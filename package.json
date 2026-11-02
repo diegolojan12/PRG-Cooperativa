@@ -1,0 +1,30 @@
+{
+  "name": "prg-cooperativa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diegolojan12/PRG-Cooperativa.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/diegolojan12/PRG-Cooperativa/issues"
+  },
+  "homepage": "https://github.com/diegolojan12/PRG-Cooperativa#readme",
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.9.10"
+  },
+  "lint-staged": {
+    "*.{ts,html,scss,json,md}": "prettier --write"
+  }
+}
