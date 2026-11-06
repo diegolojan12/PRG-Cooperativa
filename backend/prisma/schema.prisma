@@ -14,10 +14,70 @@ datasource db {
 
 model Usuario {
   id        Int      @id @default(autoincrement())
-  cedula    String   @unique
+  cedula    String?  @unique
   correo    String   @unique
   nombre    String
   rol       String   @default("SOCIO")
   creadoEn  DateTime @default(now())
+  passwordHash String?
+  celular String?
+  activo Boolean @default(true)
+  cuenta String?
+  tipoCuenta String?
+}
+
+// El Sprint 1 usa el repositorio SQL de src/database.mjs para compartir la API
+// entre PostgreSQL y SQLite local. Aplicar cambios con npm run db:init.
+model RolPermiso {
+  rol String @id
+  modulos String
+}
+
+model Sesion {
+  token String @id
+  usuarioId Int
+  expira String
+}
+
+model Recuperacion {
+  token String @id
+  usuarioId Int
+  expira String
+}
+
+model Referido {
+  id Int @id @default(autoincrement())
+  nombre String
+  correo String @unique
+  celular String
+  estado String @default("PENDIENTE")
+  socioId Int
+  creadoEn String
+  notas String? @default("")
+  @@index([socioId])
+}
+
+model Actividad {
+  id Int @id @default(autoincrement())
+  usuarioId Int?
+  actor String
+  accion String
+  detalle String
+  fecha String
+  @@index([fecha])
+}
+
+model Notificacion {
+  id Int @id @default(autoincrement())
+  usuarioId Int
+  titulo String
+  mensaje String
+  leida Boolean @default(false)
+  fecha String
+}
+
+model Configuracion {
+  clave String @id
+  valor String
 }
 

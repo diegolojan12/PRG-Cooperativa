@@ -1,0 +1,34 @@
+services:
+  web:
+    build: ./frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMINIO: ${DOMINIO}
+    volumes:
+      - ./infra/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    depends_on: [backend]
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    env_file: .env.prod
+    depends_on: [db, redis]
+    restart: unless-stopped
+
+  db:
+    image: postgres:17-alpine
+    env_file: .env.prod
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  caddy_data:

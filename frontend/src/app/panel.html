@@ -1,0 +1,938 @@
+<div class="suma-app" (keydown.escape)="modal.set(''); sidebar.set(false)">
+  <a class="s-skip" href="#content">Saltar al contenido</a>
+  @if (sidebar()) {
+    <button class="s-scrim" aria-label="Cerrar menú" (click)="sidebar.set(false)"></button>
+  }
+  <aside class="s-sidebar" [class.open]="sidebar()">
+    <a class="s-brand" href="/"
+      ><span class="logoIcon"><i></i><i></i><i></i></span>SUMA<span class="s-brand-dot">.</span></a
+    >
+    <p class="s-tagline">Conectamos para crecer</p>
+    <nav aria-label="Navegación principal">
+      @for (item of visibleNav(); track item.id; let i = $index) {
+        @if (i === 0 || visibleNav()[i - 1].group !== item.group) {
+          <span class="s-nav-label">{{ item.group }}</span>
+        }
+        <a
+          [routerLink]="item.id === 'panel' ? '/panel' : '/panel/' + item.id"
+          [class.active]="page() === item.id"
+          [attr.aria-current]="page() === item.id ? 'page' : null"
+          ><s-icon [name]="item.id" />{{ item.label }}
+          @if (item.id === 'notificaciones' && unread()) {
+            <span class="s-count">{{ unread() }}</span>
+          }
+        </a>
+      }
+    </nav>
+    <div class="s-sidebar-bottom">
+      <div class="s-community">
+        <span class="s-tiny">CRECEMOS JUNTOS</span
+        ><strong>Cada conexión<br />es un nuevo comienzo.</strong
+        ><span class="s-community-art" aria-hidden="true">↗</span>
+      </div>
+      <button class="s-logout" (click)="modal.set('logout')">
+        <s-icon name="logout" />Cerrar sesión</button
+      ><span class="s-version">SUMA · Tu comunidad, más cerca</span>
+    </div>
+  </aside>
+  <div class="s-workspace">
+    <header class="s-topbar">
+      <button
+        class="s-menu"
+        aria-label="Abrir menú"
+        [attr.aria-expanded]="sidebar()"
+        (click)="sidebar.set(!sidebar())"
+      >
+        <s-icon name="menu" />
+      </button>
+      <div class="s-breadcrumb">
+        Mi comunidad <span>/</span> <strong>{{ title() }}</strong>
+      </div>
+      <div class="s-top-right">
+        <span class="s-role"
+          ><span class="s-online"></span>{{ isAdmin() ? 'Administrador' : 'Socio' }}</span
+        >
+        @if (allowed('notificaciones')) {
+          <a routerLink="/panel/notificaciones" class="s-bell" aria-label="Ver notificaciones"
+            ><s-icon name="notificaciones" />
+            @if (unread()) {
+              <span></span>
+            }
+          </a>
+        }
+        <div class="s-profile">
+          <span class="s-avatar">{{ initials() }}</span>
+          <div>
+            <strong>{{ user()?.nombre }}</strong
+            ><small>{{ isAdmin() ? 'Administrador' : 'Socio de la comunidad' }}</small>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main id="content" class="s-content">
+      @if (loading()) {
+        <div class="s-loading" role="status">
+          <span class="s-spinner"></span>Preparando tu espacio SUMA…
+        </div>
+      } @else if (error()) {
+        <div class="s-empty s-card" role="alert">
+          <s-icon name="actividad" />
+          <h1>No pudimos cargar tu espacio</h1>
+          <p>{{ error() }}</p>
+          <button class="s-primary" (click)="load()">Volver a intentar</button>
+        </div>
+      } @else if (!allowed(page())) {
+        <div class="s-empty s-card">
+          <s-icon name="roles" />
+          <h1>Este espacio no está disponible</h1>
+          <p>Tu cuenta no tiene acceso a este módulo. Puedes continuar desde tu resumen.</p>
+          <a class="s-primary" routerLink="/panel">Volver al resumen</a>
+        </div>
+      } @else {
+        @if (page() === 'panel' && overview(); as o) {
+          <section class="s-hero">
+            <div class="s-hero-circle"></div>
+            <div class="s-hero-ring"></div>
+            <div class="s-hero-copy">
+              <span class="s-eyebrow">{{
+                o.demo ? 'DATOS DE PRUEBA · COMUNIDAD SUMA' : 'TU COMUNIDAD SIGUE CRECIENDO'
+              }}</span>
+              <h1>
+                Hola, <span>{{ user()?.nombre?.split(' ')?.[0] }}</span>
+              </h1>
+              <p class="s-date">{{ date }}</p>
+              <p class="s-welcome">{{ o.bienvenida }}</p>
+              <div class="s-hero-chips">
+                <span
+                  ><span class="s-online"></span
+                  >{{
+                    isAdmin()
+                      ? 'Tu plataforma, en un solo lugar'
+                      : 'Cada recomendación abre una oportunidad'
+                  }}</span
+                ><span
+                  >{{ o.estados.PENDIENTE }}
+                  {{
+                    o.estados.PENDIENTE === 1 ? 'referido pendiente' : 'referidos pendientes'
+                  }}</span
+                >
+              </div>
+              @if (allowed('referidos')) {
+                <button class="s-primary" (click)="openRef()">
+                  <s-icon name="plus" />Nuevo referido
+                </button>
+              }
+            </div>
+            <div class="s-hero-note">
+              <s-icon name="referidos" /><strong>Lo que compartes,<br />vuelve a ti.</strong
+              ><span>RECOMIENDA. PARTICIPA. GANA.</span>
+            </div>
+          </section>
+          <div class="s-section-line">
+            <div>
+              <span class="s-eyebrow muted">UNA MIRADA A TU COMUNIDAD</span>
+              <h2>{{ isAdmin() ? 'Así vamos creciendo' : 'Todo lo que has sumado' }}</h2>
+            </div>
+            <span class="s-live"><span class="s-online"></span>Actualizado al ingresar</span>
+          </div>
+          <section class="s-stats" aria-label="Indicadores de la comunidad">
+            <article class="s-stat yellow">
+              <div class="s-stat-top">
+                <span class="s-stat-icon"
+                  ><s-icon [name]="isAdmin() ? 'usuarios' : 'referidos'" /></span
+                ><span class="s-stat-tag">{{ isAdmin() ? 'Comunidad' : 'Tus conexiones' }}</span>
+              </div>
+              <strong>{{ (isAdmin() ? o.socios : o.referidos) | number: '1.0-0' }}</strong>
+              <p>{{ isAdmin() ? 'Socios activos' : 'Mis referidos' }}</p>
+              <svg class="s-spark" viewBox="0 0 100 40" aria-hidden="true">
+                <path d="M3 34C15 34 15 19 28 22S45 38 55 20 74 23 82 12 92 17 98 5" /></svg
+              ><small>Personas que suman oportunidades</small>
+            </article>
+            <article class="s-stat navy">
+              <div class="s-stat-top">
+                <span class="s-stat-icon"><s-icon name="referidos" /></span
+                ><span class="s-stat-tag">Este mes</span>
+              </div>
+              <strong>{{ o.mes | number: '1.0-0' }}</strong>
+              <p>Referidos del mes</p>
+              <svg class="s-spark" viewBox="0 0 100 40" aria-hidden="true">
+                <path d="M3 34C15 34 15 19 28 22S45 38 55 20 74 23 82 12 92 17 98 5" /></svg
+              ><small>Nuevas conexiones en la comunidad</small>
+            </article>
+            <article class="s-stat blue">
+              <div class="s-stat-top">
+                <span class="s-stat-icon"><s-icon name="points" /></span
+                ><span class="s-stat-tag">Por validaciones</span>
+              </div>
+              <strong>{{ o.puntos | number: '1.0-0' }}</strong>
+              <p>{{ isAdmin() ? 'Puntos generados' : 'Mis puntos' }}</p>
+              <svg class="s-spark" viewBox="0 0 100 40" aria-hidden="true">
+                <path d="M3 34C15 34 15 19 28 22S45 38 55 20 74 23 82 12 92 17 98 5" /></svg
+              ><small>Cada referido validado cuenta</small>
+            </article>
+            <article class="s-stat white">
+              <div class="s-stat-top">
+                <span class="s-stat-icon"><s-icon name="check" /></span
+                ><span class="s-stat-tag">Conexiones logradas</span>
+              </div>
+              <strong>{{ o.estados.VALIDADO | number: '1.0-0' }}</strong>
+              <p>Referidos validados</p>
+              <svg class="s-spark" viewBox="0 0 100 40" aria-hidden="true">
+                <path d="M3 34C15 34 15 19 28 22S45 38 55 20 74 23 82 12 92 17 98 5" /></svg
+              ><small>Historias que empiezan a crecer</small>
+            </article>
+          </section>
+          <div class="s-dashboard-bottom">
+            <section class="s-card s-recent">
+              <div class="s-card-heading">
+                <div>
+                  <h2>Últimas conexiones</h2>
+                  <p>Un vistazo a tus referidos más recientes.</p>
+                </div>
+                @if (allowed('referidos')) {
+                  <a routerLink="/panel/referidos" class="s-text-link"
+                    >Ver todos <s-icon name="arrow"
+                  /></a>
+                }
+              </div>
+              @for (ref of refs().slice(0, 4); track ref.id) {
+                <div class="s-connection">
+                  <span class="s-avatar pale">{{ ref.nombre.slice(0, 1) }}</span>
+                  <div>
+                    <strong>{{ ref.nombre }}</strong
+                    ><small>{{ ref.correo }}</small>
+                  </div>
+                  <span class="s-status" [attr.data-state]="ref.estado">{{
+                    labels[ref.estado]
+                  }}</span>
+                </div>
+              } @empty {
+                <div class="s-inline-empty">Aquí aparecerán tus primeras conexiones.</div>
+              }
+            </section>
+            <section class="s-card s-progress-card">
+              <span class="s-eyebrow muted">CADA PASO CUENTA</span>
+              <h2>El camino de tus referidos</h2>
+              <p>Acompaña cada conexión hasta su validación.</p>
+              @for (s of states; track s) {
+                <div class="s-progress-row">
+                  <span><i [attr.data-state]="s"></i>{{ labels[s] }}</span
+                  ><strong>{{ o.estados[s] }}</strong>
+                </div>
+                <div class="s-progress-track">
+                  <span
+                    [attr.data-state]="s"
+                    [style.width.%]="o.referidos ? (o.estados[s] / o.referidos) * 100 : 0"
+                  ></span>
+                </div>
+              }
+            </section>
+          </div>
+        }
+        @if (page() !== 'panel') {
+          <div class="s-page-heading">
+            <div>
+              <span class="s-eyebrow muted">{{
+                isAdmin() ? 'ADMINISTRA TU COMUNIDAD' : 'TU ESPACIO SUMA'
+              }}</span>
+              <h1>{{ title() }}</h1>
+              <p>
+                @switch (page()) {
+                  @case ('referidos') {
+                    Cada conexión es una oportunidad para crecer juntos.
+                  }
+                  @case ('usuarios') {
+                    Gestiona quiénes forman parte de tu comunidad.
+                  }
+                  @case ('roles') {
+                    Define qué puede ver y hacer cada tipo de cuenta.
+                  }
+                  @case ('configuracion') {
+                    Ajusta los detalles que hacen funcionar tu comunidad.
+                  }
+                  @case ('actividad') {
+                    Consulta las acciones realizadas en la plataforma.
+                  }
+                  @case ('notificaciones') {
+                    Todo lo que necesitas saber, en un solo lugar.
+                  }
+                  @case ('ayuda') {
+                    Estamos aquí para acompañarte en cada paso.
+                  }
+                }
+              </p>
+            </div>
+            @if (page() === 'referidos') {
+              <button class="s-primary" (click)="openRef()">
+                <s-icon name="plus" />Nuevo referido
+              </button>
+            }
+          </div>
+        }
+        @if (page() === 'referidos') {
+          <section class="s-mini-stats">
+            <div>
+              <span>Total de referidos</span><strong>{{ refs().length }}</strong>
+            </div>
+            @for (s of states; track s) {
+              <div>
+                <span><i class="s-dot" [attr.data-state]="s"></i>{{ labels[s] }}</span
+                ><strong>{{ countState(s) }}</strong>
+              </div>
+            }
+          </section>
+          <section class="s-card s-table-card">
+            <div class="s-toolbar">
+              <label class="s-search"
+                ><s-icon name="search" /><input
+                  aria-label="Buscar referidos"
+                  placeholder="Buscar por nombre o correo…"
+                  [ngModel]="search()"
+                  (ngModelChange)="setSearch($event)"
+              /></label>
+              <div class="s-toolbar-right">
+                <select
+                  aria-label="Filtrar por estado"
+                  [ngModel]="state()"
+                  (ngModelChange)="changeState($event)"
+                >
+                  <option value="">Todos los estados</option>
+                  @for (s of states; track s) {
+                    <option [value]="s">{{ labels[s] }}</option>
+                  }</select
+                ><button
+                  class="s-secondary"
+                  (click)="exportCsv()"
+                  [disabled]="!filteredRefs().length"
+                >
+                  <s-icon name="download" />Exportar
+                </button>
+              </div>
+            </div>
+            <div class="s-table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Persona referida</th>
+                    <th>Celular</th>
+                    @if (isAdmin()) {
+                      <th>Referido por</th>
+                    }
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th class="s-align-right">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (ref of shownRefs(); track ref.id) {
+                    <tr>
+                      <td>
+                        <div class="s-person-cell">
+                          <span class="s-avatar pale">{{ ref.nombre.slice(0, 1) }}</span>
+                          <div>
+                            <strong>{{ ref.nombre }}</strong
+                            ><small>{{ ref.correo }}</small>
+                          </div>
+                        </div>
+                      </td>
+                      <td>{{ ref.celular }}</td>
+                      @if (isAdmin()) {
+                        <td>{{ ref.socio }}</td>
+                      }
+                      <td>
+                        <span class="s-status" [attr.data-state]="ref.estado">{{
+                          labels[ref.estado]
+                        }}</span>
+                      </td>
+                      <td>{{ ref.creadoEn | date: 'dd/MM/yyyy' : '-0500' }}</td>
+                      <td class="s-align-right">
+                        @if (canEdit(ref)) {
+                          <button
+                            class="s-icon-button"
+                            [attr.aria-label]="'Editar a ' + ref.nombre"
+                            (click)="openRef(ref)"
+                          >
+                            <s-icon name="edit" /></button
+                          ><button
+                            class="s-icon-button danger"
+                            [attr.aria-label]="'Eliminar a ' + ref.nombre"
+                            (click)="selected = ref; modal.set('delete')"
+                          >
+                            <s-icon name="trash" />
+                          </button>
+                        } @else {
+                          <span class="s-muted">En seguimiento</span>
+                        }
+                      </td>
+                    </tr>
+                  } @empty {
+                    <tr>
+                      <td colspan="6">
+                        <div class="s-empty">
+                          <s-icon name="referidos" />
+                          <h3>
+                            {{
+                              search() || state()
+                                ? 'No hay coincidencias'
+                                : 'Tu próxima conexión empieza aquí'
+                            }}
+                          </h3>
+                          <p>
+                            {{
+                              search() || state()
+                                ? 'Prueba con otro nombre o estado.'
+                                : 'Registra tu primer referido y empieza a sumar.'
+                            }}
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+            <div class="s-pagination">
+              <span
+                >{{ filteredRefs().length }} resultados · Página {{ pageNumber() }} de
+                {{ lastPage() }}</span
+              >
+              <div>
+                <button
+                  class="s-secondary"
+                  [disabled]="pageNumber() === 1"
+                  (click)="pageNumber.set(pageNumber() - 1)"
+                >
+                  Anterior</button
+                ><button
+                  class="s-secondary"
+                  [disabled]="pageNumber() >= lastPage()"
+                  (click)="pageNumber.set(pageNumber() + 1)"
+                >
+                  Siguiente
+                </button>
+              </div>
+            </div>
+          </section>
+          <div class="s-info-line">
+            <s-icon name="ayuda" />
+            <p>
+              Los socios pueden editar sus referidos pendientes. Administración verifica los datos y
+              actualiza su estado.
+            </p>
+          </div>
+        }
+        @if (page() === 'usuarios') {
+          <section class="s-card s-table-card">
+            <div class="s-toolbar">
+              <label class="s-search"
+                ><s-icon name="search" /><input
+                  placeholder="Buscar personas…"
+                  aria-label="Buscar usuarios"
+                  [ngModel]="search()"
+                  (ngModelChange)="setSearch($event)" /></label
+              ><span class="s-muted">{{ filteredUsers().length }} personas en la comunidad</span>
+            </div>
+            <div class="s-table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Usuario</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (u of filteredUsers(); track u.id) {
+                    <tr>
+                      <td>
+                        <div class="s-person-cell">
+                          <span class="s-avatar pale">{{ u.nombre.slice(0, 1) }}</span>
+                          <div>
+                            <strong
+                              >{{ u.nombre }}
+                              @if (u.id === user()?.id) {
+                                <span class="s-you">Tú</span>
+                              }</strong
+                            ><small>{{ u.correo }}</small>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="s-role-pill" [class.admin]="u.rol === 'ADMIN'"
+                          ><s-icon [name]="u.rol === 'ADMIN' ? 'roles' : 'usuarios'" />{{
+                            labels[u.rol]
+                          }}</span
+                        >
+                      </td>
+                      <td>
+                        <span
+                          class="s-status"
+                          [attr.data-state]="u.activo ? 'VALIDADO' : 'RECHAZADO'"
+                          >{{ u.activo ? 'Activo' : 'Inactivo' }}</span
+                        >
+                      </td>
+                      <td>
+                        <button class="s-secondary" (click)="openUser(u)">
+                          <s-icon name="edit" />Gestionar
+                        </button>
+                      </td>
+                    </tr>
+                  } @empty {
+                    <tr>
+                      <td colspan="4" class="s-inline-empty">
+                        No se encontraron personas con esa búsqueda.
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </section>
+          <div class="s-info-line">
+            <s-icon name="roles" />
+            <p>
+              Al cambiar el rol o desactivar una cuenta, se cierran sus sesiones. Tu propio acceso
+              de administrador permanece protegido.
+            </p>
+          </div>
+        }
+        @if (page() === 'roles') {
+          <div class="s-info-banner">
+            <s-icon name="roles" />
+            <div>
+              <strong>El acceso correcto para cada persona</strong>
+              <p>
+                Elige qué módulos puede usar cada rol. Los módulos administrativos están reservados
+                a administradores.
+              </p>
+            </div>
+          </div>
+          <div class="s-role-grid">
+            @for (role of roles(); track role.rol) {
+              <section class="s-card s-role-card">
+                <div class="s-role-head">
+                  <span class="s-feature-icon" [class.yellow]="role.rol === 'ADMIN'"
+                    ><s-icon [name]="role.rol === 'ADMIN' ? 'roles' : 'usuarios'"
+                  /></span>
+                  <div>
+                    <h2>{{ labels[role.rol] }}</h2>
+                    <p>
+                      {{
+                        role.rol === 'ADMIN'
+                          ? 'Gestiona y acompaña a la comunidad.'
+                          : 'Participa y comparte oportunidades.'
+                      }}
+                    </p>
+                  </div>
+                </div>
+                <span class="s-nav-label">ACCESO A LOS MÓDULOS</span>
+                @for (item of nav; track item.id) {
+                  <label class="s-permission"
+                    ><span><s-icon [name]="item.id" />{{ item.label }}</span
+                    ><input
+                      type="checkbox"
+                      [checked]="role.modulos.includes(item.id)"
+                      [disabled]="locked(role, item.id) || busy()"
+                      (change)="togglePermission(role, item.id, $event)"
+                  /></label>
+                }
+                <button class="s-primary" [disabled]="busy()" (click)="saveRole(role)">
+                  Guardar permisos <s-icon name="check" />
+                </button>
+              </section>
+            }
+          </div>
+        }
+        @if (page() === 'configuracion') {
+          <form
+            class="s-settings-grid"
+            #settingsForm="ngForm"
+            (ngSubmit)="settingsForm.valid && saveSettings()"
+          >
+            <section class="s-card s-settings">
+              <div class="s-card-heading">
+                <div>
+                  <h2>General</h2>
+                  <p>La identidad de nuestra comunidad.</p>
+                </div>
+                <s-icon name="configuracion" />
+              </div>
+              <label class="s-field"
+                >Nombre de la aplicación<input value="SUMA" disabled /><small
+                  >SUMA es el nombre de tu plataforma.</small
+                ></label
+              ><label class="s-field"
+                >Correo de soporte<input
+                  name="contacto"
+                  type="email"
+                  email
+                  required
+                  [(ngModel)]="settings.contacto"
+                /><small>Se muestra en el centro de ayuda.</small></label
+              ><label class="s-field"
+                >Mensaje de bienvenida<textarea
+                  name="mensaje"
+                  rows="3"
+                  maxlength="240"
+                  required
+                  [(ngModel)]="settings.mensajeBienvenida"
+                ></textarea
+                ><small
+                  >Un saludo para el panel de tu comunidad. Máximo 240 caracteres.</small
+                ></label
+              >
+            </section>
+            <div>
+              <section class="s-card s-settings">
+                <h2>Participación</h2>
+                <p class="s-muted">Pequeños ajustes, nuevas oportunidades.</p>
+                <label class="s-field"
+                  >Puntos por referido validado<input
+                    name="puntos"
+                    type="number"
+                    min="0"
+                    max="99999"
+                    required
+                    [(ngModel)]="settings.puntosReferido"
+                  /><small
+                    >El panel calcula los puntos con la regla vigente; todavía no hay canjes en este
+                    sprint.</small
+                  ></label
+                ><label class="s-field"
+                  >Registro de nuevos socios<select
+                    name="registro"
+                    [(ngModel)]="settings.registroAbierto"
+                  >
+                    <option value="true">Abierto · Recibir nuevos socios</option>
+                    <option value="false">Cerrado · Pausar registros</option>
+                  </select></label
+                ><button class="s-primary" type="submit" [disabled]="busy() || !settingsForm.valid">
+                  {{ busy() ? 'Guardando…' : 'Guardar configuración' }}<s-icon name="check" />
+                </button>
+              </section>
+              <div class="s-info-line">
+                <s-icon name="actividad" />
+                <p>
+                  Los cambios quedan guardados y puedes consultarlos en el registro de actividad.
+                </p>
+              </div>
+            </div>
+          </form>
+        }
+        @if (page() === 'actividad') {
+          <section class="s-card s-table-card">
+            <div class="s-toolbar">
+              <label class="s-search"
+                ><s-icon name="search" /><input
+                  placeholder="Buscar acciones o personas…"
+                  aria-label="Buscar actividad"
+                  [ngModel]="search()"
+                  (ngModelChange)="setSearch($event)" /></label
+              ><button class="s-secondary" (click)="load()">Actualizar</button>
+            </div>
+            <div class="s-table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Acción</th>
+                    <th>Realizada por</th>
+                    <th>Detalle</th>
+                    <th>Fecha y hora</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (a of filteredActivity(); track a.id) {
+                    <tr>
+                      <td>
+                        <strong>{{ a.accion }}</strong>
+                      </td>
+                      <td>{{ a.actor }}</td>
+                      <td class="s-detail-cell">{{ a.detalle }}</td>
+                      <td class="s-nowrap">{{ a.fecha | date: 'dd/MM/yyyy · HH:mm' : '-0500' }}</td>
+                    </tr>
+                  } @empty {
+                    <tr>
+                      <td colspan="4" class="s-inline-empty">No hay actividades para mostrar.</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+            <div class="s-pagination">
+              <span>Últimas 250 acciones · Hora de Ecuador</span
+              ><span>{{ filteredActivity().length }} resultados</span>
+            </div>
+          </section>
+        }
+        @if (page() === 'notificaciones') {
+          <div class="s-notes-top">
+            <span>{{ unread() }} sin leer</span
+            ><button class="s-secondary" (click)="readNotes()" [disabled]="busy() || !unread()">
+              <s-icon name="check" />Marcar todas como leídas
+            </button>
+          </div>
+          <section class="s-card s-notes">
+            @for (note of notes(); track note.id) {
+              <article class="s-notification" [class.unread]="!note.leida">
+                <span class="s-feature-icon"><s-icon name="notificaciones" /></span>
+                <div>
+                  <div class="s-note-title">
+                    <h3>{{ note.titulo }}</h3>
+                    @if (!note.leida) {
+                      <span class="s-new">Nueva</span>
+                    }
+                  </div>
+                  <p>{{ note.mensaje }}</p>
+                  <small>{{ note.fecha | date: 'dd/MM/yyyy · HH:mm' : '-0500' }}</small>
+                </div>
+              </article>
+            } @empty {
+              <div class="s-empty">
+                <s-icon name="notificaciones" />
+                <h3>Estás al día</h3>
+                <p>Aquí recibirás los avisos de tu comunidad.</p>
+              </div>
+            }
+          </section>
+        }
+        @if (page() === 'ayuda') {
+          <section class="s-help-hero">
+            <span class="s-feature-icon yellow"><s-icon name="ayuda" /></span>
+            <div>
+              <h2>Sumar es más fácil cuando te acompañan.</h2>
+              <p>Encuentra respuestas rápidas para aprovechar tu espacio.</p>
+            </div>
+          </section>
+          <div class="s-help-grid">
+            <section class="s-card s-faq">
+              <h2>Preguntas frecuentes</h2>
+              <details open>
+                <summary>¿Cómo registro un referido?</summary>
+                <p>
+                  Entra a Referidos y selecciona “Nuevo referido”. Completa su nombre, correo y
+                  celular. Confirma que tienes autorización para compartir los datos y guarda el
+                  formulario.
+                </p>
+              </details>
+              <details>
+                <summary>¿Qué significa cada estado?</summary>
+                <p>
+                  Pendiente: recién registrado. Contactado: la cooperativa inició el seguimiento.
+                  Validado: administración confirmó la conexión. Rechazado: no cumple los requisitos
+                  de validación.
+                </p>
+              </details>
+              <details>
+                <summary>¿Puedo editar o eliminar un referido?</summary>
+                <p>
+                  Como socio, puedes hacerlo mientras esté pendiente. Una vez en seguimiento,
+                  administración gestiona los cambios desde su panel.
+                </p>
+              </details>
+              <details>
+                <summary>¿Cómo recupero mi contraseña?</summary>
+                <p>
+                  En la pantalla de inicio de sesión selecciona “¿Olvidaste tu contraseña?”. El
+                  enlace vence en 30 minutos y solo funciona una vez. Al actualizarla se cierran tus
+                  sesiones anteriores.
+                </p>
+              </details>
+              <details>
+                <summary>¿Por qué no veo algunos módulos?</summary>
+                <p>
+                  El menú depende de tu rol y de los permisos asignados. Los módulos de usuarios,
+                  permisos, configuración y actividad son administrativos.
+                </p>
+              </details>
+              <details>
+                <summary>¿Cómo se calculan mis puntos?</summary>
+                <p>
+                  El panel multiplica tus referidos validados por los puntos definidos por
+                  administración. El canje de recompensas se implementará en un sprint posterior.
+                </p>
+              </details>
+            </section>
+            <aside class="s-card s-contact">
+              <span class="s-feature-icon"><s-icon name="mail" /></span>
+              <h2>Conversemos</h2>
+              <p>Si necesitas ayuda adicional, escribe al equipo de tu comunidad.</p>
+              <a [href]="'mailto:' + contact()" class="s-text-link"
+                >{{ contact() }}<s-icon name="arrow"
+              /></a>
+              <div class="s-contact-note">
+                <s-icon name="roles" /><small
+                  >Nunca compartas tu contraseña ni enlaces de recuperación.</small
+                >
+              </div>
+            </aside>
+          </div>
+        }
+      }
+      <footer class="s-footer">
+        <span>© {{ date.slice(-4) }} SUMA · Conectamos para crecer.</span
+        ><span>Hecho para nuestra comunidad <span class="s-footer-star">✦</span></span>
+      </footer>
+    </main>
+  </div>
+  @if (toast()) {
+    <div class="s-toast" role="status">
+      <span class="s-toast-icon"><s-icon name="notificaciones" /></span>
+      <p>{{ toast() }}</p>
+      <button class="s-icon-button" aria-label="Cerrar mensaje" (click)="toast.set('')">
+        <s-icon name="close" />
+      </button>
+    </div>
+  }
+  @if (modal()) {
+    <div class="s-modal-backdrop" (click)="!busy() && modal.set('')">
+      <section
+        class="s-modal"
+        sFocusDialog
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="dialogTitle"
+        (click)="$event.stopPropagation()"
+      >
+        <button
+          class="s-modal-close s-icon-button"
+          aria-label="Cerrar ventana"
+          [disabled]="busy()"
+          (click)="modal.set('')"
+        >
+          <s-icon name="close" />
+        </button>
+        @if (modal() === 'ref') {
+          <span class="s-feature-icon yellow"><s-icon name="referidos" /></span
+          ><span class="s-eyebrow muted">NUEVAS CONEXIONES</span>
+          <h2 id="dialogTitle">{{ selected ? 'Editar referido' : 'Alguien nuevo para sumar' }}</h2>
+          <p>Completa los datos de la persona que quieres recomendar.</p>
+          <form #refForm="ngForm" (ngSubmit)="refForm.valid && saveRef()">
+            <label class="s-field"
+              >Nombres y apellidos <span class="s-required">*</span
+              ><input
+                id="refName"
+                name="nombre"
+                [(ngModel)]="form.nombre"
+                required
+                minlength="5"
+                maxlength="100"
+                placeholder="Ej. Carlos Torres"
+                autocomplete="name"
+              /><small>Incluye al menos un nombre y un apellido.</small></label
+            >
+            <div class="s-form-row">
+              <label class="s-field"
+                >Correo electrónico *<input
+                  name="correo"
+                  type="email"
+                  email
+                  required
+                  [(ngModel)]="form.correo"
+                  placeholder="nombre@correo.com" /></label
+              ><label class="s-field"
+                >Celular *<input
+                  name="celular"
+                  type="tel"
+                  required
+                  pattern="09[0-9]{8}"
+                  maxlength="10"
+                  [(ngModel)]="form.celular"
+                  placeholder="0991234567"
+                /><small>10 dígitos; empieza por 09.</small></label
+              >
+            </div>
+            @if (selected && isAdmin()) {
+              <label class="s-field"
+                >Estado<select name="estado" [(ngModel)]="form.estado">
+                  @for (s of states; track s) {
+                    <option [value]="s">{{ labels[s] }}</option>
+                  }
+                </select></label
+              >
+            }
+            <label class="s-field"
+              >Notas <span class="s-muted">(opcional)</span
+              ><textarea
+                name="notas"
+                rows="2"
+                maxlength="500"
+                [(ngModel)]="form.notas"
+                placeholder="¿Algo que debamos saber?"
+              ></textarea>
+            </label>
+            @if (!selected) {
+              <label class="s-consent"
+                ><input
+                  name="consentimiento"
+                  type="checkbox"
+                  required
+                  [(ngModel)]="form.consentimiento"
+                /><span
+                  >Tengo autorización de esta persona para compartir sus datos con la
+                  cooperativa.</span
+                ></label
+              >
+            }
+            <div class="s-form-actions">
+              <button type="button" class="s-secondary" [disabled]="busy()" (click)="modal.set('')">
+                Cancelar</button
+              ><button type="submit" class="s-primary" [disabled]="busy() || !refForm.valid">
+                {{ busy() ? 'Guardando…' : selected ? 'Guardar cambios' : 'Registrar referido'
+                }}<s-icon name="arrow" />
+              </button>
+            </div>
+          </form>
+        }
+        @if (modal() === 'user') {
+          <span class="s-feature-icon"><s-icon name="usuarios" /></span>
+          <h2 id="dialogTitle">Gestionar usuario</h2>
+          <p>{{ selected.nombre }} · {{ selected.correo }}</p>
+          <form (ngSubmit)="saveUser()">
+            <label class="s-field"
+              >Rol<select name="rol" [(ngModel)]="form.rol">
+                <option value="SOCIO">Socio</option>
+                <option value="ADMIN">Administrador</option>
+              </select></label
+            ><label class="s-consent"
+              ><input type="checkbox" name="activo" [(ngModel)]="form.activo" /><span
+                >Cuenta activa · Permitir iniciar sesión</span
+              ></label
+            >
+            <div class="s-info-line">
+              <s-icon name="roles" />
+              <p>Este cambio cerrará las sesiones de esta persona.</p>
+            </div>
+            <div class="s-form-actions">
+              <button type="button" class="s-secondary" (click)="modal.set('')">Cancelar</button
+              ><button type="submit" class="s-primary" [disabled]="busy()">Guardar cambios</button>
+            </div>
+          </form>
+        }
+        @if (modal() === 'delete') {
+          <span class="s-feature-icon red"><s-icon name="trash" /></span>
+          <h2 id="dialogTitle">¿Eliminar este referido?</h2>
+          <p>
+            Se eliminarán los datos de {{ selected.nombre }}. Esta acción quedará en el registro de
+            actividad.
+          </p>
+          <div class="s-form-actions">
+            <button class="s-secondary" (click)="modal.set('')">Conservar</button
+            ><button class="s-danger" [disabled]="busy()" (click)="deleteRef()">
+              Eliminar referido
+            </button>
+          </div>
+        }
+        @if (modal() === 'logout') {
+          <span class="s-feature-icon"><s-icon name="logout" /></span>
+          <h2 id="dialogTitle">¿Cerrar tu sesión?</h2>
+          <p>Tu comunidad te espera cuando quieras volver.</p>
+          <div class="s-form-actions">
+            <button class="s-secondary" (click)="modal.set('')">Seguir aquí</button
+            ><button class="s-primary" [disabled]="busy()" (click)="logout()">Cerrar sesión</button>
+          </div>
+        }
+      </section>
+    </div>
+  }
+</div>

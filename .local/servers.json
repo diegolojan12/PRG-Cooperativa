@@ -1,0 +1,6 @@
+{
+  "web": 3948,
+  "url": "http://localhost:4200",
+  "api": 6040,
+  "mode": "Node+PostgreSQL-Docker"
+}

@@ -29,9 +29,19 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/css",
+                "output": "css"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/internas",
+                "output": "internas"
               }
             ],
-            "styles": ["src/styles.scss"]
+            "styles": ["src/css/styles.css", "src/css/panel.css"]
           },
           "configurations": {
             "production": {
@@ -68,7 +78,10 @@
               "buildTarget": "frontend:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          }
         },
         "test": {
           "builder": "@angular/build:unit-test"

@@ -1,0 +1,29 @@
+# Usar junto con docker-compose.yml. Reutiliza su volumen pgdata.
+# docker compose -p prg-cooperativa -f docker-compose.yml -f docker-compose.local.yml up -d --build
+services:
+  backend:
+    build: ./backend
+    environment:
+      PORT: "3000"
+      DATABASE_URL: postgresql://prg:prg_dev@db:5432/prg
+      FRONTEND_URL: http://localhost:8080
+      NODE_ENV: development
+      SEED_DEMO: "true"
+      ENABLE_DEV_RESET_LINK: "true"
+      SMTP_HOST: mailpit
+      SMTP_PORT: "1025"
+      SMTP_FROM: SUMA <no-reply@suma.ec>
+    depends_on:
+      - db
+      - redis
+      - mailpit
+    restart: unless-stopped
+  web:
+    build: ./frontend
+    ports:
+      - "127.0.0.1:8080:80"
+    volumes:
+      - ./infra/Caddyfile.local:/etc/caddy/Caddyfile:ro
+    depends_on:
+      - backend
+    restart: unless-stopped

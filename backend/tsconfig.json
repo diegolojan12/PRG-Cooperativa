@@ -16,6 +16,8 @@
     "rootDir": ".",
     "incremental": true,
     "skipLibCheck": true,
+    "allowJs": true,
+    "checkJs": false,
     "strict": true,
     "strictPropertyInitialization": false,
     "types": ["vitest/globals", "node"]
