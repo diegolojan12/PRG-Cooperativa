@@ -3,6 +3,11 @@ import { mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
 import pg from 'pg';
+import { ProteccionDatos } from './dominio/proteccion-datos.mjs';
+import { Rol } from './dominio/acceso.mjs';
+import { Referido } from './dominio/referidos.mjs';
+
+const CLIENTE_SQLITE = Symbol('transacción SQLite');
 
 export function hashPassword(value) {
   const salt = randomBytes(16).toString('hex');
@@ -17,8 +22,8 @@ export function verifyPassword(value, stored) {
 }
 
 /* ---------- Modelo de dominio (Documento de Visión v1.1.0, RF-08-1, RF-11-4) ---------- */
-export const ROLES = ['ADMIN', 'GESTOR', 'SOCIO'];
-export const STATES = ['PENDIENTE', 'APROBADO', 'RECHAZADO'];
+export const ROLES = Rol.nombres;
+export const STATES = Referido.estados;
 export const MODULES = [
   'panel',
   'referidos',
@@ -45,20 +50,26 @@ export const ROLE_REQUIRED = {
 };
 
 const SQLITE_SCHEMA = `CREATE TABLE IF NOT EXISTS "Usuario" (
-  id INTEGER PRIMARY KEY AUTOINCREMENT, cedula TEXT UNIQUE, correo TEXT UNIQUE NOT NULL,
+  id INTEGER PRIMARY KEY AUTOINCREMENT, cedula TEXT UNIQUE, correo TEXT UNIQUE NOT NULL, "correoIndice" TEXT,
   nombre TEXT NOT NULL, rol TEXT NOT NULL DEFAULT 'SOCIO', "creadoEn" TEXT DEFAULT CURRENT_TIMESTAMP,
   "passwordHash" TEXT, celular TEXT, activo INTEGER NOT NULL DEFAULT 1, cuenta TEXT, "tipoCuenta" TEXT,
-  "cuentaEstado" TEXT, "intentosFallidos" INTEGER NOT NULL DEFAULT 0, "bloqueadoHasta" TEXT);
+  "cuentaEstado" TEXT, "intentosFallidos" INTEGER NOT NULL DEFAULT 0, "bloqueadoHasta" TEXT, "codigoReferido" TEXT, "cuentaIndice" TEXT, "cuentaSolicitadaEn" TEXT, "cuentaRevisadaEn" TEXT);
 CREATE TABLE IF NOT EXISTS "RolPermiso" (rol TEXT PRIMARY KEY, modulos TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS "Sesion" (token TEXT PRIMARY KEY, "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id) ON DELETE CASCADE, expira TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS "Recuperacion" (token TEXT PRIMARY KEY, "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id) ON DELETE CASCADE, expira TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS "DosFactor" (id TEXT PRIMARY KEY, "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id) ON DELETE CASCADE, codigo TEXT NOT NULL, expira TEXT NOT NULL, intentos INTEGER NOT NULL DEFAULT 0);
-CREATE TABLE IF NOT EXISTS "Referido" (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT NOT NULL, correo TEXT NOT NULL, celular TEXT NOT NULL, estado TEXT NOT NULL DEFAULT 'PENDIENTE', "socioId" INTEGER NOT NULL REFERENCES "Usuario"(id), "creadoEn" TEXT NOT NULL, notas TEXT DEFAULT '', "eliminadoEn" TEXT, "eliminadoPor" INTEGER REFERENCES "Usuario"(id), "motivoBaja" TEXT, "usuarioId" INTEGER REFERENCES "Usuario"(id));
+CREATE TABLE IF NOT EXISTS "Referido" (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT NOT NULL, correo TEXT NOT NULL, "correoIndice" TEXT, celular TEXT NOT NULL, estado TEXT NOT NULL DEFAULT 'PENDIENTE', "socioId" INTEGER NOT NULL REFERENCES "Usuario"(id), "creadoEn" TEXT NOT NULL, notas TEXT DEFAULT '', "eliminadoEn" TEXT, "eliminadoPor" INTEGER REFERENCES "Usuario"(id), "motivoBaja" TEXT, "usuarioId" INTEGER REFERENCES "Usuario"(id), "fechaDecision" TEXT, campania TEXT, provincia TEXT);
 CREATE UNIQUE INDEX IF NOT EXISTS referido_correo_activo ON "Referido"(correo) WHERE "eliminadoEn" IS NULL;
+CREATE INDEX IF NOT EXISTS usuario_cuenta_indice ON "Usuario"(COALESCE("cuentaIndice",cuenta));
+CREATE UNIQUE INDEX IF NOT EXISTS usuario_codigo_referido ON "Usuario"("codigoReferido");
+CREATE UNIQUE INDEX IF NOT EXISTS usuario_correo_indice ON "Usuario"(COALESCE("correoIndice",correo));
+CREATE UNIQUE INDEX IF NOT EXISTS referido_correo_indice ON "Referido"(COALESCE("correoIndice",correo)) WHERE "eliminadoEn" IS NULL;
 CREATE INDEX IF NOT EXISTS "Referido_socioId_idx" ON "Referido"("socioId");
 CREATE TABLE IF NOT EXISTS "Actividad" (id INTEGER PRIMARY KEY AUTOINCREMENT, "usuarioId" INTEGER REFERENCES "Usuario"(id), actor TEXT NOT NULL, accion TEXT NOT NULL, detalle TEXT NOT NULL, fecha TEXT NOT NULL, ip TEXT, "objetivoId" INTEGER, datos TEXT);
 CREATE INDEX IF NOT EXISTS "Actividad_fecha_idx" ON "Actividad"(fecha);
 CREATE TABLE IF NOT EXISTS "Notificacion" (id INTEGER PRIMARY KEY AUTOINCREMENT, "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id) ON DELETE CASCADE, titulo TEXT NOT NULL, mensaje TEXT NOT NULL, leida INTEGER NOT NULL DEFAULT 0, fecha TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS "MovimientoPuntos" ("referidoId" INTEGER PRIMARY KEY REFERENCES "Referido"(id), "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id), cantidad INTEGER NOT NULL CHECK (cantidad >= 0), fecha TEXT NOT NULL);
+CREATE INDEX IF NOT EXISTS movimiento_usuario ON "MovimientoPuntos"("usuarioId");
 CREATE TABLE IF NOT EXISTS "Configuracion" (clave TEXT PRIMARY KEY, valor TEXT NOT NULL);`;
 
 /* RF-42-1: la bitácora es inmutable (no admite UPDATE ni DELETE). */
@@ -69,6 +80,7 @@ CREATE TRIGGER IF NOT EXISTS actividad_inmutable_del BEFORE DELETE ON "Actividad
 
 export class Database {
   constructor(url = process.env.DATABASE_URL || 'file:./data/suma.db') {
+    this.datos = new ProteccionDatos();
     this.sqlite = url.startsWith('file:');
     if (this.sqlite) {
       const filename = resolve(url.slice(5));
@@ -82,8 +94,12 @@ export class Database {
     }
   }
   async query(sql, values = [], client) {
+    return (await this.queryRaw(sql, values, client)).map((fila) => this.datos.abrirFila(fila));
+  }
+  async queryRaw(sql, values = [], client) {
     if (!this.sqlite)
       return (await (client || this.pool).query(sql, values)).rows;
+    if (client !== CLIENTE_SQLITE) await this.queue;
     // Reorder numbered parameters too: UPDATE ... $2 ... WHERE id=$1.
     const params = [];
     const statement = sql
@@ -106,14 +122,16 @@ export class Database {
         release = r;
       });
       await previous;
-      this.db.exec('BEGIN IMMEDIATE');
       try {
-        const result = await work();
-        this.db.exec('COMMIT');
-        return result;
-      } catch (error) {
-        this.db.exec('ROLLBACK');
-        throw error;
+        this.db.exec('BEGIN IMMEDIATE');
+        try {
+          const result = await work(CLIENTE_SQLITE);
+          this.db.exec('COMMIT');
+          return result;
+        } catch (error) {
+          this.db.exec('ROLLBACK');
+          throw error;
+        }
       } finally {
         release();
       }
@@ -150,6 +168,11 @@ export class Database {
     };
     ensure('Usuario', [
       ['cuentaEstado', 'TEXT'],
+      ['correoIndice', 'TEXT'],
+      ['codigoReferido', 'TEXT'],
+      ['cuentaIndice', 'TEXT'],
+      ['cuentaSolicitadaEn', 'TEXT'],
+      ['cuentaRevisadaEn', 'TEXT'],
       ['intentosFallidos', 'INTEGER NOT NULL DEFAULT 0'],
       ['bloqueadoHasta', 'TEXT'],
     ]);
@@ -169,7 +192,7 @@ export class Database {
       this.db.exec(`BEGIN;
         ALTER TABLE "Referido" RENAME TO "Referido_old";
         DROP INDEX IF EXISTS "Referido_socioId_idx";
-        CREATE TABLE "Referido" (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT NOT NULL, correo TEXT NOT NULL, celular TEXT NOT NULL, estado TEXT NOT NULL DEFAULT 'PENDIENTE', "socioId" INTEGER NOT NULL REFERENCES "Usuario"(id), "creadoEn" TEXT NOT NULL, notas TEXT DEFAULT '', "eliminadoEn" TEXT, "eliminadoPor" INTEGER REFERENCES "Usuario"(id), "motivoBaja" TEXT, "usuarioId" INTEGER REFERENCES "Usuario"(id));
+        CREATE TABLE "Referido" (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT NOT NULL, correo TEXT NOT NULL, "correoIndice" TEXT, celular TEXT NOT NULL, estado TEXT NOT NULL DEFAULT 'PENDIENTE', "socioId" INTEGER NOT NULL REFERENCES "Usuario"(id), "creadoEn" TEXT NOT NULL, notas TEXT DEFAULT '', "eliminadoEn" TEXT, "eliminadoPor" INTEGER REFERENCES "Usuario"(id), "motivoBaja" TEXT, "usuarioId" INTEGER REFERENCES "Usuario"(id), "fechaDecision" TEXT, campania TEXT, provincia TEXT);
         INSERT INTO "Referido" (id,nombre,correo,celular,estado,"socioId","creadoEn",notas)
           SELECT id,nombre,correo,celular,estado,"socioId","creadoEn",notas FROM "Referido_old";
         DROP TABLE "Referido_old";
@@ -180,6 +203,10 @@ export class Database {
         ['eliminadoPor', 'INTEGER REFERENCES "Usuario"(id)'],
         ['motivoBaja', 'TEXT'],
         ['usuarioId', 'INTEGER REFERENCES "Usuario"(id)'],
+        ['correoIndice', 'TEXT'],
+        ['fechaDecision', 'TEXT'],
+        ['campania', 'TEXT'],
+        ['provincia', 'TEXT'],
       ]);
     }
   }
@@ -196,8 +223,9 @@ export class Database {
       this.db.exec(SQLITE_TRIGGERS);
     } else {
       // Explicit migration command avoids mutating an existing PostgreSQL automatically.
-      await this.query('SELECT "bloqueadoHasta" FROM "Usuario" LIMIT 1');
+      await this.query('SELECT "correoIndice","cuentaIndice" FROM "Usuario" LIMIT 1');
     }
+    await this.protegerDatosExistentes();
     // Estados documentados: Pendiente / Aprobado / Rechazado (G01).
     await this.query('UPDATE "Referido" SET estado=$1 WHERE estado=$2', [
       'PENDIENTE',
@@ -239,15 +267,40 @@ export class Database {
       if (!done) await this.seed();
     }
   }
+  async protegerDatosExistentes() {
+    await this.transaction(async (client) => {
+      if (!this.sqlite) await this.query('SELECT pg_advisory_xact_lock(15274001)', [], client);
+      const clave = 'verificadorCifrado';
+      const [actual] = await this.query('SELECT valor FROM "Configuracion" WHERE clave=$1', [clave], client);
+      const verificador = this.datos.huella('suma:verificador:v1');
+      if (actual && actual.valor !== verificador)
+        throw new Error('SUMA_DATA_KEY no coincide con la clave de esta base de datos.');
+      if (!verificador) return;
+      for (const tabla of ['Usuario', 'Referido']) {
+        const campos = tabla === 'Usuario' ? ['correo', 'celular', 'cuenta'] : ['correo', 'celular'];
+        const seleccionar = 'SELECT id,' + campos.join(',') + ' FROM "' + tabla + '" WHERE "correoIndice" IS NULL';
+        const actualizar = 'UPDATE "' + tabla + '" SET "correoIndice"=$2,' +
+          campos.map((campo, i) => campo + '=$' + (i + 3)).join(',') +
+          (tabla === 'Usuario' ? ',"cuentaIndice"=$6' : '') + ' WHERE id=$1';
+        const filas = await this.queryRaw(seleccionar, [], client);
+        for (const fila of filas) {
+          const valores = campos.map((campo) => this.datos.cifrar(campo, fila[campo]));
+          if (tabla === 'Usuario') valores.push(fila.cuenta ? this.datos.huella('cuenta:' + fila.cuenta) : null);
+          await this.query(actualizar, [fila.id, this.datos.correoIndice(fila.correo), ...valores], client);
+        }
+      }
+      if (!actual) await this.query('INSERT INTO "Configuracion" (clave,valor) VALUES ($1,$2)', [clave, verificador], client);
+    });
+  }
   async seed() {
-    for (const [correo, nombre, rol] of [
-      ['admin@suma.ec', 'Andrea Molina', 'ADMIN'],
-      ['gestor@suma.ec', 'Gabriel Ortiz', 'GESTOR'],
-      ['socio@suma.ec', 'Daniela Medina', 'SOCIO'],
+    for (const [correo, nombre, rol, celular] of [
+      ['admin@suma.ec', 'Andrea Molina', 'ADMIN', '0991234501'],
+      ['gestor@suma.ec', 'Gabriel Ortiz', 'GESTOR', '0991234502'],
+      ['socio@suma.ec', 'Daniela Medina', 'SOCIO', '0991234503'],
     ]) {
       const rows = await this.query(
-        'INSERT INTO "Usuario" (correo,nombre,rol,"passwordHash",celular) VALUES ($1,$2,$3,$4,$5) ON CONFLICT (correo) DO NOTHING RETURNING id',
-        [correo, nombre, rol, hashPassword('Suma2026!'), '0991234567'],
+        'INSERT INTO "Usuario" (correo,nombre,rol,"passwordHash",celular,"correoIndice","cuentaEstado") VALUES ($1,$2,$3,$4,$5,$6,$7) ON CONFLICT DO NOTHING RETURNING id',
+        [this.datos.cifrar('correo', correo), nombre, rol, hashPassword('Suma2026!'), this.datos.cifrar('celular', celular), this.datos.correoIndice(correo), rol === 'SOCIO' ? 'APROBADO' : null],
       );
       if (rows.length)
         await this.query(
@@ -261,8 +314,8 @@ export class Database {
         );
     }
     const [socio] = await this.query(
-      'SELECT id FROM "Usuario" WHERE correo=$1',
-      ['socio@suma.ec'],
+      'SELECT id FROM "Usuario" WHERE COALESCE("correoIndice",correo)=$1',
+      [this.datos.correoIndice('socio@suma.ec') ?? 'socio@suma.ec'],
     );
     const fiveDaysAgo = new Date(Date.now() - 5 * 86400000).toISOString();
     for (const [nombre, correo, celular, estado, creadoEn] of [
@@ -271,13 +324,13 @@ export class Database {
       ['Luis Ramírez', 'luis@ejemplo.ec', '0990000003', 'APROBADO', new Date().toISOString()],
     ]) {
       const [exists] = await this.query(
-        'SELECT id FROM "Referido" WHERE correo=$1 AND "eliminadoEn" IS NULL',
-        [correo],
+        'SELECT id FROM "Referido" WHERE COALESCE("correoIndice",correo)=$1 AND "eliminadoEn" IS NULL',
+        [this.datos.correoIndice(correo) ?? correo],
       );
       if (!exists)
         await this.query(
-          'INSERT INTO "Referido" (nombre,correo,celular,estado,"socioId","creadoEn") VALUES ($1,$2,$3,$4,$5,$6)',
-          [nombre, correo, celular, estado, socio.id, creadoEn],
+          'INSERT INTO "Referido" (nombre,correo,celular,estado,"socioId","creadoEn","correoIndice") VALUES ($1,$2,$3,$4,$5,$6,$7)',
+          [nombre, this.datos.cifrar('correo', correo), this.datos.cifrar('celular', celular), estado, socio.id, creadoEn, this.datos.correoIndice(correo)],
         );
     }
     await this.query(

@@ -83,19 +83,39 @@
       <app-campo
         para="filtroCampania"
         etiqueta="Campaña"
-        ayuda="Disponible cuando existan campañas (Sprint 3)."
+        ayuda="Selecciona una campaña registrada."
       >
-        <select id="filtroCampania" disabled aria-describedby="filtroCampania-ayuda">
-          <option>Todas las campañas</option>
+        <select
+          id="filtroCampania"
+          aria-describedby="filtroCampania-ayuda"
+          [value]="filtros().campania"
+          (change)="filtrar({ campania: $any($event.target).value })"
+        >
+          <option value="">Todas las campañas</option>
+          @for (campania of datos()?.filtros?.campanias ?? []; track campania) {
+            <option [value]="campania" [selected]="filtros().campania === campania">
+              {{ campania }}
+            </option>
+          }
         </select>
       </app-campo>
       <app-campo
         para="filtroProvincia"
         etiqueta="Provincia"
-        ayuda="Disponible cuando el registro pida provincia (Sprint 2)."
+        ayuda="Selecciona una provincia registrada."
       >
-        <select id="filtroProvincia" disabled aria-describedby="filtroProvincia-ayuda">
-          <option>Todas las provincias</option>
+        <select
+          id="filtroProvincia"
+          aria-describedby="filtroProvincia-ayuda"
+          [value]="filtros().provincia"
+          (change)="filtrar({ provincia: $any($event.target).value })"
+        >
+          <option value="">Todas las provincias</option>
+          @for (provincia of datos()?.filtros?.provincias ?? []; track provincia) {
+            <option [value]="provincia" [selected]="filtros().provincia === provincia">
+              {{ provincia }}
+            </option>
+          }
         </select>
       </app-campo>
     }

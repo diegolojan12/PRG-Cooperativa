@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import {
   Actividad,
   Configuracion,
+  CuentaPendiente,
   Modulo,
   OpcionesActividad,
   Pagina,
@@ -39,6 +40,14 @@ export class AdministracionApi {
   }
   actualizarUsuario(id: number, datos: { rol: Rol; activo: boolean }) {
     return this.http.patch<{ ok: true }>(`/api/usuarios/${id}`, datos);
+  }
+  cuentasPendientes(pagina: number) {
+    return this.http.get<Pagina<CuentaPendiente>>('/api/usuarios/cuentas-pendientes', {
+      params: params({ pagina }),
+    });
+  }
+  verificarCuenta(id: number, estado: 'APROBADO' | 'RECHAZADO', motivo: string) {
+    return this.http.patch<{ ok: true }>(`/api/usuarios/${id}/cuenta`, { estado, motivo });
   }
   roles() {
     return this.http.get<RolPermiso[]>('/api/roles');

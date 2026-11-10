@@ -65,6 +65,8 @@ export class ReferidosPage implements OnInit, OnDestroy {
     buscar: '',
     desde: '',
     hasta: '',
+    campania: '',
+    provincia: '',
   });
   readonly datos = signal<PaginaReferidos | null>(null);
   readonly cargando = signal(true);
@@ -78,7 +80,7 @@ export class ReferidosPage implements OnInit, OnDestroy {
   readonly asociables = signal<Asociables | null>(null);
   readonly hayFiltros = computed(() => {
     const f = this.filtros();
-    return !!(f.estado || f.buscar || f.desde || f.hasta);
+    return !!(f.estado || f.buscar || f.desde || f.hasta || f.campania || f.provincia);
   });
 
   readonly form = this.fb.group({
@@ -137,7 +139,7 @@ export class ReferidosPage implements OnInit, OnDestroy {
     this.busquedaTimer = setTimeout(() => this.filtrar({ buscar: valor.trim() }), 300);
   }
   limpiarFiltros(): void {
-    this.filtrar({ estado: '', buscar: '', desde: '', hasta: '' });
+    this.filtrar({ estado: '', buscar: '', desde: '', hasta: '', campania: '', provincia: '' });
   }
 
   atrasado(ref: Referido): boolean {

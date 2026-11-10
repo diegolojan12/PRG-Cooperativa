@@ -37,6 +37,8 @@ export interface Usuario {
   celular?: string | null;
   creadoEn?: string;
   modulos: Modulo[];
+  cuentaVerificada?: boolean;
+  cuentaEstado?: EstadoReferido | null;
 }
 
 export interface Desafio2fa {
@@ -77,6 +79,7 @@ export interface Pagina<T> {
 }
 export interface PaginaReferidos extends Pagina<Referido> {
   porEstado: Record<EstadoReferido, number>;
+  filtros?: { campanias: string[]; provincias: string[] };
 }
 
 export interface Resumen {
@@ -144,4 +147,13 @@ export interface Notificacion {
 export interface Asociables {
   usuarios: Usuario[];
   socios: { id: number; nombre: string; correo: string }[];
+}
+
+export interface CuentaPendiente {
+  id: number;
+  nombre: string;
+  tipo: 'ahorros' | 'corriente';
+  numero: string;
+  fecha: string;
+  diasHabiles: number;
 }

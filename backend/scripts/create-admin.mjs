@@ -17,14 +17,14 @@ const db = new Database();
 try {
   await db.init();
   const [existing] = await db.query(
-    'SELECT id FROM "Usuario" WHERE correo=$1',
-    [correo],
+    'SELECT id FROM "Usuario" WHERE COALESCE("correoIndice",correo)=$1',
+    [db.datos.correoIndice(correo) ?? correo],
   );
   if (existing)
     throw new Error('Ese correo ya existe. No se modificó su cuenta.');
   await db.query(
-    'INSERT INTO "Usuario" (nombre,correo,rol,"passwordHash") VALUES ($1,$2,$3,$4)',
-    [nombre, correo, 'ADMIN', hashPassword(clave)],
+    'INSERT INTO "Usuario" (nombre,correo,rol,"passwordHash","correoIndice") VALUES ($1,$2,$3,$4,$5)',
+    [nombre, db.datos.cifrar('correo', correo), 'ADMIN', hashPassword(clave), db.datos.correoIndice(correo)],
   );
   console.log('Cuenta de administrador creada.');
 } finally {

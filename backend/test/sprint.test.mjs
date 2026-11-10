@@ -8,6 +8,12 @@ import request from 'supertest';
 import { Database } from '../src/database.mjs';
 import { createApi, diasHabiles } from '../src/api.mjs';
 
+async function registrar(agent, datos) {
+  const alta = await agent.post('/api/auth/register').send(datos);
+  assert.equal(alta.status, 201, JSON.stringify(alta.body));
+  return alta;
+}
+
 test('días hábiles: excluye fines de semana y feriados fijos de Ecuador', () => {
   assert.equal(diasHabiles('2026-11-06T10:00:00Z', new Date('2026-11-10T12:00:00Z')), 2);
   // 2 y 3 de noviembre son feriados nacionales.
@@ -145,7 +151,7 @@ test('Sprint 1: criterios de aceptación documentados', async (t) => {
     await t.test('RF-11-4: dictamen reservado a administración y con cuenta vinculada aprobada', async () => {
       assert.equal(
         (
-          await other.post('/api/auth/register').send({
+          await registrar(other, {
             nombre: 'Otro Socio',
             correo: 'otro@ejemplo.ec',
             celular: '0995555555',
@@ -156,14 +162,14 @@ test('Sprint 1: criterios de aceptación documentados', async (t) => {
       );
       assert.equal(
         (
-          await request(app).post('/api/auth/register').send({
+          await request(app).post('/api/auth/register').send(({
             nombre: 'Cuenta Corta',
             correo: 'corta@ejemplo.ec',
             celular: '0995555556',
             clave: 'Nueva2026!',
             cuenta: '12345678',
             tipoCuenta: 'ahorros',
-          })
+          }))
         ).status,
         400,
         'la cuenta vinculada exige 10 dígitos',
@@ -285,7 +291,7 @@ test('Sprint 1: criterios de aceptación documentados', async (t) => {
         ).status,
         200,
       );
-      assert.equal((await socio.get('/api/overview')).body.puntos, 300);
+      assert.equal((await socio.get('/api/overview')).body.puntos, 100);
       assert.equal((await request(app).post('/api/auth/register').send({})).status, 403);
       const log = (await admin.get('/api/actividad?accion=Parámetro actualizado')).body;
       assert.equal(log.porPagina, 50);
@@ -295,7 +301,7 @@ test('Sprint 1: criterios de aceptación documentados', async (t) => {
       const roleLog = (await admin.get('/api/actividad?accion=Cuenta creada')).body.items[0];
       assert.equal(roleLog.datos.rolNuevo, 'GESTOR');
       assert.ok(roleLog.objetivoId);
-      const today = new Date().toISOString().slice(0, 10);
+      const today = new Date(Date.now() - 5 * 3_600_000).toISOString().slice(0, 10);
       assert.ok((await admin.get(`/api/actividad?desde=${today}&hasta=${today}`)).body.total > 0);
       assert.equal((await admin.get('/api/actividad?desde=ayer')).status, 400);
       await assert.rejects(() => db.query('DELETE FROM "Actividad"'), /inmutable/);
@@ -388,6 +394,54 @@ test('Sprint 1: criterios de aceptación documentados', async (t) => {
     });
   } finally {
     await db.close();
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test('RNF-05: migra datos personales y conserva acceso y unicidad por correo', async () => {
+  const directory = mkdtempSync(join(tmpdir(), 'suma-cifrado-'));
+  const url = 'file:' + join(directory, 'test.db');
+  const claveOriginal = process.env.SUMA_DATA_KEY;
+  const semillaOriginal = process.env.SEED_DEMO;
+  let db;
+  try {
+    delete process.env.SUMA_DATA_KEY;
+    process.env.SEED_DEMO = 'false';
+    db = new Database(url);
+    await db.init();
+    const appLegacy = express();
+    appLegacy.use('/api', (await createApi(db)).router);
+    const usuario = { nombre: 'Cuenta Antigua', correo: 'antigua@ejemplo.ec', celular: '0990000444',
+      clave: 'Valida2026!', tipoCuenta: 'corriente', cuenta: '2255667788' };
+    await registrar(request(appLegacy), usuario);
+    await db.close();
+
+    process.env.SUMA_DATA_KEY = '2a'.repeat(32);
+    db = new Database(url);
+    const app = express();
+    app.use('/api', (await createApi(db)).router);
+    const [guardado] = await db.queryRaw('SELECT correo,celular,cuenta,"correoIndice" FROM "Usuario"');
+    for (const campo of ['correo', 'celular', 'cuenta']) {
+      assert.match(guardado[campo], /^aes:v1:/);
+      assert.ok(!guardado[campo].includes(usuario[campo]));
+    }
+    assert.match(guardado.correoIndice, /^[0-9a-f]{64}$/);
+    const login = await request(app).post('/api/auth/login').send({ correo: usuario.correo, clave: usuario.clave });
+    assert.equal(login.status, 200);
+    assert.equal(login.body.correo, usuario.correo);
+    assert.equal(login.body.correoIndice, undefined);
+    assert.equal((await request(app).post('/api/auth/register').send(({ ...usuario, cuenta: undefined }))).status, 409);
+    await db.close();
+
+    process.env.SUMA_DATA_KEY = '7b'.repeat(32);
+    db = new Database(url);
+    await assert.rejects(db.init(), /no coincide/);
+  } finally {
+    await db?.close();
+    if (claveOriginal === undefined) delete process.env.SUMA_DATA_KEY;
+    else process.env.SUMA_DATA_KEY = claveOriginal;
+    if (semillaOriginal === undefined) delete process.env.SEED_DEMO;
+    else process.env.SEED_DEMO = semillaOriginal;
     rmSync(directory, { recursive: true, force: true });
   }
 });

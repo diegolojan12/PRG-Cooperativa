@@ -1,0 +1,15 @@
+ALTER TABLE "Referido" ADD COLUMN IF NOT EXISTS "fechaDecision" TEXT;
+ALTER TABLE "Referido" ADD COLUMN IF NOT EXISTS campania TEXT;
+ALTER TABLE "Referido" ADD COLUMN IF NOT EXISTS provincia TEXT;
+ALTER TABLE "Usuario" ADD COLUMN IF NOT EXISTS "correoIndice" TEXT;
+ALTER TABLE "Referido" ADD COLUMN IF NOT EXISTS "correoIndice" TEXT;
+CREATE UNIQUE INDEX IF NOT EXISTS usuario_correo_indice ON "Usuario"((COALESCE("correoIndice",correo)));
+CREATE UNIQUE INDEX IF NOT EXISTS referido_correo_indice ON "Referido"((COALESCE("correoIndice",correo))) WHERE "eliminadoEn" IS NULL;
+ALTER TABLE "Usuario" ADD COLUMN IF NOT EXISTS "codigoReferido" TEXT;
+CREATE UNIQUE INDEX IF NOT EXISTS usuario_codigo_referido ON "Usuario"("codigoReferido");
+ALTER TABLE "Usuario" ADD COLUMN IF NOT EXISTS "cuentaIndice" TEXT;
+CREATE INDEX IF NOT EXISTS usuario_cuenta_indice ON "Usuario"((COALESCE("cuentaIndice",cuenta)));
+ALTER TABLE "Usuario" ADD COLUMN IF NOT EXISTS "cuentaSolicitadaEn" TEXT;
+ALTER TABLE "Usuario" ADD COLUMN IF NOT EXISTS "cuentaRevisadaEn" TEXT;
+CREATE TABLE IF NOT EXISTS "MovimientoPuntos" ("referidoId" INTEGER PRIMARY KEY REFERENCES "Referido"(id), "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id), cantidad INTEGER NOT NULL CHECK (cantidad >= 0), fecha TEXT NOT NULL);
+CREATE INDEX IF NOT EXISTS movimiento_usuario ON "MovimientoPuntos"("usuarioId");

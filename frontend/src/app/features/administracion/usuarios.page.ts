@@ -1,9 +1,17 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { SessionStore } from '../../core/auth/session.store';
 import { leerError } from '../../core/http/api-error';
-import { ETIQUETAS_ROL, Pagina, ROLES, Rol, Usuario } from '../../core/models/domain';
+import {
+  CuentaPendiente,
+  ETIQUETAS_ROL,
+  Pagina,
+  ROLES,
+  Rol,
+  Usuario,
+} from '../../core/models/domain';
 import { AvisoService } from '../../core/ui/aviso.service';
 import { CampoComponent } from '../../shared/campo/campo.component';
 import { IconComponent } from '../../shared/icon/icon.component';
@@ -25,7 +33,14 @@ const AYUDA_ROL: Record<Rol, string> = {
 
 @Component({
   selector: 'app-usuarios-page',
-  imports: [ReactiveFormsModule, CampoComponent, IconComponent, ModalComponent, PaginadorComponent],
+  imports: [
+    DatePipe,
+    ReactiveFormsModule,
+    CampoComponent,
+    IconComponent,
+    ModalComponent,
+    PaginadorComponent,
+  ],
   templateUrl: './usuarios.page.html',
 })
 export class UsuariosPage implements OnInit, OnDestroy {
@@ -43,12 +58,61 @@ export class UsuariosPage implements OnInit, OnDestroy {
   readonly datos = signal<Pagina<Usuario> | null>(null);
   readonly cargando = signal(true);
   readonly error = signal('');
-  readonly modal = signal<'crear' | 'gestionar' | null>(null);
+  readonly modal = signal<'crear' | 'gestionar' | 'cuentas' | null>(null);
   readonly seleccionado = signal<Usuario | null>(null);
   readonly ocupado = signal(false);
   readonly enviado = signal(false);
   readonly erroresServidor = signal<Record<string, string>>({});
   readonly enlaceDev = signal<string | null>(null);
+
+  readonly cuentas = signal<Pagina<CuentaPendiente> | null>(null);
+  readonly cuentaSeleccionada = signal<CuentaPendiente | null>(null);
+  readonly errorCuentas = signal('');
+  readonly revisionForm = this.fb.group({
+    estado: ['APROBADO' as 'APROBADO' | 'RECHAZADO'],
+    motivo: ['', [Validators.maxLength(300), sinCodigo]],
+  });
+
+  async abrirCuentas(pagina = 1): Promise<void> {
+    this.modal.set('cuentas');
+    this.cuentaSeleccionada.set(null);
+    this.cuentas.set(null);
+    this.errorCuentas.set('');
+    try {
+      this.cuentas.set(await firstValueFrom(this.api.cuentasPendientes(pagina)));
+    } catch (error) {
+      this.errorCuentas.set(leerError(error).mensaje);
+    }
+  }
+
+  seleccionarCuenta(cuenta: CuentaPendiente): void {
+    this.cuentaSeleccionada.set(cuenta);
+    this.revisionForm.reset();
+    this.errorCuentas.set('');
+  }
+
+  async revisarCuenta(): Promise<void> {
+    const cuenta = this.cuentaSeleccionada();
+    if (!cuenta || this.ocupado()) return;
+    const { estado, motivo } = this.revisionForm.getRawValue();
+    if (this.revisionForm.invalid || (estado === 'RECHAZADO' && !motivo.trim())) {
+      this.errorCuentas.set(
+        'Si rechazas la solicitud, escribe un motivo de hasta 300 caracteres en texto simple.',
+      );
+      return;
+    }
+    this.ocupado.set(true);
+    this.errorCuentas.set('');
+    try {
+      await firstValueFrom(this.api.verificarCuenta(cuenta.id, estado, motivo));
+      this.avisos.exito('Revisión de cuenta registrada.');
+      await this.abrirCuentas();
+    } catch (error) {
+      this.errorCuentas.set(leerError(error).mensaje);
+    } finally {
+      this.ocupado.set(false);
+    }
+  }
 
   readonly crearForm = this.fb.group({
     nombre: ['', [Validators.required, nombreCompleto, Validators.maxLength(100), sinCodigo]],

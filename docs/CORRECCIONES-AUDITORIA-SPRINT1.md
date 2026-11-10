@@ -15,9 +15,9 @@ corregidos (Resumen de Requisitos, Trazabilidad HU/RF/RNF).
 | G06 | Baja lógica de referidos                  | Corregido     | `PATCH /referidos/:id/baja` con motivo; unicidad de correo solo entre activos              |
 | G07 | Bitácora con IP, inmutable, filtros, 50   | Corregido     | Columnas `ip/objetivoId/datos`, triggers, `GET /actividad?desde&hasta&usuarioId&accion`    |
 | G08 | Listado global 20/pág., filtros, atraso   | Corregido     | Paginación en servidor, filtros estado/fecha/búsqueda, días hábiles (feriados fijos EC)    |
-| G09 | Cifrado AES-256 de datos personales       | **Pendiente** | Requiere índice ciego para el login por correo; decidir con backend                        |
+| G09 | Cifrado AES-256 de datos personales       | Implementado | AES-256-GCM con índice HMAC. Requiere SUMA_DATA_KEY en producción.                         |
 | G10 | Tablero admin con 6 indicadores           | Corregido     | `GET /indicadores`; `TableroPage` separado de `ResumenPage`                                |
-| G11 | Dictamen con cuenta vinculada Aprobada    | Corregido     | `PATCH /referidos/:id/dictamen` responde 409 hasta que exista RF-05 (Sprint 2)             |
+| G11 | Dictamen con cuenta vinculada Aprobada    | Corregido     | Usuarios permite revisar vínculos pendientes. El dictamen exige cuenta aprobada.           |
 | G12 | Asociación manual (30 días)               | Corregido     | `GET /referidos/asociables`, `POST /referidos/asociar`                                     |
 | G13 | Bitácora de configuración anterior/nuevo  | Corregido     | Una fila por parámetro modificado                                                          |
 | G14 | Bitácora de roles estructurada            | Corregido     | `objetivoId` + `datos.rolAnterior/rolNuevo`                                                |
@@ -36,11 +36,11 @@ corregidos (Resumen de Requisitos, Trazabilidad HU/RF/RNF).
 
 - **SQLite (desarrollo):** automática al iniciar (`Database.init()`), incluida la reconstrucción de
   `Referido` para quitar el `UNIQUE` en línea.
-- **PostgreSQL:** `npm run db:init` aplica `backend/prisma/sprint1-auditoria.sql` una sola vez.
+- **PostgreSQL:** `npm run db:init` aplica `backend/prisma/sprint1-auditoria.sql` y `backend/prisma/sprint1-dominio.sql` una sola vez.
 
 ## Verificación
 
-- `backend`: `npm run test:sprint` — 17 pruebas por criterio de aceptación.
+- `backend`: `npm run test:sprint` — 18 pruebas de integración y criterios de aceptación.
 - `frontend`: `npx ng test --watch=false` — 16 pruebas (guards, inactividad, avisos, menú por rol,
   campos, listado, baja, configuración); `npx ng lint` sin errores; `npx ng build` con carga diferida.
 - `e2e`: `node smoke.cjs` — flujo completo en Chromium (2FA, tablero, CRUD + dictamen + baja,
@@ -51,5 +51,5 @@ corregidos (Resumen de Requisitos, Trazabilidad HU/RF/RNF).
 - El socio conserva la baja lógica de sus referidos **Pendientes**; si el PO decide que solo
   administración da de baja, basta con cambiar `current` por `admin` en `PATCH /referidos/:id/baja`.
 - Límite de texto de configuración alineado a **500** caracteres (RF-14-1).
-- Filtros de campaña y provincia visibles pero deshabilitados con su sprint de disponibilidad.
+- Los filtros de campaña y provincia muestran opciones cuando hay referidos con esos datos.
 - "SUMA" se mantiene como nombre del producto hasta confirmación del PO.

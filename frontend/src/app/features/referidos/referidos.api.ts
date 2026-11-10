@@ -14,6 +14,8 @@ export interface FiltroReferidos {
   desde?: string;
   hasta?: string;
   buscar?: string;
+  campania?: string;
+  provincia?: string;
 }
 
 export const POR_PAGINA_REFERIDOS = 20; // RF-11-3

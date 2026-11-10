@@ -4,9 +4,14 @@
     <h1>Usuarios</h1>
     <p>Gestiona quiénes forman parte de tu comunidad.</p>
   </div>
-  <button type="button" class="s-primary" (click)="abrirCrear()">
-    <app-icon name="plus" />Crear cuenta
-  </button>
+  <div class="s-heading-actions">
+    <button type="button" class="s-secondary" (click)="abrirCuentas()">
+      Cuentas por verificar
+    </button>
+    <button type="button" class="s-primary" (click)="abrirCrear()">
+      <app-icon name="plus" />Crear cuenta
+    </button>
+  </div>
 </div>
 @if (enlaceDev(); as enlace) {
   <div class="s-info-banner">
@@ -22,7 +27,11 @@
 }
 <section class="s-card s-table-card">
   <div class="s-filters">
-    <app-campo para="buscarUsuarios" etiqueta="Buscar" ayuda="Nombre o correo. Ej. Daniela">
+    <app-campo
+      para="buscarUsuarios"
+      etiqueta="Buscar"
+      ayuda="Nombre o correo completo. Ej. Daniela"
+    >
       <input
         id="buscarUsuarios"
         type="search"
@@ -219,5 +228,88 @@
         </button>
       </div>
     </form>
+  </app-modal>
+}
+
+@if (modal() === 'cuentas') {
+  <app-modal [ocupado]="ocupado()" (cerrar)="cerrar()">
+    <h2 id="dialogTitle">Cuentas por verificar</h2>
+    @if (cuentaSeleccionada(); as cuenta) {
+      <p>{{ cuenta.nombre }} · {{ cuenta.tipo }} · {{ cuenta.numero }}</p>
+      <p>Confirma la titularidad en los registros de la Cooperativa antes de aprobar.</p>
+      <form [formGroup]="revisionForm" (ngSubmit)="revisarCuenta()" novalidate>
+        <app-campo
+          para="cuentaDecision"
+          etiqueta="Resultado"
+          ayuda="Elige el resultado de la revisión."
+        >
+          <select
+            id="cuentaDecision"
+            formControlName="estado"
+            aria-describedby="cuentaDecision-ayuda"
+          >
+            <option value="APROBADO">Aprobar</option>
+            <option value="RECHAZADO">Rechazar</option>
+          </select>
+        </app-campo>
+        @if (revisionForm.controls.estado.value === 'RECHAZADO') {
+          <app-campo
+            para="cuentaMotivo"
+            etiqueta="Motivo del rechazo"
+            ayuda="Escribe por qué no se pudo verificar la cuenta. Máximo 300 caracteres."
+            [requerido]="true"
+            [error]="errorCuentas() || null"
+          >
+            <textarea
+              id="cuentaMotivo"
+              formControlName="motivo"
+              maxlength="300"
+              aria-describedby="cuentaMotivo-ayuda cuentaMotivo-error"
+              [attr.aria-invalid]="!!errorCuentas()"
+            ></textarea>
+          </app-campo>
+        } @else if (errorCuentas()) {
+          <p role="alert">{{ errorCuentas() }}</p>
+        }
+        <div class="s-form-actions">
+          <button
+            type="button"
+            class="s-secondary"
+            [disabled]="ocupado()"
+            (click)="cuentaSeleccionada.set(null); errorCuentas.set('')"
+          >
+            Volver al listado
+          </button>
+          <button type="submit" class="s-primary" [disabled]="ocupado()">Registrar revisión</button>
+        </div>
+      </form>
+    } @else if (cuentas(); as d) {
+      <ul>
+        @for (cuenta of d.items; track cuenta.id) {
+          <li>
+            <button type="button" class="s-secondary" (click)="seleccionarCuenta(cuenta)">
+              Revisar a {{ cuenta.nombre }}
+            </button>
+            {{ cuenta.numero }} · {{ cuenta.fecha | date: 'dd/MM/yyyy' : '-0500' }}
+            @if (cuenta.diasHabiles > 2) {
+              <span class="s-chip-alert">{{ cuenta.diasHabiles }} días hábiles</span>
+            }
+          </li>
+        } @empty {
+          <li>Actualmente no hay cuentas pendientes.</li>
+        }
+      </ul>
+      <app-paginador
+        [pagina]="d.pagina"
+        [total]="d.total"
+        [porPagina]="d.porPagina"
+        (cambiar)="abrirCuentas($event)"
+      />
+    } @else if (errorCuentas()) {
+      <p role="alert">{{ errorCuentas() }}</p>
+      <button type="button" class="s-secondary" (click)="abrirCuentas()">Volver a intentar</button>
+    } @else {
+      <p role="status">Cargando cuentas pendientes…</p>
+    }
   </app-modal>
 }
