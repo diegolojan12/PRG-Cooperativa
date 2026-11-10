@@ -8,6 +8,7 @@
     <button type="button" class="s-secondary" [disabled]="cargando()" (click)="cargar()">
       Actualizar
     </button>
+    <a class="s-primary" href="/api/indicadores/exportar" download>Exportar indicadores CSV</a>
   </div>
 </div>
 @if (cargando() && !tablero()) {
@@ -45,6 +46,9 @@
       <span class="s-eyebrow muted">REFERIDOS POR ESTADO</span>
       <h2>Embudo de captación</h2>
       <p>{{ t.sociosActivos }} socios activos en la comunidad.</p>
+      @if (t.costoCaptacion !== null && t.costoCaptacion !== undefined) {
+        <p>Costo medio por captación registrada: USD {{ t.costoCaptacion | number: '1.2-2' }}</p>
+      }
       @for (s of estados; track s) {
         <div class="s-progress-row">
           <span><i [attr.data-state]="s"></i>{{ etiquetas[s] }}</span
@@ -76,13 +80,60 @@
       }
     </section>
   </div>
+  <section class="s-card s-settings">
+    <h2>Participación en retos y juegos</h2>
+    <div class="s-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Actividad</th>
+            <th scope="col">Participantes</th>
+            <th scope="col">Completaron</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of t.participacion ?? []; track p.id) {
+            <tr>
+              <td>{{ p.titulo }}</td>
+              <td>{{ p.participantes }}</td>
+              <td>{{ p.porcentaje | number: '1.0-1' }} %</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="3">No hay actividades para mostrar.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
   @if (session.puede('referidos')) {
-    <section class="s-card s-settings">
-      <h2>Lista comercial</h2>
-      <p>Descarga los referidos pendientes con sus datos de contacto.</p>
-      <a class="s-secondary" href="/api/referidos/exportar" download
-        >Descargar referidos pendientes</a
-      >
-    </section>
+    <form
+      class="s-card s-settings"
+      (submit)="exportarReferidos($event, desde.value, hasta.value)"
+      novalidate
+    >
+      <h2>Reporte de conversión de referidos</h2>
+      <div class="s-filters">
+        <app-campo para="reporteDesde" etiqueta="Desde" ayuda="Fecha de inicio del período.">
+          <input #desde id="reporteDesde" type="date" />
+        </app-campo>
+        <app-campo
+          para="reporteHasta"
+          etiqueta="Hasta"
+          ayuda="Fecha final. El período máximo es de doce meses."
+        >
+          <input #hasta id="reporteHasta" type="date" />
+        </app-campo>
+      </div>
+      <div class="s-heading-actions">
+        <button type="submit" class="s-primary" [disabled]="exportando()">
+          Exportar conversión CSV
+        </button>
+        <a class="s-secondary" href="/api/referidos/exportar" download
+          >Descargar referidos pendientes</a
+        >
+      </div>
+    </form>
   }
 }

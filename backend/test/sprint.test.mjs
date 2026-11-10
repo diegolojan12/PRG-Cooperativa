@@ -389,6 +389,7 @@ test('Sprints 1 y 2: criterios de aceptación documentados', async (t) => {
       const config = (await admin.get('/api/configuracion')).body;
       assert.equal((await admin.put('/api/configuracion').send({ ...config, puntosReferido: '500', valorPunto: '0.25' })).status, 200);
       assert.equal((await nuevoSocio.get('/api/overview')).body.puntos, 100);
+      assert.equal((await admin.get('/api/indicadores')).body.costoCaptacion, 33.33);
       await admin.put('/api/configuracion').send(config);
     });
 

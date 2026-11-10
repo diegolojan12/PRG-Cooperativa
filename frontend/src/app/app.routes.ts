@@ -166,6 +166,32 @@ export const routes: Routes = [
           import('./features/participacion/capacitaciones.page').then((m) => m.CapacitacionesPage),
       },
       {
+        path: 'recompensas',
+        canActivate: [moduloGuard],
+        data: { modulo: 'panel', titulo: 'Recompensas' },
+        loadComponent: () =>
+          import('./features/comunidad/recompensas.page').then((m) => m.RecompensasPage),
+      },
+      {
+        path: 'comunidad',
+        canActivate: [moduloGuard],
+        data: { modulo: 'panel', titulo: 'Comunidad' },
+        loadComponent: () =>
+          import('./features/comunidad/comunidad.page').then((m) => m.ComunidadPage),
+      },
+      {
+        path: 'salud',
+        canActivate: [moduloGuard],
+        data: { modulo: 'panel', titulo: 'Salud y bienestar' },
+        loadComponent: () => import('./features/comunidad/salud.page').then((m) => m.SaludPage),
+      },
+      {
+        path: 'soporte',
+        canActivate: [moduloGuard],
+        data: { modulo: 'ayuda', titulo: 'Soporte' },
+        loadComponent: () => import('./features/comunidad/soporte.page').then((m) => m.SoportePage),
+      },
+      {
         path: 'acceso-denegado',
         data: { titulo: 'Acceso denegado' },
         title: 'Acceso denegado · SUMA',
@@ -173,6 +199,8 @@ export const routes: Routes = [
           import('./features/ayuda/acceso-denegado.page').then((m) => m.AccesoDenegadoPage),
       },
       { path: 'aprende', redirectTo: 'capacitaciones', pathMatch: 'full' },
+      { path: 'publicaciones', redirectTo: 'comunidad', pathMatch: 'full' },
+      { path: 'reportes', redirectTo: '', pathMatch: 'full' },
       {
         path: '**',
         data: { titulo: 'Página no disponible' },

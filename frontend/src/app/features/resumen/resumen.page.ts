@@ -34,11 +34,11 @@ export class ResumenPage implements OnInit {
   readonly nombre = computed(() => this.session.usuario()?.nombre.split(' ')[0] ?? '');
   readonly accesos = [
     { id: 'referidos', label: 'Referidos', icon: 'referidos' },
+    { id: 'recompensas', label: 'Recompensas', icon: 'gift' },
     { id: 'retos', label: 'Retos', icon: 'gift' },
     { id: 'juegos', label: 'Juegos', icon: 'game' },
     { id: 'talleres', label: 'Talleres', icon: 'book' },
-    { id: 'capacitaciones', label: 'Capacitaciones', icon: 'book' },
-    { id: 'puntos', label: 'Mis puntos', icon: 'points' },
+    { id: 'comunidad', label: 'Comunidad', icon: 'usuarios' },
   ];
 
   ngOnInit(): void {

@@ -1,0 +1,215 @@
+<div class="s-page-heading">
+  <div>
+    <h1>Recompensas</h1>
+    <p>
+      {{
+        session.esAdmin()
+          ? 'Administra el catálogo y las entregas.'
+          : 'Canjea tus puntos por premios.'
+      }}
+    </p>
+  </div>
+  @if (session.esAdmin()) {
+    <button type="button" class="s-primary" (click)="abrir()">Nuevo premio</button>
+  }
+</div>
+@if (error() && !confirmacion()) {
+  <p role="alert">{{ error() }}</p>
+}
+@if (formulario()) {
+  <form class="s-card s-settings" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+    <h2>{{ editando() ? 'Editar premio' : 'Nuevo premio' }}</h2>
+    <app-campo para="premioNombre" etiqueta="Nombre" ayuda="Nombre único de hasta 100 caracteres."
+      ><input id="premioNombre" formControlName="nombre" maxlength="100"
+    /></app-campo>
+    <app-campo
+      para="premioDescripcion"
+      etiqueta="Descripción"
+      ayuda="Describe el premio en hasta 500 caracteres."
+    >
+      <textarea id="premioDescripcion" formControlName="descripcion" maxlength="500"></textarea>
+    </app-campo>
+    <app-campo para="premioCosto" etiqueta="Costo en puntos" ayuda="Número entero mayor que cero."
+      ><input id="premioCosto" formControlName="costo" type="number" min="1"
+    /></app-campo>
+    <app-campo
+      para="premioStock"
+      etiqueta="Stock"
+      ayuda="Indica cuántas unidades estarán disponibles."
+      ><input id="premioStock" formControlName="stock" type="number" min="1"
+    /></app-campo>
+    <app-campo para="premioFoto" etiqueta="Foto" ayuda="JPG o PNG de hasta 2 MB.">
+      <input
+        id="premioFoto"
+        type="file"
+        accept=".jpg,.jpeg,.png"
+        (change)="seleccionarFoto($any($event.target).files?.item(0) ?? null)"
+      />
+    </app-campo>
+    <div class="s-heading-actions">
+      <button type="submit" class="s-primary" [disabled]="ocupado()">Guardar premio</button>
+      <button type="button" class="s-secondary" (click)="formulario.set(false)">Cancelar</button>
+    </div>
+  </form>
+}
+@if (catalogo(); as c) {
+  @if (!session.esAdmin()) {
+    <section class="s-card s-settings">
+      <h2>{{ c.saldo }} puntos disponibles</h2>
+      <a class="s-text-link" routerLink="/panel/puntos">Ver historial de puntos</a>
+      @if (!c.cuentaVerificada && session.rol() === 'SOCIO') {
+        <p>Para canjear, primero verifica tu cuenta.</p>
+        <a class="s-secondary" routerLink="/panel/mi-cuenta">Vincular mi cuenta</a>
+      }
+    </section>
+  }
+  <div class="s-quick-grid">
+    @for (p of c.items; track p.id) {
+      <article class="s-card s-settings">
+        @if (p.foto) {
+          <img
+            [src]="'/api/premios/' + p.id + '/foto'"
+            [alt]="p.nombre"
+            width="180"
+            height="135"
+            loading="lazy"
+          />
+        }
+        <h2>{{ p.nombre }}</h2>
+        <p>{{ p.descripcion }}</p>
+        <p>{{ p.costo }} puntos · {{ p.stock }} disponibles</p>
+        @if (session.esAdmin()) {
+          @if (!p.foto) {
+            <p>Agrega una foto para publicar el premio.</p>
+          }
+          <button type="button" class="s-secondary" (click)="abrir(p)">Editar</button>
+          @if (p.activo) {
+            <button
+              type="button"
+              class="s-secondary"
+              [disabled]="ocupado()"
+              (click)="inactivar(p.id)"
+            >
+              Inactivar
+            </button>
+          } @else {
+            <p>Inactivo</p>
+          }
+        } @else if (session.rol() === 'SOCIO') {
+          <button
+            type="button"
+            class="s-primary"
+            [disabled]="!c.cuentaVerificada || c.saldo < p.costo"
+            (click)="elegir(p)"
+          >
+            Canjear
+          </button>
+        }
+      </article>
+    } @empty {
+      <p>No hay premios disponibles.</p>
+    }
+  </div>
+}
+@if (comprobante(); as c) {
+  <section class="s-card s-settings" role="status">
+    <h2>Canje confirmado</h2>
+    <p>{{ c.premio }} · {{ c.costo }} puntos · {{ estados[c.estado] }}</p>
+    <p>Comprobante {{ c.id }}</p>
+  </section>
+}
+@if (canjes(); as d) {
+  <section class="s-card s-settings">
+    <h2>{{ session.esAdmin() ? 'Historial de entregas' : 'Mis canjes' }}</h2>
+    @if (session.esAdmin()) {
+      <div class="s-filters">
+        <app-campo para="canjeDesde" etiqueta="Desde" ayuda="Fecha inicial del historial.">
+          <input
+            id="canjeDesde"
+            type="date"
+            [value]="desde()"
+            (change)="desde.set($any($event.target).value)"
+          />
+        </app-campo>
+        <app-campo para="canjeHasta" etiqueta="Hasta" ayuda="Fecha final del historial.">
+          <input
+            id="canjeHasta"
+            type="date"
+            [value]="hasta()"
+            (change)="hasta.set($any($event.target).value)"
+          />
+        </app-campo>
+        <button type="button" class="s-secondary" (click)="cargar()">Filtrar</button>
+      </div>
+    }
+    <div class="s-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Premio</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Puntos</th>
+            <th scope="col">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (c of d.items; track c.id) {
+            <tr>
+              <td>
+                {{ c.premio }}
+                @if (c.socio) {
+                  · {{ c.socio }}
+                }
+              </td>
+              <td>{{ c.fecha | date: 'dd/MM/yyyy HH:mm' : '-0500' }}</td>
+              <td>{{ c.costo }}</td>
+              <td>
+                {{ estados[c.estado] }}
+                @if (session.esAdmin() && c.estado !== 'ENTREGADO') {
+                  <button
+                    type="button"
+                    class="s-secondary"
+                    [disabled]="ocupado()"
+                    (click)="entregar(c)"
+                  >
+                    {{ c.estado === 'PENDIENTE' ? 'Listo para retiro' : 'Marcar entregado' }}
+                  </button>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="4">Todavía no hay canjes.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <app-paginador
+      [pagina]="d.pagina"
+      [porPagina]="d.porPagina"
+      [total]="d.total"
+      (cambiar)="cargar($event)"
+    />
+  </section>
+}
+@if (confirmacion(); as c) {
+  <app-modal [ocupado]="ocupado()" (cerrar)="confirmacion.set(null)">
+    <h2 id="dialogTitle">Confirmar canje</h2>
+    <p>Canjearás {{ c.premio.nombre }} por {{ c.premio.costo }} puntos.</p>
+    @if (error()) {
+      <p role="alert">{{ error() }}</p>
+    }
+    <button type="button" class="s-primary" [disabled]="ocupado()" (click)="canjear()">
+      Confirmar
+    </button>
+    <button
+      type="button"
+      class="s-secondary"
+      [disabled]="ocupado()"
+      (click)="confirmacion.set(null)"
+    >
+      Cancelar
+    </button>
+  </app-modal>
+}

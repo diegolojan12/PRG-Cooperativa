@@ -118,6 +118,14 @@ export interface Indicador {
 export interface Tablero {
   generadoEn: string;
   sociosActivos: number;
+  costoCaptacion?: number | null;
+  participacion?: {
+    id: string;
+    titulo: string;
+    tipo: string;
+    participantes: number;
+    porcentaje: number;
+  }[];
   pendientesAtrasados: number;
   estados: Record<EstadoReferido, number>;
   indicadores: Indicador[];

@@ -1,0 +1,256 @@
+<div class="s-page-heading">
+  <div>
+    <h1>Comunidad</h1>
+    <p>Comparte novedades y conversa con otros socios.</p>
+  </div>
+  @if (session.esAdmin()) {
+    <button type="button" class="s-secondary" (click)="cargarModeracion()">Abrir moderación</button>
+  }
+</div>
+@if (error() && !reportando()) {
+  <p role="alert">{{ error() }}</p>
+}
+@if (moderacion(); as m) {
+  <section class="s-card s-settings">
+    <h2>Moderación</h2>
+    <button type="button" class="s-secondary" (click)="moderacion.set(null)">
+      Cerrar moderación
+    </button>
+    @for (c of m.items; track c.tipo + c.id) {
+      <article>
+        <h3>
+          {{ c.tipo === 'PUBLICACION' ? 'Publicación' : 'Comentario' }} · {{ c.estado }} ·
+          {{ c.reportes }} reportes activos
+        </h3>
+        <p>{{ c.texto }}</p>
+        <div class="s-heading-actions">
+          @if (c.estado === 'VISIBLE') {
+            <button
+              type="button"
+              class="s-secondary"
+              [disabled]="ocupado()"
+              (click)="moderar(c, 'ocultar')"
+            >
+              Ocultar
+            </button>
+          } @else {
+            <button
+              type="button"
+              class="s-secondary"
+              [disabled]="ocupado()"
+              (click)="moderar(c, 'restaurar')"
+            >
+              Restaurar
+            </button>
+          }
+          <button
+            type="button"
+            class="s-danger"
+            [disabled]="ocupado()"
+            (click)="moderar(c, 'eliminar')"
+          >
+            Eliminar
+          </button>
+        </div>
+      </article>
+    } @empty {
+      <p>No hay contenido para moderar.</p>
+    }
+    <app-paginador
+      [pagina]="m.pagina"
+      [porPagina]="m.porPagina"
+      [total]="m.total"
+      (cambiar)="cargarModeracion($event)"
+    />
+  </section>
+}
+<form class="s-card s-settings" (submit)="guardar($event, foto)" novalidate>
+  <h2>{{ editando() ? 'Editar publicación' : 'Nueva publicación' }}</h2>
+  <app-campo para="muroTexto" etiqueta="Mensaje" ayuda="Hasta 500 caracteres.">
+    <textarea
+      id="muroTexto"
+      maxlength="500"
+      [value]="texto()"
+      (input)="texto.set($any($event.target).value)"
+    ></textarea>
+  </app-campo>
+  <app-campo para="muroFoto" etiqueta="Imagen (opcional)" ayuda="JPG o PNG de hasta 2 MB.">
+    <input
+      #foto
+      id="muroFoto"
+      type="file"
+      accept=".jpg,.jpeg,.png"
+      (change)="seleccionar(foto.files?.item(0) ?? null)"
+    />
+  </app-campo>
+  <div class="s-heading-actions">
+    <button type="submit" class="s-primary" [disabled]="ocupado()">
+      {{ editando() ? 'Guardar publicación' : 'Publicar' }}
+    </button>
+    @if (editando()) {
+      <button type="button" class="s-secondary" (click)="foto.value = ''; limpiar()">
+        Cancelar edición
+      </button>
+    }
+  </div>
+</form>
+@if (datos(); as d) {
+  @for (p of d.items; track p.id) {
+    <article class="s-card s-settings">
+      <h2>
+        {{ p.autor }}
+        @if (p.oficial) {
+          · Oficial
+        }
+      </h2>
+      <p>
+        {{ p.fecha | date: 'dd/MM/yyyy HH:mm' : '-0500' }}
+        @if (p.fijadaHasta && p.fijadaHasta > ahora()) {
+          · Fijada
+        }
+      </p>
+      <p>{{ p.texto }}</p>
+      @if (p.imagen) {
+        <img
+          [src]="'/api/comunidad/' + p.id + '/imagen'"
+          alt="Imagen de la publicación"
+          style="max-width: 100%; max-height: 360px"
+          loading="lazy"
+        />
+      }
+      <div class="s-heading-actions">
+        <button
+          type="button"
+          class="s-secondary"
+          [disabled]="ocupado()"
+          [attr.aria-pressed]="!!p.meGusta"
+          (click)="reaccion(p)"
+        >
+          Me gusta · {{ p.reacciones }}
+        </button>
+        <button
+          type="button"
+          class="s-secondary"
+          [attr.aria-expanded]="abierto() === p.id"
+          (click)="abrirComentarios(p.id)"
+        >
+          Comentarios
+        </button>
+        @if (p.propia) {
+          <button type="button" class="s-secondary" (click)="editar(p)">Editar</button>
+          <button
+            type="button"
+            class="s-danger"
+            [disabled]="ocupado()"
+            (click)="borrar('PUBLICACION', p.id)"
+          >
+            Retirar
+          </button>
+        } @else {
+          <button
+            type="button"
+            class="s-secondary"
+            (click)="error.set(''); reportando.set({ tipo: 'PUBLICACION', id: p.id })"
+          >
+            Reportar publicación
+          </button>
+        }
+      </div>
+      @if (p.oficial && (p.propia || session.esAdmin())) {
+        <div class="s-heading-actions">
+          <app-campo [para]="'fijar-' + p.id" etiqueta="Días fijada" ayuda="De 1 a 30 días.">
+            <input #dias [id]="'fijar-' + p.id" type="number" value="1" min="1" max="30" />
+          </app-campo>
+          <button
+            type="button"
+            class="s-secondary"
+            [disabled]="ocupado()"
+            (click)="fijar(p.id, dias.valueAsNumber)"
+          >
+            Fijar
+          </button>
+          @if (p.fijadaHasta) {
+            <button
+              type="button"
+              class="s-secondary"
+              [disabled]="ocupado()"
+              (click)="fijar(p.id, null)"
+            >
+              Quitar fijación
+            </button>
+          }
+        </div>
+      }
+      @if (abierto() === p.id) {
+        <section>
+          <h3>Comentarios</h3>
+          @for (c of comentarios(); track c.id) {
+            <p>
+              <strong>{{ c.autor }}</strong> · {{ c.texto }}
+              @if (c.propio) {
+                <button
+                  type="button"
+                  class="s-secondary"
+                  [disabled]="ocupado()"
+                  (click)="borrar('COMENTARIO', c.id)"
+                >
+                  Retirar comentario
+                </button>
+              } @else {
+                <button
+                  type="button"
+                  class="s-secondary"
+                  (click)="error.set(''); reportando.set({ tipo: 'COMENTARIO', id: c.id })"
+                >
+                  Reportar comentario
+                </button>
+              }
+            </p>
+          } @empty {
+            <p>Aún no hay comentarios.</p>
+          }
+          <form (submit)="comentar($event, p.id, comentario)" novalidate>
+            <app-campo
+              [para]="'comentar-' + p.id"
+              etiqueta="Tu comentario"
+              ayuda="Hasta 250 caracteres."
+            >
+              <input #comentario [id]="'comentar-' + p.id" maxlength="250" />
+            </app-campo>
+            <button type="submit" class="s-primary" [disabled]="ocupado()">Comentar</button>
+          </form>
+        </section>
+      }
+    </article>
+  } @empty {
+    <p>Aún no hay publicaciones.</p>
+  }
+  <app-paginador
+    [pagina]="d.pagina"
+    [porPagina]="d.porPagina"
+    [total]="d.total"
+    (cambiar)="cargar($event)"
+  />
+}
+@if (reportando()) {
+  <app-modal [ocupado]="ocupado()" (cerrar)="reportando.set(null)">
+    <h2 id="dialogTitle">Reportar contenido</h2>
+    <app-campo
+      para="muroMotivo"
+      etiqueta="Motivo"
+      ayuda="Selecciona el motivo para que administración revise el contenido."
+    >
+      <select #motivo id="muroMotivo">
+        @for (m of motivos; track m.id) {
+          <option [value]="m.id">{{ m.nombre }}</option>
+        }
+      </select>
+    </app-campo>
+    @if (error()) {
+      <p role="alert">{{ error() }}</p>
+    }
+    <button type="button" class="s-primary" [disabled]="ocupado()" (click)="reportar(motivo.value)">
+      Enviar reporte
+    </button>
+  </app-modal>
+}

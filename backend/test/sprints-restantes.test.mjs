@@ -539,6 +539,227 @@ test('Flujos integrados del backlog posterior al Sprint 2', async (t) => {
       },
     );
 
+    await t.test(
+      'HU-044 a HU-046: foto válida, canje atómico y entrega ordenada',
+      async () => {
+        const p = ok(
+          await admin.post('/api/premios').send({
+            nombre: 'Premio piloto',
+            descripcion: 'Un artículo de prueba',
+            costo: 40,
+            stock: 1,
+          }),
+          201,
+        );
+        assert.equal(ok(await titular.a.get('/api/premios')).items.length, 0);
+        assert.equal(
+          (
+            await admin
+              .post('/api/premios/' + p.id + '/foto')
+              .set('Content-Type', 'application/octet-stream')
+              .send(Buffer.from('<svg>imagen</svg>'))
+          ).status,
+          400,
+        );
+        const png = await QRCode.toBuffer('Premio de prueba');
+        ok(
+          await admin
+            .post('/api/premios/' + p.id + '/foto')
+            .set('Content-Type', 'application/octet-stream')
+            .send(png),
+        );
+        assert.equal(ok(await titular.a.get('/api/premios')).items.length, 1);
+        const puntosAntes = ok(await titular.a.get('/api/puntos'));
+        const datos = { premioId: p.id, solicitud: randomUUID() };
+        const r = await Promise.all([
+          titular.a.post('/api/canjes').send(datos),
+          titular.a.post('/api/canjes').send(datos),
+        ]);
+        r.forEach((x) => ok(x, 201));
+        assert.equal(r[0].body.id, r[1].body.id);
+        assert.equal(ok(await titular.a.get('/api/premios')).items.length, 0);
+        const saldo = ok(await titular.a.get('/api/puntos'));
+        assert.equal(saldo.saldo, puntosAntes.saldo - 40);
+        assert.equal(saldo.acumulados, puntosAntes.acumulados);
+        assert.equal(saldo.nivel.nombre, puntosAntes.nivel.nombre);
+        const url = '/api/canjes/' + r[0].body.id + '/entrega';
+        assert.equal(
+          (await admin.patch(url).send({ estado: 'ENTREGADO' })).status,
+          409,
+        );
+        ok(await admin.patch(url).send({ estado: 'LISTO' }));
+        ok(await admin.patch(url).send({ estado: 'ENTREGADO' }));
+        assert.equal(
+          ok(await titular.a.get('/api/canjes')).items[0].estado,
+          'ENTREGADO',
+        );
+        assert.equal(ok(await admin.get('/api/canjes')).porPagina, 50);
+      },
+    );
+
+    await t.test(
+      'HU-047 a HU-050: autoría, comentarios, reacciones, contenido oficial y moderación',
+      async () => {
+        const post = ok(
+          await socio
+            .post('/api/comunidad')
+            .send({ texto: 'Una publicación de prueba' }),
+          201,
+        );
+        const url = '/api/comunidad/' + post.id;
+        assert.equal(
+          (await titular.a.patch(url).send({ texto: 'Cambio no permitido' }))
+            .status,
+          403,
+        );
+        ok(
+          await titular.a
+            .post(url + '/comentarios')
+            .send({ texto: 'Comentario de prueba' }),
+          201,
+        );
+        const [comentario] = ok(await titular.a.get(url + '/comentarios'));
+        assert.equal(comentario.autor, 'Nombre');
+        ok(
+          await titular.a.delete('/api/comunidad/comentarios/' + comentario.id),
+        );
+        assert.equal(ok(await titular.a.get(url + '/comentarios')).length, 0);
+        for (let i = 0; i < 2; i++)
+          ok(await titular.a.put(url + '/reaccion').send({ activa: true }));
+        assert.equal(
+          ok(await socio.get('/api/comunidad')).items.find(
+            (x) => x.id === post.id,
+          ).reacciones,
+          1,
+        );
+        ok(await titular.a.put(url + '/reaccion').send({ activa: false }));
+        const oficial = ok(
+          await gestor
+            .post('/api/comunidad')
+            .send({ texto: 'Aviso oficial de prueba' }),
+          201,
+        );
+        ok(
+          await gestor
+            .patch('/api/comunidad/' + oficial.id + '/fijar')
+            .send({ dias: 2 }),
+        );
+        assert.equal(
+          ok(await titular.a.get('/api/comunidad')).items[0].id,
+          oficial.id,
+        );
+        const datos = { tipo: 'PUBLICACION', id: post.id, motivo: 'SPAM' };
+        ok(await titular.a.post('/api/comunidad/reportes').send(datos), 201);
+        assert.equal(
+          (await titular.a.post('/api/comunidad/reportes').send(datos)).status,
+          409,
+        );
+        ok(await gestor.post('/api/comunidad/reportes').send(datos), 201);
+        ok(await admin.post('/api/comunidad/reportes').send(datos), 201);
+        assert.ok(
+          !ok(await socio.get('/api/comunidad')).items.some(
+            (x) => x.id === post.id,
+          ),
+        );
+        const moderar = '/api/comunidad/moderacion/PUBLICACION/' + post.id;
+        ok(await admin.patch(moderar).send({ accion: 'restaurar' }));
+        assert.ok(
+          ok(await socio.get('/api/comunidad')).items.some(
+            (x) => x.id === post.id,
+          ),
+        );
+        ok(await admin.patch(moderar).send({ accion: 'ocultar' }));
+        ok(await admin.patch(moderar).send({ accion: 'eliminar' }));
+      },
+    );
+
+    await t.test(
+      'HU-051, HU-053 y HU-054: catálogo, soporte y exportaciones con datos reales',
+      async () => {
+        const salud = ok(
+          await gestor.post('/api/salud').send({
+            tipo: 'ARTICULO',
+            categoria: 'PREVENCION',
+            titulo: 'Artículo de prueba',
+            descripcion: 'Contenido administrado por el gestor.',
+          }),
+          201,
+        );
+        assert.equal(ok(await socio.get('/api/salud')).articulos.length, 0);
+        ok(
+          await gestor
+            .patch('/api/salud/' + salud.id + '/estado')
+            .send({ estado: 'PUBLICADO' }),
+        );
+        assert.equal(
+          ok(await socio.get('/api/salud')).articulos[0].id,
+          salud.id,
+        );
+        ok(
+          await gestor
+            .patch('/api/salud/' + salud.id + '/estado')
+            .send({ estado: 'BORRADOR' }),
+        );
+        assert.equal(ok(await socio.get('/api/salud')).articulos.length, 0);
+        const s = ok(
+          await socio.post('/api/soporte').send({
+            descripcion: 'Necesito consultar el estado de una solicitud.',
+          }),
+          201,
+        );
+        assert.match(s.codigo, /^[A-F0-9]{6}$/);
+        assert.ok(
+          !ok(await titular.a.get('/api/soporte')).items.some(
+            (x) => x.codigo === s.codigo,
+          ),
+        );
+        const url = '/api/soporte/' + s.codigo;
+        assert.equal(
+          (
+            await admin
+              .patch(url)
+              .send({ estado: 'CERRADA', respuesta: 'Respuesta de prueba' })
+          ).status,
+          409,
+        );
+        ok(await admin.patch(url).send({ estado: 'EN_ATENCION' }));
+        ok(
+          await admin
+            .patch(url)
+            .send({ estado: 'CERRADA', respuesta: 'Respuesta de prueba' }),
+        );
+        assert.ok(
+          ok(await socio.get('/api/notificaciones/bandeja')).items.some((n) =>
+            n.titulo.endsWith(s.codigo),
+          ),
+        );
+        const datos = ok(await admin.get('/api/indicadores'));
+        assert.equal(
+          datos.indicadores.find((x) => x.id === 'canjeados').valor,
+          40,
+        );
+        assert.equal(
+          datos.indicadores.find((x) => x.id === 'talleres').valor,
+          1,
+        );
+        assert.ok(
+          datos.participacion.some(
+            (x) => x.id === 'trivia' && x.porcentaje === 100,
+          ),
+        );
+        const csv = await admin.get('/api/indicadores/exportar');
+        assert.equal(csv.status, 200);
+        assert.match(csv.text, /Puntos canjeados/);
+        const conversion = await admin.get(
+          '/api/reportes/referidos?desde=' + fecha(-1) + '&hasta=' + fecha(0),
+        );
+        assert.equal(conversion.status, 200);
+        assert.match(conversion.text, /Campaña Local/);
+        const pendientes = await admin.get('/api/referidos/exportar');
+        assert.equal(pendientes.status, 200);
+        assert.match(pendientes.text, /Socio referidor/);
+      },
+    );
   } finally {
     await db.close();
     rmSync(dir, { recursive: true, force: true });

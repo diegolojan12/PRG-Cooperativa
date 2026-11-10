@@ -69,7 +69,7 @@ describe('Menú por rol (RF-08-3)', () => {
     const menu = opciones('GESTOR');
     expect(menu).not.toContain('Referidos');
     expect(menu).not.toContain('Usuarios');
-    expect(menu).toContain('Trivia financiera');
+    expect(menu).toContain('Publicaciones');
   });
 });
 

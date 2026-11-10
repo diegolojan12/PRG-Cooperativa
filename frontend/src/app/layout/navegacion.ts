@@ -25,6 +25,41 @@ export interface FuncionNav {
 }
 
 export const FUNCIONES: readonly FuncionNav[] = [
+  {
+    id: 'recompensas',
+    label: 'Recompensas',
+    icon: 'gift',
+    permiso: 'panel',
+    roles: ['SOCIO', 'ADMIN'],
+  },
+  {
+    id: 'comunidad',
+    label: 'Comunidad',
+    icon: 'post',
+    permiso: 'panel',
+    roles: ['SOCIO', 'ADMIN'],
+  },
+  {
+    id: 'comunidad',
+    label: 'Publicaciones',
+    icon: 'post',
+    permiso: 'panel',
+    roles: ['GESTOR'],
+  },
+  {
+    id: 'salud',
+    label: 'Salud y bienestar',
+    icon: 'book',
+    permiso: 'panel',
+    roles: ['SOCIO', 'GESTOR', 'ADMIN'],
+  },
+  {
+    id: 'soporte',
+    label: 'Soporte',
+    icon: 'ayuda',
+    permiso: 'ayuda',
+    roles: ['SOCIO', 'GESTOR', 'ADMIN'],
+  },
   { id: 'retos', label: 'Retos', icon: 'gift', permiso: 'panel', roles: ['SOCIO', 'ADMIN'] },
   {
     id: 'juegos',

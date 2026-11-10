@@ -2,6 +2,10 @@ import express from 'express';
 import { randomBytes } from 'node:crypto';
 import { AceptacionTerminos, AvisoPrivacidad, CodigoVerificacion, CuentaCooperativa, Rol, Usuario, errorDeDominio } from './dominio/acceso.mjs';
 import { CodigoReferido, Referido } from './dominio/referidos.mjs';
+import { rutasRecompensas } from './dominio/recompensas.mjs';
+import { rutasComunidad } from './dominio/comunidad.mjs';
+import { rutasBienestarSoporte } from './dominio/bienestar-soporte.mjs';
+import { participacion, rutasReportes } from './dominio/reportes.mjs';
 import { rutasCapacitaciones } from './dominio/capacitaciones.mjs';
 import { rutasParticipacion } from './dominio/participacion.mjs';
 import { rutasTrivia } from './dominio/trivia.mjs';
@@ -505,6 +509,9 @@ export async function createApi(database) {
   const recordatorios = rutasParticipacion(contextoActividades);
   rutasTrivia(contextoActividades);
   rutasCapacitaciones(contextoActividades);
+  rutasRecompensas({ ...contextoActividades, fecha, inicioDelDia, finDelDia });
+  rutasComunidad(contextoActividades);
+  rutasBienestarSoporte(contextoActividades);
   route('get', '/provincias', (_, res) => res.json(provinciasCobertura()));
 
   route('post', '/auth/register', async (req, res) => {
@@ -709,12 +716,22 @@ export async function createApi(database) {
       ['PENDIENTE'],
     );
     const [movimientos] = await db.query(
-      "SELECT COALESCE(SUM(CASE WHEN tipo='CREDITO' THEN cantidad ELSE 0 END),0) AS otorgados FROM \"MovimientoPuntos\"",
+      "SELECT COALESCE(SUM(CASE WHEN tipo='CREDITO' THEN cantidad ELSE 0 END),0) AS otorgados, " +
+      "COALESCE(SUM(CASE WHEN tipo='DEBITO' AND actividad='CANJE' THEN cantidad ELSE 0 END),0) AS canjeados FROM \"MovimientoPuntos\"",
+    );
+    const [captacion] = await db.query(
+      'SELECT COALESCE(SUM(m.cantidad),0) AS total FROM "MovimientoPuntos" m JOIN "Referido" r ON r.id=m."referidoId" ' +
+      "WHERE m.tipo='CREDITO' AND r.estado='APROBADO' AND r.\"eliminadoEn\" IS NULL",
     );
     const [{ total: inscripciones }] = await db.query('SELECT COUNT(*) AS total FROM "Inscripcion" WHERE estado=$1', ['CONFIRMADA']);
+    const costoCaptacion = aprobados
+      ? Math.round(Number(captacion.total) * Number(await setting('valorPunto')) * 100 / aprobados) / 100
+      : null;
     return {
       generadoEn: now(),
       sociosActivos: Number(socios.total),
+      costoCaptacion,
+      participacion: await participacion(db),
       pendientesAtrasados: pendientes.filter((x) => diasHabiles(x.creadoEn) > 2).length,
       estados: Object.fromEntries(
         STATES.map((s) => [s, refs.filter((x) => x.estado === s).length]),
@@ -739,7 +756,7 @@ export async function createApi(database) {
           valor: Number(movimientos.otorgados),
           unidad: 'pts',
         },
-        { id: 'canjeados', etiqueta: 'Puntos canjeados', valor: 0, unidad: 'pts', disponibleDesde: 'Sprint 5' },
+        { id: 'canjeados', etiqueta: 'Puntos canjeados', valor: Number(movimientos.canjeados), unidad: 'pts' },
         { id: 'talleres', etiqueta: 'Inscripciones a talleres', valor: Number(inscripciones), unidad: '' },
       ],
     };
@@ -748,6 +765,7 @@ export async function createApi(database) {
     await admin(req, 'panel');
     res.json(await indicadores());
   });
+  rutasReportes({ db, route, admin, fecha, inicioDelDia, finDelDia, csv, indicadores });
 
   /* ---------- Referidos (RF-11-3 a RF-11-6) ---------- */
   function referralFilters(req, user, soloPendientes = false) {

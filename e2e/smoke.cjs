@@ -150,12 +150,20 @@ const web = http.createServer((req, res) => {
     await expect(page.getByRole("button", { name: "Pausar", exact: true })).toBeVisible();
     for (const [ruta, titulo] of [
       ["gamificacion", "Niveles e insignias"], ["retos", "Retos"], ["juegos", "Banco de preguntas"],
-      ["capacitaciones", "Capacitaciones"], ["talleres", "Talleres"],
+      ["capacitaciones", "Capacitaciones"], ["talleres", "Talleres"], ["recompensas", "Recompensas"],
+      ["comunidad", "Comunidad"], ["salud", "Salud y bienestar"], ["soporte", "Solicitudes de soporte"],
     ]) {
       await page.goto(base + "/panel/" + ruta);
       await expect(page.getByRole("heading", { name: titulo, exact: true })).toBeVisible();
     }
-    console.log("PASS: campaña creada y activada y pantallas S3 a S4");
+    await page.getByRole("textbox", { name: "Cuéntanos qué necesitas" }).fill("Solicitud desde el navegador");
+    await page.getByRole("button", { name: "Enviar solicitud", exact: true }).click();
+    await expect(page.getByText("Solicitud desde el navegador", { exact: true })).toBeVisible();
+    await page.goto(base + "/panel");
+    const archivoIndicadores = page.waitForEvent("download");
+    await page.getByRole("link", { name: "Exportar indicadores CSV" }).click();
+    expect((await archivoIndicadores).suggestedFilename()).toBe("SUMA-indicadores.csv");
+    console.log("PASS: campaña creada y activada, pantallas S3 a S5, soporte y CSV del tablero");
     await page.goto(base + "/panel/referidos");
     await page.getByRole("button", { name: "Nuevo referido" }).click();
     await page.getByRole("button", { name: "Registrar referido" }).click();
