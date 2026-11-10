@@ -22,6 +22,7 @@
       </h1>
       <p class="s-date">{{ fecha }}</p>
       <p class="s-welcome">{{ o.bienvenida }}</p>
+      <p>Notificaciones sin leer · {{ o.sinLeer ?? 0 }}</p>
       <div class="s-hero-chips">
         <span><span class="s-online"></span>Cada recomendación abre una oportunidad</span
         ><span
@@ -77,9 +78,17 @@
         <span class="s-stat-icon"><app-icon name="points" /></span
         ><span class="s-stat-tag">Por aprobaciones</span>
       </div>
-      <strong>{{ o.puntos | number: '1.0-0' }}</strong>
+      <strong>{{ o.saldo ?? o.puntos | number: '1.0-0' }}</strong>
       <p>Mis puntos</p>
-      <small>Se acreditan al aprobar tus referidos</small>
+      <small>
+        @if (o.nivel; as nivel) {
+          Nivel {{ nivel.nombre }}
+          @if (nivel.siguiente) {
+            · Faltan {{ nivel.faltan }} puntos para {{ nivel.siguiente }}
+          }
+        }
+      </small>
+      <a class="s-text-link" routerLink="/panel/puntos">Ver saldo e historial</a>
     </article>
     <article class="s-stat white">
       <div class="s-stat-top">
@@ -135,4 +144,22 @@
       }
     </section>
   </div>
+  @if (session.rol() === 'SOCIO') {
+    <section class="s-quick-access" aria-labelledby="quickTitle">
+      <h2 id="quickTitle">Accesos rápidos</h2>
+      <div class="s-quick-grid">
+        @for (item of accesos; track item.id) {
+          <a
+            class="s-card s-quick-link"
+            [routerLink]="['/panel', item.id]"
+            [attr.aria-label]="'Ir a ' + item.label"
+          >
+            <span class="s-feature-icon yellow"><app-icon [name]="item.icon" /></span>
+            <strong>{{ item.label }}</strong>
+            <app-icon name="arrow" />
+          </a>
+        }
+      </div>
+    </section>
+  }
 }

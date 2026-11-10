@@ -2,6 +2,7 @@ import { Location } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
+import { SessionStore } from '../../core/auth/session.store';
 import { AuthApi } from '../../core/auth/auth.api';
 import { leerError } from '../../core/http/api-error';
 import { DesafioConfirmacion } from '../../core/models/domain';
@@ -66,6 +67,7 @@ import { AuthPreviewComponent } from './auth-preview.component';
 })
 export class ConfirmarCorreoPage {
   private auth = inject(AuthApi);
+  private sesion = inject(SessionStore);
   private router = inject(Router);
   private avisos = inject(AvisoService);
   readonly desafio = (inject(Location).getState() as { confirmacion?: DesafioConfirmacion } | null)
@@ -84,10 +86,13 @@ export class ConfirmarCorreoPage {
     this.ocupado.set(true);
     this.error.set('');
     try {
-      await firstValueFrom(this.auth.confirmarCorreo(this.desafio.token, codigo.trim()));
+      const resultado = await firstValueFrom(
+        this.auth.confirmarCorreo(this.desafio.token, codigo.trim()),
+      );
+      if (resultado.cambioCorreo) this.sesion.limpiar();
       await this.router.navigate(['/iniciar-sesion'], {
         replaceUrl: true,
-        queryParams: { registered: '1' },
+        queryParams: resultado.cambioCorreo ? { correoActualizado: '1' } : { registered: '1' },
       });
     } catch (error) {
       this.error.set(leerError(error).mensaje);

@@ -42,6 +42,41 @@ export class ConfirmacionCorreo {
     return { token, ...codigo };
   }
 
+  async iniciarCambio(usuarioId, correo, client) {
+    const ahora = Date.now();
+    const [anterior] = await this.db.query(
+      'SELECT "correoPendiente",reenvios,vence FROM "ConfirmacionCorreo" WHERE "usuarioId"=$1',
+      [usuarioId],
+      client,
+    );
+    const reenvios = (anterior ? JSON.parse(anterior.reenvios) : []).filter(
+      (t) => ahora - t < HORA,
+    );
+    if (anterior && reenvios.length >= 3)
+      throw errorDeDominio(
+        'Ya solicitaste tres códigos en la última hora. Intenta más tarde.',
+        429,
+      );
+    const token = CodigoVerificacion.token();
+    const { codigo, vence, huella } = this.emitir(usuarioId, ahora);
+    await this.db.query(
+      'INSERT INTO "ConfirmacionCorreo" ("usuarioId",token,"tokenExpira",huella,vence,"correoPendiente","correoPendienteIndice",reenvios) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) ' +
+        'ON CONFLICT ("usuarioId") DO UPDATE SET token=$2,"tokenExpira"=$3,huella=$4,vence=$5,"correoPendiente"=$6,"correoPendienteIndice"=$7,reenvios=$8,intentos=0',
+      [
+        usuarioId,
+        CodigoVerificacion.huella(token),
+        new Date(ahora + 24 * HORA).toISOString(),
+        huella,
+        vence,
+        this.db.datos.cifrar('correo', correo),
+        this.db.datos.correoIndice(correo),
+        JSON.stringify([...reenvios, ahora]),
+      ],
+      client,
+    );
+    return { token, codigo, vence, huella };
+  }
+
   async reanudar(usuarioId) {
     const token = CodigoVerificacion.token();
     const [actual] = await this.db.query(
@@ -74,7 +109,7 @@ export class ConfirmacionCorreo {
       [llave, new Date(ahora).toISOString()],
       client,
     );
-    if (!fila?.activo || fila.correoVerificado)
+    if (!fila?.activo || (fila.correoVerificado && !fila.correoPendiente))
       throw errorDeDominio(
         'La solicitud venció o ya se utilizó. Inicia sesión para continuar.',
         400,
@@ -82,7 +117,7 @@ export class ConfirmacionCorreo {
     return fila;
   }
 
-  async confirmar(token, codigo) {
+  async confirmar(token, codigo, alCambiar) {
     const ahora = Date.now();
     if (typeof codigo !== 'string' || !/^\d{6}$/.test(codigo))
       throw errorDeDominio('Escribe los seis dígitos del correo.', 400, {
@@ -105,17 +140,38 @@ export class ConfirmacionCorreo {
         );
         return false;
       }
-      await this.db.query(
-        'UPDATE "Usuario" SET "correoVerificado"=$2 WHERE id=$1',
-        [fila.usuarioId, true],
-        client,
-      );
+      if (fila.correoPendiente) {
+        await this.db.query(
+          'UPDATE "Usuario" SET correo=$2,"correoIndice"=$3 WHERE id=$1',
+          [
+            fila.usuarioId,
+            fila.correoPendiente,
+            this.db.datos.correoIndice(
+              this.db.datos.descifrar('correo', fila.correoPendiente),
+            ),
+          ],
+          client,
+        );
+        for (const tabla of ['Sesion', 'DosFactor', 'Recuperacion'])
+          await this.db.query(
+            'DELETE FROM "' + tabla + '" WHERE "usuarioId"=$1',
+            [fila.usuarioId],
+            client,
+          );
+        await alCambiar?.(fila.usuarioId, client);
+      } else {
+        await this.db.query(
+          'UPDATE "Usuario" SET "correoVerificado"=$2 WHERE id=$1',
+          [fila.usuarioId, true],
+          client,
+        );
+      }
       await this.db.query(
         'DELETE FROM "ConfirmacionCorreo" WHERE "usuarioId"=$1',
         [fila.usuarioId],
         client,
       );
-      return true;
+      return { cambioCorreo: Boolean(fila.correoPendiente) };
     });
   }
 
@@ -147,7 +203,9 @@ export class ConfirmacionCorreo {
         client,
       );
       return {
-        correo: fila.correo,
+        correo: fila.correoPendiente
+          ? this.db.datos.descifrar('correo', fila.correoPendiente)
+          : fila.correo,
         ...codigo,
       };
     });

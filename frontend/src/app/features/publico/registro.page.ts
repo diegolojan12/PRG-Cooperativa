@@ -44,6 +44,8 @@ export class RegistroPage {
   private identity = { nombre: '', correo: '', celular: '' };
   private cuenta = '';
 
+  readonly provincias = signal<string[]>([]);
+  readonly provincia = signal('');
   readonly aviso = signal<AvisoPrivacidad | null>(null);
   readonly errorAviso = signal('');
   readonly codigoReferido = signal(inject(ActivatedRoute).snapshot.queryParamMap.get('ref') ?? '');
@@ -63,6 +65,9 @@ export class RegistroPage {
 
   constructor() {
     void this.cargarAviso();
+    void firstValueFrom(this.auth.provincias())
+      .then((p) => this.provincias.set(p))
+      .catch(() => null);
   }
 
   async cargarAviso(): Promise<void> {
@@ -141,6 +146,7 @@ export class RegistroPage {
           ...cuenta,
           clave,
           codigoReferido: codigo,
+          provincia: this.provincia(),
           confirmacionClave: confirmation,
           aceptaTerminos: accepted,
           versionAviso: aviso.version,

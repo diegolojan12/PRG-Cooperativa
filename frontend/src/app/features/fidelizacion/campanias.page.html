@@ -1,0 +1,123 @@
+<div class="s-page-heading">
+  <div>
+    <h1>Campañas de referidos</h1>
+    <p>Consulta vigencia, cobertura y puntos para ambas partes.</p>
+  </div>
+  @if (session.esAdmin()) {
+    <button type="button" class="s-primary" (click)="abrir()">Nueva campaña</button>
+  }
+</div>
+@if (error()) {
+  <p role="alert">{{ error() }}</p>
+}
+@if (formulario()) {
+  <form class="s-card s-settings" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+    <h2>{{ editando() ? 'Editar campaña' : 'Nueva campaña' }}</h2>
+    <app-campo para="campTitulo" etiqueta="Título" ayuda="Hasta 100 caracteres.">
+      <input
+        id="campTitulo"
+        formControlName="titulo"
+        maxlength="100"
+        aria-describedby="campTitulo-ayuda"
+      />
+    </app-campo>
+    <app-campo para="campInicio" etiqueta="Inicio" ayuda="Primer día de vigencia en Ecuador.">
+      <input
+        id="campInicio"
+        type="date"
+        formControlName="inicio"
+        aria-describedby="campInicio-ayuda"
+      />
+    </app-campo>
+    <app-campo para="campFin" etiqueta="Fin" ayuda="Debe ser posterior al inicio.">
+      <input id="campFin" type="date" formControlName="fin" aria-describedby="campFin-ayuda" />
+    </app-campo>
+    <fieldset>
+      <legend>Provincias</legend>
+      <p>Selecciona de una a ocho provincias.</p>
+      @for (provincia of provincias(); track provincia) {
+        <label class="s-consent"
+          ><input
+            type="checkbox"
+            [checked]="seleccion().includes(provincia)"
+            (change)="marcar(provincia, $any($event.target).checked)"
+          />
+          {{ provincia }}</label
+        >
+      }
+    </fieldset>
+    <app-campo para="campSocio" etiqueta="Puntos del socio" ayuda="Entero de 1 a 10000.">
+      <input
+        id="campSocio"
+        type="number"
+        formControlName="puntosSocio"
+        min="1"
+        max="10000"
+        aria-describedby="campSocio-ayuda"
+      />
+    </app-campo>
+    <app-campo para="campReferido" etiqueta="Puntos del referido" ayuda="Entero de 1 a 10000.">
+      <input
+        id="campReferido"
+        type="number"
+        formControlName="puntosReferido"
+        min="1"
+        max="10000"
+        aria-describedby="campReferido-ayuda"
+      />
+    </app-campo>
+    <div class="s-heading-actions">
+      <button type="submit" class="s-primary" [disabled]="ocupado()">Guardar campaña</button>
+      <button type="button" class="s-secondary" (click)="formulario.set(false)">Cancelar</button>
+    </div>
+  </form>
+}
+@if (cargando()) {
+  <p role="status">Cargando campañas…</p>
+}
+<div class="s-quick-grid">
+  @for (c of items(); track c.id) {
+    <article class="s-card s-settings">
+      <h2>{{ c.titulo }}</h2>
+      <p>{{ estados[c.estado] }} · {{ c.inicio }} a {{ c.fin }}</p>
+      <p>{{ c.provincias.join(', ') }}</p>
+      <p>Socio {{ c.puntosSocio }} puntos · Referido {{ c.puntosReferido }} puntos</p>
+      @if (session.esAdmin() && c.estado !== 'FINALIZADA') {
+        <div class="s-heading-actions">
+          <button type="button" class="s-secondary" (click)="abrir(c)">Editar</button>
+          @if (c.estado === 'ACTIVA') {
+            <button
+              type="button"
+              class="s-secondary"
+              [disabled]="ocupado()"
+              (click)="cambiar(c.id, 'PAUSADA')"
+            >
+              Pausar
+            </button>
+          } @else {
+            <button
+              type="button"
+              class="s-primary"
+              [disabled]="ocupado()"
+              (click)="cambiar(c.id, 'ACTIVA')"
+            >
+              Activar
+            </button>
+          }
+          <button
+            type="button"
+            class="s-secondary"
+            [disabled]="ocupado()"
+            (click)="cambiar(c.id, 'FINALIZADA')"
+          >
+            Finalizar
+          </button>
+        </div>
+      }
+    </article>
+  } @empty {
+    @if (!cargando()) {
+      <p>No hay campañas para mostrar.</p>
+    }
+  }
+</div>

@@ -18,6 +18,7 @@ export interface NuevoSocio {
   versionAviso: string;
   cuenta?: string;
   codigoReferido?: string;
+  provincia?: string;
   tipoCuenta?: 'ahorros' | 'corriente';
 }
 
@@ -37,11 +38,14 @@ export class AuthApi {
   registrar(datos: NuevoSocio) {
     return this.http.post<DesafioConfirmacion>('/api/auth/register', datos);
   }
+  provincias() {
+    return this.http.get<string[]>('/api/provincias');
+  }
   avisoPrivacidad() {
     return this.http.get<AvisoPrivacidad>('/api/auth/aviso-privacidad');
   }
   confirmarCorreo(token: string, codigo: string) {
-    return this.http.post<{ ok: true }>('/api/auth/confirmar-correo', {
+    return this.http.post<{ ok: true; cambioCorreo?: boolean }>('/api/auth/confirmar-correo', {
       token,
       codigo,
     });

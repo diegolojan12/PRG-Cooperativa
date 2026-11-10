@@ -32,6 +32,14 @@ export class ResumenPage implements OnInit {
     timeZone: 'America/Guayaquil',
   }).format(new Date());
   readonly nombre = computed(() => this.session.usuario()?.nombre.split(' ')[0] ?? '');
+  readonly accesos = [
+    { id: 'referidos', label: 'Referidos', icon: 'referidos' },
+    { id: 'campanias', label: 'Campañas', icon: 'referidos' },
+    { id: 'puntos', label: 'Mis puntos', icon: 'points' },
+    { id: 'perfil', label: 'Mi perfil', icon: 'profile' },
+    { id: 'notificaciones', label: 'Notificaciones', icon: 'notificaciones' },
+    { id: 'ayuda', label: 'Centro de ayuda', icon: 'ayuda' },
+  ];
 
   ngOnInit(): void {
     void this.cargar();

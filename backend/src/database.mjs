@@ -3,6 +3,7 @@ import { mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
 import pg from 'pg';
+import { SPRINT3_DDL } from './dominio/esquema-sprint3.mjs';
 import { ProteccionDatos } from './dominio/proteccion-datos.mjs';
 import { Rol } from './dominio/acceso.mjs';
 import { Referido } from './dominio/referidos.mjs';
@@ -54,12 +55,12 @@ const SQLITE_SCHEMA = `CREATE TABLE IF NOT EXISTS "Usuario" (
   id INTEGER PRIMARY KEY AUTOINCREMENT, cedula TEXT UNIQUE, correo TEXT UNIQUE NOT NULL, "correoIndice" TEXT,
   nombre TEXT NOT NULL, rol TEXT NOT NULL DEFAULT 'SOCIO', "creadoEn" TEXT DEFAULT CURRENT_TIMESTAMP,
   "passwordHash" TEXT, celular TEXT, activo INTEGER NOT NULL DEFAULT 1, cuenta TEXT, "tipoCuenta" TEXT,
-  "cuentaEstado" TEXT, "intentosFallidos" INTEGER NOT NULL DEFAULT 0, "bloqueadoHasta" TEXT, "codigoReferido" TEXT, "cuentaIndice" TEXT, "cuentaSolicitadaEn" TEXT, "cuentaRevisadaEn" TEXT, "celularIndice" TEXT, "correoVerificado" INTEGER NOT NULL DEFAULT 1);
+  "cuentaEstado" TEXT, "intentosFallidos" INTEGER NOT NULL DEFAULT 0, "bloqueadoHasta" TEXT, "codigoReferido" TEXT, "cuentaIndice" TEXT, "cuentaSolicitadaEn" TEXT, "cuentaRevisadaEn" TEXT, "celularIndice" TEXT, "correoVerificado" INTEGER NOT NULL DEFAULT 1, provincia TEXT, visibilidad TEXT NOT NULL DEFAULT 'PRIVADO');
 CREATE TABLE IF NOT EXISTS "RolPermiso" (rol TEXT PRIMARY KEY, modulos TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS "Sesion" (token TEXT PRIMARY KEY, "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id) ON DELETE CASCADE, expira TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS "Recuperacion" (token TEXT PRIMARY KEY, "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id) ON DELETE CASCADE, expira TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS "DosFactor" (id TEXT PRIMARY KEY, "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id) ON DELETE CASCADE, codigo TEXT NOT NULL, expira TEXT NOT NULL, intentos INTEGER NOT NULL DEFAULT 0);
-CREATE TABLE IF NOT EXISTS "Referido" (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT NOT NULL, correo TEXT NOT NULL, "correoIndice" TEXT, celular TEXT NOT NULL, estado TEXT NOT NULL DEFAULT 'PENDIENTE', "socioId" INTEGER NOT NULL REFERENCES "Usuario"(id), "creadoEn" TEXT NOT NULL, notas TEXT DEFAULT '', "eliminadoEn" TEXT, "eliminadoPor" INTEGER REFERENCES "Usuario"(id), "motivoBaja" TEXT, "usuarioId" INTEGER REFERENCES "Usuario"(id), "fechaDecision" TEXT, campania TEXT, provincia TEXT);
+CREATE TABLE IF NOT EXISTS "Referido" (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT NOT NULL, correo TEXT NOT NULL, "correoIndice" TEXT, celular TEXT NOT NULL, estado TEXT NOT NULL DEFAULT 'PENDIENTE', "socioId" INTEGER NOT NULL REFERENCES "Usuario"(id), "creadoEn" TEXT NOT NULL, notas TEXT DEFAULT '', "eliminadoEn" TEXT, "eliminadoPor" INTEGER REFERENCES "Usuario"(id), "motivoBaja" TEXT, "usuarioId" INTEGER REFERENCES "Usuario"(id), "fechaDecision" TEXT, campania TEXT, provincia TEXT, "campaniaId" TEXT);
 CREATE UNIQUE INDEX IF NOT EXISTS referido_correo_activo ON "Referido"(correo) WHERE "eliminadoEn" IS NULL;
 CREATE INDEX IF NOT EXISTS usuario_cuenta_indice ON "Usuario"(COALESCE("cuentaIndice",cuenta));
 CREATE UNIQUE INDEX IF NOT EXISTS usuario_codigo_referido ON "Usuario"("codigoReferido");
@@ -69,10 +70,10 @@ CREATE INDEX IF NOT EXISTS "Referido_socioId_idx" ON "Referido"("socioId");
 CREATE TABLE IF NOT EXISTS "Actividad" (id INTEGER PRIMARY KEY AUTOINCREMENT, "usuarioId" INTEGER REFERENCES "Usuario"(id), actor TEXT NOT NULL, accion TEXT NOT NULL, detalle TEXT NOT NULL, fecha TEXT NOT NULL, ip TEXT, "objetivoId" INTEGER, datos TEXT);
 CREATE INDEX IF NOT EXISTS "Actividad_fecha_idx" ON "Actividad"(fecha);
 CREATE TABLE IF NOT EXISTS "Notificacion" (id INTEGER PRIMARY KEY AUTOINCREMENT, "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id) ON DELETE CASCADE, titulo TEXT NOT NULL, mensaje TEXT NOT NULL, leida INTEGER NOT NULL DEFAULT 0, fecha TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS "MovimientoPuntos" (clave TEXT PRIMARY KEY, "referidoId" INTEGER REFERENCES "Referido"(id), "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id), actividad TEXT NOT NULL, cantidad INTEGER NOT NULL CHECK (cantidad >= 0), fecha TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS "MovimientoPuntos" (clave TEXT PRIMARY KEY, "referidoId" INTEGER REFERENCES "Referido"(id), "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id), actividad TEXT NOT NULL, cantidad INTEGER NOT NULL CHECK (cantidad >= 0), fecha TEXT NOT NULL, tipo TEXT NOT NULL DEFAULT 'CREDITO');
 CREATE INDEX IF NOT EXISTS movimiento_usuario ON "MovimientoPuntos"("usuarioId");
 CREATE TABLE IF NOT EXISTS "Configuracion" (clave TEXT PRIMARY KEY, valor TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS "ConfirmacionCorreo" ("usuarioId" INTEGER PRIMARY KEY REFERENCES "Usuario"(id) ON DELETE CASCADE, token TEXT UNIQUE NOT NULL, "tokenExpira" TEXT NOT NULL, huella TEXT NOT NULL, vence TEXT NOT NULL, intentos INTEGER NOT NULL DEFAULT 0, reenvios TEXT NOT NULL DEFAULT '[]');
+CREATE TABLE IF NOT EXISTS "ConfirmacionCorreo" ("usuarioId" INTEGER PRIMARY KEY REFERENCES "Usuario"(id) ON DELETE CASCADE, token TEXT UNIQUE NOT NULL, "tokenExpira" TEXT NOT NULL, huella TEXT NOT NULL, vence TEXT NOT NULL, intentos INTEGER NOT NULL DEFAULT 0, reenvios TEXT NOT NULL DEFAULT '[]', "correoPendiente" TEXT, "correoPendienteIndice" TEXT);
 CREATE TABLE IF NOT EXISTS "AvisoPrivacidad" (version TEXT PRIMARY KEY, terminos TEXT NOT NULL, privacidad TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS "AceptacionTerminos" ("usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id), version TEXT NOT NULL REFERENCES "AvisoPrivacidad"(version), fecha TEXT NOT NULL, PRIMARY KEY ("usuarioId",version));
 CREATE INDEX IF NOT EXISTS usuario_celular_indice ON "Usuario"((COALESCE("celularIndice",celular)));
@@ -177,6 +178,8 @@ export class Database {
       ['correoIndice', 'TEXT'],
       ['celularIndice', 'TEXT'],
       ['correoVerificado', 'INTEGER NOT NULL DEFAULT 1'],
+      ['provincia', 'TEXT'],
+      ['visibilidad', "TEXT NOT NULL DEFAULT 'PRIVADO'"],
       ['codigoReferido', 'TEXT'],
       ['cuentaIndice', 'TEXT'],
       ['cuentaSolicitadaEn', 'TEXT'],
@@ -200,7 +203,7 @@ export class Database {
       this.db.exec(`BEGIN;
         ALTER TABLE "Referido" RENAME TO "Referido_old";
         DROP INDEX IF EXISTS "Referido_socioId_idx";
-        CREATE TABLE "Referido" (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT NOT NULL, correo TEXT NOT NULL, "correoIndice" TEXT, celular TEXT NOT NULL, estado TEXT NOT NULL DEFAULT 'PENDIENTE', "socioId" INTEGER NOT NULL REFERENCES "Usuario"(id), "creadoEn" TEXT NOT NULL, notas TEXT DEFAULT '', "eliminadoEn" TEXT, "eliminadoPor" INTEGER REFERENCES "Usuario"(id), "motivoBaja" TEXT, "usuarioId" INTEGER REFERENCES "Usuario"(id), "fechaDecision" TEXT, campania TEXT, provincia TEXT);
+        CREATE TABLE "Referido" (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT NOT NULL, correo TEXT NOT NULL, "correoIndice" TEXT, celular TEXT NOT NULL, estado TEXT NOT NULL DEFAULT 'PENDIENTE', "socioId" INTEGER NOT NULL REFERENCES "Usuario"(id), "creadoEn" TEXT NOT NULL, notas TEXT DEFAULT '', "eliminadoEn" TEXT, "eliminadoPor" INTEGER REFERENCES "Usuario"(id), "motivoBaja" TEXT, "usuarioId" INTEGER REFERENCES "Usuario"(id), "fechaDecision" TEXT, campania TEXT, provincia TEXT, "campaniaId" TEXT);
         INSERT INTO "Referido" (id,nombre,correo,celular,estado,"socioId","creadoEn",notas)
           SELECT id,nombre,correo,celular,estado,"socioId","creadoEn",notas FROM "Referido_old";
         DROP TABLE "Referido_old";
@@ -214,6 +217,7 @@ export class Database {
         ['correoIndice', 'TEXT'],
         ['fechaDecision', 'TEXT'],
         ['campania', 'TEXT'],
+        ['campaniaId', 'TEXT'],
         ['provincia', 'TEXT'],
       ]);
     }
@@ -221,12 +225,16 @@ export class Database {
     if (movimientos.size && !movimientos.has('clave')) {
       this.db.exec(`BEGIN;
         ALTER TABLE "MovimientoPuntos" RENAME TO "MovimientoPuntos_s1";
-        CREATE TABLE IF NOT EXISTS "MovimientoPuntos" (clave TEXT PRIMARY KEY, "referidoId" INTEGER REFERENCES "Referido"(id), "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id), actividad TEXT NOT NULL, cantidad INTEGER NOT NULL CHECK (cantidad >= 0), fecha TEXT NOT NULL);
+        CREATE TABLE IF NOT EXISTS "MovimientoPuntos" (clave TEXT PRIMARY KEY, "referidoId" INTEGER REFERENCES "Referido"(id), "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id), actividad TEXT NOT NULL, cantidad INTEGER NOT NULL CHECK (cantidad >= 0), fecha TEXT NOT NULL, tipo TEXT NOT NULL DEFAULT 'CREDITO');
         INSERT INTO "MovimientoPuntos" (clave,"referidoId","usuarioId",actividad,cantidad,fecha)
   SELECT 'referido:' || "referidoId" || ':' || "usuarioId","referidoId","usuarioId",'REFERIDO',cantidad,fecha FROM "MovimientoPuntos_s1";
         DROP TABLE "MovimientoPuntos_s1";
         COMMIT;`);
     }
+    if (columns('MovimientoPuntos').size)
+      ensure('MovimientoPuntos', [['tipo', "TEXT NOT NULL DEFAULT 'CREDITO'"]]);
+    if (columns('ConfirmacionCorreo').size)
+      ensure('ConfirmacionCorreo', [['correoPendiente', 'TEXT'], ['correoPendienteIndice', 'TEXT']]);
   }
   async init() {
     if (this.sqlite) {
@@ -238,6 +246,7 @@ export class Database {
         .all().length;
       if (hasReferido) this.migrateSqlite();
       this.db.exec(SQLITE_SCHEMA);
+      this.db.exec(SPRINT3_DDL);
       this.db.exec(SQLITE_TRIGGERS);
     } else {
       // Explicit migration command avoids mutating an existing PostgreSQL automatically.
@@ -268,6 +277,7 @@ export class Database {
       puntosReferido: '100',
       ...Object.fromEntries(Object.keys(PUNTOS_POR_ACCION).map((clave) => [clave, '0'])),
       valorPunto: '0.00',
+      niveles: JSON.stringify([{ nombre: 'Inicial', umbral: 0 }, { nombre: 'Conector', umbral: 100 }]),
       registroAbierto: 'true',
       mensajeBienvenida: 'Cada conexión suma. Sigamos creciendo juntos.',
     })) {

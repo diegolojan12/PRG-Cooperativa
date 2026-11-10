@@ -76,4 +76,13 @@
       }
     </section>
   </div>
+  @if (session.puede('referidos')) {
+    <section class="s-card s-settings">
+      <h2>Lista comercial</h2>
+      <p>Descarga los referidos pendientes con sus datos de contacto.</p>
+      <a class="s-secondary" href="/api/referidos/exportar" download
+        >Descargar referidos pendientes</a
+      >
+    </section>
+  }
 }

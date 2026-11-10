@@ -81,6 +81,25 @@
           </div>
         </div>
 
+        @if (provincias().length) {
+          <div class="campo">
+            <label for="registroProvincia">Provincia (opcional)</label>
+            <select
+              id="registroProvincia"
+              [value]="provincia()"
+              (change)="provincia.set($any($event.target).value)"
+              aria-describedby="registroProvincia-ayuda"
+            >
+              <option value="">Seleccionar después</option>
+              @for (p of provincias(); track p) {
+                <option [value]="p">{{ p }}</option>
+              }
+            </select>
+            <span class="ayuda" id="registroProvincia-ayuda"
+              >Permite mostrarte campañas de tu zona.</span
+            >
+          </div>
+        }
         <div class="nota">Solo los usamos para tu cuenta y avisos importantes.</div>
 
         <div class="accionesPaso soloDer">

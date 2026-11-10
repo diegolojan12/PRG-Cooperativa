@@ -23,7 +23,7 @@
     "db:init": "node --env-file=.env scripts/database.mjs",
     "db:seed": "node --env-file=.env scripts/seed.mjs",
     "start:local": "node --env-file=.env dist/main.js",
-    "test:sprint": "node --test test/sprint.test.mjs",
+    "test:sprint": "node --test test/sprint.test.mjs test/sprints-restantes.test.mjs",
     "admin:create": "node --env-file-if-exists=.env scripts/create-admin.mjs"
   },
   "dependencies": {

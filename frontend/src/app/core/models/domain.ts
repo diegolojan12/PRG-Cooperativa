@@ -100,6 +100,10 @@ export interface Resumen {
   mes: number;
   estados: Record<EstadoReferido, number>;
   puntos: number;
+  saldo?: number;
+  acumulados?: number;
+  nivel?: { nombre: string; siguiente: string | null; faltan: number };
+  sinLeer?: number;
   bienvenida: string;
   demo: boolean;
 }

@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { SPRINT3_DDL } from '../src/dominio/esquema-sprint3.mjs';
 import { Database } from '../src/database.mjs';
 const db = new Database();
 try {
@@ -15,6 +16,7 @@ try {
         'sprint1-auditoria',
         'sprint1-dominio',
         'sprint2',
+        'sprint3',
       ]) {
         const [done] = await db.query(
           'SELECT nombre FROM "SumaMigracion" WHERE nombre=$1',
@@ -28,6 +30,7 @@ try {
             'utf8',
           ),
         );
+        if (nombre === 'sprint3') await client.query(SPRINT3_DDL);
         await db.query(
           'INSERT INTO "SumaMigracion" (nombre) VALUES ($1)',
           [nombre],

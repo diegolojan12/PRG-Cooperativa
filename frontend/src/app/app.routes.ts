@@ -77,6 +77,34 @@ export const routes: Routes = [
         loadComponent: () => import('./features/resumen/resumen.page').then((m) => m.ResumenPage),
       },
       {
+        path: 'perfil',
+        data: { titulo: 'Mi perfil' },
+        loadComponent: () =>
+          import('./features/fidelizacion/perfil.page').then((m) => m.PerfilPage),
+      },
+      {
+        path: 'puntos',
+        canActivate: [moduloGuard],
+        data: { modulo: 'panel', titulo: 'Mis puntos' },
+        loadComponent: () =>
+          import('./features/fidelizacion/puntos.page').then((m) => m.PuntosPage),
+      },
+      {
+        path: 'campanias',
+        canActivate: [moduloGuard],
+        data: { modulo: 'referidos', titulo: 'Campañas' },
+        loadComponent: () =>
+          import('./features/fidelizacion/campanias.page').then((m) => m.CampaniasPage),
+      },
+      {
+        path: 'gamificacion',
+        canMatch: [rolMatch('ADMIN')],
+        canActivate: [moduloGuard],
+        data: { modulo: 'configuracion', titulo: 'Niveles e insignias' },
+        loadComponent: () =>
+          import('./features/fidelizacion/gamificacion.page').then((m) => m.GamificacionPage),
+      },
+      {
         path: 'mi-cuenta',
         canMatch: [rolMatch('SOCIO')],
         data: { titulo: 'Mi cuenta vinculada' },

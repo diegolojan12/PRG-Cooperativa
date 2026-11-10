@@ -34,6 +34,8 @@ export class LoginPage {
   readonly toggle = toggle;
 
   constructor() {
+    if (this.params.has('correoActualizado'))
+      this.avisos.exito('Correo actualizado. Inicia sesión con el nuevo correo.');
     if (this.params.has('registered'))
       this.avisos.exito('¡Cuenta creada! Ya puedes iniciar sesión.');
   }

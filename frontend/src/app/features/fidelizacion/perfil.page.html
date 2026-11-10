@@ -1,0 +1,182 @@
+<div class="s-page-heading">
+  <div>
+    <h1>Mi perfil</h1>
+    <p>Actualiza tus datos y consulta tus insignias.</p>
+  </div>
+  @if (session.rol() === 'SOCIO') {
+    <a class="s-secondary" routerLink="/panel/mi-cuenta">Mi cuenta vinculada</a>
+  }
+</div>
+@if (error() && !bajaAbierta()) {
+  <p role="alert">{{ error() }}</p>
+}
+@if (datos(); as perfil) {
+  <div class="s-settings-grid">
+    <form class="s-card s-settings" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+      <h2>Datos de tu perfil</h2>
+      <p>Cuenta vinculada · {{ perfil.cuentaEstado ?? 'Sin vincular' }}</p>
+      <app-campo
+        para="perfilNombre"
+        etiqueta="Nombre completo"
+        ayuda="Ej. Ana Pérez."
+        [requerido]="true"
+        [error]="
+          errores()['nombre'] ||
+          (form.controls.nombre.touched && form.controls.nombre.invalid
+            ? 'Ingresa tus nombres y apellidos.'
+            : null)
+        "
+      >
+        <input
+          id="perfilNombre"
+          formControlName="nombre"
+          autocomplete="name"
+          aria-describedby="perfilNombre-ayuda perfilNombre-error"
+        />
+      </app-campo>
+      <app-campo
+        para="perfilCorreo"
+        etiqueta="Correo"
+        ayuda="Si lo cambias, enviaremos un código al nuevo correo."
+        [requerido]="true"
+        [error]="
+          errores()['correo'] ||
+          (form.controls.correo.touched && form.controls.correo.invalid
+            ? 'Ingresa un correo válido.'
+            : null)
+        "
+      >
+        <input
+          id="perfilCorreo"
+          type="email"
+          formControlName="correo"
+          autocomplete="email"
+          aria-describedby="perfilCorreo-ayuda perfilCorreo-error"
+        />
+      </app-campo>
+      <app-campo
+        para="perfilCelular"
+        etiqueta="Celular"
+        ayuda="Diez dígitos que empiezan con 09."
+        [requerido]="true"
+        [error]="
+          errores()['celular'] ||
+          (form.controls.celular.touched && form.controls.celular.invalid
+            ? 'Usa diez dígitos que empiecen por 09.'
+            : null)
+        "
+      >
+        <input
+          id="perfilCelular"
+          type="tel"
+          formControlName="celular"
+          autocomplete="tel-national"
+          aria-describedby="perfilCelular-ayuda perfilCelular-error"
+        />
+      </app-campo>
+      <app-campo
+        para="perfilProvincia"
+        etiqueta="Provincia"
+        ayuda="Se usa para mostrarte las campañas de tu zona."
+      >
+        <select
+          id="perfilProvincia"
+          formControlName="provincia"
+          aria-describedby="perfilProvincia-ayuda"
+        >
+          <option value="">Sin seleccionar</option>
+          @for (provincia of perfil.provincias; track provincia) {
+            <option [value]="provincia">{{ provincia }}</option>
+          }
+        </select>
+      </app-campo>
+      <app-campo
+        para="perfilClave"
+        etiqueta="Contraseña actual"
+        ayuda="Confirma que eres titular de la cuenta."
+        [requerido]="true"
+      >
+        <input
+          id="perfilClave"
+          type="password"
+          formControlName="claveActual"
+          autocomplete="current-password"
+          aria-describedby="perfilClave-ayuda"
+        />
+      </app-campo>
+      <app-campo
+        para="perfilNueva"
+        etiqueta="Nueva contraseña (opcional)"
+        ayuda="Al menos ocho caracteres con una mayúscula y un número."
+        [error]="errores()['clave'] || null"
+      >
+        <input
+          id="perfilNueva"
+          type="password"
+          formControlName="claveNueva"
+          autocomplete="new-password"
+          aria-describedby="perfilNueva-ayuda perfilNueva-error"
+        />
+      </app-campo>
+      <button type="submit" class="s-primary" [disabled]="ocupado()">Guardar perfil</button>
+    </form>
+    <section class="s-card s-settings">
+      <h2>Insignias</h2>
+      @for (insignia of perfil.insignias; track insignia.id) {
+        <p>
+          <img [src]="insignia.imagen" alt="" width="36" height="36" referrerpolicy="no-referrer" />
+          {{ insignia.nombre }}
+        </p>
+      } @empty {
+        <p>Tus insignias aparecerán aquí al cumplir una meta.</p>
+      }
+      @if (session.rol() === 'SOCIO') {
+        <h2>Visibilidad</h2>
+        <p>
+          Tu perfil es {{ perfil.visibilidad === 'PUBLICO' ? 'público' : 'privado' }}. Al hacerlo
+          público aparecerás en la clasificación.
+        </p>
+        <button
+          type="button"
+          class="s-secondary"
+          [disabled]="ocupado()"
+          (click)="privacidad(perfil.visibilidad === 'PUBLICO' ? 'PRIVADO' : 'PUBLICO')"
+        >
+          {{ perfil.visibilidad === 'PUBLICO' ? 'Hacer privado' : 'Hacer público' }}
+        </button>
+        <button type="button" class="s-danger" (click)="error.set(''); bajaAbierta.set(true)">
+          Dar de baja mi cuenta
+        </button>
+      }
+    </section>
+  </div>
+} @else if (error()) {
+  <button type="button" class="s-secondary" (click)="cargar()">Volver a intentar</button>
+} @else {
+  <p role="status">Cargando perfil…</p>
+}
+@if (bajaAbierta()) {
+  <app-modal [ocupado]="ocupado()" (cerrar)="bajaAbierta.set(false)">
+    <h2 id="dialogTitle">Dar de baja mi cuenta</h2>
+    <p>Tu cuenta se desactivará y se conservará tu historial.</p>
+    <app-campo
+      para="bajaPerfilClave"
+      etiqueta="Contraseña actual"
+      ayuda="Confirma tu decisión con tu contraseña."
+    >
+      <input
+        id="bajaPerfilClave"
+        #clave
+        type="password"
+        autocomplete="current-password"
+        aria-describedby="bajaPerfilClave-ayuda"
+      />
+    </app-campo>
+    @if (error()) {
+      <p role="alert">{{ error() }}</p>
+    }
+    <button type="button" class="s-danger" [disabled]="ocupado()" (click)="baja(clave.value)">
+      Confirmar baja
+    </button>
+  </app-modal>
+}

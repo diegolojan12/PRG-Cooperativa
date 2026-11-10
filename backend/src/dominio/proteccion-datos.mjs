@@ -69,6 +69,7 @@ export class ProteccionDatos {
     delete fila.correoIndice;
     delete fila.cuentaIndice;
     delete fila.celularIndice;
+    delete fila.correoPendienteIndice;
     for (const campo of ['correo', 'celular', 'cuenta'])
       if (Object.hasOwn(fila, campo))
         fila[campo] = this.descifrar(campo, fila[campo]);

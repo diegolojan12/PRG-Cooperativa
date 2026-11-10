@@ -24,4 +24,21 @@ export interface FuncionNav {
   permiso?: Modulo;
 }
 
-export const FUNCIONES: readonly FuncionNav[] = [];
+export const FUNCIONES: readonly FuncionNav[] = [
+  { id: 'perfil', label: 'Mi perfil', icon: 'profile', roles: ['GESTOR', 'SOCIO', 'ADMIN'] },
+  { id: 'puntos', label: 'Mis puntos', icon: 'points', permiso: 'panel', roles: ['SOCIO'] },
+  {
+    id: 'campanias',
+    label: 'Campañas',
+    icon: 'referidos',
+    permiso: 'referidos',
+    roles: ['SOCIO', 'ADMIN'],
+  },
+  {
+    id: 'gamificacion',
+    label: 'Niveles e insignias',
+    icon: 'gift',
+    permiso: 'configuracion',
+    roles: ['ADMIN'],
+  },
+];

@@ -136,6 +136,25 @@ const web = http.createServer((req, res) => {
       });
     }
     console.log("PASS: las ocho pantallas de administración");
+    await page.goto(base + "/panel/campanias");
+    await page.getByRole("button", { name: "Nueva campaña" }).click();
+    await page.locator("#campTitulo").fill("Campaña desde Chromium");
+    const dia = new Date().toISOString().slice(0,10);
+    const fin = new Date(Date.now() + 3 * 86400000).toISOString().slice(0,10);
+    await page.locator("#campInicio").fill(dia);
+    await page.locator("#campFin").fill(fin);
+    await page.getByRole("checkbox", { name: "Loja", exact: true }).check();
+    await page.getByRole("button", { name: "Guardar campaña" }).click();
+    await expect(page.getByRole("heading", { name: "Campaña desde Chromium" })).toBeVisible();
+    await page.getByRole("button", { name: "Activar", exact: true }).click();
+    await expect(page.getByRole("button", { name: "Pausar", exact: true })).toBeVisible();
+    for (const [ruta, titulo] of [
+      ["gamificacion", "Niveles e insignias"],
+    ]) {
+      await page.goto(base + "/panel/" + ruta);
+      await expect(page.getByRole("heading", { name: titulo, exact: true })).toBeVisible();
+    }
+    console.log("PASS: campaña creada y activada y pantalla de niveles e insignias");
     await page.goto(base + "/panel/referidos");
     await page.getByRole("button", { name: "Nuevo referido" }).click();
     await page.getByRole("button", { name: "Registrar referido" }).click();
@@ -283,6 +302,14 @@ const web = http.createServer((req, res) => {
     await mp.getByRole("button", { name: "Mostrar número" }).click();
     await expect(mp.getByText("2144556677", { exact: true })).toBeVisible();
     console.log("PASS: invitación por QR, código precargado, confirmación y vinculación en el perfil");
+    await mp.goto(base + "/panel/perfil");
+    await expect(mp.getByRole("heading", { name: "Mi perfil", exact: true })).toBeVisible();
+    await expect(mp.locator("#perfilCorreo")).toHaveValue("registro-ui@ejemplo.ec");
+    await mp.getByRole("button", { name: "Hacer público", exact: true }).click();
+    await expect(mp.getByRole("button", { name: "Hacer privado", exact: true })).toBeVisible();
+    await mp.goto(base + "/panel/puntos");
+    await expect(mp.getByRole("heading", { name: "Ranking", exact: true })).toBeVisible();
+    console.log("PASS: perfil, privacidad y puntos desde móvil");
     if (errors.length) throw Error("Browser errors: " + errors.join("\n"));
     console.log("PASS: sin errores de JavaScript. Capturas: " + output);
   } finally {

@@ -2,6 +2,9 @@ import express from 'express';
 import { randomBytes } from 'node:crypto';
 import { AceptacionTerminos, AvisoPrivacidad, CodigoVerificacion, CuentaCooperativa, Rol, Usuario, errorDeDominio } from './dominio/acceso.mjs';
 import { CodigoReferido, Referido } from './dominio/referidos.mjs';
+import { Campanias, provinciasCobertura } from './dominio/campanias.mjs';
+import { Gamificacion } from './dominio/gamificacion.mjs';
+import { rutasPerfil } from './dominio/perfil.mjs';
 import { ConfirmacionCorreo } from './dominio/confirmacion-correo.mjs';
 import { AcreditacionPuntos, Notificacion, ParametroGlobal, RegistroAuditoria, PUNTOS_POR_ACCION } from './dominio/administracion.mjs';
 import nodemailer from 'nodemailer';
@@ -181,6 +184,8 @@ export async function createApi(database) {
 
   const confirmacionCorreo = new ConfirmacionCorreo(db);
   const acreditacion = new AcreditacionPuntos(db, notify);
+  const gamificacion = new Gamificacion(db, notify);
+  const campanias = new Campanias(db, log);
 
   /* ---------- Correo con reintentos (RNF-14: 3 reintentos cada 5 min) ---------- */
   const transporter = process.env.SMTP_HOST
@@ -463,12 +468,16 @@ export async function createApi(database) {
   });
   route('post', '/auth/confirmar-correo', async (req, res) => {
     rate(req, 'confirmar-correo', 30);
-    const resultado = await confirmacionCorreo.confirmar(req.body.token, req.body.codigo);
+    const resultado = await confirmacionCorreo.confirmar(req.body.token, req.body.codigo, async (id, client) => {
+      const [u] = await db.query('SELECT id,nombre FROM "Usuario" WHERE id=$1', [id], client);
+      await log(req, u, 'Correo actualizado', 'El titular confirmó su nuevo correo', client, { objetivoId: id });
+    });
     if (!resultado)
       fail('El código no es correcto, venció o agotó sus intentos. Solicita otro.', 400, {
         codigo: 'Verifica los seis dígitos o solicita un código nuevo.',
       });
-    res.json({ ok: true });
+    if (resultado.cambioCorreo) res.clearCookie('suma_session', { path: '/' });
+    res.json({ ok: true, ...resultado });
   });
   route('post', '/auth/reenviar-confirmacion', async (req, res) => {
     rate(req, 'reenviar-confirmacion', 15);
@@ -477,6 +486,11 @@ export async function createApi(database) {
     enviarConfirmacion(prueba.correo, prueba);
     res.json({ ok: true, ...(devExpose() ? { devCodigo: prueba.codigo } : {}) });
   });
+  rutasPerfil({ db, route, current, fail, person, password, verifyPassword, hashPassword,
+    confirmacionCorreo, enviarConfirmacion, exigirCorreoDisponible, devExpose, mask, gamificacion, log });
+  campanias.rutas({ route, current, admin, text, now });
+  gamificacion.rutas({ route, current, admin, text, now, pagina, log });
+  route('get', '/provincias', (_, res) => res.json(provinciasCobertura()));
 
   route('post', '/auth/register', async (req, res) => {
     rate(req, 'register', 12);
@@ -491,6 +505,9 @@ export async function createApi(database) {
     const aviso = AvisoPrivacidad.vigente();
     const aceptacion = new AceptacionTerminos(aviso, req.body.aceptaTerminos, req.body.versionAviso, now());
     exigirCorreoDisponible();
+    const provincia = req.body.provincia || null;
+    if (provincia && !provinciasCobertura().includes(provincia))
+      fail('Selecciona una provincia de la lista.', 400, { provincia: 'Elige una provincia válida.' });
     const cuenta = req.body.cuenta
       ? new CuentaCooperativa(req.body.cuenta, req.body.tipoCuenta)
       : null;
@@ -522,7 +539,7 @@ export async function createApi(database) {
       if (publicado.terminos !== aviso.terminos || publicado.privacidad !== aviso.privacidad)
         fail('La versión publicada del aviso cambió. Contacta con soporte.', 503);
       const [user] = await db.query(
-        'INSERT INTO "Usuario" (nombre,correo,celular,"passwordHash",cuenta,"tipoCuenta","cuentaEstado","correoIndice","cuentaIndice","cuentaSolicitadaEn","celularIndice","correoVerificado") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *',
+        'INSERT INTO "Usuario" (nombre,correo,celular,"passwordHash",cuenta,"tipoCuenta","cuentaEstado","correoIndice","cuentaIndice","cuentaSolicitadaEn","celularIndice","correoVerificado",provincia) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *',
         [
           p.nombre,
           cifrar('correo', p.correo),
@@ -536,6 +553,7 @@ export async function createApi(database) {
           cuenta ? now() : null,
           indice,
           false,
+          provincia,
         ],
         client,
       );
@@ -556,6 +574,7 @@ export async function createApi(database) {
               'INSERT INTO "Referido" (nombre,correo,celular,"socioId","creadoEn","usuarioId","correoIndice") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id',
               [p.nombre, cifrar('correo', p.correo), cifrar('celular', p.celular), socio.id, now(), user.id, correoIndice(p.correo)], client,
             );
+        await campanias.vincular(ref.id, socio.id, client);
         await log(req, user, 'Referido asociado por código', 'Registro mediante invitación', client, { objetivoId: ref.id, datos: { socioId: socio.id } });
         await notify(socio.id, 'Nuevo referido asociado', new Referido({ nombre: p.nombre }).nombreDePila + ' se registró con tu código.', client);
       }
@@ -646,15 +665,14 @@ export async function createApi(database) {
     const states = Object.fromEntries(
       STATES.map((state) => [state, referrals.filter((x) => x.estado === state).length]),
     );
-    const [puntos] = await db.query(
-      'SELECT COALESCE(SUM(cantidad),0) AS total FROM "MovimientoPuntos"' + (own ? ' WHERE "usuarioId"=$1' : ''),
-      own ? [user.id] : [],
-    );
+    const progreso = await gamificacion.resumen(user.id);
+    const [totalGeneral] = own ? [] : await db.query('SELECT COALESCE(SUM(cantidad),0) AS total FROM "MovimientoPuntos" WHERE tipo=$1', ['CREDITO']);
     res.json({
       referidos: referrals.length,
       mes: referrals.filter((x) => String(x.creadoEn).startsWith(now().slice(0, 7))).length,
       estados: states,
-      puntos: Number(puntos.total),
+      ...progreso,
+      puntos: own ? progreso.saldo : Number(totalGeneral.total),
       bienvenida: await setting('mensajeBienvenida'),
       demo: process.env.SEED_DEMO === 'true' && process.env.NODE_ENV !== 'production',
     });
@@ -676,7 +694,7 @@ export async function createApi(database) {
       ['PENDIENTE'],
     );
     const [movimientos] = await db.query(
-      'SELECT COALESCE(SUM(cantidad),0) AS otorgados FROM "MovimientoPuntos"',
+      "SELECT COALESCE(SUM(CASE WHEN tipo='CREDITO' THEN cantidad ELSE 0 END),0) AS otorgados FROM \"MovimientoPuntos\"",
     );
     return {
       generadoEn: now(),
@@ -852,6 +870,7 @@ export async function createApi(database) {
         [p.nombre, cifrar('correo', p.correo), cifrar('celular', p.celular), user.id, now(), text(req.body.notas, 500, 'notas'), correoIndice(p.correo)],
         client,
       );
+      await campanias.vincular(ref.id, user.id, client);
       await log(req, user, 'Referido registrado', `Referido #${ref.id}: ${p.nombre}`, client, {
         objetivoId: ref.id,
       });
@@ -917,7 +936,12 @@ export async function createApi(database) {
         ref.id, decision.estado, decision.fechaDecision, destinatario ?? null,
       ], client);
       if (decision.estado === 'APROBADO') {
-        await acreditacion.registrar('REFERIDO', ref.id, [ref.socioId, destinatario], fechaDecision, client);
+        const premio = ref.campaniaId ? await campanias.premio(ref, client) : null;
+        if (!ref.campaniaId || premio) {
+          const importes = premio ? new Map([[ref.socioId, premio.puntosSocio], [destinatario, premio.puntosReferido]]) : new Map();
+          await acreditacion.registrar('REFERIDO', ref.id, [ref.socioId, destinatario], fechaDecision, client, importes);
+        }
+        await gamificacion.registrar(ref.socioId, 'REFERIDO', ref.id, fechaDecision, client);
       }
       await log(req, user, 'Dictamen de referido', `Referido #${ref.id}: ${estado}`, client, {
         objetivoId: ref.id,
@@ -1015,6 +1039,7 @@ export async function createApi(database) {
         ],
         client,
       );
+      await campanias.vincular(ref.id, socio.id, client);
       await log(req, user, 'Asociación manual', `${target.nombre} → ${socio.nombre}`, client, {
         objetivoId: ref.id,
         datos: { usuarioId: target.id, socioId: socio.id },
