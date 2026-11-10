@@ -148,7 +148,7 @@
   color: var(--navy);
   box-shadow: 0 5px 12px #071b3340;
 }
-.s-sidebar nav s-icon {
+.s-sidebar nav app-icon {
   width: 19px;
   height: 19px;
 }
@@ -424,7 +424,7 @@
   flex-direction: column;
   align-items: flex-start;
 }
-.s-hero-note s-icon {
+.s-hero-note app-icon {
   width: 29px;
   height: 29px;
   color: var(--yellow);
@@ -469,8 +469,8 @@
   filter: brightness(0.97);
   transform: translateY(-1px);
 }
-.s-primary s-icon,
-.s-secondary s-icon {
+.s-primary app-icon,
+.s-secondary app-icon {
   width: 16px;
   height: 16px;
 }
@@ -669,7 +669,7 @@
   font-weight: 700;
   white-space: nowrap;
 }
-.s-text-link s-icon {
+.s-text-link app-icon {
   width: 15px;
   height: 15px;
 }
@@ -723,11 +723,7 @@
   border-radius: 50%;
   background: currentColor;
 }
-.s-status[data-state='CONTACTADO'] {
-  background: #eaf2ff;
-  color: #336ba8;
-}
-.s-status[data-state='VALIDADO'] {
+.s-status[data-state='APROBADO'] {
   background: #e9f7f0;
   color: #2c8166;
 }
@@ -760,12 +756,8 @@
   border-radius: 50%;
   background: #e5bb43;
 }
-.s-progress-row i[data-state='CONTACTADO'],
-.s-dot[data-state='CONTACTADO'] {
-  background: #5389c2;
-}
-.s-progress-row i[data-state='VALIDADO'],
-.s-dot[data-state='VALIDADO'] {
+.s-progress-row i[data-state='APROBADO'],
+.s-dot[data-state='APROBADO'] {
   background: #5baa8c;
 }
 .s-progress-row i[data-state='RECHAZADO'],
@@ -785,10 +777,7 @@
   background: #e5bb43;
   border-radius: 20px;
 }
-.s-progress-track > span[data-state='CONTACTADO'] {
-  background: #5389c2;
-}
-.s-progress-track > span[data-state='VALIDADO'] {
+.s-progress-track > span[data-state='APROBADO'] {
   background: #5baa8c;
 }
 .s-progress-track > span[data-state='RECHAZADO'] {
@@ -875,7 +864,7 @@
   flex: 1;
   color: #97a5b6;
 }
-.s-search s-icon {
+.s-search app-icon {
   width: 16px;
   height: 16px;
 }
@@ -964,7 +953,7 @@
   padding: 7px;
   vertical-align: middle;
 }
-.s-icon-button s-icon {
+.s-icon-button app-icon {
   width: 16px;
   height: 16px;
 }
@@ -1004,7 +993,7 @@
   font-size: 11px;
   line-height: 1.7;
 }
-.s-info-line s-icon {
+.s-info-line app-icon {
   width: 17px;
   height: 17px;
   flex-shrink: 0;
@@ -1033,7 +1022,7 @@
 .s-role-pill.admin {
   color: var(--blue);
 }
-.s-role-pill s-icon {
+.s-role-pill app-icon {
   width: 15px;
   height: 15px;
 }
@@ -1047,7 +1036,7 @@
   gap: 16px;
   margin-bottom: 24px;
 }
-.s-info-banner > s-icon {
+.s-info-banner > app-icon {
   width: 26px;
   height: 26px;
   color: var(--blue);
@@ -1117,7 +1106,7 @@
   gap: 11px;
   align-items: center;
 }
-.s-permission s-icon {
+.s-permission app-icon {
   width: 17px;
   height: 17px;
   color: #8899ae;
@@ -1323,7 +1312,7 @@
   padding: 60px 25px;
   white-space: normal;
 }
-.s-empty > s-icon {
+.s-empty > app-icon {
   width: 36px;
   height: 36px;
   color: var(--blue);
@@ -1390,7 +1379,7 @@
   color: var(--blue);
   border-radius: 50%;
 }
-.s-toast-icon s-icon {
+.s-toast-icon app-icon {
   width: 17px;
   height: 17px;
 }
@@ -1554,7 +1543,23 @@
     padding-right: 17px;
   }
 }
+/* Ajustes de grilla para tabletas */
 @media (max-width: 980px) {
+  .s-dashboard-bottom {
+    grid-template-columns: 1.3fr 1fr;
+  }
+  .s-stat {
+    min-height: 211px;
+  }
+  .s-hero-note {
+    display: flex;
+  }
+  .s-stats {
+    gap: 17px;
+  }
+}
+/* RF-49-4: menú del rol completo desde 768 px; desplegable en pantallas menores */
+@media (max-width: 767.98px) {
   .s-sidebar {
     transform: translateX(-100%);
     transition: transform 0.2s;
@@ -1588,18 +1593,6 @@
   }
   .s-role {
     display: flex;
-  }
-  .s-dashboard-bottom {
-    grid-template-columns: 1.3fr 1fr;
-  }
-  .s-stat {
-    min-height: 211px;
-  }
-  .s-hero-note {
-    display: flex;
-  }
-  .s-stats {
-    gap: 17px;
   }
 }
 @media (max-width: 640px) {
@@ -1713,7 +1706,7 @@
     height: 34px;
     border-radius: 11px;
   }
-  .s-stat-icon s-icon {
+  .s-stat-icon app-icon {
     width: 18px;
     height: 18px;
   }
@@ -2027,6 +2020,220 @@
   border-color: var(--blue);
   color: var(--blue);
 }
-.s-quick-link > s-icon:last-child {
+.s-quick-link > app-icon:last-child {
   margin-left: auto;
+}
+
+/* =========================================================
+   Auditoría Sprint 1
+   ========================================================= */
+.s-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.s-block {
+  display: block;
+}
+/* RF-49-1 / RF-49-2: ayuda siempre visible y error en rojo con causa y corrección */
+.s-field > label,
+.s-field > legend {
+  display: block;
+}
+fieldset.s-field {
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+.s-field .s-help {
+  display: block;
+  color: #6f7d90;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.6;
+  margin-top: 6px;
+}
+.s-field .s-error {
+  display: block;
+  color: #b3261e;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.6;
+  margin-top: 4px;
+}
+.s-field .s-error::before {
+  content: '⚠ ';
+}
+.s-field-error input,
+.s-field-error textarea,
+.s-field-error select {
+  border-color: #c4314b !important;
+  background: #fff7f8 !important;
+  box-shadow: 0 0 0 3px #c4314b1a;
+}
+.s-form-error {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #fdecec;
+  color: #8a1c1c;
+  font-size: 12px;
+  font-weight: 600;
+}
+.s-field select:disabled {
+  background: #f4f6fa;
+  color: #8f9bab;
+}
+/* Filtros de listados (RF-11-3, RF-42-2) */
+.s-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0 16px;
+  align-items: start;
+  padding: 4px 22px 18px;
+  border-bottom: 1px solid var(--line, #e5eaf1);
+}
+.s-filters .s-field {
+  margin-top: 14px;
+}
+.s-filters-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  grid-column: 1 / -1;
+  margin-top: 14px;
+}
+.s-heading-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+/* Pendientes con más de 2 días hábiles: color + texto (WCAG 1.4.1) */
+.s-row-late > td {
+  background: #fff8e6;
+}
+.s-row-late > td:first-child {
+  box-shadow: inset 4px 0 0 #e5a400;
+}
+.s-chip-alert,
+.s-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 6px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 650;
+  white-space: nowrap;
+  background: #fde7c2;
+  color: #8a5300;
+}
+.s-chip-alert app-icon {
+  width: 12px;
+  height: 12px;
+}
+.s-chip {
+  margin: 10px 0 0;
+  background: #eef2f7;
+  color: #5b6b80;
+}
+/* Modal: el fondo es un botón para que cerrar sea operable con teclado */
+.s-modal-scrim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  cursor: default;
+}
+.s-modal {
+  position: relative;
+  z-index: 1;
+}
+/* RF-49 / HU-009: éxito y error se distinguen por color, icono y título */
+.s-toast {
+  color: #173455;
+}
+.s-toast p strong {
+  display: block;
+  font-size: 12px;
+}
+.s-toast.exito {
+  border-color: #b9e3cf;
+  border-left: 5px solid #2c8166;
+}
+.s-toast.exito .s-toast-icon {
+  background: #e9f7f0;
+  color: #2c8166;
+}
+.s-toast.error {
+  border-color: #f3c2c5;
+  border-left: 5px solid #b3261e;
+}
+.s-toast.error .s-toast-icon {
+  background: #fdecec;
+  color: #b3261e;
+}
+.s-toast .s-icon-button {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: inherit;
+  display: inline-flex;
+  padding: 6px;
+}
+/* Tablero del administrador (RF-45-1) */
+.s-indicators {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 14px 0 24px;
+}
+.s-indicator {
+  padding: 22px;
+}
+.s-indicator p {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.s-indicator > strong {
+  display: block;
+  font-size: 32px;
+  line-height: 1.2;
+  margin-top: 4px;
+}
+.s-indicator > strong small {
+  font-size: 13px;
+  margin-left: 4px;
+  color: var(--muted);
+}
+.s-indicator-off > strong {
+  color: #9aa6b5;
+}
+.s-big-number strong {
+  font-size: 40px;
+  display: block;
+}
+@media (max-width: 980px) {
+  .s-indicators {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .s-indicators {
+    grid-template-columns: 1fr;
+  }
+  .s-filters {
+    padding: 4px 14px 14px;
+  }
 }

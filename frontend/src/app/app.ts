@@ -1,4 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-@Component({ selector: 'app-root', imports: [RouterOutlet], template: '<router-outlet />' })
+import { AvisoComponent } from './shared/aviso/aviso.component';
+
+@Component({
+  selector: 'app-root',
+  imports: [RouterOutlet, AvisoComponent],
+  template: '<router-outlet /><app-aviso />',
+})
 export class App {}

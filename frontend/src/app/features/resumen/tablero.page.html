@@ -1,0 +1,77 @@
+<div class="s-page-heading">
+  <div>
+    <span class="s-eyebrow muted">TABLERO DE ADMINISTRACIÓN</span>
+    <h1>Así vamos creciendo</h1>
+    <p>Indicadores de captación y fidelización de la comunidad.</p>
+  </div>
+  <button type="button" class="s-secondary" [disabled]="cargando()" (click)="cargar()">
+    Actualizar
+  </button>
+</div>
+@if (cargando() && !tablero()) {
+  <div class="s-loading" role="status"><span class="s-spinner"></span>Calculando indicadores…</div>
+} @else if (error()) {
+  <div class="s-empty s-card" role="alert">
+    <app-icon name="actividad" />
+    <h2>No pudimos cargar el tablero</h2>
+    <p>{{ error() }}</p>
+    <button type="button" class="s-primary" (click)="cargar()">Volver a intentar</button>
+  </div>
+} @else if (tablero(); as t) {
+  <p class="s-live">
+    <span class="s-online"></span>Datos generados el
+    {{ t.generadoEn | date: 'dd/MM/yyyy · HH:mm' : '-0500' }} (máximo 24 h de antigüedad)
+  </p>
+  <section class="s-indicators" aria-label="Indicadores de la comunidad">
+    @for (ind of t.indicadores; track ind.id) {
+      <article class="s-card s-indicator" [class.s-indicator-off]="!!ind.disponibleDesde">
+        <span class="s-feature-icon" [class.yellow]="!ind.disponibleDesde"
+          ><app-icon [name]="iconos[ind.id] || 'report'"
+        /></span>
+        <p>{{ ind.etiqueta }}</p>
+        <strong
+          >{{ ind.valor | number: '1.0-1' }}<small>{{ ind.unidad }}</small></strong
+        >
+        @if (ind.disponibleDesde) {
+          <span class="s-chip">Disponible en {{ ind.disponibleDesde }}</span>
+        }
+      </article>
+    }
+  </section>
+  <div class="s-dashboard-bottom">
+    <section class="s-card s-progress-card">
+      <span class="s-eyebrow muted">REFERIDOS POR ESTADO</span>
+      <h2>Embudo de captación</h2>
+      <p>{{ t.sociosActivos }} socios activos en la comunidad.</p>
+      @for (s of estados; track s) {
+        <div class="s-progress-row">
+          <span><i [attr.data-state]="s"></i>{{ etiquetas[s] }}</span
+          ><strong>{{ t.estados[s] }}</strong>
+        </div>
+        <div class="s-progress-track">
+          <span
+            [attr.data-state]="s"
+            [style.width.%]="total(t) ? (t.estados[s] / total(t)) * 100 : 0"
+          ></span>
+        </div>
+      }
+    </section>
+    <section class="s-card s-recent">
+      <div class="s-card-heading">
+        <div>
+          <h2>Pendientes por atender</h2>
+          <p>Referidos Pendientes con más de 2 días hábiles.</p>
+        </div>
+      </div>
+      <p class="s-big-number">
+        <strong>{{ t.pendientesAtrasados }}</strong>
+        {{ t.pendientesAtrasados === 1 ? 'referido atrasado' : 'referidos atrasados' }}
+      </p>
+      @if (session.puede('referidos')) {
+        <a routerLink="/panel/referidos" [queryParams]="{ estado: 'PENDIENTE' }" class="s-text-link"
+          >Revisar pendientes <app-icon name="arrow"
+        /></a>
+      }
+    </section>
+  </div>
+}

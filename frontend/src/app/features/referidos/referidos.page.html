@@ -1,0 +1,514 @@
+<div class="s-page-heading">
+  <div>
+    <span class="s-eyebrow muted">{{
+      session.esAdmin() ? 'LISTADO GLOBAL DE REFERIDOS' : 'TU ESPACIO SUMA'
+    }}</span>
+    <h1>Referidos</h1>
+    <p>Cada conexión es una oportunidad para crecer juntos.</p>
+  </div>
+  <div class="s-heading-actions">
+    @if (session.esAdmin()) {
+      <button type="button" class="s-secondary" (click)="abrirAsociar()">
+        <app-icon name="link" />Asociar usuario
+      </button>
+    }
+    <button type="button" class="s-primary" (click)="abrirFormulario()">
+      <app-icon name="plus" />Nuevo referido
+    </button>
+  </div>
+</div>
+
+@if (datos(); as d) {
+  <section class="s-mini-stats" aria-label="Referidos por estado">
+    <div>
+      <span>Total de referidos</span
+      ><strong>{{ d.porEstado.PENDIENTE + d.porEstado.APROBADO + d.porEstado.RECHAZADO }}</strong>
+    </div>
+    @for (s of estados; track s) {
+      <div>
+        <span><i class="s-dot" [attr.data-state]="s"></i>{{ etiquetas[s] }}</span
+        ><strong>{{ d.porEstado[s] }}</strong>
+      </div>
+    }
+  </section>
+}
+
+<section class="s-card s-table-card">
+  <form class="s-filters" aria-label="Filtros de referidos" (submit)="$event.preventDefault()">
+    <app-campo para="filtroBuscar" etiqueta="Buscar" ayuda="Nombre, correo o socio. Ej. Carlos">
+      <input
+        id="filtroBuscar"
+        type="search"
+        maxlength="100"
+        placeholder="Buscar por nombre o correo…"
+        aria-describedby="filtroBuscar-ayuda"
+        [value]="filtros().buscar"
+        (input)="buscar($any($event.target).value)"
+      />
+    </app-campo>
+    <app-campo para="filtroEstado" etiqueta="Estado" ayuda="Pendiente, Aprobado o Rechazado.">
+      <select
+        id="filtroEstado"
+        aria-describedby="filtroEstado-ayuda"
+        [value]="filtros().estado"
+        (change)="filtrar({ estado: $any($event.target).value })"
+      >
+        <option value="">Todos los estados</option>
+        @for (s of estados; track s) {
+          <option [value]="s" [selected]="filtros().estado === s">{{ etiquetas[s] }}</option>
+        }
+      </select>
+    </app-campo>
+    <app-campo para="filtroDesde" etiqueta="Desde" ayuda="Fecha de registro inicial.">
+      <input
+        id="filtroDesde"
+        type="date"
+        aria-describedby="filtroDesde-ayuda"
+        [value]="filtros().desde"
+        [max]="filtros().hasta || null"
+        (change)="filtrar({ desde: $any($event.target).value })"
+      />
+    </app-campo>
+    <app-campo para="filtroHasta" etiqueta="Hasta" ayuda="Fecha de registro final.">
+      <input
+        id="filtroHasta"
+        type="date"
+        aria-describedby="filtroHasta-ayuda"
+        [value]="filtros().hasta"
+        [min]="filtros().desde || null"
+        (change)="filtrar({ hasta: $any($event.target).value })"
+      />
+    </app-campo>
+    @if (session.esAdmin()) {
+      <app-campo
+        para="filtroCampania"
+        etiqueta="Campaña"
+        ayuda="Disponible cuando existan campañas (Sprint 3)."
+      >
+        <select id="filtroCampania" disabled aria-describedby="filtroCampania-ayuda">
+          <option>Todas las campañas</option>
+        </select>
+      </app-campo>
+      <app-campo
+        para="filtroProvincia"
+        etiqueta="Provincia"
+        ayuda="Disponible cuando el registro pida provincia (Sprint 2)."
+      >
+        <select id="filtroProvincia" disabled aria-describedby="filtroProvincia-ayuda">
+          <option>Todas las provincias</option>
+        </select>
+      </app-campo>
+    }
+    <div class="s-filters-actions">
+      @if (hayFiltros()) {
+        <button type="button" class="s-secondary" (click)="limpiarFiltros()">
+          Limpiar filtros
+        </button>
+      }
+      <button type="button" class="s-secondary" (click)="exportar()" [disabled]="!datos()?.total">
+        <app-icon name="download" />Exportar
+      </button>
+    </div>
+  </form>
+
+  @if (error()) {
+    <div class="s-inline-empty" role="alert">
+      {{ error() }}
+      <button type="button" class="s-secondary" (click)="cargar()">Volver a intentar</button>
+    </div>
+  } @else {
+    <div class="s-table-scroll" [attr.aria-busy]="cargando()">
+      <table>
+        <caption class="s-sr-only">
+          Referidos,
+          {{
+            porPagina
+          }}
+          por página. Las filas resaltadas llevan más de 2 días hábiles pendientes.
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Persona referida</th>
+            <th scope="col">Celular</th>
+            @if (session.esAdmin()) {
+              <th scope="col">Referido por</th>
+            }
+            <th scope="col">Estado</th>
+            <th scope="col">Fecha</th>
+            <th scope="col" class="s-align-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (ref of datos()?.items ?? []; track ref.id) {
+            <tr [class.s-row-late]="atrasado(ref)">
+              <td>
+                <div class="s-person-cell">
+                  <span class="s-avatar pale">{{ ref.nombre.slice(0, 1) }}</span>
+                  <div>
+                    <strong>{{ ref.nombre }}</strong
+                    ><small>{{ ref.correo }}</small>
+                  </div>
+                </div>
+              </td>
+              <td>{{ ref.celular }}</td>
+              @if (session.esAdmin()) {
+                <td>{{ ref.socio }}</td>
+              }
+              <td>
+                <span class="s-status" [attr.data-state]="ref.estado">{{
+                  etiquetas[ref.estado]
+                }}</span>
+                @if (atrasado(ref)) {
+                  <span class="s-chip-alert"
+                    ><app-icon name="clock" />{{ ref.diasHabilesPendiente }} días hábiles</span
+                  >
+                }
+              </td>
+              <td>{{ ref.creadoEn | date: 'dd/MM/yyyy' : '-0500' }}</td>
+              <td class="s-align-right s-nowrap">
+                @if (puedeEditar(ref)) {
+                  @if (puedeDictaminar(ref)) {
+                    <button
+                      type="button"
+                      class="s-icon-button"
+                      [attr.aria-label]="'Dictaminar a ' + ref.nombre"
+                      title="Dictaminar"
+                      (click)="abrirDictamen(ref)"
+                    >
+                      <app-icon name="check" />
+                    </button>
+                  }
+                  <button
+                    type="button"
+                    class="s-icon-button"
+                    [attr.aria-label]="'Editar a ' + ref.nombre"
+                    title="Editar"
+                    (click)="abrirFormulario(ref)"
+                  >
+                    <app-icon name="edit" /></button
+                  ><button
+                    type="button"
+                    class="s-icon-button danger"
+                    [attr.aria-label]="'Dar de baja a ' + ref.nombre"
+                    title="Dar de baja"
+                    (click)="abrirBaja(ref)"
+                  >
+                    <app-icon name="trash" />
+                  </button>
+                } @else {
+                  <span class="s-muted">En seguimiento</span>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6">
+                <div class="s-empty">
+                  <app-icon name="referidos" />
+                  @if (cargando()) {
+                    <h3>Cargando referidos…</h3>
+                  } @else {
+                    <h3>
+                      {{
+                        hayFiltros() ? 'No hay coincidencias' : 'Tu próxima conexión empieza aquí'
+                      }}
+                    </h3>
+                    <p>
+                      {{
+                        hayFiltros()
+                          ? 'Prueba con otro nombre, estado o rango de fechas.'
+                          : 'Registra tu primer referido y empieza a sumar.'
+                      }}
+                    </p>
+                  }
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    @if (datos(); as d) {
+      <app-paginador
+        [pagina]="d.pagina"
+        [total]="d.total"
+        [porPagina]="d.porPagina"
+        (cambiar)="filtrar({ pagina: $event })"
+      />
+    }
+  }
+</section>
+<div class="s-info-line">
+  <app-icon name="ayuda" />
+  <p>
+    Los socios pueden editar y dar de baja sus referidos pendientes. Administración emite el
+    dictamen (Aprobado o Rechazado). Las bajas son lógicas: el historial se conserva.
+  </p>
+</div>
+
+@switch (modal()) {
+  @case ('form') {
+    <app-modal [ocupado]="ocupado()" (cerrar)="cerrarModal()">
+      <span class="s-feature-icon yellow"><app-icon name="referidos" /></span
+      ><span class="s-eyebrow muted">NUEVAS CONEXIONES</span>
+      <h2 id="dialogTitle">
+        {{ seleccionado() ? 'Editar referido' : 'Alguien nuevo para sumar' }}
+      </h2>
+      <p>Completa los datos de la persona que quieres recomendar.</p>
+      <form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+        <app-campo
+          para="refNombre"
+          etiqueta="Nombres y apellidos"
+          ayuda="Incluye al menos un nombre y un apellido. Ej. Carlos Torres"
+          [requerido]="true"
+          [error]="errorReferido('nombre')"
+        >
+          <input
+            id="refNombre"
+            formControlName="nombre"
+            maxlength="100"
+            placeholder="Ej. Carlos Torres"
+            autocomplete="name"
+            aria-describedby="refNombre-ayuda refNombre-error"
+            [attr.aria-invalid]="!!errorReferido('nombre')"
+          />
+        </app-campo>
+        <div class="s-form-row">
+          <app-campo
+            para="refCorreo"
+            etiqueta="Correo electrónico"
+            ayuda="Ej. nombre@correo.com"
+            [requerido]="true"
+            [error]="errorReferido('correo')"
+          >
+            <input
+              id="refCorreo"
+              type="email"
+              formControlName="correo"
+              placeholder="nombre@correo.com"
+              autocomplete="email"
+              aria-describedby="refCorreo-ayuda refCorreo-error"
+              [attr.aria-invalid]="!!errorReferido('correo')"
+            />
+          </app-campo>
+          <app-campo
+            para="refCelular"
+            etiqueta="Celular"
+            ayuda="10 dígitos; empieza por 09. Ej. 0991234567"
+            [requerido]="true"
+            [error]="errorReferido('celular')"
+          >
+            <input
+              id="refCelular"
+              type="tel"
+              inputmode="numeric"
+              maxlength="10"
+              formControlName="celular"
+              placeholder="0991234567"
+              aria-describedby="refCelular-ayuda refCelular-error"
+              [attr.aria-invalid]="!!errorReferido('celular')"
+            />
+          </app-campo>
+        </div>
+        <app-campo
+          para="refNotas"
+          etiqueta="Notas"
+          ayuda="Ej. Prefiere que la llamen en la tarde. Máximo 500 caracteres."
+          [opcional]="true"
+          [error]="errorReferido('notas')"
+        >
+          <textarea
+            id="refNotas"
+            rows="2"
+            maxlength="500"
+            formControlName="notas"
+            placeholder="¿Algo que debamos saber?"
+            aria-describedby="refNotas-ayuda refNotas-error"
+            [attr.aria-invalid]="!!errorReferido('notas')"
+          ></textarea>
+        </app-campo>
+        @if (!seleccionado()) {
+          <div class="s-field" [class.s-field-error]="!!errorReferido('consentimiento')">
+            <label class="s-consent"
+              ><input
+                id="refConsentimiento"
+                type="checkbox"
+                formControlName="consentimiento"
+                aria-describedby="refConsentimiento-ayuda refConsentimiento-error"
+              /><span
+                >Tengo autorización de esta persona para compartir sus datos con la
+                cooperativa.</span
+              ></label
+            >
+            <small class="s-help" id="refConsentimiento-ayuda"
+              >Obligatorio por la protección de datos personales.</small
+            >
+            @if (errorReferido('consentimiento'); as e) {
+              <small class="s-error" id="refConsentimiento-error">{{ e }}</small>
+            }
+          </div>
+        }
+        @if (errorModal()) {
+          <p class="s-form-error" role="alert">{{ errorModal() }}</p>
+        }
+        <div class="s-form-actions">
+          <button type="button" class="s-secondary" [disabled]="ocupado()" (click)="cerrarModal()">
+            Cancelar</button
+          ><button type="submit" class="s-primary" [disabled]="ocupado()">
+            {{ ocupado() ? 'Guardando…' : seleccionado() ? 'Guardar cambios' : 'Registrar referido'
+            }}<app-icon name="arrow" />
+          </button>
+        </div>
+      </form>
+    </app-modal>
+  }
+  @case ('dictamen') {
+    <app-modal [ocupado]="ocupado()" (cerrar)="cerrarModal()">
+      <span class="s-feature-icon"><app-icon name="check" /></span>
+      <h2 id="dialogTitle">Dictamen del referido</h2>
+      <p>{{ seleccionado()?.nombre }} · {{ seleccionado()?.correo }}</p>
+      <form [formGroup]="dictamenForm" (ngSubmit)="dictaminar()" novalidate>
+        <fieldset class="s-field" [class.s-field-error]="!!errorDictamen()">
+          <legend>Resultado <span class="s-required" aria-hidden="true">*</span></legend>
+          <label class="s-consent"
+            ><input
+              type="radio"
+              formControlName="estado"
+              value="APROBADO"
+              aria-describedby="dictamen-ayuda"
+            /><span>Aprobado · solo si su cuenta vinculada ya está Aprobada</span></label
+          >
+          <label class="s-consent"
+            ><input
+              type="radio"
+              formControlName="estado"
+              value="RECHAZADO"
+              aria-describedby="dictamen-ayuda"
+            /><span>Rechazado · no cumple los requisitos</span></label
+          >
+          <small class="s-help" id="dictamen-ayuda"
+            >Solo los referidos Pendientes reciben dictamen (RF-11-4).</small
+          >
+          @if (errorDictamen(); as e) {
+            <small class="s-error">{{ e }}</small>
+          }
+        </fieldset>
+        @if (errorModal()) {
+          <p class="s-form-error" role="alert">{{ errorModal() }}</p>
+        }
+        <div class="s-form-actions">
+          <button type="button" class="s-secondary" [disabled]="ocupado()" (click)="cerrarModal()">
+            Cancelar</button
+          ><button type="submit" class="s-primary" [disabled]="ocupado()">
+            {{ ocupado() ? 'Guardando…' : 'Registrar dictamen' }}
+          </button>
+        </div>
+      </form>
+    </app-modal>
+  }
+  @case ('baja') {
+    <app-modal [ocupado]="ocupado()" (cerrar)="cerrarModal()">
+      <span class="s-feature-icon red"><app-icon name="trash" /></span>
+      <h2 id="dialogTitle">¿Dar de baja este referido?</h2>
+      <p>
+        {{ seleccionado()?.nombre }} dejará de aparecer en el listado. Sus datos y su historial se
+        conservan y la acción queda en el registro de actividad.
+      </p>
+      <form [formGroup]="bajaForm" (ngSubmit)="darDeBaja()" novalidate>
+        <app-campo
+          para="bajaMotivo"
+          etiqueta="Motivo de la baja"
+          ayuda="Ej. Datos duplicados o la persona pidió no ser contactada."
+          [requerido]="true"
+          [error]="errorBaja()"
+        >
+          <textarea
+            id="bajaMotivo"
+            rows="2"
+            maxlength="300"
+            formControlName="motivo"
+            aria-describedby="bajaMotivo-ayuda bajaMotivo-error"
+            [attr.aria-invalid]="!!errorBaja()"
+          ></textarea>
+        </app-campo>
+        <div class="s-form-actions">
+          <button type="button" class="s-secondary" [disabled]="ocupado()" (click)="cerrarModal()">
+            Conservar</button
+          ><button type="submit" class="s-danger" [disabled]="ocupado()">
+            {{ ocupado() ? 'Procesando…' : 'Dar de baja' }}
+          </button>
+        </div>
+      </form>
+    </app-modal>
+  }
+  @case ('asociar') {
+    <app-modal [ocupado]="ocupado()" (cerrar)="cerrarModal()">
+      <span class="s-feature-icon yellow"><app-icon name="link" /></span>
+      <h2 id="dialogTitle">Asociar usuario a un socio referidor</h2>
+      <p>Para personas que se registraron sin código en los últimos 30 días (RF-11-5).</p>
+      @if (asociables(); as a) {
+        <form [formGroup]="asociarForm" (ngSubmit)="asociar()" novalidate>
+          <app-campo
+            para="asocUsuario"
+            etiqueta="Usuario registrado sin código"
+            [ayuda]="
+              a.usuarios.length
+                ? 'Solo aparecen cuentas creadas hace 30 días o menos.'
+                : 'No hay usuarios registrados en los últimos 30 días sin socio referidor.'
+            "
+            [requerido]="true"
+            [error]="errorAsociar('usuarioId')"
+          >
+            <select
+              id="asocUsuario"
+              formControlName="usuarioId"
+              aria-describedby="asocUsuario-ayuda asocUsuario-error"
+            >
+              <option [ngValue]="0">Selecciona una persona</option>
+              @for (u of a.usuarios; track u.id) {
+                <option [ngValue]="u.id">{{ u.nombre }} · {{ u.correo }}</option>
+              }
+            </select>
+          </app-campo>
+          <app-campo
+            para="asocSocio"
+            etiqueta="Socio referidor"
+            ayuda="Socio que recomendó a esta persona."
+            [requerido]="true"
+            [error]="errorAsociar('socioId')"
+          >
+            <select
+              id="asocSocio"
+              formControlName="socioId"
+              aria-describedby="asocSocio-ayuda asocSocio-error"
+            >
+              <option [ngValue]="0">Selecciona un socio</option>
+              @for (s of a.socios; track s.id) {
+                <option [ngValue]="s.id">{{ s.nombre }} · {{ s.correo }}</option>
+              }
+            </select>
+          </app-campo>
+          @if (errorModal()) {
+            <p class="s-form-error" role="alert">{{ errorModal() }}</p>
+          }
+          <div class="s-form-actions">
+            <button
+              type="button"
+              class="s-secondary"
+              [disabled]="ocupado()"
+              (click)="cerrarModal()"
+            >
+              Cancelar</button
+            ><button type="submit" class="s-primary" [disabled]="ocupado()">
+              {{ ocupado() ? 'Guardando…' : 'Asociar' }}
+            </button>
+          </div>
+        </form>
+      } @else if (errorModal()) {
+        <p class="s-form-error" role="alert">{{ errorModal() }}</p>
+      } @else {
+        <div class="s-loading" role="status"><span class="s-spinner"></span>Cargando opciones…</div>
+      }
+    </app-modal>
+  }
+}

@@ -1,0 +1,114 @@
+<div class="suma-app">
+  <a class="s-skip" href="#content" (click)="saltarAlContenido($event)">Saltar al contenido</a>
+  @if (menuAbierto()) {
+    <button
+      type="button"
+      class="s-scrim"
+      aria-label="Cerrar menú"
+      (click)="menuAbierto.set(false)"
+      (keydown.escape)="menuAbierto.set(false)"
+    ></button>
+  }
+  <aside class="s-sidebar" [class.open]="menuAbierto()">
+    <a class="s-brand" routerLink="/"
+      ><span class="logoIcon"><i></i><i></i><i></i></span>SUMA<span class="s-brand-dot">.</span></a
+    >
+    <p class="s-tagline">Conectamos para crecer</p>
+    <nav aria-label="Navegación principal">
+      @for (item of menu(); track item.id; let i = $index) {
+        @if (i === 0 || menu()[i - 1].group !== item.group) {
+          <span class="s-nav-label">{{ item.group }}</span>
+        }
+        <a
+          [routerLink]="item.id === 'panel' ? '/panel' : '/panel/' + item.id"
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+          [routerLinkActiveOptions]="{ exact: item.id === 'panel' }"
+          ><app-icon [name]="item.id" />{{ item.label }}
+          @if (item.id === 'notificaciones' && notificaciones.sinLeer()) {
+            <span class="s-count">{{ notificaciones.sinLeer() }}</span>
+          }
+        </a>
+      }
+      @if (futuros().length) {
+        <span class="s-nav-label">Próximamente</span>
+        @for (item of futuros(); track item.id) {
+          <a
+            [routerLink]="['/panel', item.id]"
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page"
+          >
+            <app-icon [name]="item.icon" />{{ item.label }}
+          </a>
+        }
+      }
+    </nav>
+    <div class="s-sidebar-bottom">
+      <div class="s-community">
+        <span class="s-tiny">CRECEMOS JUNTOS</span
+        ><strong>Cada conexión<br />es un nuevo comienzo.</strong
+        ><span class="s-community-art" aria-hidden="true">↗</span>
+      </div>
+      <button type="button" class="s-logout" (click)="confirmarSalida.set(true)">
+        <app-icon name="logout" />Cerrar sesión</button
+      ><span class="s-version">SUMA · Tu comunidad, más cerca</span>
+    </div>
+  </aside>
+  <div class="s-workspace">
+    <header class="s-topbar">
+      <button
+        type="button"
+        class="s-menu"
+        aria-label="Abrir menú"
+        [attr.aria-expanded]="menuAbierto()"
+        (click)="menuAbierto.set(!menuAbierto())"
+      >
+        <app-icon name="menu" />
+      </button>
+      <div class="s-breadcrumb">
+        Mi comunidad <span>/</span> <strong>{{ titulo() }}</strong>
+      </div>
+      <div class="s-top-right">
+        @if (session.rol(); as rol) {
+          <span class="s-role"><span class="s-online"></span>{{ etiquetasRol[rol] }}</span>
+        }
+        @if (session.puede('notificaciones')) {
+          <a routerLink="/panel/notificaciones" class="s-bell" aria-label="Ver notificaciones"
+            ><app-icon name="notificaciones" />
+            @if (notificaciones.sinLeer()) {
+              <span></span>
+            }
+          </a>
+        }
+        <div class="s-profile">
+          <span class="s-avatar">{{ iniciales() }}</span>
+          <div>
+            <strong>{{ session.usuario()?.nombre }}</strong
+            ><small>{{ session.rol() ? etiquetasRol[session.rol()!] : '' }}</small>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main #content id="content" class="s-content" tabindex="-1">
+      <router-outlet />
+      <footer class="s-footer">
+        <span>© {{ anio }} SUMA · Conectamos para crecer.</span
+        ><span>Hecho para nuestra comunidad <span class="s-footer-star">✦</span></span>
+      </footer>
+    </main>
+  </div>
+  @if (confirmarSalida()) {
+    <app-modal [ocupado]="saliendo()" (cerrar)="confirmarSalida.set(false)">
+      <span class="s-feature-icon"><app-icon name="logout" /></span>
+      <h2 id="dialogTitle">¿Cerrar tu sesión?</h2>
+      <p>Tu comunidad te espera cuando quieras volver.</p>
+      <div class="s-form-actions">
+        <button type="button" class="s-secondary" (click)="confirmarSalida.set(false)">
+          Seguir aquí</button
+        ><button type="button" class="s-primary" [disabled]="saliendo()" (click)="salir()">
+          {{ saliendo() ? 'Cerrando…' : 'Cerrar sesión' }}
+        </button>
+      </div>
+    </app-modal>
+  }
+</div>

@@ -1,0 +1,303 @@
+<div class="authLayout">
+  <!-- ===================== FORMULARIO ===================== -->
+  <section class="authLado">
+    <div class="authCard">
+      <a routerLink="/" class="authLogo"
+        ><span class="logoIcon" aria-hidden="true"><i></i><i></i><i></i></span>SUMA</a
+      >
+      <div class="progresoTop">
+        <div>
+          <small id="textoPaso">PASO {{ step() }} DE 3</small>
+          <strong id="nombrePaso">{{ steps[step() - 1] }}</strong>
+        </div>
+        <span id="porcentaje">{{ progress() }}%</span>
+      </div>
+      <div class="barra grande">
+        <div class="barraRelleno" id="barraPaso" [style.width.%]="progress()"></div>
+      </div>
+
+      <!-- ============ PASO 1: DATOS ============ -->
+      <div class="pasoForm" [class.activo]="step() === 1" id="paso1">
+        <span class="eyebrow">EMPECEMOS POR CONOCERTE</span>
+        <h1>Tus datos</h1>
+        <p class="lead">Crea tu perfil para empezar a sumar con la comunidad.</p>
+
+        <div class="campo" id="campoNombre" [class.error]="errors().includes('nombre')">
+          <label for="nombre">Nombres y apellidos</label>
+          <input
+            type="text"
+            id="nombre"
+            #nombre
+            [attr.aria-invalid]="errors().includes('nombre')"
+            aria-describedby="ayudaNombre errorNombre"
+            autocomplete="name"
+            maxlength="100"
+            placeholder="Ej. Daniela Medina"
+          />
+          <span class="ayuda" id="ayudaNombre"
+            >Escribe tu nombre tal como quieres verlo en SUMA.</span
+          >
+          <span class="msgError" id="errorNombre"
+            >Falta el apellido. Escribe nombre y apellido, por ejemplo Daniela Medina.</span
+          >
+        </div>
+
+        <div class="fila2">
+          <div class="campo" id="campoCorreo" [class.error]="errors().includes('correo')">
+            <label for="correo">Correo electrónico</label>
+            <input
+              type="email"
+              id="correo"
+              #correo
+              [attr.aria-invalid]="errors().includes('correo')"
+              aria-describedby="ayudaCorreo errorCorreo"
+              autocomplete="email"
+              placeholder="nombre@correo.com"
+            />
+            <span class="ayuda" id="ayudaCorreo"
+              >Recibirás los avisos de tu cuenta en este correo.</span
+            >
+            <span class="msgError" id="errorCorreo"
+              >El correo está incompleto. Escríbelo completo, por ejemplo nombre@correo.com.</span
+            >
+          </div>
+          <div class="campo" id="campoCelular" [class.error]="errors().includes('celular')">
+            <label for="celular">Celular</label>
+            <input
+              type="tel"
+              id="celular"
+              #celular
+              [attr.aria-invalid]="errors().includes('celular')"
+              aria-describedby="ayudaCelular errorCelular"
+              inputmode="numeric"
+              autocomplete="tel-national"
+              placeholder="0991234567"
+              maxlength="10"
+            />
+            <span class="ayuda" id="ayudaCelular">Ejemplo: 0991234567, sin código de país.</span>
+            <span class="msgError" id="errorCelular"
+              >Usa 10 dígitos que empiecen por 09, sin espacios. Ej. 0991234567.</span
+            >
+          </div>
+        </div>
+
+        <div class="nota">Solo los usamos para tu cuenta y avisos importantes.</div>
+
+        <div class="accionesPaso soloDer">
+          <button
+            type="button"
+            class="btnPrimario btnBtn"
+            id="sig1"
+            (click)="continueIdentity(nombre.value, correo.value, celular.value)"
+          >
+            Continuar <span>→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============ PASO 2: CUENTA COOPERATIVA ============ -->
+      <div class="pasoForm" [class.activo]="step() === 2" id="paso2">
+        <span class="eyebrow">CONECTA TUS BENEFICIOS</span>
+        <h1>Tu cuenta en la Cooperativa</h1>
+        <p class="lead">¿Tienes una cuenta de ahorros o corriente en la Cooperativa?</p>
+
+        <div class="opciones">
+          <button
+            type="button"
+            class="opcion"
+            id="opSi"
+            [class.sel]="linked() === true"
+            [attr.aria-pressed]="linked() === true"
+            (click)="chooseAccount(true)"
+          >
+            <span class="icono amarillo">💳</span>
+            <strong>Sí, tengo cuenta</strong>
+            <small>Solicita su vinculación a la cooperativa.</small>
+          </button>
+          <button
+            type="button"
+            class="opcion"
+            id="opNo"
+            [class.sel]="linked() === false"
+            [attr.aria-pressed]="linked() === false"
+            (click)="chooseAccount(false)"
+          >
+            <span class="icono azul">?</span>
+            <strong>No, aún no</strong>
+            <small>Puedes crear tu perfil y vincularla después.</small>
+          </button>
+        </div>
+        <span class="msgErrorSuelto" id="errorOpcion" [hidden]="!errors().includes('account')"
+          >Selecciona una opción para continuar.</span
+        >
+
+        <div class="cuentaBox" id="cuentaBox" [class.visible]="linked() === true">
+          <div class="fila2">
+            <div class="campo" id="campoTipo">
+              <label for="tipo">Tipo de cuenta</label>
+              <select id="tipo" #tipo aria-describedby="ayudaTipo">
+                <option value="ahorros">Ahorros</option>
+                <option value="corriente">Corriente</option>
+              </select>
+              <span class="ayuda" id="ayudaTipo">Selecciona el tipo de tu cuenta.</span>
+            </div>
+            <div class="campo" id="campoNumCuenta" [class.error]="errors().includes('numCuenta')">
+              <label for="numCuenta">Número de cuenta</label>
+              <input
+                type="text"
+                id="numCuenta"
+                #numCuenta
+                [attr.aria-invalid]="errors().includes('numCuenta')"
+                inputmode="numeric"
+                aria-describedby="ayudaNumCuenta errorNumCuenta"
+                placeholder="Ej. 2100123456"
+                maxlength="10"
+              />
+              <span class="ayuda" id="ayudaNumCuenta"
+                >10 dígitos, sin guiones. Ej. 2100123456.</span
+              >
+              <span class="msgError" id="errorNumCuenta"
+                >La cuenta tiene exactamente 10 dígitos. Revisa que no falten números.</span
+              >
+            </div>
+          </div>
+
+          <div class="nota" style="margin-bottom: 0">
+            Tu solicitud quedará pendiente de verificación por la cooperativa. Crear tu perfil no
+            activa ni verifica una cuenta bancaria.
+          </div>
+        </div>
+
+        <div class="accionesPaso">
+          <button type="button" class="btnOutline" id="atras2" (click)="goTo(1)">Atrás</button>
+          <button
+            type="button"
+            class="btnPrimario btnBtn"
+            id="sig2"
+            (click)="continueAccount(numCuenta.value)"
+          >
+            Continuar <span>→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============ PASO 3: ACCESO ============ -->
+      <div class="pasoForm" [class.activo]="step() === 3" id="paso3">
+        <span class="eyebrow">ÚLTIMO PASO</span>
+        <h1>Crea tu acceso</h1>
+        <p class="lead">Protege tu cuenta y confirma cómo quieres ingresar.</p>
+
+        <div class="campo" id="campoClave" [class.error]="errors().includes('clave')">
+          <label for="clave">Contraseña</label>
+          <div class="conOjo">
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              id="clave"
+              #clave
+              [attr.aria-invalid]="errors().includes('clave')"
+              placeholder="Crea una contraseña segura"
+              autocomplete="new-password"
+              aria-describedby="reqsClave errorClave"
+              (input)="password.set(clave.value)"
+            />
+            <button
+              type="button"
+              class="ojo"
+              id="verClave"
+              [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+              (click)="showPassword.update(toggle)"
+            >
+              👁
+            </button>
+          </div>
+          <div class="fuerza" aria-hidden="true">
+            @for (rule of rules; track rule.label; let i = $index) {
+              <i [class.on]="i < strength()"></i>
+            }
+          </div>
+          <div class="reqs" id="reqsClave">
+            @for (rule of rules; track rule.label) {
+              <span [class.ok]="rule.test(password())"
+                >{{ rule.test(password()) ? '✓' : '○' }} {{ rule.label }}</span
+              >
+            }
+          </div>
+          <span class="msgError" id="errorClave"
+            >Tu contraseña aún no cumple los requisitos marcados con ○. Agrega lo que falte.</span
+          >
+        </div>
+
+        <div class="campo" id="campoClave2" [class.error]="errors().includes('clave2')">
+          <label for="clave2">Confirmar contraseña</label>
+          <input
+            type="password"
+            id="clave2"
+            #clave2
+            [attr.aria-invalid]="errors().includes('clave2')"
+            aria-describedby="ayudaClave2 errorClave2"
+            placeholder="Repite tu contraseña"
+            autocomplete="new-password"
+          />
+          <span class="ayuda" id="ayudaClave2">Debe coincidir exactamente con la contraseña.</span>
+          <span class="msgError" id="errorClave2"
+            >Las contraseñas no coinciden. Vuelve a escribir la misma contraseña.</span
+          >
+        </div>
+
+        <div class="campo">
+          <label for="referido">Código de referido <span class="opc">(opcional)</span></label>
+          <input type="text" id="referido" aria-describedby="estadoReferido" disabled />
+          <span class="ayuda" id="estadoReferido"
+            >La validación de códigos estará disponible próximamente.</span
+          >
+        </div>
+
+        <label class="terminos">
+          <input type="checkbox" id="acepto" #acepto aria-describedby="errorTerminos" />
+          <span>Acepto los términos y el tratamiento de mis datos personales.</span>
+        </label>
+        <span class="terminosError" id="errorTerminos" [class.visible]="errors().includes('terms')"
+          >Debes aceptar los términos y el tratamiento de datos.</span
+        >
+
+        <div class="accionesPaso">
+          <button
+            type="button"
+            class="btnOutline"
+            id="atras3"
+            [disabled]="busy()"
+            (click)="goTo(2)"
+          >
+            Atrás
+          </button>
+          <button
+            type="button"
+            class="btnPrimario btnBtn"
+            id="crear"
+            [disabled]="busy()"
+            (click)="submit(clave.value, clave2.value, acepto.checked, tipo.value)"
+          >
+            {{ busy() ? 'Creando cuenta…' : 'Crear cuenta' }}
+          </button>
+        </div>
+      </div>
+
+      <p class="pieAuth linea">
+        ¿Ya tienes cuenta? <a routerLink="/iniciar-sesion">Inicia sesión</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== PANEL AMARILLO ===================== -->
+  <aside class="authPanel">
+    <h2>Empieza a crecer con SUMA</h2>
+    <p>Refiere, participa y convierte cada acción en puntos y recompensas para ti.</p>
+
+    <app-auth-preview
+      badgeLabel="Nueva insignia"
+      badgeValue="Primer paso"
+      pointsLabel="Primer reto"
+      pointsValue="+100 SUMA"
+    />
+  </aside>
+</div>

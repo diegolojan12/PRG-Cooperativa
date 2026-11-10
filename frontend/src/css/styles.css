@@ -1029,7 +1029,7 @@ footer.mainFooter h6{ text-align: center; font-weight: 400; color: #6f819f; padd
 /*=========================================================
    PAGINAS INTERNAS: INICIAR SESION Y REGISTRO
 =========================================================*/
-suma-login, suma-register, suma-recovery{
+app-login-page, app-registro-page, app-recuperar-page{
     display: block;
     background: #f1f5fa;
     background-image: none;
@@ -1498,4 +1498,22 @@ suma-login, suma-register, suma-recovery{
     .mainHeader *, .authLayout *{
         transition: none;
     }
+}
+
+/* ---------- Auditoría Sprint 1: bloqueo, 2FA y errores de recuperación ---------- */
+.alerta.alertaError{
+    background: #fdecec;
+    border-color: #f1a7a7;
+    color: #8a1c1c;
+}
+.alerta.alertaError .i{ background: #d92d20; color: #fff; }
+.recoveryStatus.recoveryError{ color: #b42318; font-weight: 600; }
+.linkBoton{
+    background: none;
+    border: 0;
+    padding: 0;
+    color: var(--azul);
+    font: inherit;
+    cursor: pointer;
+    text-decoration: underline;
 }

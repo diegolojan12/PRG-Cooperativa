@@ -99,14 +99,23 @@ const web = http.createServer((req, res) => {
     await page.locator("#correo").fill("admin@suma.ec");
     await page.locator("#clave").fill("Suma2026!");
     await page.getByRole("button", { name: "Iniciar sesión" }).click();
+    // RNF-06: segundo factor por correo para administradores.
     await expect(
-      page.getByRole("heading", { name: "Hola, Andrea" }),
+      page.getByRole("heading", { name: "Revisa tu correo" }),
+    ).toBeVisible();
+    const code = (await page.locator(".recoveryStatus").textContent()).match(
+      /\d{6}/,
+    )[0];
+    await page.locator("#codigo").fill(code);
+    await page.getByRole("button", { name: "Verificar y entrar" }).click();
+    await expect(
+      page.getByRole("heading", { name: "Así vamos creciendo" }),
     ).toBeVisible();
     await page.screenshot({
       path: path.join(output, "SUMA-panel-administrador.png"),
       fullPage: true,
     });
-    console.log("PASS: portada y acceso administrador");
+    console.log("PASS: portada, acceso administrador con 2FA y tablero");
     for (const [route, title] of [
       ["referidos", "Referidos"],
       ["usuarios", "Usuarios"],
@@ -129,10 +138,12 @@ const web = http.createServer((req, res) => {
     console.log("PASS: las ocho pantallas de administración");
     await page.goto(base + "/panel/referidos");
     await page.getByRole("button", { name: "Nuevo referido" }).click();
-    await page.locator("#refName").fill("Ana Visual");
-    await page.locator("input[name=correo]").fill("visual@ejemplo.ec");
-    await page.locator("input[name=celular]").fill("0991234567");
-    await page.locator("input[name=consentimiento]").check();
+    await page.getByRole("button", { name: "Registrar referido" }).click();
+    await expect(page.locator(".s-field-error")).not.toHaveCount(0);
+    await page.locator("#refNombre").fill("Ana Visual");
+    await page.locator("#refCorreo").fill("visual@ejemplo.ec");
+    await page.locator("#refCelular").fill("0991234567");
+    await page.locator("#refConsentimiento").check();
     await page.getByRole("button", { name: "Registrar referido" }).click();
     await expect(page.locator(".s-modal")).toHaveCount(0);
     await expect(page.getByText("Ana Visual", { exact: true })).toBeVisible();
@@ -141,29 +152,39 @@ const web = http.createServer((req, res) => {
     await page
       .getByRole("button", { name: "Editar a Ana Visual", exact: true })
       .click();
-    await page.locator("select[name=estado]").selectOption("VALIDADO");
+    await page.locator("#refNotas").fill("Prefiere llamadas en la tarde");
     await page.getByRole("button", { name: "Guardar cambios" }).click();
     await expect(page.locator(".s-modal")).toHaveCount(0);
     await page
-      .getByRole("button", { name: "Eliminar a Ana Visual", exact: true })
+      .getByRole("button", { name: "Dictaminar a Ana Visual", exact: true })
       .click();
+    await page.getByLabel(/Rechazado/).check();
+    await page.getByRole("button", { name: "Registrar dictamen" }).click();
+    await expect(page.locator(".s-modal")).toHaveCount(0);
     await page
-      .getByRole("button", { name: "Eliminar referido", exact: true })
+      .getByRole("button", { name: "Dar de baja a Ana Visual", exact: true })
+      .click();
+    await page.locator("#bajaMotivo").fill("Datos de prueba");
+    await page
+      .getByRole("button", { name: "Dar de baja", exact: true })
       .click();
     await expect(page.locator(".s-modal")).toHaveCount(0);
     await expect(page.getByText("Ana Visual", { exact: true })).toHaveCount(0);
-    console.log("PASS: crear, persistir, editar y eliminar referido");
+    console.log("PASS: crear, editar, dictaminar y dar de baja (lógica) un referido");
     const downloadPromise = page.waitForEvent("download");
     await page.getByRole("button", { name: "Exportar" }).click();
     await downloadPromise;
     await page.goto(base + "/panel/configuracion");
-    await page.locator("input[name=puntos]").fill("175");
+    await page.locator("#cfgPuntos").fill("17.5");
+    await page.getByRole("button", { name: "Guardar configuración" }).click();
+    await expect(page.locator("#cfgPuntos-error")).toContainText("sin decimales");
+    await page.locator("#cfgPuntos").fill("175");
     await page.getByRole("button", { name: "Guardar configuración" }).click();
     await expect(page.getByRole("status")).toContainText(
       "Configuración guardada",
     );
     await page.reload();
-    await expect(page.locator("input[name=puntos]")).toHaveValue("175");
+    await expect(page.locator("#cfgPuntos")).toHaveValue("175");
     console.log("PASS: exportación y configuración persistente");
     await page
       .getByRole("button", { name: "Cerrar sesión", exact: true })
@@ -209,7 +230,7 @@ const web = http.createServer((req, res) => {
     if (overflow) throw Error("Mobile horizontal overflow");
     await mp.goto(base + "/panel/usuarios");
     await expect(
-      mp.getByRole("heading", { name: "Este espacio no está disponible" }),
+      mp.getByRole("heading", { name: "Acceso denegado" }),
     ).toBeVisible();
     console.log("PASS: móvil, menú por rol y acceso denegado");
     await mp.goto(base + "/internas/recuperar.html");

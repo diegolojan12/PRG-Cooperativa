@@ -1,0 +1,483 @@
+<!-- ===================== CABECERA ===================== -->
+<header class="mainHeader">
+  <h2 class="logotipo">
+    <span class="logoIcon"><i></i><i></i><i></i></span>SUMA
+  </h2>
+  <nav class="mainNav" id="mainNav" aria-label="Navegación principal" [class.is-open]="menuOpen()">
+    <a href="#inicio" (click)="menuOpen.set(false)">Inicio</a>
+    <a href="#como-funciona" (click)="menuOpen.set(false)">Cómo funciona</a>
+    <a href="#recompensas" (click)="menuOpen.set(false)">Recompensas</a>
+    <a href="#comunidad" (click)="menuOpen.set(false)">Comunidad</a>
+    <a href="#aprende" (click)="menuOpen.set(false)">Aprende</a>
+    <a href="#bienestar" (click)="menuOpen.set(false)">Bienestar</a>
+    <a class="mobileLogin" routerLink="/iniciar-sesion">Iniciar sesión</a>
+  </nav>
+  <div class="headerAcciones">
+    <a routerLink="/iniciar-sesion" class="linkLogin">Iniciar sesión</a>
+    <a routerLink="/registro" class="btnPrimario">Crear cuenta <span>→</span></a>
+    <button
+      type="button"
+      class="mobileMenu"
+      aria-controls="mainNav"
+      [attr.aria-expanded]="menuOpen()"
+      [attr.aria-label]="menuOpen() ? 'Cerrar menú' : 'Abrir menú'"
+      (click)="menuOpen.set(!menuOpen())"
+    >
+      <app-icon [name]="menuOpen() ? 'close' : 'menu'" />
+    </button>
+  </div>
+</header>
+
+<!-- ===================== HERO / SLIDER ===================== -->
+<section class="mainSlider" id="inicio">
+  <div class="heroTexto">
+    <span class="badge">✦ CRECEMOS JUNTOS, GANAMOS TODOS</span>
+
+    <h1>Recomienda.<br />Participa.<br /><span class="resaltado">Gana.</span></h1>
+
+    <p class="descripcion">
+      Invita a más personas a nuestra cooperativa y transforma cada acción en puntos, experiencias y
+      recompensas para ti.
+    </p>
+
+    <div class="botones">
+      <a routerLink="/registro" class="btnPrimario">Empieza a referir <span>→</span></a>
+      <a href="#como-funciona" class="btnSecundario"><span class="play">▶</span> Conoce más</a>
+    </div>
+
+    <div class="comunidad">
+      <div class="avatares">
+        <span class="av av1">AM</span>
+        <span class="av av2">JL</span>
+        <span class="av av3">SR</span>
+      </div>
+      <div>
+        <strong>Una comunidad que suma</strong>
+        <p>Socios de Loja conectados por nuevas oportunidades.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== CELULAR ===================== -->
+  <div class="heroVisual">
+    <div class="circuloAmarillo"></div>
+
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="pantalla">
+        <div class="saludo">
+          <div>
+            <small>Hola, Daniela</small>
+            <h4>Tu comunidad SUMA</h4>
+          </div>
+          <span class="avatarDM">DM</span>
+        </div>
+
+        <div class="saldo">
+          <small>Mi saldo</small>
+          <p class="puntos">2.480 <span>puntos</span></p>
+          <div class="nivelFila">
+            <small>Nivel Impulsor</small>
+            <small>75%</small>
+          </div>
+          <div class="barra"><div class="barraRelleno" style="width: 75%"></div></div>
+        </div>
+
+        <div class="atajos">
+          <div class="atajo"><span>👤</span><small>Referir</small></div>
+          <div class="atajo"><span>◎</span><small>Retos</small></div>
+          <div class="atajo"><span>🏅</span><small>Premios</small></div>
+        </div>
+
+        <div class="actividad">
+          <strong>Actividad reciente</strong>
+          <a href="#">Ver todo</a>
+        </div>
+
+        <div class="retoCard">
+          <div class="retoTop">
+            <h5>RETO<br />SEMANAL</h5>
+            <span>📈</span>
+          </div>
+          <div class="retoInfo">
+            <strong>Ahorra con propósito</strong>
+            <small>Completa 3 acciones y gana 120 puntos.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tarjetas flotantes -->
+    <div class="flotante f-puntos">
+      <span class="icono amarillo">🪙</span>
+      <div><small>Puntos ganados</small><strong>+250 SUMA</strong></div>
+    </div>
+
+    <div class="flotante f-insignia">
+      <span class="icono azul">🏅</span>
+      <div><small>Nueva insignia</small><strong>Conector estrella</strong></div>
+    </div>
+
+    <div class="flotante f-nivel">
+      <small>Nivel 4</small>
+      <strong>Impulsor</strong>
+      <div class="barra"><div class="barraRelleno" style="width: 60%"></div></div>
+    </div>
+  </div>
+
+  <div class="descubre">DESCUBRE SUMA <span>⌄</span></div>
+</section>
+
+<!-- ===================== COMO FUNCIONA ===================== -->
+<section class="comoFunciona" id="como-funciona">
+  <span class="eyebrow">ASÍ DE FÁCIL</span>
+  <h2 class="titulo">Tres pasos para <span class="azul">crecer juntos.</span></h2>
+  <p class="subtitulo">Referir es sencillo, transparente y beneficioso para toda la comunidad.</p>
+
+  <div class="pasos">
+    <article class="paso">
+      <span class="numero">01</span>
+      <div class="icono azul">👤</div>
+      <h3>Invita</h3>
+      <p>Comparte tu código con familiares, amigos o colegas.</p>
+    </article>
+    <article class="paso">
+      <span class="numero">02</span>
+      <div class="icono amarillo">✅</div>
+      <h3>Se une</h3>
+      <p>Tu invitado crea su cuenta y se suma a la cooperativa.</p>
+    </article>
+    <article class="paso">
+      <span class="numero">03</span>
+      <div class="icono azul">🎁</div>
+      <h3>Ganan ambos</h3>
+      <p>Recibes puntos y recompensas por cada persona que llega.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ===================== RECOMPENSAS ===================== -->
+<section class="recompensas" id="recompensas">
+  <div class="recTexto">
+    <span class="eyebrow amarilloTxt">TU PROGRESO CUENTA</span>
+    <h2 class="titulo blanco">Cada acción te lleva <span class="amarilloTxt">más lejos.</span></h2>
+    <p class="subtitulo claro">
+      En SUMA, participar tiene recompensa. Suma puntos, supera niveles y desbloquea beneficios
+      mientras fortaleces tu comunidad.
+    </p>
+
+    <ul class="listaBeneficios">
+      <li>
+        <span class="ico">🪙</span>
+        <div>
+          <strong>Puntos por cada acción</strong
+          ><small>Refiere, aprende, participa y completa retos.</small>
+        </div>
+      </li>
+      <li>
+        <span class="ico">📈</span>
+        <div>
+          <strong>Niveles que reconocen tu avance</strong
+          ><small>De Explorador a Líder de la comunidad.</small>
+        </div>
+      </li>
+      <li>
+        <span class="ico">🏅</span>
+        <div>
+          <strong>Insignias para celebrar logros</strong
+          ><small>Colecciona hitos y compártelos con orgullo.</small>
+        </div>
+      </li>
+      <li>
+        <span class="ico">⭐</span>
+        <div>
+          <strong>Recompensas que sí disfrutas</strong
+          ><small>Canjea beneficios, experiencias y premios.</small>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="recCard">
+    <div class="recCardTop">
+      <div>
+        <small>Tu progreso</small>
+        <h3>Nivel Impulsor</h3>
+      </div>
+      <span class="medalla">🏅</span>
+    </div>
+    <div class="barra grande"><div class="barraRelleno" style="width: 74%"></div></div>
+    <small class="derecha">1.850 / 2.500 puntos</small>
+
+    <div class="siguiente">
+      <span class="ico claroIco">✦</span>
+      <div><small>Siguiente nivel</small><strong>Embajador SUMA</strong></div>
+      <b>650 pts</b>
+    </div>
+
+    <strong class="insigniasTitulo">Tus insignias recientes</strong>
+    <div class="insignias">
+      <div class="insignia amarilla"><span>👥</span><small>Conector</small></div>
+      <div class="insignia azulClaro"><span>🎓</span><small>Aprendiz</small></div>
+      <div class="insignia gris"><span>🌱</span><small>Constante</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COMUNIDAD ===================== -->
+<section class="seccionComunidad" id="comunidad">
+  <div class="cabeceraSeccion">
+    <div>
+      <span class="eyebrow">MÁS QUE UNA PLATAFORMA</span>
+      <h2 class="titulo">Una comunidad que <span class="azul">se mueve contigo.</span></h2>
+    </div>
+    <p class="subtitulo">
+      Comparte ideas, celebra logros y súmate a actividades que generan un impacto real entre
+      socios.
+    </p>
+  </div>
+
+  <div class="comGrid">
+    <article class="post">
+      <div class="postTop">
+        <span class="av av2 grande">MC</span>
+        <div><strong>María C.</strong><small>Hace 2 horas · Loja</small></div>
+        <span class="tag">COMUNIDAD</span>
+      </div>
+      <p>Hoy completé mi primer reto de ahorro. Pequeños pasos, grandes cambios.</p>
+      <div class="postImg">
+        <div class="sello">RETO<br />CUMPLIDO</div>
+        <div class="barras"><i></i><i></i><i></i><i class="y"></i><i class="w"></i></div>
+      </div>
+    </article>
+
+    <div class="comLateral">
+      <article class="cardActividad">
+        <small class="eyebrowMini">PRÓXIMA ACTIVIDAD</small>
+        <h3>Caminata por el bienestar</h3>
+        <p>Sábado 22 · Parque Jipiro</p>
+        <div class="actividadPie">
+          <div class="avatares">
+            <span class="av av1 borde">AM</span><span class="av av2 borde">LR</span
+            ><span class="av av3 borde">+24</span>
+          </div>
+          <span class="flecha">→</span>
+        </div>
+      </article>
+
+      <article class="cardReto">
+        <span class="ico oscuroIco">◎</span>
+        <div>
+          <small class="eyebrowMini amarilloTxt">RETO COLECTIVO</small>
+          <h3>1.000 buenas acciones</h3>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== APRENDE ===================== -->
+<section class="aprende" id="aprende">
+  <div class="cabeceraSeccion">
+    <div>
+      <span class="eyebrow">APRENDE A TU RITMO</span>
+      <h2 class="titulo">Conocimiento que se vive <span class="azul">y se juega.</span></h2>
+    </div>
+    <p class="subtitulo">
+      Contenido práctico para tomar mejores decisiones, desarrollar habilidades y divertirte
+      mientras aprendes.
+    </p>
+  </div>
+
+  <div class="cursosGrid">
+    <article class="curso destacado">
+      <div class="cursoImg"><span class="moneda">$</span></div>
+      <div class="cursoInfo">
+        <small class="eyebrowMini azulTxt">CURSO DESTACADO · 25 MIN</small>
+        <h3>Haz que tu dinero trabaje para ti</h3>
+        <p>Aprende los fundamentos del ahorro y crea un plan que sí puedas cumplir.</p>
+      </div>
+    </article>
+
+    <article class="curso">
+      <div class="icono azul">📖</div>
+      <small class="eyebrowMini azulTxt">TALLER EN VIVO</small>
+      <h3>Emprende con propósito</h3>
+      <p>Herramientas simples para convertir tu idea en un proyecto sostenible.</p>
+    </article>
+
+    <article class="curso">
+      <div class="icono amarillo">🎮</div>
+      <small class="eyebrowMini azulTxt">JUEGO FINANCIERO</small>
+      <h3>La ruta del ahorro</h3>
+      <p>Toma decisiones, supera misiones y construye un futuro financiero más sólido.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ===================== BIENESTAR ===================== -->
+<section class="bienestar" id="bienestar">
+  <div class="bienVisual">
+    <div class="blob">
+      <div class="persona"><span class="cabeza"></span><span class="cuerpo"></span></div>
+    </div>
+    <div class="flotante f-racha">
+      <span class="icono azul">💙</span>
+      <div><small>Racha saludable</small><strong>7 días activos</strong></div>
+    </div>
+  </div>
+
+  <div class="bienTexto">
+    <span class="eyebrow">TU BIENESTAR IMPORTA</span>
+    <h2 class="titulo">Cuidarte también es <span class="azul">progresar.</span></h2>
+    <p class="subtitulo">
+      Descubre actividades, consejos y retos que te ayudan a construir hábitos para una vida más
+      equilibrada.
+    </p>
+
+    <ul class="listaBien">
+      <li>
+        <span class="ico claroIco">💙</span>
+        <div>
+          <strong>Movimiento y energía</strong
+          ><small>Rutinas y actividades para mantenerte activo.</small>
+        </div>
+      </li>
+      <li>
+        <span class="ico claroIco">✦</span>
+        <div>
+          <strong>Bienestar emocional</strong
+          ><small>Recursos para pausar, respirar y reconectar.</small>
+        </div>
+      </li>
+      <li>
+        <span class="ico claroIco">👥</span>
+        <div>
+          <strong>Experiencias compartidas</strong
+          ><small>Eventos que nos acercan como comunidad.</small>
+        </div>
+      </li>
+    </ul>
+
+    <a href="#" class="btnPrimario">Explorar bienestar <span>→</span></a>
+  </div>
+</section>
+
+<!-- ===================== CIFRAS ===================== -->
+<section class="cifras">
+  <small class="aviso">DATOS DEMOSTRATIVOS · CIFRAS FICTICIAS PARA ESTA PROPUESTA</small>
+  <div class="cifrasGrid">
+    <div class="cifra"><strong>8.500+</strong><span>socios conectados</span></div>
+    <div class="cifra"><strong>3.200+</strong><span>referidos registrados</span></div>
+    <div class="cifra"><strong>12.800+</strong><span>retos completados</span></div>
+  </div>
+</section>
+
+<!-- ===================== HISTORIAS ===================== -->
+<section class="historias">
+  <h2 class="titulo">Historias que nos <span class="azul">inspiran.</span></h2>
+
+  <div class="historiasGrid">
+    <article class="historia">
+      <span class="comillas">❝</span>
+      <p>
+        “SUMA me motivó a compartir algo en lo que ya confío. Ahora mi hermana también es socia y
+        las dos sumamos beneficios.”
+      </p>
+      <div class="autor">
+        <span class="av av2 grande">AM</span>
+        <div><strong>Andrea M.</strong><small>Socia desde 2019 · Testimonio de ejemplo</small></div>
+      </div>
+    </article>
+
+    <article class="historia oscura">
+      <span class="comillas">❝</span>
+      <p>
+        “Los retos hicieron que ahorrar se sienta posible. Voy paso a paso y ver mi progreso me
+        anima a continuar.”
+      </p>
+      <div class="autor">
+        <span class="av av2 grande">DR</span>
+        <div><strong>Diego R.</strong><small>Socio emprendedor · Testimonio de ejemplo</small></div>
+      </div>
+    </article>
+
+    <article class="historia">
+      <span class="comillas">❝</span>
+      <p>
+        “Me encanta aprender con juegos y encontrar actividades para hacer con mi familia. Se siente
+        como una comunidad de verdad.”
+      </p>
+      <div class="autor">
+        <span class="av av2 grande">CS</span>
+        <div>
+          <strong>Carolina S.</strong><small>Socia desde 2021 · Testimonio de ejemplo</small>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ===================== LLAMADA A LA ACCION ===================== -->
+<section class="cta">
+  <span class="eyebrow oscuro">TU COMUNIDAD TE ESPERA</span>
+  <h2>Lo que compartes,<br /><span>vuelve a ti.</span></h2>
+  <p>Únete a SUMA y empieza a convertir tus conexiones en oportunidades para todos.</p>
+  <a routerLink="/registro" class="btnPrimario">Crear mi cuenta <span>→</span></a>
+  <small>Registro gratuito para socios de la Cooperativa Padre Julián Lorente.</small>
+</section>
+
+<!-- ===================== PIE ===================== -->
+<footer class="mainFooter">
+  <div class="footerTop">
+    <div class="footerMarca">
+      <h2 class="logotipo">
+        <span class="logoIcon"><i></i><i></i><i></i></span>SUMA
+      </h2>
+      <p>Una plataforma para conectar, aprender y crecer juntos.</p>
+      <a class="footerLogin" routerLink="/iniciar-sesion"
+        >¿Ya eres socio? <strong>Inicia sesión</strong></a
+      >
+      <div class="iniciativa">
+        <img
+          class="logoCoop"
+          src="logo-padre-julian-lorente.png"
+          alt=""
+          width="60"
+          height="60"
+          loading="lazy"
+        />
+        <div><small>UNA INICIATIVA DE</small><strong>Cooperativa Padre Julián Lorente</strong></div>
+      </div>
+    </div>
+
+    <div class="footerCol">
+      <h4>EXPLORA</h4>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#recompensas">Recompensas</a>
+      <a href="#comunidad">Comunidad</a>
+      <a href="#aprende">Aprende</a>
+    </div>
+
+    <div class="footerCol">
+      <h4>AYUDA</h4>
+      <a href="#">Preguntas frecuentes</a>
+      <a href="#">Contáctanos</a>
+      <a href="#">Centro de ayuda</a>
+      <a href="#">Accesibilidad</a>
+    </div>
+
+    <div class="footerCol">
+      <h4>HABLEMOS</h4>
+      <a href="mailto:info@coopjulianlorente.fin.ec">info@coopjulianlorente.fin.ec</a>
+      <a href="#">Loja, Ecuador</a>
+      <div class="redes"><a href="#">f</a><a href="#">ig</a><a href="#">yt</a></div>
+    </div>
+  </div>
+
+  <div class="footerBottom">
+    <small>© 2026 SUMA. Todos los derechos reservados.</small>
+    <div><a href="#">Política de privacidad</a><a href="#">Términos y condiciones</a></div>
+  </div>
+  <h6>Derechos reservados UTPL 2026, By: @Lojann</h6>
+</footer>

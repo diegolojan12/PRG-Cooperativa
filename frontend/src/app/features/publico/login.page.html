@@ -1,0 +1,140 @@
+<div class="authLayout">
+  <section class="authLado">
+    <div class="authCard">
+      <a routerLink="/" class="authLogo"
+        ><span class="logoIcon"><i></i><i></i><i></i></span>SUMA</a
+      >
+
+      @if (inactividad()) {
+        <div class="alerta" id="alerta" role="status">
+          <span class="i" aria-hidden="true">i</span>
+          <p>Tu sesión se cerró tras 15 minutos de inactividad. Vuelve a ingresar.</p>
+          <button
+            type="button"
+            id="alertaCerrar"
+            aria-label="Cerrar aviso"
+            (click)="inactividad.set(false)"
+          >
+            ×
+          </button>
+        </div>
+      }
+      @if (bloqueadoHasta(); as hasta) {
+        <!-- RF-04-2: alerta persistente con la hora de desbloqueo -->
+        <div class="alerta alertaError" id="bloqueo" role="alert">
+          <span class="i" aria-hidden="true">!</span>
+          <p>
+            Tu cuenta está bloqueada por 5 intentos fallidos consecutivos. Podrás intentarlo de
+            nuevo a las <strong>{{ hasta | date: 'HH:mm' : '-0500' }}</strong> o recuperar tu
+            contraseña.
+          </p>
+        </div>
+      }
+
+      @if (desafio(); as d) {
+        <span class="eyebrow">VERIFICACIÓN EN DOS PASOS</span>
+        <h1>Revisa tu correo</h1>
+        <p class="lead">
+          Te enviamos un código de 6 dígitos a <strong>{{ d.destino }}</strong
+          >. Vence en 5 minutos.
+        </p>
+        <form id="form2fa" (submit)="verificar($event, codigo.value)" novalidate>
+          <div class="campo" [class.error]="!!invalidCode()">
+            <label for="codigo">Código de verificación</label>
+            <input
+              id="codigo"
+              #codigo
+              inputmode="numeric"
+              autocomplete="one-time-code"
+              maxlength="6"
+              placeholder="000000"
+              aria-describedby="ayudaCodigo errorCodigo"
+              [attr.aria-invalid]="!!invalidCode()"
+            />
+            <span class="ayuda" id="ayudaCodigo"
+              >Ej. 482913. Requerido para cuentas de administración.</span
+            >
+            <span class="msgError" id="errorCodigo">{{ invalidCode() }}</span>
+          </div>
+          @if (d.devCodigo) {
+            <p class="recoveryStatus">Entorno local de prueba: tu código es {{ d.devCodigo }}.</p>
+          }
+          <button type="submit" class="btnPrimario btnAuth" [disabled]="busy()">
+            {{ busy() ? 'Verificando…' : 'Verificar y entrar →' }}
+          </button>
+        </form>
+        <p class="pieAuth">
+          <button type="button" class="linkBoton" (click)="volver()">← Usar otra cuenta</button>
+        </p>
+      } @else {
+        <span class="eyebrow">ACCESO PARA SOCIOS</span>
+        <h1>Bienvenido de nuevo</h1>
+        <p class="lead">Ingresa para seguir sumando puntos.</p>
+
+        <form id="formLogin" (submit)="submit($event, correo.value, clave.value)" novalidate>
+          <div class="campo" id="campoCorreo" [class.error]="invalidEmail()">
+            <label for="correo">Correo electrónico</label>
+            <input
+              type="email"
+              id="correo"
+              #correo
+              required
+              [attr.aria-invalid]="invalidEmail()"
+              aria-describedby="ayudaCorreo errorCorreo"
+              placeholder="nombre@correo.com"
+              autocomplete="email"
+            />
+            <span class="ayuda" id="ayudaCorreo">Usa el correo con el que creaste tu cuenta.</span>
+            <span class="msgError" id="errorCorreo"
+              >Falta el dominio o la @. Escríbelo completo, por ejemplo nombre@correo.com.</span
+            >
+          </div>
+
+          <div class="campo" id="campoClave" [class.error]="invalidPassword()">
+            <div class="etiquetaFila">
+              <label for="clave">Contraseña</label>
+              <a routerLink="/recuperar-contrasena">¿Olvidaste tu contraseña?</a>
+            </div>
+            <div class="conOjo">
+              <input
+                [type]="showPassword() ? 'text' : 'password'"
+                id="clave"
+                #clave
+                required
+                [attr.aria-invalid]="invalidPassword()"
+                aria-describedby="ayudaClave errorClave"
+                placeholder="Ingresa tu contraseña"
+                autocomplete="current-password"
+              />
+              <button
+                type="button"
+                class="ojo"
+                id="verClave"
+                [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                (click)="showPassword.update(toggle)"
+              >
+                👁
+              </button>
+            </div>
+            <span class="ayuda" id="ayudaClave">Mínimo 8 caracteres.</span>
+            <span class="msgError" id="errorClave"
+              >La contraseña es muy corta. Escribe al menos 8 caracteres.</span
+            >
+          </div>
+
+          <button type="submit" class="btnPrimario btnAuth" [disabled]="busy()">
+            {{ busy() ? 'Ingresando…' : 'Iniciar sesión →' }}
+          </button>
+        </form>
+
+        <p class="pieAuth">¿Aún no eres parte? <a routerLink="/registro">Crear cuenta</a></p>
+      }
+    </div>
+  </section>
+
+  <aside class="authPanel">
+    <h2>Tu comunidad te espera</h2>
+    <p>Vuelve a tus retos, puntos y recompensas. Cada conexión sigue sumando.</p>
+    <app-auth-preview />
+  </aside>
+</div>

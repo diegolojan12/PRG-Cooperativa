@@ -1,0 +1,120 @@
+<div class="s-page-heading">
+  <div>
+    <span class="s-eyebrow muted">ADMINISTRA TU COMUNIDAD</span>
+    <h1>Configuración</h1>
+    <p>Ajusta los detalles que hacen funcionar tu comunidad.</p>
+  </div>
+</div>
+@if (error()) {
+  <div class="s-empty s-card" role="alert">
+    <p>{{ error() }}</p>
+    <button type="button" class="s-primary" (click)="cargar()">Volver a intentar</button>
+  </div>
+} @else if (cargando()) {
+  <div class="s-loading" role="status"><span class="s-spinner"></span>Cargando configuración…</div>
+} @else {
+  <form class="s-settings-grid" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+    <section class="s-card s-settings">
+      <div class="s-card-heading">
+        <div>
+          <h2>General</h2>
+          <p>La identidad de nuestra comunidad.</p>
+        </div>
+        <app-icon name="configuracion" />
+      </div>
+      <app-campo
+        para="cfgNombre"
+        etiqueta="Nombre de la aplicación"
+        ayuda="SUMA es el nombre de tu plataforma. No se puede cambiar aquí."
+      >
+        <input id="cfgNombre" value="SUMA" disabled aria-describedby="cfgNombre-ayuda" />
+      </app-campo>
+      <app-campo
+        para="cfgContacto"
+        etiqueta="Correo de soporte"
+        ayuda="Se muestra en el centro de ayuda. Ej. soporte@cooperativa.ec"
+        [requerido]="true"
+        [error]="errorDe('contacto')"
+      >
+        <input
+          id="cfgContacto"
+          type="email"
+          formControlName="contacto"
+          aria-describedby="cfgContacto-ayuda cfgContacto-error"
+          [attr.aria-invalid]="!!errorDe('contacto')"
+        />
+      </app-campo>
+      <app-campo
+        para="cfgMensaje"
+        etiqueta="Mensaje de bienvenida"
+        [ayuda]="
+          'Un saludo para el panel de tu comunidad. ' +
+          form.controls.mensajeBienvenida.value.length +
+          ' de ' +
+          textoMax +
+          ' caracteres.'
+        "
+        [requerido]="true"
+        [error]="errorDe('mensajeBienvenida')"
+      >
+        <textarea
+          id="cfgMensaje"
+          rows="3"
+          [attr.maxlength]="textoMax"
+          formControlName="mensajeBienvenida"
+          aria-describedby="cfgMensaje-ayuda cfgMensaje-error"
+          [attr.aria-invalid]="!!errorDe('mensajeBienvenida')"
+        ></textarea>
+      </app-campo>
+    </section>
+    <div>
+      <section class="s-card s-settings">
+        <h2>Participación</h2>
+        <p class="s-muted">Pequeños ajustes, nuevas oportunidades.</p>
+        <app-campo
+          para="cfgPuntos"
+          etiqueta="Puntos por referido aprobado"
+          [ayuda]="'Número entero entre 0 y ' + puntosMax + ', sin decimales. Ej. 100'"
+          [requerido]="true"
+          [error]="errorDe('puntosReferido')"
+        >
+          <input
+            id="cfgPuntos"
+            type="number"
+            inputmode="numeric"
+            min="0"
+            [max]="puntosMax"
+            step="1"
+            formControlName="puntosReferido"
+            aria-describedby="cfgPuntos-ayuda cfgPuntos-error"
+            [attr.aria-invalid]="!!errorDe('puntosReferido')"
+          />
+        </app-campo>
+        <app-campo
+          para="cfgRegistro"
+          etiqueta="Registro de nuevos socios"
+          ayuda="Si lo cierras, la página de registro mostrará un aviso."
+        >
+          <select
+            id="cfgRegistro"
+            formControlName="registroAbierto"
+            aria-describedby="cfgRegistro-ayuda"
+          >
+            <option value="true">Abierto · Recibir nuevos socios</option>
+            <option value="false">Cerrado · Pausar registros</option>
+          </select>
+        </app-campo>
+        <button class="s-primary" type="submit" [disabled]="ocupado()">
+          {{ ocupado() ? 'Guardando…' : 'Guardar configuración' }}<app-icon name="check" />
+        </button>
+      </section>
+      <div class="s-info-line">
+        <app-icon name="actividad" />
+        <p>
+          Cada parámetro modificado queda en el registro de actividad con su valor anterior y el
+          nuevo.
+        </p>
+      </div>
+    </div>
+  </form>
+}

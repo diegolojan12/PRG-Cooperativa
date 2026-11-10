@@ -1,0 +1,108 @@
+<div class="authLayout">
+  <section class="authLado">
+    <div class="authCard">
+      <a routerLink="/" class="authLogo"
+        ><span class="logoIcon"><i></i><i></i><i></i></span>SUMA</a
+      >
+      <span class="eyebrow">VOLVAMOS A CONECTAR</span>
+      <h1 id="heading">
+        {{
+          finished()
+            ? 'Contraseña actualizada'
+            : token()
+              ? 'Crea tu nueva contraseña'
+              : 'Recupera tu acceso'
+        }}
+      </h1>
+      <p class="lead" id="intro">
+        {{
+          finished()
+            ? 'Ya puedes iniciar sesión con tu nueva contraseña.'
+            : token()
+              ? 'Elige una contraseña segura para volver a SUMA.'
+              : 'Te ayudamos a crear una nueva contraseña.'
+        }}
+      </p>
+      <form
+        id="recovery"
+        novalidate
+        [hidden]="finished()"
+        (submit)="submit($event, correo.value, clave.value, confirmar.value)"
+      >
+        <div class="campo" id="emailField" [hidden]="!!token()" [class.error]="!!errors().correo">
+          <label for="correo">Correo electrónico</label
+          ><input
+            id="correo"
+            #correo
+            type="email"
+            autocomplete="email"
+            placeholder="nombre@correo.com"
+            aria-describedby="ayudaCorreo errorCorreo"
+            [attr.aria-invalid]="!!errors().correo"
+          /><span class="ayuda" id="ayudaCorreo"
+            >Usa el correo con el que creaste tu cuenta. Ej. nombre@correo.com</span
+          ><span class="msgError" id="errorCorreo">{{ errors().correo }}</span>
+        </div>
+        <div id="passwordFields" [hidden]="!token()">
+          <div class="campo" [class.error]="!!errors().clave">
+            <label for="clave">Nueva contraseña</label
+            ><input
+              id="clave"
+              #clave
+              type="password"
+              autocomplete="new-password"
+              maxlength="128"
+              aria-describedby="ayudaClave errorClave"
+              [attr.aria-invalid]="!!errors().clave"
+            /><span class="ayuda" id="ayudaClave"
+              >Mínimo 8 caracteres, una mayúscula y un número. Ej. Ahorro2026</span
+            ><span class="msgError" id="errorClave">{{ errors().clave }}</span>
+          </div>
+          <div class="campo" [class.error]="!!errors().confirmar">
+            <label for="confirmar">Repite la contraseña</label
+            ><input
+              id="confirmar"
+              #confirmar
+              maxlength="128"
+              type="password"
+              autocomplete="new-password"
+              aria-describedby="ayudaConfirmar errorConfirmar"
+              [attr.aria-invalid]="!!errors().confirmar"
+            /><span class="ayuda" id="ayudaConfirmar"
+              >Escribe otra vez la misma contraseña para confirmarla.</span
+            ><span class="msgError" id="errorConfirmar">{{ errors().confirmar }}</span>
+          </div>
+        </div>
+        <button class="btnPrimario btnAuth" id="submit" type="submit" [disabled]="busy()">
+          {{ busy() ? 'Procesando…' : token() ? 'Guardar contraseña →' : 'Enviar instrucciones →' }}
+        </button>
+      </form>
+      <p
+        id="message"
+        class="recoveryStatus"
+        [class.recoveryError]="failed()"
+        [attr.role]="failed() ? 'alert' : 'status'"
+      >
+        {{ message() }}
+      </p>
+      @if (devToken() && !token()) {
+        <p id="dev" class="recoveryStatus">
+          Entorno local de prueba:
+          <a
+            routerLink="/recuperar-contrasena"
+            [queryParams]="{ token: devToken() }"
+            (click)="message.set('')"
+            >Abrir enlace de recuperación</a
+          >
+        </p>
+      }
+      <p class="pieAuth"><a routerLink="/iniciar-sesion">← Volver a iniciar sesión</a></p>
+    </div>
+  </section>
+  <aside class="authPanel">
+    <span class="eyebrow oscuro">ESTAMOS CONTIGO</span>
+    <h2>Vuelve a lo que<br />te hace sumar.</h2>
+    <p>Tu comunidad, tus conexiones y nuevas oportunidades te esperan.</p>
+    <app-auth-preview badgeLabel="Cuenta protegida" badgeValue="Acceso seguro" />
+  </aside>
+</div>

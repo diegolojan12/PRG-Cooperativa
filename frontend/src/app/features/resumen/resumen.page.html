@@ -1,0 +1,150 @@
+@if (cargando()) {
+  <div class="s-loading" role="status">
+    <span class="s-spinner"></span>Preparando tu espacio SUMA…
+  </div>
+} @else if (error()) {
+  <div class="s-empty s-card" role="alert">
+    <app-icon name="actividad" />
+    <h1>No pudimos cargar tu espacio</h1>
+    <p>{{ error() }}</p>
+    <button type="button" class="s-primary" (click)="cargar()">Volver a intentar</button>
+  </div>
+} @else if (resumen(); as o) {
+  <section class="s-hero">
+    <div class="s-hero-circle"></div>
+    <div class="s-hero-ring"></div>
+    <div class="s-hero-copy">
+      <span class="s-eyebrow">{{
+        o.demo ? 'DATOS DE PRUEBA · COMUNIDAD SUMA' : 'TU COMUNIDAD SIGUE CRECIENDO'
+      }}</span>
+      <h1>
+        Hola, <span>{{ nombre() }}</span>
+      </h1>
+      <p class="s-date">{{ fecha }}</p>
+      <p class="s-welcome">{{ o.bienvenida }}</p>
+      <div class="s-hero-chips">
+        <span><span class="s-online"></span>Cada recomendación abre una oportunidad</span
+        ><span
+          >{{ o.estados.PENDIENTE }}
+          {{ o.estados.PENDIENTE === 1 ? 'referido pendiente' : 'referidos pendientes' }}</span
+        >
+      </div>
+      @if (session.puede('referidos')) {
+        <a class="s-primary" routerLink="/panel/referidos" [queryParams]="{ nuevo: 1 }">
+          <app-icon name="plus" />Nuevo referido
+        </a>
+      }
+    </div>
+    <div class="s-hero-note">
+      <app-icon name="referidos" /><strong>Lo que compartes,<br />vuelve a ti.</strong
+      ><span>RECOMIENDA. PARTICIPA. GANA.</span>
+    </div>
+  </section>
+  <div class="s-section-line">
+    <div>
+      <span class="s-eyebrow muted">UNA MIRADA A TU COMUNIDAD</span>
+      <h2>Todo lo que has sumado</h2>
+    </div>
+    <span class="s-live"><span class="s-online"></span>Actualizado al ingresar</span>
+  </div>
+  <section class="s-stats" aria-label="Tus indicadores">
+    <article class="s-stat yellow">
+      <div class="s-stat-top">
+        <span class="s-stat-icon"><app-icon name="referidos" /></span
+        ><span class="s-stat-tag">Tus conexiones</span>
+      </div>
+      <strong>{{ o.referidos | number: '1.0-0' }}</strong>
+      <p>Mis referidos</p>
+      <small>Personas que suman oportunidades</small>
+    </article>
+    <article class="s-stat navy">
+      <div class="s-stat-top">
+        <span class="s-stat-icon"><app-icon name="referidos" /></span
+        ><span class="s-stat-tag">Este mes</span>
+      </div>
+      <strong>{{ o.mes | number: '1.0-0' }}</strong>
+      <p>Referidos del mes</p>
+      <small>Nuevas conexiones en la comunidad</small>
+    </article>
+    <article class="s-stat blue">
+      <div class="s-stat-top">
+        <span class="s-stat-icon"><app-icon name="points" /></span
+        ><span class="s-stat-tag">Por aprobaciones</span>
+      </div>
+      <strong>{{ o.puntos | number: '1.0-0' }}</strong>
+      <p>Mis puntos</p>
+      <small>Cada referido aprobado cuenta</small>
+    </article>
+    <article class="s-stat white">
+      <div class="s-stat-top">
+        <span class="s-stat-icon"><app-icon name="check" /></span
+        ><span class="s-stat-tag">Conexiones logradas</span>
+      </div>
+      <strong>{{ o.estados.APROBADO | number: '1.0-0' }}</strong>
+      <p>Referidos aprobados</p>
+      <small>Historias que empiezan a crecer</small>
+    </article>
+  </section>
+  <div class="s-dashboard-bottom">
+    <section class="s-card s-recent">
+      <div class="s-card-heading">
+        <div>
+          <h2>Últimas conexiones</h2>
+          <p>Un vistazo a tus referidos más recientes.</p>
+        </div>
+        @if (session.puede('referidos')) {
+          <a routerLink="/panel/referidos" class="s-text-link"
+            >Ver todos <app-icon name="arrow"
+          /></a>
+        }
+      </div>
+      @for (ref of recientes(); track ref.id) {
+        <div class="s-connection">
+          <span class="s-avatar pale">{{ ref.nombre.slice(0, 1) }}</span>
+          <div>
+            <strong>{{ ref.nombre }}</strong
+            ><small>{{ ref.correo }}</small>
+          </div>
+          <span class="s-status" [attr.data-state]="ref.estado">{{ etiquetas[ref.estado] }}</span>
+        </div>
+      } @empty {
+        <div class="s-inline-empty">Aquí aparecerán tus primeras conexiones.</div>
+      }
+    </section>
+    <section class="s-card s-progress-card">
+      <span class="s-eyebrow muted">CADA PASO CUENTA</span>
+      <h2>El camino de tus referidos</h2>
+      <p>Acompaña cada conexión hasta su aprobación.</p>
+      @for (s of estados; track s) {
+        <div class="s-progress-row">
+          <span><i [attr.data-state]="s"></i>{{ etiquetas[s] }}</span
+          ><strong>{{ o.estados[s] }}</strong>
+        </div>
+        <div class="s-progress-track">
+          <span
+            [attr.data-state]="s"
+            [style.width.%]="o.referidos ? (o.estados[s] / o.referidos) * 100 : 0"
+          ></span>
+        </div>
+      }
+    </section>
+  </div>
+  @if (accesos().length) {
+    <section class="s-quick-access" aria-labelledby="quickTitle">
+      <h2 id="quickTitle">Accesos rápidos</h2>
+      <div class="s-quick-grid">
+        @for (item of accesos(); track item.id) {
+          <a
+            class="s-card s-quick-link"
+            [routerLink]="['/panel', item.id]"
+            [attr.aria-label]="'Ir a ' + item.label"
+          >
+            <span class="s-feature-icon yellow"><app-icon [name]="item.id" /></span>
+            <strong>{{ item.label }}</strong>
+            <app-icon name="arrow" />
+          </a>
+        }
+      </div>
+    </section>
+  }
+}
