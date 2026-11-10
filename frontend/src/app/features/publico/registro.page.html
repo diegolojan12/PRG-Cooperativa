@@ -244,16 +244,45 @@
           >
         </div>
 
-        <div class="campo">
-          <label for="referido">Código de referido <span class="opc">(opcional)</span></label>
-          <input type="text" id="referido" aria-describedby="estadoReferido" disabled />
-          <span class="ayuda" id="estadoReferido"
-            >La validación de códigos estará disponible próximamente.</span
+        <div class="campo" [class.error]="errors().includes('codigoReferido')">
+          <label for="codigoReferido">Código de referido (opcional)</label>
+          <input
+            id="codigoReferido"
+            type="text"
+            maxlength="8"
+            autocomplete="off"
+            [value]="codigoReferido()"
+            (input)="codigoReferido.set($any($event.target).value)"
+            aria-describedby="ayudaCodigoReferido errorCodigoReferido"
+            [attr.aria-invalid]="errors().includes('codigoReferido')"
+          />
+          <span class="ayuda" id="ayudaCodigoReferido"
+            >Escribe las 8 letras o números de tu invitación.</span
+          >
+          <span class="msgError" id="errorCodigoReferido"
+            >Revisa el código de tu invitación o deja el campo vacío.</span
           >
         </div>
-
+        @if (aviso(); as textos) {
+          <details>
+            <summary>Términos y aviso de privacidad · versión {{ textos.version }}</summary>
+            <h3>Términos</h3>
+            <p style="white-space: pre-wrap">{{ textos.terminos }}</p>
+            <h3>Aviso de privacidad</h3>
+            <p style="white-space: pre-wrap">{{ textos.privacidad }}</p>
+          </details>
+        } @else if (errorAviso()) {
+          <p role="alert">{{ errorAviso() }}</p>
+          <button type="button" class="btnOutline" (click)="cargarAviso()">Reintentar</button>
+        }
         <label class="terminos">
-          <input type="checkbox" id="acepto" #acepto aria-describedby="errorTerminos" />
+          <input
+            type="checkbox"
+            id="acepto"
+            #acepto
+            [disabled]="!aviso()"
+            aria-describedby="errorTerminos"
+          />
           <span>Acepto los términos y el tratamiento de mis datos personales.</span>
         </label>
         <span class="terminosError" id="errorTerminos" [class.visible]="errors().includes('terms')"

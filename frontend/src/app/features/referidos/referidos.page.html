@@ -12,11 +12,34 @@
         <app-icon name="link" />Asociar usuario
       </button>
     }
-    <button type="button" class="s-primary" (click)="abrirFormulario()">
-      <app-icon name="plus" />Nuevo referido
-    </button>
+    @if (session.esAdmin() || session.usuario()?.cuentaVerificada) {
+      <button type="button" class="s-primary" (click)="abrirFormulario()">
+        <app-icon name="plus" />Nuevo referido
+      </button>
+    }
   </div>
 </div>
+
+@if (session.rol() === 'SOCIO' && !session.usuario()?.cuentaVerificada) {
+  <div class="s-info-banner">
+    @if (session.usuario()?.cuentaEstado === 'PENDIENTE') {
+      <p>Tu cuenta está pendiente de revisión. Podrás referir después de la aprobación.</p>
+      <button type="button" class="s-secondary" (click)="session.refrescar()">
+        Consultar estado
+      </button>
+    } @else {
+      <p>Para referir necesitas una cuenta de la Cooperativa verificada.</p>
+      <a class="s-secondary" routerLink="/panel/mi-cuenta">Vincular mi cuenta</a>
+    }
+  </div>
+}
+
+@if (session.rol() === 'SOCIO' && session.usuario()?.cuentaVerificada) {
+  <section class="s-card s-settings" aria-label="Mi invitación">
+    <h2>Mi invitación</h2>
+    <app-invitacion />
+  </section>
+}
 
 @if (datos(); as d) {
   <section class="s-mini-stats" aria-label="Referidos por estado">
@@ -35,12 +58,20 @@
 
 <section class="s-card s-table-card">
   <form class="s-filters" aria-label="Filtros de referidos" (submit)="$event.preventDefault()">
-    <app-campo para="filtroBuscar" etiqueta="Buscar" ayuda="Nombre, correo o socio. Ej. Carlos">
+    <app-campo
+      para="filtroBuscar"
+      etiqueta="Buscar"
+      [ayuda]="
+        session.esAdmin()
+          ? 'Nombre, correo completo o socio. Ej. Carlos'
+          : 'Nombre de pila. Ej. Carlos'
+      "
+    >
       <input
         id="filtroBuscar"
         type="search"
         maxlength="100"
-        placeholder="Buscar por nombre o correo…"
+        [placeholder]="session.esAdmin() ? 'Nombre, correo completo o socio…' : 'Nombre de pila…'"
         aria-describedby="filtroBuscar-ayuda"
         [value]="filtros().buscar"
         (input)="buscar($any($event.target).value)"
@@ -125,9 +156,16 @@
           Limpiar filtros
         </button>
       }
-      <button type="button" class="s-secondary" (click)="exportar()" [disabled]="!datos()?.total">
-        <app-icon name="download" />Exportar
-      </button>
+      @if (session.esAdmin()) {
+        <button
+          type="button"
+          class="s-secondary"
+          (click)="exportar()"
+          [disabled]="!datos()?.porEstado?.PENDIENTE"
+        >
+          <app-icon name="download" />Exportar pendientes
+        </button>
+      }
     </div>
   </form>
 
@@ -142,15 +180,15 @@
         <caption class="s-sr-only">
           Referidos,
           {{
-            porPagina
+            porPagina()
           }}
           por página. Las filas resaltadas llevan más de 2 días hábiles pendientes.
         </caption>
         <thead>
           <tr>
             <th scope="col">Persona referida</th>
-            <th scope="col">Celular</th>
             @if (session.esAdmin()) {
+              <th scope="col">Celular</th>
               <th scope="col">Referido por</th>
             }
             <th scope="col">Estado</th>
@@ -165,13 +203,15 @@
                 <div class="s-person-cell">
                   <span class="s-avatar pale">{{ ref.nombre.slice(0, 1) }}</span>
                   <div>
-                    <strong>{{ ref.nombre }}</strong
-                    ><small>{{ ref.correo }}</small>
+                    <strong>{{ ref.nombre }}</strong>
+                    @if (session.esAdmin()) {
+                      <small>{{ ref.correo }}</small>
+                    }
                   </div>
                 </div>
               </td>
-              <td>{{ ref.celular }}</td>
               @if (session.esAdmin()) {
+                <td>{{ ref.celular }}</td>
                 <td>{{ ref.socio }}</td>
               }
               <td>
@@ -186,7 +226,7 @@
               </td>
               <td>{{ ref.creadoEn | date: 'dd/MM/yyyy' : '-0500' }}</td>
               <td class="s-align-right s-nowrap">
-                @if (puedeEditar(ref)) {
+                @if (puedeDarDeBaja(ref)) {
                   @if (puedeDictaminar(ref)) {
                     <button
                       type="button"
@@ -198,15 +238,18 @@
                       <app-icon name="check" />
                     </button>
                   }
+                  @if (puedeEditar(ref)) {
+                    <button
+                      type="button"
+                      class="s-icon-button"
+                      [attr.aria-label]="'Editar a ' + ref.nombre"
+                      title="Editar"
+                      (click)="abrirFormulario(ref)"
+                    >
+                      <app-icon name="edit" />
+                    </button>
+                  }
                   <button
-                    type="button"
-                    class="s-icon-button"
-                    [attr.aria-label]="'Editar a ' + ref.nombre"
-                    title="Editar"
-                    (click)="abrirFormulario(ref)"
-                  >
-                    <app-icon name="edit" /></button
-                  ><button
                     type="button"
                     class="s-icon-button danger"
                     [attr.aria-label]="'Dar de baja a ' + ref.nombre"
@@ -222,7 +265,7 @@
             </tr>
           } @empty {
             <tr>
-              <td colspan="6">
+              <td [attr.colspan]="session.esAdmin() ? 6 : 4">
                 <div class="s-empty">
                   <app-icon name="referidos" />
                   @if (cargando()) {

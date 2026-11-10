@@ -14,6 +14,7 @@ try {
         'sprint1',
         'sprint1-auditoria',
         'sprint1-dominio',
+        'sprint2',
       ]) {
         const [done] = await db.query(
           'SELECT nombre FROM "SumaMigracion" WHERE nombre=$1',

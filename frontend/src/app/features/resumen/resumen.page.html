@@ -29,9 +29,9 @@
           {{ o.estados.PENDIENTE === 1 ? 'referido pendiente' : 'referidos pendientes' }}</span
         >
       </div>
-      @if (session.puede('referidos')) {
-        <a class="s-primary" routerLink="/panel/referidos" [queryParams]="{ nuevo: 1 }">
-          <app-icon name="plus" />Nuevo referido
+      @if (session.rol() === 'SOCIO') {
+        <a class="s-primary" routerLink="/panel/mi-cuenta">
+          {{ session.usuario()?.cuentaEstado ? 'Mi cuenta vinculada' : 'Vincular mi cuenta' }}
         </a>
       }
     </div>
@@ -40,6 +40,12 @@
       ><span>RECOMIENDA. PARTICIPA. GANA.</span>
     </div>
   </section>
+  @if (session.puede('referidos') && session.usuario()?.cuentaVerificada) {
+    <section class="s-card s-settings" aria-label="Mi invitación">
+      <h2>Compartir mi invitación</h2>
+      <app-invitacion />
+    </section>
+  }
   <div class="s-section-line">
     <div>
       <span class="s-eyebrow muted">UNA MIRADA A TU COMUNIDAD</span>
@@ -73,7 +79,7 @@
       </div>
       <strong>{{ o.puntos | number: '1.0-0' }}</strong>
       <p>Mis puntos</p>
-      <small>Cada referido aprobado cuenta</small>
+      <small>Se acreditan al aprobar tus referidos</small>
     </article>
     <article class="s-stat white">
       <div class="s-stat-top">
@@ -129,22 +135,4 @@
       }
     </section>
   </div>
-  @if (accesos().length) {
-    <section class="s-quick-access" aria-labelledby="quickTitle">
-      <h2 id="quickTitle">Accesos rápidos</h2>
-      <div class="s-quick-grid">
-        @for (item of accesos(); track item.id) {
-          <a
-            class="s-card s-quick-link"
-            [routerLink]="['/panel', item.id]"
-            [attr.aria-label]="'Ir a ' + item.label"
-          >
-            <span class="s-feature-icon yellow"><app-icon [name]="item.id" /></span>
-            <strong>{{ item.label }}</strong>
-            <app-icon name="arrow" />
-          </a>
-        }
-      </div>
-    </section>
-  }
 }

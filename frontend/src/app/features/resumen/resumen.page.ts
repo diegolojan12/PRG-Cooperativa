@@ -7,13 +7,13 @@ import { SessionStore } from '../../core/auth/session.store';
 import { leerError } from '../../core/http/api-error';
 import { ESTADOS, ETIQUETAS_ESTADO, Referido, Resumen } from '../../core/models/domain';
 import { IconComponent } from '../../shared/icon/icon.component';
-import { NAVEGACION } from '../../layout/navegacion';
+import { InvitacionComponent } from '../referidos/invitacion.component';
 import { ReferidosApi } from '../referidos/referidos.api';
 
 /** Resumen del socio y del gestor de contenidos (el administrador usa TableroPage). */
 @Component({
   selector: 'app-resumen-page',
-  imports: [DecimalPipe, RouterLink, IconComponent],
+  imports: [DecimalPipe, RouterLink, IconComponent, InvitacionComponent],
   templateUrl: './resumen.page.html',
 })
 export class ResumenPage implements OnInit {
@@ -32,9 +32,6 @@ export class ResumenPage implements OnInit {
     timeZone: 'America/Guayaquil',
   }).format(new Date());
   readonly nombre = computed(() => this.session.usuario()?.nombre.split(' ')[0] ?? '');
-  readonly accesos = computed(() =>
-    NAVEGACION.filter((item) => item.id !== 'panel' && this.session.puede(item.id)).slice(0, 3),
-  );
 
   ngOnInit(): void {
     void this.cargar();

@@ -40,7 +40,7 @@ corregidos (Resumen de Requisitos, Trazabilidad HU/RF/RNF).
 
 ## Verificación
 
-- `backend`: `npm run test:sprint` — 18 pruebas de integración y criterios de aceptación.
+- `backend`: `npm run test:sprint` — 20 pruebas de integración y criterios de aceptación.
 - `frontend`: `npx ng test --watch=false` — 16 pruebas (guards, inactividad, avisos, menú por rol,
   campos, listado, baja, configuración); `npx ng lint` sin errores; `npx ng build` con carga diferida.
 - `e2e`: `node smoke.cjs` — flujo completo en Chromium (2FA, tablero, CRUD + dictamen + baja,

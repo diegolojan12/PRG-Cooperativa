@@ -220,6 +220,13 @@ const web = http.createServer((req, res) => {
     await expect(
       mp.getByRole("heading", { name: "Referidos", exact: true }),
     ).toBeVisible();
+    const invitacion = await mp.locator("#enlace-oficial").inputValue();
+    const codigoReferido = new URL(invitacion).searchParams.get("ref");
+    expect(codigoReferido).toMatch(/^[A-Z0-9]{8}$/);
+    await expect(mp.getByRole("link", { name: "WhatsApp" })).toHaveAttribute("href", /wa\.me/);
+    const qr = mp.waitForEvent("download");
+    await mp.getByRole("link", { name: "Descargar QR" }).click();
+    expect((await qr).suggestedFilename()).toBe("SUMA-invitacion.png");
     await mp.screenshot({
       path: path.join(output, "SUMA-referidos-movil.png"),
       fullPage: true,
@@ -246,17 +253,22 @@ const web = http.createServer((req, res) => {
       "Contraseña actualizada",
     );
     console.log("PASS: recuperación de contraseña desde interfaz");
-    await mp.goto(base + "/internas/registro.html");
+    await mp.goto(invitacion);
     await mp.locator("#nombre").fill("Prueba Interfaz");
     await mp.locator("#correo").fill("registro-ui@ejemplo.ec");
     await mp.locator("#celular").fill("0992222222");
     await mp.locator("#sig1").click();
     await mp.locator("#opNo").click();
     await mp.locator("#sig2").click();
+    await expect(mp.locator("#codigoReferido")).toHaveValue(codigoReferido);
     await mp.locator("#clave").fill("Registro2026!");
     await mp.locator("#clave2").fill("Registro2026!");
     await mp.locator("#acepto").check();
     await mp.locator("#crear").click();
+    await expect(mp).toHaveURL(/confirmar-correo/);
+    const codigoConfirmacion = await mp.getByTestId("codigo-confirmacion").textContent();
+    await mp.locator("#confirmacionCodigo").fill(codigoConfirmacion);
+    await mp.getByRole("button", { name: "Confirmar correo" }).click();
     await expect(mp).toHaveURL(/iniciar-sesion/, { timeout: 10000 });
     await mp.locator("#correo").fill("registro-ui@ejemplo.ec");
     await mp.locator("#clave").fill("Registro2026!");
@@ -264,7 +276,13 @@ const web = http.createServer((req, res) => {
     await expect(
       mp.getByRole("heading", { name: "Hola, Prueba" }),
     ).toBeVisible();
-    console.log("PASS: registro existente conectado a base de datos");
+    await mp.getByRole("link", { name: "Vincular mi cuenta" }).click();
+    await mp.locator("#numeroCuentaVinculada").fill("2144556677");
+    await mp.getByRole("button", { name: "Solicitar vinculación" }).click();
+    await expect(mp.getByText("******6677", { exact: true })).toBeVisible();
+    await mp.getByRole("button", { name: "Mostrar número" }).click();
+    await expect(mp.getByText("2144556677", { exact: true })).toBeVisible();
+    console.log("PASS: invitación por QR, código precargado, confirmación y vinculación en el perfil");
     if (errors.length) throw Error("Browser errors: " + errors.join("\n"));
     console.log("PASS: sin errores de JavaScript. Capturas: " + output);
   } finally {

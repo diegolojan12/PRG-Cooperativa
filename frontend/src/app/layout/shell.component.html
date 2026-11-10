@@ -30,9 +30,9 @@
           }
         </a>
       }
-      @if (futuros().length) {
-        <span class="s-nav-label">Próximamente</span>
-        @for (item of futuros(); track item.id) {
+      @if (funciones().length) {
+        <span class="s-nav-label">Fidelización</span>
+        @for (item of funciones(); track item.id) {
           <a
             [routerLink]="['/panel', item.id]"
             routerLinkActive="active"

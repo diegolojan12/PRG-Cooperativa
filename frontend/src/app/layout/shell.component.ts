@@ -26,7 +26,7 @@ import { AvisoService } from '../core/ui/aviso.service';
 import { NotificacionesStore } from '../features/notificaciones/notificaciones.store';
 import { IconComponent } from '../shared/icon/icon.component';
 import { ModalComponent } from '../shared/modal/modal.component';
-import { MODULOS_FUTUROS, NAVEGACION } from './navegacion';
+import { FUNCIONES, NAVEGACION } from './navegacion';
 
 const tituloDe = (snapshot: ActivatedRouteSnapshot): string => {
   let route: ActivatedRouteSnapshot | null = snapshot;
@@ -66,9 +66,13 @@ export class ShellComponent {
     { initialValue: tituloDe(this.router.routerState.snapshot.root) },
   );
   readonly menu = computed(() => NAVEGACION.filter((item) => this.session.puede(item.id)));
-  readonly futuros = computed(() => {
+  readonly funciones = computed(() => {
     const rol = this.session.rol();
-    return rol ? MODULOS_FUTUROS.filter((m) => m.roles.includes(rol)) : [];
+    return rol
+      ? FUNCIONES.filter(
+          (m) => m.roles.includes(rol) && (!m.permiso || this.session.puede(m.permiso)),
+        )
+      : [];
   });
   readonly iniciales = computed(
     () =>
@@ -83,11 +87,33 @@ export class ShellComponent {
   constructor() {
     const inactividad = inject(InactividadService);
     inactividad.iniciar();
-    inject(DestroyRef).onDestroy(() => inactividad.detener());
+    const destruccion = inject(DestroyRef);
+    destruccion.onDestroy(() => inactividad.detener());
     this.router.events
       .pipe(filter((e) => e instanceof NavigationEnd))
       .subscribe(() => this.menuAbierto.set(false));
-    if (this.session.puede('notificaciones')) void this.notificaciones.cargar().catch(() => null);
+    if (this.session.puede('notificaciones')) {
+      let disponible = true;
+      let cargando = false;
+      const actualizar = () => {
+        if (!disponible || cargando || document.hidden) return;
+        cargando = true;
+        void this.notificaciones
+          .cargar()
+          .catch((error: unknown) => {
+            if ([401, 403].includes(leerError(error).status)) disponible = false;
+          })
+          .finally(() => (cargando = false));
+      };
+      actualizar();
+      const refresco = setInterval(actualizar, 3_000);
+      document.addEventListener('visibilitychange', actualizar);
+      destruccion.onDestroy(() => {
+        clearInterval(refresco);
+        document.removeEventListener('visibilitychange', actualizar);
+        this.notificaciones.limpiar();
+      });
+    }
   }
 
   saltarAlContenido(event: Event): void {

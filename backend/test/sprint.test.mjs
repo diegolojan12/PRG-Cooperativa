@@ -5,12 +5,22 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import express from 'express';
 import request from 'supertest';
+import { AcreditacionPuntos } from '../src/dominio/administracion.mjs';
+import { CodigoVerificacion } from '../src/dominio/acceso.mjs';
 import { Database } from '../src/database.mjs';
 import { createApi, diasHabiles } from '../src/api.mjs';
 
-async function registrar(agent, datos) {
-  const alta = await agent.post('/api/auth/register').send(datos);
+const datosAlta = (datos) => ({
+  ...datos, confirmacionClave: datos.clave, aceptaTerminos: true, versionAviso: '0.1',
+});
+
+async function registrarConfirmado(agent, datos) {
+  const alta = await agent.post('/api/auth/register').send(datosAlta(datos));
   assert.equal(alta.status, 201, JSON.stringify(alta.body));
+  const resultado = await agent.post('/api/auth/confirmar-correo').send({
+    token: alta.body.token, codigo: alta.body.devCodigo,
+  });
+  assert.equal(resultado.status, 200, JSON.stringify(resultado.body));
   return alta;
 }
 
@@ -20,7 +30,7 @@ test('días hábiles: excluye fines de semana y feriados fijos de Ecuador', () =
   assert.equal(diasHabiles('2026-10-30T10:00:00Z', new Date('2026-11-04T12:00:00Z')), 1);
 });
 
-test('Sprint 1: criterios de aceptación documentados', async (t) => {
+test('Sprints 1 y 2: criterios de aceptación documentados', async (t) => {
   process.env.SEED_DEMO = 'true';
   process.env.NODE_ENV = 'test';
   process.env.ENABLE_DEV_RESET_LINK = 'true';
@@ -115,7 +125,7 @@ test('Sprint 1: criterios de aceptación documentados', async (t) => {
       assert.equal((await admin.post('/api/usuarios').send({ ...body, rol: 'JEFE' })).status, 400);
     });
 
-    await t.test('RF-11 / RNF-12: valida, rechaza código, evita duplicados y pagina de 20', async () => {
+    await t.test('RF-11 / RNF-12: valida, rechaza código y pagina de 10 para socio o 20 para administración', async () => {
       assert.equal(
         (await socio.post('/api/referidos').send({ ...payload, celular: '123' })).body.campos
           .celular !== undefined,
@@ -134,7 +144,10 @@ test('Sprint 1: criterios de aceptación documentados', async (t) => {
       id = created.body.id;
       assert.equal((await socio.post('/api/referidos').send(payload)).status, 409);
       const list = (await socio.get('/api/referidos')).body;
-      assert.equal(list.porPagina, 20);
+      assert.equal(list.porPagina, 10);
+      assert.deepEqual(Object.keys(list.items.find((x) => x.id === id)).sort(), ['creadoEn', 'estado', 'id', 'nombre']);
+      assert.equal(list.items.find((x) => x.id === id).nombre, 'Ana');
+      assert.equal((await admin.get('/api/referidos?porPagina=-1')).body.porPagina, 20);
       assert.ok(list.items.some((x) => x.id === id));
       assert.equal(typeof list.porEstado.PENDIENTE, 'number');
       const old = (await admin.get('/api/referidos?buscar=carlos')).body.items[0];
@@ -151,7 +164,7 @@ test('Sprint 1: criterios de aceptación documentados', async (t) => {
     await t.test('RF-11-4: dictamen reservado a administración y con cuenta vinculada aprobada', async () => {
       assert.equal(
         (
-          await registrar(other, {
+          await registrarConfirmado(other, {
             nombre: 'Otro Socio',
             correo: 'otro@ejemplo.ec',
             celular: '0995555555',
@@ -162,7 +175,7 @@ test('Sprint 1: criterios de aceptación documentados', async (t) => {
       );
       assert.equal(
         (
-          await request(app).post('/api/auth/register').send(({
+          await request(app).post('/api/auth/register').send(datosAlta({
             nombre: 'Cuenta Corta',
             correo: 'corta@ejemplo.ec',
             celular: '0995555556',
@@ -176,6 +189,7 @@ test('Sprint 1: criterios de aceptación documentados', async (t) => {
       );
       await login(other, 'otro@ejemplo.ec', 'Nueva2026!');
       assert.equal((await other.get('/api/referidos')).body.total, 0);
+      assert.equal((await other.post('/api/referidos').send(payload)).status, 403);
       assert.equal((await other.patch('/api/referidos/' + id).send(payload)).status, 404);
       assert.equal(
         (await socio.patch(`/api/referidos/${id}/dictamen`).send({ estado: 'APROBADO' })).status,
@@ -313,7 +327,138 @@ test('Sprint 1: criterios de aceptación documentados', async (t) => {
       const data = (await admin.get('/api/indicadores')).body;
       assert.equal(data.indicadores.length, 6);
       assert.ok(data.indicadores.find((x) => x.id === 'activos').valor >= 2);
-      assert.equal(data.indicadores.find((x) => x.id === 'canjeados').disponibleDesde, 'Sprint 5');
+      assert.equal(data.indicadores.find((x) => x.id === 'canjeados').valor, 0);
+    });
+
+    await t.test('RF-11: vinculación, código, registro asociado y exportación privada', async () => {
+      const titular = {
+        nombre: 'Socio Verificado', correo: 'verificado@ejemplo.ec', celular: '0990000033',
+        clave: 'Valida2026!', cuenta: '2100123456', tipoCuenta: 'ahorros',
+      };
+      await registrarConfirmado(request(app), titular);
+      assert.equal((await request(app).post('/api/auth/register').send(datosAlta({
+        ...titular, correo: 'otra-cuenta@ejemplo.ec', celular: '0990000077',
+      }))).status, 409);
+      const nuevoSocio = request.agent(app);
+      await login(nuevoSocio, titular.correo, titular.clave);
+      assert.equal((await nuevoSocio.post('/api/referidos/mi-codigo').send({})).status, 403);
+      const pendientes = await admin.get('/api/usuarios/cuentas-pendientes');
+      const vinculacion = pendientes.body.items.find((x) => x.nombre === titular.nombre);
+      assert.equal(vinculacion.numero, '******3456');
+      assert.equal((await admin.patch('/api/usuarios/' + vinculacion.id + '/cuenta').send({ estado: 'APROBADO' })).status, 200);
+      const [asignado] = await db.query('SELECT "codigoReferido" FROM "Usuario" WHERE id=$1', [vinculacion.id]);
+      assert.match(asignado.codigoReferido, /^[A-Z0-9]{8}$/);
+      const invitacion = await nuevoSocio.post('/api/referidos/mi-codigo').send({});
+      assert.equal(invitacion.body.codigo, asignado.codigoReferido);
+      assert.equal((await nuevoSocio.get('/api/auth/cuenta')).body.numero, '******3456');
+      assert.equal((await nuevoSocio.get('/api/auth/cuenta?mostrar=1')).body.numero, titular.cuenta);
+      assert.equal(invitacion.status, 200);
+      const repetida = await nuevoSocio.post('/api/referidos/mi-codigo').send({});
+      assert.equal(repetida.body.codigo, invitacion.body.codigo);
+      assert.match(invitacion.body.codigo, /^[A-Z0-9]{8}$/);
+      assert.equal(new URL(invitacion.body.enlace).searchParams.get('ref'), invitacion.body.codigo);
+      assert.match(invitacion.body.qr, /^data:image\/png;base64,/);
+      const registro = { nombre: 'Invitada Nueva', correo: 'invitada@ejemplo.ec', celular: '0990000034', clave: 'Valida2026!' };
+      assert.equal((await request(app).post('/api/auth/register').send(datosAlta({ ...registro, codigoReferido: 'INVALIDO' }))).status, 400);
+      await registrarConfirmado(request(app), { ...registro, codigoReferido: invitacion.body.codigo });
+      const consulta = await nuevoSocio.get('/api/referidos');
+      assert.equal(consulta.body.items[0].nombre, 'Invitada');
+      assert.equal(consulta.body.items[0].estado, 'PENDIENTE');
+      assert.equal((await nuevoSocio.get('/api/referidos/exportar')).status, 403);
+      const descarga = await admin.get('/api/referidos/exportar');
+      assert.match(descarga.headers['content-type'], /^text\/csv/);
+      assert.match(descarga.text, /invitada@ejemplo.ec/);
+      assert.doesNotMatch(descarga.text, /luis@ejemplo.ec/);
+      assert.equal((await admin.get('/api/referidos?desde=2026-02-30')).status, 400);
+      assert.equal((await nuevoSocio.post('/api/auth/cuenta').send({ cuenta: '2111122222', tipoCuenta: 'ahorros' })).status, 409);
+      const invitada = request.agent(app);
+      await login(invitada, registro.correo, registro.clave);
+      assert.equal((await invitada.post('/api/auth/cuenta').send({ cuenta: '2111122222', tipoCuenta: 'corriente' })).status, 201);
+      const revision = (await admin.get('/api/usuarios/cuentas-pendientes')).body.items
+        .find((x) => x.nombre === registro.nombre);
+      assert.equal((await admin.patch('/api/usuarios/' + revision.id + '/cuenta').send({ estado: 'APROBADO' })).status, 200);
+      const dictamen = () => admin.patch('/api/referidos/' + consulta.body.items[0].id + '/dictamen').send({ estado: 'APROBADO' });
+      const decisiones = await Promise.all([dictamen(), dictamen()]);
+      assert.deepEqual(decisiones.map((x) => x.status).sort(), [200, 409]);
+      const movimientos = await db.query('SELECT cantidad,"usuarioId" FROM "MovimientoPuntos" WHERE "referidoId"=$1', [consulta.body.items[0].id]);
+      assert.deepEqual(movimientos.map((m) => m.cantidad), [100, 100]);
+      assert.equal(new Set(movimientos.map((m) => m.usuarioId)).size, 2);
+      assert.equal((await invitada.get('/api/overview')).body.puntos, 100);
+      const avisos = (await invitada.get('/api/notificaciones/bandeja')).body.items;
+      assert.ok(avisos.some((x) => x.mensaje === 'Ganaste 100 puntos.'));
+      const config = (await admin.get('/api/configuracion')).body;
+      assert.equal((await admin.put('/api/configuracion').send({ ...config, puntosReferido: '500', valorPunto: '0.25' })).status, 200);
+      assert.equal((await nuevoSocio.get('/api/overview')).body.puntos, 100);
+      await admin.put('/api/configuracion').send(config);
+    });
+
+    await t.test('HU-013 / HU-014: consentimiento, unicidad, confirmación, vencimiento y reenvíos', async () => {
+      const datos = { nombre: 'Eva Prueba', correo: 'eva-s2@ejemplo.ec', celular: '0990000098', clave: 'Validar2026!' };
+      const usuario = request.agent(app);
+      const alta = (payload) => usuario.post('/api/auth/register').send(payload);
+      assert.equal((await alta({ ...datosAlta(datos), aceptaTerminos: false })).status, 400);
+      assert.equal((await alta({ ...datosAlta(datos), confirmacionClave: 'distinta' })).status, 400);
+      const inicio = await alta(datosAlta(datos));
+      assert.equal(inicio.status, 201, JSON.stringify(inicio.body));
+      assert.match(inicio.body.devCodigo, /^\d{6}$/);
+      const duplicado = await alta(datosAlta({ ...datos, correo: 'otro-s2@ejemplo.ec' }));
+      assert.equal(duplicado.status, 409);
+      assert.ok(duplicado.body.campos.celular);
+      const [aceptacion] = await db.query('SELECT a.version,a.fecha FROM "AceptacionTerminos" a JOIN "Usuario" u ON u.id=a."usuarioId" WHERE u.correo=$1', [datos.correo]);
+      assert.equal(aceptacion.version, '0.1');
+      assert.ok(aceptacion.fecha);
+      const pendiente = await login(usuario, datos.correo, datos.clave);
+      assert.equal(pendiente.body.requiereConfirmacion, true);
+      assert.equal(pendiente.headers['set-cookie'], undefined);
+      assert.equal((await usuario.get('/api/auth/me')).status, 401);
+      const token = pendiente.body.token;
+      await db.query('UPDATE "ConfirmacionCorreo" SET vence=$2 WHERE token=$1', [
+        CodigoVerificacion.huella(token), new Date(Date.now() - 1000).toISOString(),
+      ]);
+      const confirmar = (codigo) => usuario.post('/api/auth/confirmar-correo').send({ token, codigo });
+      assert.equal((await confirmar(inicio.body.devCodigo)).status, 400);
+      let codigo;
+      for (let i = 0; i < 3; i++) {
+        const reenvio = await usuario.post('/api/auth/reenviar-confirmacion').send({ token });
+        assert.equal(reenvio.status, 200);
+        codigo = reenvio.body.devCodigo;
+      }
+      assert.equal((await usuario.post('/api/auth/reenviar-confirmacion').send({ token })).status, 429);
+      const consumos = await Promise.all([confirmar(codigo), confirmar(codigo)]);
+      assert.deepEqual(consumos.map((x) => x.status).sort(), [200, 400]);
+      assert.ok((await login(usuario, datos.correo, datos.clave)).headers['set-cookie']);
+    });
+
+    await t.test('HU-022: acreditar una actividad interna es idempotente y usa su parámetro', async () => {
+      const [usuario] = await db.query('SELECT id FROM "Usuario" WHERE correo=$1', ['eva-s2@ejemplo.ec']);
+      await db.query('UPDATE "Configuracion" SET valor=$2 WHERE clave=$1', ['puntosTrivia', '27']);
+      const avisos = [];
+      const servicio = new AcreditacionPuntos(db, (...args) => avisos.push(args));
+      const fecha = new Date().toISOString();
+      const acreditar = () => db.transaction((client) => servicio.registrar('TRIVIA', 1, [usuario.id], fecha, client));
+      await Promise.all([acreditar(), acreditar()]);
+      const filas = await db.query('SELECT actividad,cantidad,"referidoId" FROM "MovimientoPuntos" WHERE "usuarioId"=$1', [usuario.id]);
+      assert.equal(filas.length, 1);
+      assert.equal(filas[0].cantidad, 27);
+      assert.equal(filas[0].actividad, 'TRIVIA');
+      assert.equal(filas[0].referidoId, null);
+      assert.equal(avisos.length, 1);
+      assert.equal(avisos[0][2], 'Ganaste 27 puntos.');
+    });
+
+    await t.test('RF-39: las notificaciones se leen por destinatario sin renovar la sesión al consultar', async () => {
+      const bandeja = await socio.get('/api/notificaciones/bandeja');
+      assert.equal(bandeja.body.porPagina, 20);
+      assert.ok(bandeja.body.sinLeer > 0);
+      const id = bandeja.body.items.find((x) => !x.leida).id;
+      assert.equal((await gestor.patch('/api/notificaciones/' + id + '/leer').send({})).status, 404);
+      assert.equal((await socio.patch('/api/notificaciones/' + id + '/leer').send({})).status, 200);
+      const [usuario] = await db.query('SELECT id FROM "Usuario" WHERE correo=$1', ['socio@suma.ec']);
+      const [antes] = await db.query('SELECT expira FROM "Sesion" WHERE "usuarioId"=$1', [usuario.id]);
+      const actual = await socio.get('/api/notificaciones/bandeja');
+      assert.equal(actual.body.sinLeer, bandeja.body.sinLeer - 1);
+      const [despues] = await db.query('SELECT expira FROM "Sesion" WHERE "usuarioId"=$1', [usuario.id]);
+      assert.equal(despues.expira, antes.expira);
     });
 
     await t.test('RF-07: recuperación de un solo uso que revoca sesiones', async () => {
@@ -413,7 +558,7 @@ test('RNF-05: migra datos personales y conserva acceso y unicidad por correo', a
     appLegacy.use('/api', (await createApi(db)).router);
     const usuario = { nombre: 'Cuenta Antigua', correo: 'antigua@ejemplo.ec', celular: '0990000444',
       clave: 'Valida2026!', tipoCuenta: 'corriente', cuenta: '2255667788' };
-    await registrar(request(appLegacy), usuario);
+    await registrarConfirmado(request(appLegacy), usuario);
     await db.close();
 
     process.env.SUMA_DATA_KEY = '2a'.repeat(32);
@@ -430,7 +575,7 @@ test('RNF-05: migra datos personales y conserva acceso y unicidad por correo', a
     assert.equal(login.status, 200);
     assert.equal(login.body.correo, usuario.correo);
     assert.equal(login.body.correoIndice, undefined);
-    assert.equal((await request(app).post('/api/auth/register').send(({ ...usuario, cuenta: undefined }))).status, 409);
+    assert.equal((await request(app).post('/api/auth/register').send(datosAlta({ ...usuario, cuenta: undefined }))).status, 409);
     await db.close();
 
     process.env.SUMA_DATA_KEY = '7b'.repeat(32);

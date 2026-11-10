@@ -6,6 +6,7 @@ import pg from 'pg';
 import { ProteccionDatos } from './dominio/proteccion-datos.mjs';
 import { Rol } from './dominio/acceso.mjs';
 import { Referido } from './dominio/referidos.mjs';
+import { PUNTOS_POR_ACCION } from './dominio/administracion.mjs';
 
 const CLIENTE_SQLITE = Symbol('transacción SQLite');
 
@@ -53,7 +54,7 @@ const SQLITE_SCHEMA = `CREATE TABLE IF NOT EXISTS "Usuario" (
   id INTEGER PRIMARY KEY AUTOINCREMENT, cedula TEXT UNIQUE, correo TEXT UNIQUE NOT NULL, "correoIndice" TEXT,
   nombre TEXT NOT NULL, rol TEXT NOT NULL DEFAULT 'SOCIO', "creadoEn" TEXT DEFAULT CURRENT_TIMESTAMP,
   "passwordHash" TEXT, celular TEXT, activo INTEGER NOT NULL DEFAULT 1, cuenta TEXT, "tipoCuenta" TEXT,
-  "cuentaEstado" TEXT, "intentosFallidos" INTEGER NOT NULL DEFAULT 0, "bloqueadoHasta" TEXT, "codigoReferido" TEXT, "cuentaIndice" TEXT, "cuentaSolicitadaEn" TEXT, "cuentaRevisadaEn" TEXT);
+  "cuentaEstado" TEXT, "intentosFallidos" INTEGER NOT NULL DEFAULT 0, "bloqueadoHasta" TEXT, "codigoReferido" TEXT, "cuentaIndice" TEXT, "cuentaSolicitadaEn" TEXT, "cuentaRevisadaEn" TEXT, "celularIndice" TEXT, "correoVerificado" INTEGER NOT NULL DEFAULT 1);
 CREATE TABLE IF NOT EXISTS "RolPermiso" (rol TEXT PRIMARY KEY, modulos TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS "Sesion" (token TEXT PRIMARY KEY, "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id) ON DELETE CASCADE, expira TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS "Recuperacion" (token TEXT PRIMARY KEY, "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id) ON DELETE CASCADE, expira TEXT NOT NULL);
@@ -68,9 +69,14 @@ CREATE INDEX IF NOT EXISTS "Referido_socioId_idx" ON "Referido"("socioId");
 CREATE TABLE IF NOT EXISTS "Actividad" (id INTEGER PRIMARY KEY AUTOINCREMENT, "usuarioId" INTEGER REFERENCES "Usuario"(id), actor TEXT NOT NULL, accion TEXT NOT NULL, detalle TEXT NOT NULL, fecha TEXT NOT NULL, ip TEXT, "objetivoId" INTEGER, datos TEXT);
 CREATE INDEX IF NOT EXISTS "Actividad_fecha_idx" ON "Actividad"(fecha);
 CREATE TABLE IF NOT EXISTS "Notificacion" (id INTEGER PRIMARY KEY AUTOINCREMENT, "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id) ON DELETE CASCADE, titulo TEXT NOT NULL, mensaje TEXT NOT NULL, leida INTEGER NOT NULL DEFAULT 0, fecha TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS "MovimientoPuntos" ("referidoId" INTEGER PRIMARY KEY REFERENCES "Referido"(id), "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id), cantidad INTEGER NOT NULL CHECK (cantidad >= 0), fecha TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS "MovimientoPuntos" (clave TEXT PRIMARY KEY, "referidoId" INTEGER REFERENCES "Referido"(id), "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id), actividad TEXT NOT NULL, cantidad INTEGER NOT NULL CHECK (cantidad >= 0), fecha TEXT NOT NULL);
 CREATE INDEX IF NOT EXISTS movimiento_usuario ON "MovimientoPuntos"("usuarioId");
-CREATE TABLE IF NOT EXISTS "Configuracion" (clave TEXT PRIMARY KEY, valor TEXT NOT NULL);`;
+CREATE TABLE IF NOT EXISTS "Configuracion" (clave TEXT PRIMARY KEY, valor TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS "ConfirmacionCorreo" ("usuarioId" INTEGER PRIMARY KEY REFERENCES "Usuario"(id) ON DELETE CASCADE, token TEXT UNIQUE NOT NULL, "tokenExpira" TEXT NOT NULL, huella TEXT NOT NULL, vence TEXT NOT NULL, intentos INTEGER NOT NULL DEFAULT 0, reenvios TEXT NOT NULL DEFAULT '[]');
+CREATE TABLE IF NOT EXISTS "AvisoPrivacidad" (version TEXT PRIMARY KEY, terminos TEXT NOT NULL, privacidad TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS "AceptacionTerminos" ("usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id), version TEXT NOT NULL REFERENCES "AvisoPrivacidad"(version), fecha TEXT NOT NULL, PRIMARY KEY ("usuarioId",version));
+CREATE INDEX IF NOT EXISTS usuario_celular_indice ON "Usuario"((COALESCE("celularIndice",celular)));
+CREATE INDEX IF NOT EXISTS notificacion_destinatario ON "Notificacion"("usuarioId",id);`;
 
 /* RF-42-1: la bitácora es inmutable (no admite UPDATE ni DELETE). */
 const SQLITE_TRIGGERS = `CREATE TRIGGER IF NOT EXISTS actividad_inmutable_upd BEFORE UPDATE ON "Actividad"
@@ -169,6 +175,8 @@ export class Database {
     ensure('Usuario', [
       ['cuentaEstado', 'TEXT'],
       ['correoIndice', 'TEXT'],
+      ['celularIndice', 'TEXT'],
+      ['correoVerificado', 'INTEGER NOT NULL DEFAULT 1'],
       ['codigoReferido', 'TEXT'],
       ['cuentaIndice', 'TEXT'],
       ['cuentaSolicitadaEn', 'TEXT'],
@@ -209,6 +217,16 @@ export class Database {
         ['provincia', 'TEXT'],
       ]);
     }
+    const movimientos = columns('MovimientoPuntos');
+    if (movimientos.size && !movimientos.has('clave')) {
+      this.db.exec(`BEGIN;
+        ALTER TABLE "MovimientoPuntos" RENAME TO "MovimientoPuntos_s1";
+        CREATE TABLE IF NOT EXISTS "MovimientoPuntos" (clave TEXT PRIMARY KEY, "referidoId" INTEGER REFERENCES "Referido"(id), "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id), actividad TEXT NOT NULL, cantidad INTEGER NOT NULL CHECK (cantidad >= 0), fecha TEXT NOT NULL);
+        INSERT INTO "MovimientoPuntos" (clave,"referidoId","usuarioId",actividad,cantidad,fecha)
+  SELECT 'referido:' || "referidoId" || ':' || "usuarioId","referidoId","usuarioId",'REFERIDO',cantidad,fecha FROM "MovimientoPuntos_s1";
+        DROP TABLE "MovimientoPuntos_s1";
+        COMMIT;`);
+    }
   }
   async init() {
     if (this.sqlite) {
@@ -223,7 +241,7 @@ export class Database {
       this.db.exec(SQLITE_TRIGGERS);
     } else {
       // Explicit migration command avoids mutating an existing PostgreSQL automatically.
-      await this.query('SELECT "correoIndice","cuentaIndice" FROM "Usuario" LIMIT 1');
+      await this.query('SELECT "correoVerificado","celularIndice" FROM "Usuario" LIMIT 1');
     }
     await this.protegerDatosExistentes();
     // Estados documentados: Pendiente / Aprobado / Rechazado (G01).
@@ -248,6 +266,8 @@ export class Database {
     for (const [clave, valor] of Object.entries({
       contacto: 'soporte@suma.ec',
       puntosReferido: '100',
+      ...Object.fromEntries(Object.keys(PUNTOS_POR_ACCION).map((clave) => [clave, '0'])),
+      valorPunto: '0.00',
       registroAbierto: 'true',
       mensajeBienvenida: 'Cada conexión suma. Sigamos creciendo juntos.',
     })) {
@@ -289,6 +309,12 @@ export class Database {
           await this.query(actualizar, [fila.id, this.datos.correoIndice(fila.correo), ...valores], client);
         }
       }
+      const telefonos = await this.query(
+        'SELECT id,celular FROM "Usuario" WHERE "celularIndice" IS NULL AND celular IS NOT NULL', [], client,
+      );
+      for (const fila of telefonos)
+        await this.query('UPDATE "Usuario" SET "celularIndice"=$2 WHERE id=$1',
+          [fila.id, this.datos.huella('celular:' + fila.celular)], client);
       if (!actual) await this.query('INSERT INTO "Configuracion" (clave,valor) VALUES ($1,$2)', [clave, verificador], client);
     });
   }
@@ -299,8 +325,8 @@ export class Database {
       ['socio@suma.ec', 'Daniela Medina', 'SOCIO', '0991234503'],
     ]) {
       const rows = await this.query(
-        'INSERT INTO "Usuario" (correo,nombre,rol,"passwordHash",celular,"correoIndice","cuentaEstado") VALUES ($1,$2,$3,$4,$5,$6,$7) ON CONFLICT DO NOTHING RETURNING id',
-        [this.datos.cifrar('correo', correo), nombre, rol, hashPassword('Suma2026!'), this.datos.cifrar('celular', celular), this.datos.correoIndice(correo), rol === 'SOCIO' ? 'APROBADO' : null],
+        'INSERT INTO "Usuario" (correo,nombre,rol,"passwordHash",celular,"correoIndice","cuentaEstado","celularIndice") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT DO NOTHING RETURNING id',
+        [this.datos.cifrar('correo', correo), nombre, rol, hashPassword('Suma2026!'), this.datos.cifrar('celular', celular), this.datos.correoIndice(correo), rol === 'SOCIO' ? 'APROBADO' : null, this.datos.huella('celular:' + celular) ?? null],
       );
       if (rows.length)
         await this.query(

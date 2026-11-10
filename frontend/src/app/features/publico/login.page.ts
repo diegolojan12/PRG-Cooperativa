@@ -50,6 +50,10 @@ export class LoginPage {
     this.bloqueadoHasta.set(null);
     try {
       const respuesta = await firstValueFrom(this.auth.login(correo, clave));
+      if ('requiereConfirmacion' in respuesta) {
+        await this.router.navigate(['/confirmar-correo'], { state: { confirmacion: respuesta } });
+        return;
+      }
       if (requiere2fa(respuesta)) {
         this.desafio.set(respuesta);
         return;

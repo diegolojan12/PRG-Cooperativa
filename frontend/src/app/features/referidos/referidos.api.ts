@@ -18,8 +18,6 @@ export interface FiltroReferidos {
   provincia?: string;
 }
 
-export const POR_PAGINA_REFERIDOS = 20; // RF-11-3
-
 const params = (f: Partial<FiltroReferidos>) => {
   let result = new HttpParams();
   for (const [clave, valor] of Object.entries(f))
@@ -34,13 +32,22 @@ export class ReferidosApi {
 
   listar(f: FiltroReferidos) {
     return this.http.get<PaginaReferidos>('/api/referidos', {
-      params: params(f).set('porPagina', POR_PAGINA_REFERIDOS),
+      params: params(f),
     });
   }
   exportar(f: FiltroReferidos) {
     const filtros: Partial<FiltroReferidos> = { ...f };
     delete filtros.pagina;
-    return this.http.get<Referido[]>('/api/referidos/exportar', { params: params(filtros) });
+    return this.http.get('/api/referidos/exportar', {
+      params: params(filtros),
+      responseType: 'blob',
+    });
+  }
+  miCodigo() {
+    return this.http.post<{ codigo: string; enlace: string; qr: string }>(
+      '/api/referidos/mi-codigo',
+      {},
+    );
   }
   crear(datos: NuevoReferido) {
     return this.http.post<Referido>('/api/referidos', datos);

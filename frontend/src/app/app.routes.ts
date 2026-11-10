@@ -35,6 +35,12 @@ export const routes: Routes = [
     loadComponent: () => import('./features/publico/registro.page').then((m) => m.RegistroPage),
   },
   {
+    path: 'confirmar-correo',
+    title: 'Confirmar correo · SUMA',
+    loadComponent: () =>
+      import('./features/publico/confirmar-correo.page').then((m) => m.ConfirmarCorreoPage),
+  },
+  {
     path: 'recuperar-contrasena',
     title: 'Recuperar acceso · SUMA',
     loadComponent: () => import('./features/publico/recuperar.page').then((m) => m.RecuperarPage),
@@ -71,6 +77,14 @@ export const routes: Routes = [
         loadComponent: () => import('./features/resumen/resumen.page').then((m) => m.ResumenPage),
       },
       {
+        path: 'mi-cuenta',
+        canMatch: [rolMatch('SOCIO')],
+        data: { titulo: 'Mi cuenta vinculada' },
+        title: 'Mi cuenta vinculada · SUMA',
+        loadComponent: () =>
+          import('./features/resumen/mi-cuenta.page').then((m) => m.MiCuentaPage),
+      },
+      {
         path: 'referidos',
         canActivate: [moduloGuard],
         data: { modulo: 'referidos', titulo: 'Referidos' },
@@ -104,10 +118,10 @@ export const routes: Routes = [
           import('./features/ayuda/acceso-denegado.page').then((m) => m.AccesoDenegadoPage),
       },
       {
-        path: ':modulo',
-        data: { titulo: 'Próximamente' },
+        path: '**',
+        data: { titulo: 'Página no disponible' },
         loadComponent: () =>
-          import('./features/ayuda/proximamente.page').then((m) => m.ProximamentePage),
+          import('./features/ayuda/proximamente.page').then((m) => m.PaginaNoDisponible),
       },
     ],
   },

@@ -116,3 +116,53 @@ export class CuentaCooperativa {
     return '******' + this.numeroCuenta.slice(-4);
   }
 }
+export class AvisoPrivacidad {
+  static vigente() {
+    const {
+      SUMA_AVISO_VERSION: version,
+      SUMA_TERMINOS: terminos,
+      SUMA_PRIVACIDAD: privacidad,
+    } = process.env;
+    if (
+      version &&
+      /^\d+(?:\.\d+)*$/.test(version) &&
+      terminos?.trim() &&
+      privacidad?.trim()
+    )
+      return new AvisoPrivacidad(version, terminos.trim(), privacidad.trim());
+    if (
+      process.env.NODE_ENV !== 'production' &&
+      !version &&
+      !terminos &&
+      !privacidad
+    )
+      return new AvisoPrivacidad(
+        '0.1',
+        'Entorno académico de prueba. Usa datos ficticios.',
+        'SUMA guarda los datos de prueba para gestionar el acceso y la vinculación de cuentas.',
+      );
+    throw errorDeDominio(
+      'El registro está pendiente de publicar los términos y el aviso de privacidad.',
+      503,
+    );
+  }
+  constructor(version, terminos, privacidad) {
+    Object.assign(this, { version, terminos, privacidad });
+  }
+}
+
+export class AceptacionTerminos {
+  constructor(aviso, aceptado, version, fecha) {
+    if (aceptado !== true || version !== aviso.version)
+      throw errorDeDominio(
+        'Revisa y acepta los términos y el aviso vigente.',
+        400,
+        {
+          aceptaTerminos:
+            'Abre los textos vigentes y marca la casilla de aceptación.',
+        },
+      );
+    this.version = version;
+    this.fecha = fecha;
+  }
+}

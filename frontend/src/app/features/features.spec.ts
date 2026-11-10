@@ -69,7 +69,7 @@ describe('Menú por rol (RF-08-3)', () => {
     const menu = opciones('GESTOR');
     expect(menu).not.toContain('Referidos');
     expect(menu).not.toContain('Usuarios');
-    expect(menu).toContain('Publicaciones');
+    expect(menu).toContain('Notificaciones');
   });
 });
 
@@ -124,7 +124,7 @@ describe('Referidos (RF-11-3, RF-11-6)', () => {
     const fixture = TestBed.createComponent(ReferidosPage);
     fixture.detectChanges();
     const req = http.expectOne((r) => r.url === '/api/referidos');
-    expect(req.request.params.get('porPagina')).toBe('20');
+    expect(req.request.params.has('porPagina')).toBe(false);
     req.flush(pagina);
     await fixture.whenStable();
     fixture.detectChanges();
@@ -167,7 +167,7 @@ describe('Configuración (RF-14-1)', () => {
   it('rechaza decimales con un mensaje que explica la corrección', () => {
     setup('ADMIN');
     const page = TestBed.createComponent(ConfiguracionPage).componentInstance;
-    page.form.setValue({
+    page.form.patchValue({
       contacto: 'soporte@suma.ec',
       mensajeBienvenida: 'Hola',
       puntosReferido: 10.5,

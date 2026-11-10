@@ -1,9 +1,11 @@
 import express from 'express';
 import { randomBytes } from 'node:crypto';
-import { CodigoVerificacion, CuentaCooperativa, Rol, Usuario, errorDeDominio } from './dominio/acceso.mjs';
-import { Referido } from './dominio/referidos.mjs';
-import { MovimientoPuntos, Notificacion, ParametroGlobal, RegistroAuditoria } from './dominio/administracion.mjs';
+import { AceptacionTerminos, AvisoPrivacidad, CodigoVerificacion, CuentaCooperativa, Rol, Usuario, errorDeDominio } from './dominio/acceso.mjs';
+import { CodigoReferido, Referido } from './dominio/referidos.mjs';
+import { ConfirmacionCorreo } from './dominio/confirmacion-correo.mjs';
+import { AcreditacionPuntos, Notificacion, ParametroGlobal, RegistroAuditoria, PUNTOS_POR_ACCION } from './dominio/administracion.mjs';
 import nodemailer from 'nodemailer';
+import QRCode from 'qrcode';
 import {
   Database,
   hashPassword,
@@ -23,6 +25,7 @@ const CODIGO_2FA_MS = 5 * 60_000; // RNF-06
 const RECUPERACION_MS = 30 * 60_000; // RF-07-1
 const ACTIVACION_MS = 24 * 3600_000; // cuentas creadas por el administrador
 const ASOCIACION_DIAS = 30; // RF-11-5
+const POR_PAGINA_SOCIO = 10;
 const POR_PAGINA_REFERIDOS = 20; // RF-11-3
 const POR_PAGINA_BITACORA = 50; // RF-42-2
 const REINTENTOS_CORREO = 3; // RNF-14
@@ -120,6 +123,9 @@ const fecha = (value, campo) => {
 // Los filtros por día corresponden a la hora continental de Ecuador (UTC−5).
 const inicioDelDia = (value) => new Date(value + 'T00:00:00-05:00').toISOString();
 const finDelDia = (value) => new Date(value + 'T23:59:59.999-05:00').toISOString();
+const csv = (value) => '"' + String(value ?? '')
+  .replace(/^(\s*[=+@-]|[\t\r\n])/, "'$&")
+  .replaceAll('"', '""') + '"';
 const mask = (correo) => correo.replace(/^(.).*(@.*)$/, '$1***$2');
 
 export async function createApi(database) {
@@ -128,6 +134,7 @@ export async function createApi(database) {
   const cifrar = (campo, valor) => db.datos.cifrar(campo, valor);
   const correoIndice = (correo) => db.datos.correoIndice(correo);
   const cuentaIndice = (numero) => numero ? db.datos.huella('cuenta:' + numero) ?? null : null;
+  const celularIndice = (celular) => db.datos.huella('celular:' + celular) ?? null;
   const claveCorreo = (correo) => correoIndice(correo) ?? correo;
   const router = express.Router();
   router.use(express.json({ limit: '32kb' }));
@@ -172,6 +179,8 @@ export async function createApi(database) {
     );
   };
 
+  const confirmacionCorreo = new ConfirmacionCorreo(db);
+  const acreditacion = new AcreditacionPuntos(db, notify);
 
   /* ---------- Correo con reintentos (RNF-14: 3 reintentos cada 5 min) ---------- */
   const transporter = process.env.SMTP_HOST
@@ -220,7 +229,7 @@ export async function createApi(database) {
       'SELECT u.* FROM "Sesion" s JOIN "Usuario" u ON u.id=s."usuarioId" WHERE s.token=$1 AND s.expira>$2',
       [digest(raw), now()],
     );
-    if (!user || !user.activo) fail('Tu sesión terminó. Vuelve a ingresar.', 401);
+    if (!user || !user.activo || !user.correoVerificado) fail('Tu sesión terminó. Vuelve a ingresar.', 401);
     const [role] = await db.query('SELECT modulos FROM "RolPermiso" WHERE rol=$1', [user.rol]);
     user.modulos = JSON.parse(role?.modulos || '[]');
     if (module && !user.modulos.includes(module))
@@ -244,7 +253,7 @@ export async function createApi(database) {
       const [actual] = await db.query(
         'SELECT * FROM "Usuario" WHERE id=$1' + (db.sqlite ? '' : ' FOR UPDATE'), [user.id], client,
       );
-      if (!actual?.activo || actual.passwordHash !== user.passwordHash || actual.rol !== user.rol)
+      if (!actual?.activo || !actual.correoVerificado || actual.passwordHash !== user.passwordHash || actual.rol !== user.rol)
         fail('Tus credenciales cambiaron. Vuelve a iniciar sesión.', 401);
       await db.query('DELETE FROM "Sesion" WHERE expira<$1', [now()], client);
       await db.query('INSERT INTO "Sesion" (token,"usuarioId",expira) VALUES ($1,$2,$3)', [
@@ -319,7 +328,7 @@ export async function createApi(database) {
       }
       fail('Correo o contraseña incorrectos.', 401);
     }
-    const requiereSegundoFactor = new Rol(user.rol).requiereSegundoFactor;
+    const requiereSegundoFactor = user.correoVerificado && new Rol(user.rol).requiereSegundoFactor;
     const desafioId = requiereSegundoFactor ? randomBytes(16).toString('hex') : null;
     const codigo = requiereSegundoFactor ? CodigoVerificacion.segundoFactor() : null;
     await db.transaction(async (client) => {
@@ -337,6 +346,11 @@ export async function createApi(database) {
         );
       }
     });
+    if (!user.correoVerificado) {
+      const token = await confirmacionCorreo.reanudar(user.id);
+      if (token) return res.json({ requiereConfirmacion: true, token, destino: mask(user.correo) });
+      fail('Vuelve a intentar iniciar sesión.', 409);
+    }
     if (requiereSegundoFactor) {
       sendMail({
         to: user.correo,
@@ -404,6 +418,65 @@ export async function createApi(database) {
     });
   }
 
+  route('get', '/auth/cuenta', async (req, res) => {
+    const usuario = await current(req);
+    if (usuario.rol !== 'SOCIO') fail('La vinculación es para socios y clientes.', 403);
+    const cuenta = usuario.cuenta
+      ? new CuentaCooperativa(usuario.cuenta, usuario.tipoCuenta, usuario.cuentaEstado)
+      : null;
+    res.json(cuenta && {
+      numero: req.query.mostrar === '1' ? cuenta.numeroCuenta : cuenta.numeroEnmascarado(),
+      tipo: cuenta.tipoCuenta, estado: publicUser(usuario).cuentaEstado,
+    });
+  });
+  route('post', '/auth/cuenta', async (req, res) => {
+    const usuario = await current(req);
+    if (usuario.rol !== 'SOCIO') fail('La vinculación es para socios y clientes.', 403);
+    const cuenta = new CuentaCooperativa(req.body.cuenta, req.body.tipoCuenta);
+    await db.transaction(async (client) => {
+      const [actual] = await db.query(
+        'SELECT "cuentaEstado",rol,activo FROM "Usuario" WHERE id=$1' + (db.sqlite ? '' : ' FOR UPDATE'), [usuario.id], client,
+      );
+      if (!actual?.activo || actual.rol !== 'SOCIO') fail('No tienes permiso para vincular una cuenta.', 403);
+      if (actual.cuentaEstado && !['RECHAZADA','RECHAZADO'].includes(actual.cuentaEstado))
+        fail('Ya tienes una cuenta vinculada o pendiente de revisión.', 409);
+      await validarCuentaDisponible(cuenta.numeroCuenta, client);
+      await db.query(
+        'UPDATE "Usuario" SET cuenta=$2,"tipoCuenta"=$3,"cuentaIndice"=$4,"cuentaEstado"=$5,"cuentaSolicitadaEn"=$6,"cuentaRevisadaEn"=NULL WHERE id=$1',
+        [usuario.id, cifrar('cuenta', cuenta.numeroCuenta), cuenta.tipoCuenta, cuentaIndice(cuenta.numeroCuenta), cuenta.estado, now()], client,
+      );
+      await log(req, usuario, 'Vinculación solicitada', 'Cuenta pendiente de revisión', client, { objetivoId: usuario.id });
+    });
+    res.status(201).json({ cuentaEstado: cuenta.estado, cuentaVerificada: false });
+  });
+  const enviarConfirmacion = (correo, prueba) => sendMail({
+    to: correo,
+    subject: 'Confirma tu correo en SUMA',
+    text: 'Tu código de confirmación es ' + prueba.codigo + '. Vence en 10 minutos y es de un solo uso.',
+  }, 0, prueba.vence, () => confirmacionCorreo.pendiente(prueba.huella));
+  const exigirCorreoDisponible = () => {
+    if (!transporter && !devExpose()) fail('La confirmación por correo no está disponible en este momento.', 503);
+  };
+
+  route('get', '/auth/aviso-privacidad', async (_, res) => {
+    res.json(AvisoPrivacidad.vigente());
+  });
+  route('post', '/auth/confirmar-correo', async (req, res) => {
+    rate(req, 'confirmar-correo', 30);
+    const resultado = await confirmacionCorreo.confirmar(req.body.token, req.body.codigo);
+    if (!resultado)
+      fail('El código no es correcto, venció o agotó sus intentos. Solicita otro.', 400, {
+        codigo: 'Verifica los seis dígitos o solicita un código nuevo.',
+      });
+    res.json({ ok: true });
+  });
+  route('post', '/auth/reenviar-confirmacion', async (req, res) => {
+    rate(req, 'reenviar-confirmacion', 15);
+    exigirCorreoDisponible();
+    const prueba = await confirmacionCorreo.reenviar(req.body.token);
+    enviarConfirmacion(prueba.correo, prueba);
+    res.json({ ok: true, ...(devExpose() ? { devCodigo: prueba.codigo } : {}) });
+  });
 
   route('post', '/auth/register', async (req, res) => {
     rate(req, 'register', 12);
@@ -413,14 +486,43 @@ export async function createApi(database) {
     if (setting?.valor !== 'true') fail('El registro está cerrado. Contacta a la cooperativa.', 403);
     const p = person(req.body),
       clave = password(req.body.clave);
-    // La Visión v1.1.0 no solicita cédula; la cuenta vinculada tiene 10 dígitos.
+    if (clave !== req.body.confirmacionClave)
+      fail('Las contraseñas no coinciden.', 400, { confirmacionClave: 'Repite exactamente la contraseña.' });
+    const aviso = AvisoPrivacidad.vigente();
+    const aceptacion = new AceptacionTerminos(aviso, req.body.aceptaTerminos, req.body.versionAviso, now());
+    exigirCorreoDisponible();
     const cuenta = req.body.cuenta
-      ? new CuentaCooperativa(text(req.body.cuenta, 10, 'cuenta'), req.body.tipoCuenta)
+      ? new CuentaCooperativa(req.body.cuenta, req.body.tipoCuenta)
       : null;
-    await db.transaction(async (client) => {
+    const codigo = req.body.codigoReferido
+      ? new CodigoReferido(text(req.body.codigoReferido, 8, 'codigoReferido').toUpperCase())
+      : null;
+    const prueba = await db.transaction(async (client) => {
+      let socio;
+      if (codigo) {
+        [socio] = await db.query(
+          'SELECT id,correo,"cuentaEstado" FROM "Usuario" WHERE "codigoReferido"=$1 AND rol=$2 AND activo=$3' + (db.sqlite ? '' : ' FOR UPDATE'),
+          [codigo.codigo, 'SOCIO', true], client,
+        );
+        if (!CuentaCooperativa.estaAprobada(socio?.cuentaEstado) || socio.correo === p.correo)
+          fail('El código no pertenece a un socio con una cuenta aprobada.', 400, {
+            codigoReferido: 'Revisa el código o continúa sin él.',
+          });
+      }
       if (cuenta) await validarCuentaDisponible(cuenta.numeroCuenta, client);
+      const indice = celularIndice(p.celular);
+      if (!db.sqlite) await db.query('SELECT pg_advisory_xact_lock(15274004, hashtext($1))', [indice ?? p.celular], client);
+      const [duplicado] = await db.query(
+        'SELECT id FROM "Usuario" WHERE COALESCE("celularIndice",celular)=$1', [indice ?? p.celular], client,
+      );
+      if (duplicado) fail('Ese celular ya está registrado.', 409, { celular: 'Escribe otro número o recupera tu cuenta.' });
+      await db.query('INSERT INTO "AvisoPrivacidad" (version,terminos,privacidad) VALUES ($1,$2,$3) ON CONFLICT (version) DO NOTHING',
+        [aviso.version, aviso.terminos, aviso.privacidad], client);
+      const [publicado] = await db.query('SELECT terminos,privacidad FROM "AvisoPrivacidad" WHERE version=$1', [aviso.version], client);
+      if (publicado.terminos !== aviso.terminos || publicado.privacidad !== aviso.privacidad)
+        fail('La versión publicada del aviso cambió. Contacta con soporte.', 503);
       const [user] = await db.query(
-        'INSERT INTO "Usuario" (nombre,correo,celular,"passwordHash",cuenta,"tipoCuenta","cuentaEstado","correoIndice","cuentaIndice","cuentaSolicitadaEn") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *',
+        'INSERT INTO "Usuario" (nombre,correo,celular,"passwordHash",cuenta,"tipoCuenta","cuentaEstado","correoIndice","cuentaIndice","cuentaSolicitadaEn","celularIndice","correoVerificado") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *',
         [
           p.nombre,
           cifrar('correo', p.correo),
@@ -432,9 +534,31 @@ export async function createApi(database) {
           correoIndice(p.correo),
           cuentaIndice(cuenta?.numeroCuenta),
           cuenta ? now() : null,
+          indice,
+          false,
         ],
         client,
       );
+      await db.query('INSERT INTO "AceptacionTerminos" ("usuarioId",version,fecha) VALUES ($1,$2,$3)',
+        [user.id, aceptacion.version, aceptacion.fecha], client);
+      if (socio) {
+        const [previo] = await db.query(
+          'SELECT id,"socioId",estado FROM "Referido" WHERE COALESCE("correoIndice",correo)=$1 AND "eliminadoEn" IS NULL' + (db.sqlite ? '' : ' FOR UPDATE'),
+          [claveCorreo(p.correo)], client,
+        );
+        if (previo && (previo.socioId !== socio.id || previo.estado !== 'PENDIENTE'))
+          fail('Ya existe un referido activo con ese correo.', 409, { codigoReferido: 'Contacta a soporte para revisar la asociación.' });
+        const [ref] = previo
+          ? await db.query('UPDATE "Referido" SET "usuarioId"=$2,nombre=$3,celular=$4 WHERE id=$1 RETURNING id', [
+              previo.id, user.id, p.nombre, cifrar('celular', p.celular),
+            ], client)
+          : await db.query(
+              'INSERT INTO "Referido" (nombre,correo,celular,"socioId","creadoEn","usuarioId","correoIndice") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id',
+              [p.nombre, cifrar('correo', p.correo), cifrar('celular', p.celular), socio.id, now(), user.id, correoIndice(p.correo)], client,
+            );
+        await log(req, user, 'Referido asociado por código', 'Registro mediante invitación', client, { objetivoId: ref.id, datos: { socioId: socio.id } });
+        await notify(socio.id, 'Nuevo referido asociado', new Referido({ nombre: p.nombre }).nombreDePila + ' se registró con tu código.', client);
+      }
       await log(req, user, 'Registro', 'Nuevo socio registrado', client, { objetivoId: user.id });
       await notify(
         user.id,
@@ -444,8 +568,13 @@ export async function createApi(database) {
           : 'Tu perfil está listo para sumar.',
         client,
       );
+      return confirmacionCorreo.iniciar(user.id, client);
     });
-    res.status(201).json({ ok: true });
+    enviarConfirmacion(p.correo, prueba);
+    res.status(201).json({
+      ok: true, requiereConfirmacion: true, token: prueba.token, destino: mask(p.correo),
+      ...(devExpose() ? { devCodigo: prueba.codigo } : {}),
+    });
   });
   const resetUrl = (token) =>
     `${process.env.FRONTEND_URL || 'http://localhost:4200'}/recuperar-contrasena?token=${token}`;
@@ -587,7 +716,7 @@ export async function createApi(database) {
   });
 
   /* ---------- Referidos (RF-11-3 a RF-11-6) ---------- */
-  function referralFilters(req, user) {
+  function referralFilters(req, user, soloPendientes = false) {
     const where = ['r."eliminadoEn" IS NULL'],
       values = [];
     const add = (sql, value) => {
@@ -596,7 +725,8 @@ export async function createApi(database) {
     };
     if (user.rol !== 'ADMIN') add('r."socioId"=?', user.id);
     const q = req.query;
-    if (q.estado) {
+    if (soloPendientes) add('r.estado=?', 'PENDIENTE');
+    else if (q.estado) {
       if (!STATES.includes(q.estado)) fail('Estado no válido.');
       add('r.estado=?', q.estado);
     }
@@ -611,11 +741,18 @@ export async function createApi(database) {
     }
     const buscar = text(q.buscar, 100, 'buscar').toLowerCase();
     if (buscar) {
-      values.push('%' + buscar + '%');
-      const n = '$' + values.length;
-      values.push(claveCorreo(buscar));
-      const correo = '$' + values.length;
-      where.push('(LOWER(r.nombre) LIKE ' + n + ' OR COALESCE(r."correoIndice",r.correo)=' + correo + ' OR LOWER(u.nombre) LIKE ' + n + ')');
+      if (user.rol === 'ADMIN') {
+        values.push('%' + buscar + '%');
+        const n = '$' + values.length;
+        values.push(claveCorreo(buscar));
+        const correo = '$' + values.length;
+        where.push('(LOWER(r.nombre) LIKE ' + n + ' OR COALESCE(r."correoIndice",r.correo)=' + correo + ' OR LOWER(u.nombre) LIKE ' + n + ')');
+      } else {
+        const nombreDePila = db.sqlite
+          ? "SUBSTR(TRIM(r.nombre), 1, INSTR(TRIM(r.nombre) || ' ', ' ') - 1)"
+          : "SPLIT_PART(TRIM(r.nombre), ' ', 1)";
+        add('LOWER(' + nombreDePila + ') LIKE ?', '%' + buscar + '%');
+      }
     }
     return { sql: where.join(' AND '), values };
   }
@@ -626,7 +763,7 @@ export async function createApi(database) {
   route('get', '/referidos', async (req, res) => {
     const user = await current(req, 'referidos');
     const { sql, values } = referralFilters(req, user);
-    const porPagina = Math.min(50, Math.max(1, Number.parseInt(req.query.porPagina, 10) || POR_PAGINA_REFERIDOS));
+    const porPagina = user.rol === 'ADMIN' ? POR_PAGINA_REFERIDOS : POR_PAGINA_SOCIO;
     const actual = pagina(req.query.pagina);
     const from = 'FROM "Referido" r JOIN "Usuario" u ON u.id=r."socioId"';
     const [{ total }] = await db.query(`SELECT COUNT(*) AS total ${from} WHERE ${sql}`, values);
@@ -646,7 +783,7 @@ export async function createApi(database) {
       filtros = { campanias: valores('campania'), provincias: valores('provincia') };
     }
     res.json({
-      items: rows.map(shapeReferral),
+      items: rows.map((r) => user.rol === 'ADMIN' ? shapeReferral(r) : new Referido(r).consultaSocio()),
       total: Number(total),
       pagina: actual,
       porPagina,
@@ -657,17 +794,51 @@ export async function createApi(database) {
     });
   });
   route('get', '/referidos/exportar', async (req, res) => {
-    const user = await current(req, 'referidos');
-    const { sql, values } = referralFilters(req, user);
+    await admin(req, 'referidos');
+    const { sql, values } = referralFilters(req, { rol: 'ADMIN' }, true);
     const rows = await db.query(
-      `SELECT r.*,u.nombre AS socio FROM "Referido" r JOIN "Usuario" u ON u.id=r."socioId" WHERE ${sql} ORDER BY r.id DESC LIMIT 5000`,
+      'SELECT r.nombre,r.correo,r.celular,u.nombre AS socio,r."creadoEn" FROM "Referido" r JOIN "Usuario" u ON u.id=r."socioId" WHERE ' + sql + ' ORDER BY r.id DESC',
       values,
     );
-    res.json(rows.map(shapeReferral));
+    const lineas = [
+      ['Nombre', 'Correo', 'Celular', 'Socio referidor', 'Fecha de registro'],
+      ...rows.map((r) => [r.nombre, r.correo, r.celular, r.socio, r.creadoEn]),
+    ];
+    res.attachment('SUMA-referidos.csv').type('text/csv').send('\uFEFF' + lineas.map((fila) => fila.map(csv).join(',')).join('\r\n'));
+  });
+  async function generarCodigo(usuario, client) {
+    if (usuario.codigoReferido) return usuario.codigoReferido;
+    if (!db.sqlite) await db.query('SELECT pg_advisory_xact_lock(15274005)', [], client);
+    for (let intento = 0; intento < 5; intento++) {
+      const codigo = CodigoReferido.generar().codigo;
+      const [actual] = await db.query(
+        'UPDATE "Usuario" SET "codigoReferido"=$2 WHERE id=$1 AND NOT EXISTS (SELECT 1 FROM "Usuario" WHERE "codigoReferido"=$2) RETURNING "codigoReferido"',
+        [usuario.id, codigo], client,
+      );
+      if (actual) return actual.codigoReferido;
+    }
+    fail('No se pudo generar el enlace. Inténtalo de nuevo.', 503);
+  }
+
+  route('post', '/referidos/mi-codigo', async (req, res) => {
+    const user = await current(req, 'referidos');
+    const codigo = await db.transaction(async (client) => {
+      const [actual] = await db.query(
+        'SELECT id,rol,activo,"cuentaEstado","codigoReferido" FROM "Usuario" WHERE id=$1' + (db.sqlite ? '' : ' FOR UPDATE'),
+        [user.id], client,
+      );
+      if (!actual?.activo || actual.rol !== 'SOCIO' || !CuentaCooperativa.estaAprobada(actual.cuentaEstado))
+        fail('Necesitas una cuenta de la Cooperativa aprobada para generar tu enlace.', 403);
+      return generarCodigo(actual, client);
+    });
+    const enlace = new CodigoReferido(codigo).enlace(process.env.FRONTEND_URL || 'http://localhost:4200');
+    res.json({ codigo, enlace, qr: await QRCode.toDataURL(enlace, { width: 256 }) });
   });
   route('post', '/referidos', async (req, res) => {
     const user = await current(req, 'referidos'),
       p = person(req.body);
+    if (user.rol === 'SOCIO' && !CuentaCooperativa.estaAprobada(user.cuentaEstado))
+      fail('Vincula y verifica tu cuenta de la Cooperativa antes de referir.', 403);
     if (p.correo === user.correo) fail('Usa los datos de otra persona. No puedes referirte a ti mismo.', 400, {
       correo: 'Escribe el correo de la persona que quieres referir.',
     });
@@ -687,7 +858,7 @@ export async function createApi(database) {
       await notify(user.id, 'Referido registrado', new Referido(ref).nombreDePila + ' se añadió a tus referidos.', client);
       return ref;
     });
-    res.status(201).json(shapeReferral(row));
+    res.status(201).json(user.rol === 'ADMIN' ? shapeReferral(row) : new Referido(row).consultaSocio());
   });
   async function findReferral(id, user, client) {
     const numero = Number(id);
@@ -705,8 +876,7 @@ export async function createApi(database) {
     const user = await current(req, 'referidos');
     await db.transaction(async (client) => {
       const ref = await findReferral(req.params.id, user, client);
-      if (user.rol !== 'ADMIN' && ref.estado !== 'PENDIENTE')
-        fail('Solo puedes editar tus referidos pendientes. El estado lo actualiza administración.', 403);
+      if (user.rol !== 'ADMIN') fail('La edición de datos está reservada a administración.', 403);
       if (ref.usuarioId) fail('Los datos de esta persona están vinculados a su cuenta.', 409);
       const p = person(req.body);
       await db.query(
@@ -734,8 +904,8 @@ export async function createApi(database) {
       if (estado === 'APROBADO') {
         const [cuenta] = await db.query(
           ref.usuarioId
-            ? 'SELECT id,"cuentaEstado" FROM "Usuario" WHERE id=$1 AND activo=$2'
-            : 'SELECT id,"cuentaEstado" FROM "Usuario" WHERE COALESCE("correoIndice",correo)=$1 AND activo=$2',
+            ? 'SELECT id,"cuentaEstado" FROM "Usuario" WHERE id=$1 AND activo=$2 AND "correoVerificado"=$2'
+            : 'SELECT id,"cuentaEstado" FROM "Usuario" WHERE COALESCE("correoIndice",correo)=$1 AND activo=$2 AND "correoVerificado"=$2',
           [ref.usuarioId ?? claveCorreo(ref.correo), true], client,
         );
         decision.aprobar(cuenta?.cuentaEstado, fechaDecision);
@@ -747,14 +917,7 @@ export async function createApi(database) {
         ref.id, decision.estado, decision.fechaDecision, destinatario ?? null,
       ], client);
       if (decision.estado === 'APROBADO') {
-        // El crédito se guarda con el valor vigente al aprobar (RF-14).
-        const [config] = await db.query('SELECT valor FROM "Configuracion" WHERE clave=$1', ['puntosReferido'], client);
-        const movimiento = new MovimientoPuntos(ref.id, ref.socioId, Number(config?.valor), fechaDecision);
-        await db.query(
-          'INSERT INTO "MovimientoPuntos" ("referidoId","usuarioId",cantidad,fecha) VALUES ($1,$2,$3,$4) ON CONFLICT ("referidoId") DO NOTHING',
-          [movimiento.referidoId, movimiento.usuarioId, movimiento.cantidad, movimiento.fecha],
-          client,
-        );
+        await acreditacion.registrar('REFERIDO', ref.id, [ref.socioId, destinatario], fechaDecision, client);
       }
       await log(req, user, 'Dictamen de referido', `Referido #${ref.id}: ${estado}`, client, {
         objetivoId: ref.id,
@@ -907,7 +1070,7 @@ export async function createApi(database) {
     });
     await db.transaction(async (client) => {
       const [fila] = await db.query(
-        'SELECT id,cuenta,"tipoCuenta","cuentaEstado",activo,rol FROM "Usuario" WHERE id=$1' + (db.sqlite ? '' : ' FOR UPDATE'), [id], client,
+        'SELECT id,cuenta,"tipoCuenta","cuentaEstado",activo,rol,"codigoReferido" FROM "Usuario" WHERE id=$1' + (db.sqlite ? '' : ' FOR UPDATE'), [id], client,
       );
       if (!fila?.cuenta || !fila.activo) fail('No se encontró la cuenta vinculada.', 404);
       const cuenta = new CuentaCooperativa(fila.cuenta, fila.tipoCuenta, fila.cuentaEstado);
@@ -920,6 +1083,7 @@ export async function createApi(database) {
         );
         if (otra) fail('Este número ya está aprobado en otra cuenta.', 409);
         cuenta.aprobar(now());
+        if (fila.rol === 'SOCIO') await generarCodigo(fila, client);
       }
       else cuenta.rechazar(text(req.body.motivo, 300, 'motivo'), now());
       await db.query('UPDATE "Usuario" SET "cuentaEstado"=$2,"cuentaRevisadaEn"=$3 WHERE id=$1', [id, cuenta.estado, cuenta.fechaRevision], client);
@@ -1044,6 +1208,10 @@ export async function createApi(database) {
       mensajeBienvenida: text(req.body.mensajeBienvenida, TEXTO_MAX_CONFIG, 'mensajeBienvenida'),
       puntosReferido: new ParametroGlobal('puntosReferido').actualizar(req.body.puntosReferido),
     };
+    for (const clave of [...Object.keys(PUNTOS_POR_ACCION), 'valorPunto']) {
+      if (Object.hasOwn(req.body, clave))
+        values[clave] = new ParametroGlobal(clave).actualizar(req.body[clave]);
+    }
     if (!['true', 'false'].includes(values.registroAbierto)) fail('Elige si el registro está abierto.');
     if (!values.mensajeBienvenida || values.mensajeBienvenida.length > TEXTO_MAX_CONFIG)
       fail(`El mensaje de bienvenida debe tener entre 1 y ${TEXTO_MAX_CONFIG} caracteres.`, 400, {
@@ -1111,13 +1279,35 @@ export async function createApi(database) {
 
   /* ---------- Notificaciones y ayuda ---------- */
   route('get', '/notificaciones', async (req, res) => {
-    const user = await current(req, 'notificaciones');
+    const user = await current(req, 'notificaciones', false);
     res.json(
       await db.query(
         'SELECT * FROM "Notificacion" WHERE "usuarioId"=$1 ORDER BY id DESC LIMIT 100',
         [user.id],
       ),
     );
+  });
+  route('get', '/notificaciones/bandeja', async (req, res) => {
+    const user = await current(req, 'notificaciones', false);
+    const actual = pagina(req.query.pagina);
+    const [conteos] = await db.query(
+      'SELECT COUNT(*) AS total, SUM(CASE WHEN leida=$2 THEN 1 ELSE 0 END) AS "sinLeer" FROM "Notificacion" WHERE "usuarioId"=$1', [user.id, false],
+    );
+    const items = await db.query(
+      'SELECT id,titulo,mensaje,leida,fecha FROM "Notificacion" WHERE "usuarioId"=$1 ORDER BY id DESC LIMIT 20 OFFSET ' + (actual - 1) * 20, [user.id],
+    );
+    const { cuentaEstado, cuentaVerificada } = publicUser(user);
+    res.json({ items, pagina: actual, porPagina: 20, total: Number(conteos.total), sinLeer: Number(conteos.sinLeer), cuentaEstado, cuentaVerificada });
+  });
+  route('patch', '/notificaciones/:id/leer', async (req, res) => {
+    const user = await current(req, 'notificaciones');
+    const id = Number(req.params.id);
+    if (!Number.isSafeInteger(id) || id < 1) fail('No se encontró la notificación.', 404);
+    const n = new Notificacion(user.id);
+    n.marcarLeida();
+    const [actualizada] = await db.query('UPDATE "Notificacion" SET leida=$3 WHERE id=$1 AND "usuarioId"=$2 RETURNING id', [id, n.usuarioId, n.leida]);
+    if (!actualizada) fail('No se encontró la notificación.', 404);
+    res.json({ ok: true });
   });
   route('patch', '/notificaciones/leer', async (req, res) => {
     const user = await current(req, 'notificaciones');

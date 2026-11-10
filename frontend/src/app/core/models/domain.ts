@@ -47,21 +47,34 @@ export interface Desafio2fa {
   destino: string;
   devCodigo?: string;
 }
-export type RespuestaLogin = Usuario | Desafio2fa;
+export interface DesafioConfirmacion {
+  requiereConfirmacion: true;
+  token: string;
+  destino: string;
+  devCodigo?: string;
+}
+export interface AvisoPrivacidad {
+  version: string;
+  terminos: string;
+  privacidad: string;
+}
+export type RespuestaLogin = Usuario | Desafio2fa | DesafioConfirmacion;
 export const requiere2fa = (r: RespuestaLogin): r is Desafio2fa => 'requiere2fa' in r;
 
 export interface Referido {
   id: number;
   nombre: string;
-  correo: string;
-  celular: string;
+  correo?: string;
+  celular?: string;
   estado: EstadoReferido;
-  socio: string;
-  socioId: number;
-  notas: string | null;
+  socio?: string;
+  socioId?: number;
+  usuarioId?: number | null;
+  fechaDecision?: string | null;
+  notas?: string | null;
   creadoEn: string;
   /** Calculado en el servidor sin fines de semana ni feriados de Ecuador. */
-  diasHabilesPendiente: number;
+  diasHabilesPendiente?: number;
 }
 export interface NuevoReferido {
   nombre: string;
@@ -118,6 +131,11 @@ export interface Configuracion {
   puntosReferido: string;
   registroAbierto: 'true' | 'false';
   mensajeBienvenida: string;
+  puntosCapacitacion?: string;
+  puntosTrivia?: string;
+  puntosTaller?: string;
+  puntosReto?: string;
+  valorPunto?: string;
 }
 
 export interface Actividad {

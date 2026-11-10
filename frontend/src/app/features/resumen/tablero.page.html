@@ -4,9 +4,11 @@
     <h1>Así vamos creciendo</h1>
     <p>Indicadores de captación y fidelización de la comunidad.</p>
   </div>
-  <button type="button" class="s-secondary" [disabled]="cargando()" (click)="cargar()">
-    Actualizar
-  </button>
+  <div class="s-heading-actions">
+    <button type="button" class="s-secondary" [disabled]="cargando()" (click)="cargar()">
+      Actualizar
+    </button>
+  </div>
 </div>
 @if (cargando() && !tablero()) {
   <div class="s-loading" role="status"><span class="s-spinner"></span>Calculando indicadores…</div>
