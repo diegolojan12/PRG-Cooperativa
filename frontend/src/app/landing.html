@@ -1,19 +1,30 @@
 <!-- ===================== CABECERA ===================== -->
-<header class="mainHeader">
+<header class="mainHeader" (keydown.escape)="menuOpen.set(false)">
   <h2 class="logotipo">
     <span class="logoIcon"><i></i><i></i><i></i></span>SUMA
   </h2>
-  <nav class="mainNav">
-    <a href="#inicio">Inicio</a>
-    <a href="#como-funciona">Cómo funciona</a>
-    <a href="#recompensas">Recompensas</a>
-    <a href="#comunidad">Comunidad</a>
-    <a href="#aprende">Aprende</a>
-    <a href="#bienestar">Bienestar</a>
+  <nav class="mainNav" id="mainNav" aria-label="Navegación principal" [class.is-open]="menuOpen()">
+    <a href="#inicio" (click)="menuOpen.set(false)">Inicio</a>
+    <a href="#como-funciona" (click)="menuOpen.set(false)">Cómo funciona</a>
+    <a href="#recompensas" (click)="menuOpen.set(false)">Recompensas</a>
+    <a href="#comunidad" (click)="menuOpen.set(false)">Comunidad</a>
+    <a href="#aprende" (click)="menuOpen.set(false)">Aprende</a>
+    <a href="#bienestar" (click)="menuOpen.set(false)">Bienestar</a>
+    <a class="mobileLogin" routerLink="/iniciar-sesion">Iniciar sesión</a>
   </nav>
   <div class="headerAcciones">
-    <a href="internas/iniciar-sesion.html" class="linkLogin">Iniciar sesión</a>
-    <a href="internas/registro.html" class="btnPrimario">Crear cuenta <span>→</span></a>
+    <a routerLink="/iniciar-sesion" class="linkLogin">Iniciar sesión</a>
+    <a routerLink="/registro" class="btnPrimario">Crear cuenta <span>→</span></a>
+    <button
+      type="button"
+      class="mobileMenu"
+      aria-controls="mainNav"
+      [attr.aria-expanded]="menuOpen()"
+      [attr.aria-label]="menuOpen() ? 'Cerrar menú' : 'Abrir menú'"
+      (click)="menuOpen.set(!menuOpen())"
+    >
+      <s-icon [name]="menuOpen() ? 'close' : 'menu'" />
+    </button>
   </div>
 </header>
 
@@ -30,8 +41,8 @@
     </p>
 
     <div class="botones">
-      <a href="internas/registro.html" class="btnPrimario">Empieza a referir <span>→</span></a>
-      <a href="#" class="btnSecundario"><span class="play">▶</span> Conoce más</a>
+      <a routerLink="/registro" class="btnPrimario">Empieza a referir <span>→</span></a>
+      <a href="#como-funciona" class="btnSecundario"><span class="play">▶</span> Conoce más</a>
     </div>
 
     <div class="comunidad">
@@ -412,8 +423,8 @@
   <span class="eyebrow oscuro">TU COMUNIDAD TE ESPERA</span>
   <h2>Lo que compartes,<br /><span>vuelve a ti.</span></h2>
   <p>Únete a SUMA y empieza a convertir tus conexiones en oportunidades para todos.</p>
-  <a href="internas/registro.html" class="btnPrimario">Crear mi cuenta <span>→</span></a>
-  <small>Registro gratuito para socios de la Cooperativa Horizonte.</small>
+  <a routerLink="/registro" class="btnPrimario">Crear mi cuenta <span>→</span></a>
+  <small>Registro gratuito para socios de la Cooperativa Padre Julián Lorente.</small>
 </section>
 
 <!-- ===================== PIE ===================== -->
@@ -424,9 +435,19 @@
         <span class="logoIcon"><i></i><i></i><i></i></span>SUMA
       </h2>
       <p>Una plataforma para conectar, aprender y crecer juntos.</p>
+      <a class="footerLogin" routerLink="/iniciar-sesion"
+        >¿Ya eres socio? <strong>Inicia sesión</strong></a
+      >
       <div class="iniciativa">
-        <span class="logoCoop">🏀</span>
-        <div><small>UNA INICIATIVA DE</small><strong>Cooperativa Horizonte</strong></div>
+        <img
+          class="logoCoop"
+          src="logo-padre-julian-lorente.png"
+          alt=""
+          width="60"
+          height="60"
+          loading="lazy"
+        />
+        <div><small>UNA INICIATIVA DE</small><strong>Cooperativa Padre Julián Lorente</strong></div>
       </div>
     </div>
 
@@ -448,7 +469,7 @@
 
     <div class="footerCol">
       <h4>HABLEMOS</h4>
-      <a href="#">info@suma-ejemplo.ec</a>
+      <a href="mailto:info@coopjulianlorente.fin.ec">info@coopjulianlorente.fin.ec</a>
       <a href="#">Loja, Ecuador</a>
       <div class="redes"><a href="#">f</a><a href="#">ig</a><a href="#">yt</a></div>
     </div>

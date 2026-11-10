@@ -1,14 +1,15 @@
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { App } from './app';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
+import { App } from './app';
 import { routes } from './app.routes';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideRouter(routes)],
+      providers: [provideRouter(routes), provideHttpClient()],
     }).compileComponents();
   });
 
@@ -22,7 +23,17 @@ describe('App', () => {
     const harness = await RouterTestingHarness.create('/');
     expect(harness.routeNativeElement?.querySelector('.logotipo')?.textContent).toContain('SUMA');
     expect(harness.routeNativeElement?.querySelector('.linkLogin')?.getAttribute('href')).toBe(
-      'internas/iniciar-sesion.html',
+      '/iniciar-sesion',
+    );
+  });
+
+  it('conserva el token de los enlaces de recuperación anteriores', async () => {
+    const harness = await RouterTestingHarness.create(
+      '/internas/recuperar.html?token=token-prueba',
+    );
+    expect(TestBed.inject(Router).url).toBe('/recuperar-contrasena?token=token-prueba');
+    expect(harness.routeNativeElement?.querySelector('h1')?.textContent).toContain(
+      'Crea tu nueva contraseña',
     );
   });
 });

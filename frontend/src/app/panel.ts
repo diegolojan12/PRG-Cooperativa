@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Api, User } from './api';
 import { Icon } from './icon';
 import { FocusDialog } from './focus-dialog';
@@ -14,6 +14,7 @@ import { FocusDialog } from './focus-dialog';
 export class Panel implements OnInit {
   private api = inject(Api);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   user = signal<User | null>(null);
   page = signal('panel');
   loading = signal(true);
@@ -46,6 +47,22 @@ export class Panel implements OnInit {
     { id: 'notificaciones', label: 'Notificaciones', group: 'Comunidad' },
     { id: 'ayuda', label: 'Centro de ayuda', group: 'Comunidad' },
   ];
+  previewModules: { id: string; label: string; icon: string; roles: User['rol'][] }[] = [
+    { id: 'retos', label: 'Retos y recompensas', icon: 'gift', roles: ['ADMIN', 'SOCIO'] },
+    {
+      id: 'capacitaciones',
+      label: 'Capacitaciones y talleres',
+      icon: 'book',
+      roles: ['ADMIN', 'SOCIO'],
+    },
+    { id: 'juegos', label: 'Juegos', icon: 'game', roles: ['ADMIN', 'SOCIO'] },
+    { id: 'publicaciones', label: 'Publicaciones', icon: 'post', roles: ['ADMIN'] },
+    { id: 'reportes', label: 'Reportes', icon: 'report', roles: ['ADMIN'] },
+    { id: 'aprende', label: 'Aprende', icon: 'book', roles: ['SOCIO'] },
+    { id: 'comunidad', label: 'Comunidad', icon: 'usuarios', roles: ['SOCIO'] },
+    { id: 'recompensas', label: 'Recompensas', icon: 'points', roles: ['SOCIO'] },
+    { id: 'perfil', label: 'Mi perfil', icon: 'profile', roles: ['SOCIO'] },
+  ];
   states = ['PENDIENTE', 'CONTACTADO', 'VALIDADO', 'RECHAZADO'];
   labels: Record<string, string> = {
     PENDIENTE: 'Pendiente',
@@ -55,9 +72,22 @@ export class Panel implements OnInit {
     ADMIN: 'Administrador',
     SOCIO: 'Socio',
   };
-  visibleNav = computed(() => this.nav.filter((x) => this.user()?.modulos.includes(x.id)));
+  visibleNav = computed(() => this.nav.filter((item) => this.allowed(item.id)));
+  visiblePreviews = computed(() => {
+    const role = this.user()?.rol;
+    return role ? this.previewModules.filter((item) => item.roles.includes(role)) : [];
+  });
+  preview = computed(() => this.visiblePreviews().find((item) => item.id === this.page()));
+  quickLinks = computed(() =>
+    this.visibleNav()
+      .filter((item) => item.id !== 'panel')
+      .slice(0, 3),
+  );
   title = computed(
-    () => this.nav.find((x) => x.id === this.page())?.label || 'Página no disponible',
+    () =>
+      this.preview()?.label ??
+      this.nav.find((item) => item.id === this.page())?.label ??
+      'Página no disponible',
   );
   initials = computed(
     () =>
@@ -253,7 +283,7 @@ export class Panel implements OnInit {
   async logout() {
     await this.mutate(async () => {
       await this.api.call('POST', '/auth/logout', {});
-      location.assign('/internas/iniciar-sesion.html');
+      await this.router.navigate(['/iniciar-sesion']);
     });
   }
   async mutate(action: () => Promise<void>) {

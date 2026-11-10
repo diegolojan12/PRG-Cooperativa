@@ -1,10 +1,12 @@
 <div class="suma-app" (keydown.escape)="modal.set(''); sidebar.set(false)">
-  <a class="s-skip" href="#content">Saltar al contenido</a>
+  <a class="s-skip" href="#content" (click)="$event.preventDefault(); content.focus()"
+    >Saltar al contenido</a
+  >
   @if (sidebar()) {
     <button class="s-scrim" aria-label="Cerrar menú" (click)="sidebar.set(false)"></button>
   }
   <aside class="s-sidebar" [class.open]="sidebar()">
-    <a class="s-brand" href="/"
+    <a class="s-brand" routerLink="/"
       ><span class="logoIcon"><i></i><i></i><i></i></span>SUMA<span class="s-brand-dot">.</span></a
     >
     <p class="s-tagline">Conectamos para crecer</p>
@@ -22,6 +24,18 @@
             <span class="s-count">{{ unread() }}</span>
           }
         </a>
+      }
+      @if (visiblePreviews().length) {
+        <span class="s-nav-label">Próximamente</span>
+        @for (item of visiblePreviews(); track item.id) {
+          <a
+            [routerLink]="['/panel', item.id]"
+            [class.active]="page() === item.id"
+            [attr.aria-current]="page() === item.id ? 'page' : null"
+          >
+            <s-icon [name]="item.icon" />{{ item.label }}
+          </a>
+        }
       }
     </nav>
     <div class="s-sidebar-bottom">
@@ -69,7 +83,7 @@
         </div>
       </div>
     </header>
-    <main id="content" class="s-content">
+    <main #content id="content" class="s-content" tabindex="-1">
       @if (loading()) {
         <div class="s-loading" role="status">
           <span class="s-spinner"></span>Preparando tu espacio SUMA…
@@ -81,6 +95,14 @@
           <p>{{ error() }}</p>
           <button class="s-primary" (click)="load()">Volver a intentar</button>
         </div>
+      } @else if (preview(); as module) {
+        <section class="s-card s-empty s-preview">
+          <span class="s-feature-icon yellow"><s-icon [name]="module.icon" /></span>
+          <p class="s-eyebrow muted">PRÓXIMAMENTE</p>
+          <h1>{{ module.label }}</h1>
+          <p>Este módulo estará disponible próximamente.</p>
+          <a class="s-primary" routerLink="/panel">Volver al resumen <s-icon name="arrow" /></a>
+        </section>
       } @else if (!allowed(page())) {
         <div class="s-empty s-card">
           <s-icon name="roles" />
@@ -228,6 +250,24 @@
               }
             </section>
           </div>
+          @if (quickLinks().length) {
+            <section class="s-quick-access" aria-labelledby="quickTitle">
+              <h2 id="quickTitle">Accesos rápidos</h2>
+              <div class="s-quick-grid">
+                @for (item of quickLinks(); track item.id) {
+                  <a
+                    class="s-card s-quick-link"
+                    [routerLink]="['/panel', item.id]"
+                    [attr.aria-label]="'Ir a ' + item.label"
+                  >
+                    <span class="s-feature-icon yellow"><s-icon [name]="item.id" /></span>
+                    <strong>{{ item.label }}</strong>
+                    <s-icon name="arrow" />
+                  </a>
+                }
+              </div>
+            </section>
+          }
         }
         @if (page() !== 'panel') {
           <div class="s-page-heading">

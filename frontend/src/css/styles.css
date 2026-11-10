@@ -1029,7 +1029,8 @@ footer.mainFooter h6{ text-align: center; font-weight: 400; color: #6f819f; padd
 /*=========================================================
    PAGINAS INTERNAS: INICIAR SESION Y REGISTRO
 =========================================================*/
-body.bodyAuth{
+suma-login, suma-register, suma-recovery{
+    display: block;
     background: #f1f5fa;
     background-image: none;
     min-height: 100vh;
@@ -1326,7 +1327,7 @@ body.bodyAuth{
     background: var(--amarillo);
     position: relative;
     overflow: hidden;
-    padding: 70px 6% 0;
+    padding: clamp(32px, 7vh, 70px) 6% 0;
     position: sticky;
     top: 0;
     height: 100vh;
@@ -1342,7 +1343,7 @@ body.bodyAuth{
     border: 1px solid rgba(18,49,95,.1);
 }
 .authPanel h2{
-    font-size: 72px;
+    font-size: clamp(44px, 5vw, 72px);
     line-height: .95;
     letter-spacing: -4px;
     font-weight: 800;
@@ -1366,9 +1367,9 @@ body.bodyAuth{
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1000px){
-    .authLayout{ flex-direction: column-reverse; }
+    .authLayout{ flex-direction: column; }
     .authLado, .authPanel{ width: 100%; }
-    .authPanel{ position: relative; height: 480px; padding-top: 40px; }
+    .authPanel{ position: relative; height: auto; padding: 32px 6%; }
     .authPanel h2{ font-size: 44px; letter-spacing: -2px; }
     .authPanel .heroVisual{ display: none; }
     .authCard{ padding: 32px 24px; }
@@ -1377,4 +1378,124 @@ body.bodyAuth{
 @media (max-width: 600px){
     .fila2, .opciones{ grid-template-columns: 1fr; }
     .authPanel{ display: none; }
+}
+
+/* Navegación, identidad de la cooperativa y formularios */
+.mainHeader{
+    position: relative;
+    z-index: 2;
+}
+.mainHeader .mobileMenu, .mainHeader .mainNav .mobileLogin{
+    display: none;
+}
+.mainHeader :focus-visible, .authCard :focus-visible{
+    outline: 3px solid var(--azul);
+    outline-offset: 4px;
+}
+.footerLogin{
+    display: inline-block;
+    margin-bottom: 22px;
+    color: #fff;
+    text-underline-offset: 4px;
+}
+.iniciativa .logoCoop{
+    flex-shrink: 0;
+    object-fit: contain;
+    padding: 6px;
+    background: #fff;
+}
+.authCard [hidden]{
+    display: none !important;
+}
+.authCard button:disabled{
+    cursor: wait;
+    opacity: .7;
+    transform: none;
+}
+.authCard .msgErrorSuelto{
+    display: block;
+    margin: -14px 0 18px;
+    color: #b42318;
+    font-size: 13px;
+}
+.recoveryStatus{
+    margin-top: 16px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+.recoveryStatus:empty{
+    margin-top: 0;
+}
+.recoveryStatus a{
+    color: var(--azul);
+}
+.authPanel .heroVisual{
+    margin-top: clamp(0px, 4vh, 40px);
+}
+.authPanel .phone{
+    top: 22px;
+}
+@media (max-width: 1220px){
+    header.mainHeader .mainNav{
+        display: none;
+    }
+    header.mainHeader .mainNav.is-open{
+        position: absolute;
+        inset: calc(100% + 8px) 0 auto;
+        display: grid;
+        padding: 10px;
+        border: 1px solid #e6ebf3;
+        border-radius: 20px;
+        background: #fff;
+        box-shadow: 0 16px 32px rgba(18, 49, 95, .14);
+    }
+    .mainHeader .mobileMenu{
+        display: inline-grid;
+        place-items: center;
+        min-width: 44px;
+        min-height: 44px;
+        border: 1px solid #d5dce8;
+        border-radius: 12px;
+        background: #fff;
+        color: var(--azul-oscuro);
+        cursor: pointer;
+    }
+}
+@media (max-width: 600px){
+    .mainHeader .mainNav .mobileLogin{
+        display: block;
+    }
+    .mainHeader .headerAcciones{
+        gap: 8px;
+    }
+    .mainHeader .btnPrimario{
+        padding: 12px 14px;
+        font-size: 14px;
+        white-space: nowrap;
+    }
+    .authLado{
+        padding: 24px 12px;
+    }
+    .authCard{
+        border-radius: 24px;
+    }
+    .authCard h1{
+        font-size: clamp(30px, 9vw, 40px);
+        letter-spacing: -.06em;
+    }
+    .authCard .accionesPaso{
+        gap: 10px;
+    }
+    .authCard .btnOutline, .authCard .btnBtn{
+        padding-inline: 18px;
+    }
+    .toast{
+        inset-inline: 12px;
+        top: 12px;
+    }
+}
+@media (prefers-reduced-motion: reduce){
+    .mainHeader *, .authLayout *{
+        transition: none;
+    }
 }

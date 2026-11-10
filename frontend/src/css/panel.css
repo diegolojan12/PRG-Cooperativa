@@ -11,9 +11,11 @@
   min-height: 100vh;
   background-color: #f1f5f9;
   background-image:
-    linear-gradient(#17345503 1px, transparent 1px),
-    linear-gradient(90deg, #17345503 1px, transparent 1px);
-  background-size: 28px 28px;
+    radial-gradient(circle at 95% 8%, #ffc6001c 0 95px, transparent 96px),
+    radial-gradient(circle at 8% 94%, #2e6dad15 0 130px, transparent 131px),
+    linear-gradient(#17345508 1px, transparent 1px),
+    linear-gradient(90deg, #17345508 1px, transparent 1px);
+  background-size: auto, auto, 28px 28px, 28px 28px;
 }
 .suma-app button,
 .suma-app input,
@@ -85,8 +87,9 @@
   z-index: 20;
   inset: 0 auto 0 0;
   width: 250px;
-  background: #fff;
-  border-right: 1px solid var(--line);
+  background: radial-gradient(circle at 48% 94%, #2e6dad55, transparent 45%), linear-gradient(180deg, #071b33, #12315a);
+  color: #fff;
+  border-right: 1px solid #ffffff24;
   padding: 31px 20px 18px;
   display: flex;
   flex-direction: column;
@@ -132,21 +135,18 @@
   border-radius: 11px;
   font-size: 12px;
   font-weight: 550;
-  color: #6a7a90;
+  color: #d0deed;
   margin: 3px 0;
   transition: 0.15s;
 }
 .s-sidebar nav a:hover {
-  background: #f3f6fa;
-  color: var(--navy);
+  background: #ffffff16;
+  color: #fff;
 }
 .s-sidebar nav a.active {
-  background: var(--navy);
-  color: #fff;
-  box-shadow: 0 5px 12px #12315a1a;
-}
-.s-sidebar nav a.active s-icon {
-  color: var(--yellow);
+  background: var(--yellow);
+  color: var(--navy);
+  box-shadow: 0 5px 12px #071b3340;
 }
 .s-sidebar nav s-icon {
   width: 19px;
@@ -1963,4 +1963,70 @@
     transition: none !important;
     scroll-behavior: auto !important;
   }
+}
+
+
+.s-sidebar > nav {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #a9bed6 #12315a;
+}
+.s-sidebar > :not(nav) {
+  flex-shrink: 0;
+}
+.s-sidebar .s-tagline,
+.s-sidebar .s-nav-label,
+.s-sidebar .s-version,
+.s-sidebar .s-logout {
+  color: #c2d3e7;
+}
+.s-sidebar :focus-visible {
+  outline-color: #fff;
+}
+.s-sidebar .s-community {
+  color: var(--navy);
+}
+.s-sidebar .s-logout:hover {
+  color: #fff;
+}
+.s-sidebar nav a.active .s-count {
+  background: var(--navy);
+  color: #fff;
+}
+.s-preview {
+  background:
+    radial-gradient(circle at 100% 0, #ffc60022, transparent 32%),
+    radial-gradient(circle at 0 100%, #2e6dad16, transparent 32%), #fff;
+}
+.s-preview .s-feature-icon {
+  display: inline-grid;
+  place-items: center;
+  margin-bottom: 12px;
+}
+.s-preview .s-primary {
+  justify-self: center;
+}
+.s-quick-access {
+  margin-top: 24px;
+}
+.s-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+.suma-app .s-quick-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+}
+.suma-app .s-quick-link:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+.s-quick-link > s-icon:last-child {
+  margin-left: auto;
 }

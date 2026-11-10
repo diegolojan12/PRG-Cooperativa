@@ -25,22 +25,7 @@
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              },
-              {
-                "glob": "**/*",
-                "input": "src/css",
-                "output": "css"
-              },
-              {
-                "glob": "**/*",
-                "input": "src/internas",
-                "output": "internas"
-              }
-            ],
+            "assets": [{ "glob": "**/*", "input": "public" }],
             "styles": ["src/css/styles.css", "src/css/panel.css"]
           },
           "configurations": {

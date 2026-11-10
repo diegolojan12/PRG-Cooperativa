@@ -1,129 +1,92 @@
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Iniciar sesión - SUMA</title>
-    <link rel="stylesheet" type="text/css" href="../css/styles.css" />
-  </head>
+<!-- Mensaje de error (aparece arriba a la derecha) -->
+<suma-auth-notice [message]="message()" [success]="success()" (dismiss)="message.set('')" />
 
-  <body class="bodyAuth">
-    <!-- Mensaje de error (aparece arriba a la derecha) -->
-    <div class="toast" id="toast">
-      <span class="i">!</span>
-      <span id="toastTexto">Revisa los campos marcados.</span>
-      <button type="button" id="toastCerrar">×</button>
-    </div>
+<div class="authLayout">
+  <!-- ===================== FORMULARIO ===================== -->
+  <section class="authLado">
+    <div class="authCard">
+      <a routerLink="/" class="authLogo"
+        ><span class="logoIcon"><i></i><i></i><i></i></span>SUMA</a
+      >
 
-    <div class="authLayout">
-      <!-- ===================== FORMULARIO ===================== -->
-      <section class="authLado">
-        <div class="authCard">
-          <a href="../index.html" class="authLogo"
-            ><span class="logoIcon"><i></i><i></i><i></i></span>SUMA</a
-          >
+      <div class="alerta" id="alerta" [hidden]="!expired()">
+        <span class="i">i</span>
+        <p>Tu sesión se cerró por inactividad. Vuelve a ingresar.</p>
+        <button
+          type="button"
+          id="alertaCerrar"
+          aria-label="Cerrar aviso"
+          (click)="expired.set(false)"
+        >
+          ×
+        </button>
+      </div>
 
-          <div class="alerta" id="alerta" style="display: none">
-            <span class="i">i</span>
-            <p>Tu sesión se cerró por inactividad. Vuelve a ingresar.</p>
-            <button type="button" id="alertaCerrar">×</button>
-          </div>
+      <span class="eyebrow">ACCESO PARA SOCIOS</span>
+      <h1>Bienvenido de nuevo</h1>
+      <p class="lead">Ingresa para seguir sumando puntos.</p>
 
-          <span class="eyebrow">ACCESO PARA SOCIOS</span>
-          <h1>Bienvenido de nuevo</h1>
-          <p class="lead">Ingresa para seguir sumando puntos.</p>
-
-          <form id="formLogin" novalidate>
-            <div class="campo" id="campoCorreo">
-              <label for="correo">Correo electrónico</label>
-              <input
-                type="email"
-                id="correo"
-                placeholder="nombre@correo.com"
-                autocomplete="email"
-              />
-              <span class="ayuda"
-                >Usa tu correo registrado. Prueba: socio@suma.ec o admin@suma.ec</span
-              >
-              <span class="msgError">Ingresa un correo válido.</span>
-            </div>
-
-            <div class="campo" id="campoClave">
-              <div class="etiquetaFila">
-                <label for="clave">Contraseña</label>
-                <a href="recuperar.html">¿Olvidaste tu contraseña?</a>
-              </div>
-              <div class="conOjo">
-                <input
-                  type="password"
-                  id="clave"
-                  placeholder="Ingresa tu contraseña"
-                  autocomplete="current-password"
-                />
-                <button type="button" class="ojo" id="verClave" aria-label="Mostrar contraseña">
-                  👁
-                </button>
-              </div>
-              <span class="ayuda">Mínimo 8 caracteres. Prueba: Suma2026!</span>
-              <span class="msgError">La contraseña debe tener mínimo 8 caracteres.</span>
-            </div>
-
-            <button type="submit" class="btnPrimario btnAuth">Iniciar sesión <span>→</span></button>
-          </form>
-
-          <p class="pieAuth">¿Aún no eres parte? <a href="registro.html">Crear cuenta</a></p>
+      <form id="formLogin" (submit)="submit($event, correo.value, clave.value)" novalidate>
+        <div class="campo" id="campoCorreo" [class.error]="invalidEmail()">
+          <label for="correo">Correo electrónico</label>
+          <input
+            type="email"
+            id="correo"
+            #correo
+            required
+            [attr.aria-invalid]="invalidEmail()"
+            aria-describedby="ayudaCorreo"
+            placeholder="nombre@correo.com"
+            autocomplete="email"
+          />
+          <span class="ayuda" id="ayudaCorreo">Usa el correo con el que creaste tu cuenta.</span>
+          <span class="msgError">Ingresa un correo válido.</span>
         </div>
-      </section>
 
-      <!-- ===================== PANEL AMARILLO ===================== -->
-      <aside class="authPanel">
-        <h2>Tu comunidad te espera</h2>
-        <p>Vuelve a tus retos, puntos y recompensas. Cada conexión sigue sumando.</p>
-
-        <div class="heroVisual">
-          <div class="phone">
-            <div class="notch"></div>
-            <div class="pantalla">
-              <div class="saludo">
-                <div>
-                  <small>Hola, Daniela</small>
-                  <h4>Tu comunidad SUMA</h4>
-                </div>
-                <span class="avatarDM">DM</span>
-              </div>
-              <div class="saldo">
-                <small>Mi saldo</small>
-                <p class="puntos">2.480 <span>puntos</span></p>
-                <div class="nivelFila"><small>Nivel Impulsor</small><small>75%</small></div>
-                <div class="barra"><div class="barraRelleno" style="width: 75%"></div></div>
-              </div>
-              <div class="atajos">
-                <div class="atajo"><small>Referir</small></div>
-                <div class="atajo"><small>Retos</small></div>
-                <div class="atajo"><small>Premios</small></div>
-              </div>
-              <div class="retoCard">
-                <div class="retoTop"><h5>RETO SEMANAL</h5></div>
-                <div class="retoInfo">
-                  <strong>Ahorra con propósito</strong
-                  ><small>Completa 3 acciones y gana 120 puntos.</small>
-                </div>
-              </div>
-            </div>
+        <div class="campo" id="campoClave" [class.error]="invalidPassword()">
+          <div class="etiquetaFila">
+            <label for="clave">Contraseña</label>
+            <a routerLink="/recuperar-contrasena">¿Olvidaste tu contraseña?</a>
           </div>
-
-          <div class="flotante f-puntos">
-            <span class="icono amarillo">＋</span>
-            <div><small>Puntos ganados</small><strong>+250 SUMA</strong></div>
+          <div class="conOjo">
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              id="clave"
+              #clave
+              required
+              [attr.aria-invalid]="invalidPassword()"
+              aria-describedby="ayudaClave"
+              placeholder="Ingresa tu contraseña"
+              autocomplete="current-password"
+            />
+            <button
+              type="button"
+              class="ojo"
+              id="verClave"
+              [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+              (click)="showPassword.update(toggle)"
+            >
+              👁
+            </button>
           </div>
-          <div class="flotante f-insignia">
-            <span class="icono azul">★</span>
-            <div><small>Nueva insignia</small><strong>Conector estrella</strong></div>
-          </div>
+          <span class="ayuda" id="ayudaClave">Mínimo 8 caracteres.</span>
+          <span class="msgError">La contraseña debe tener mínimo 8 caracteres.</span>
         </div>
-      </aside>
-    </div>
 
-    <script src="/auth.js" defer></script>
-  </body>
-</html>
+        <button type="submit" class="btnPrimario btnAuth" [disabled]="busy()">
+          {{ busy() ? 'Ingresando…' : 'Iniciar sesión →' }}
+        </button>
+      </form>
+
+      <p class="pieAuth">¿Aún no eres parte? <a routerLink="/registro">Crear cuenta</a></p>
+    </div>
+  </section>
+
+  <!-- ===================== PANEL AMARILLO ===================== -->
+  <aside class="authPanel">
+    <h2>Tu comunidad te espera</h2>
+    <p>Vuelve a tus retos, puntos y recompensas. Cada conexión sigue sumando.</p>
+
+    <suma-auth-preview />
+  </aside>
+</div>

@@ -35,6 +35,11 @@ export class Icon {
     download: 'M12 3v12 M7 10l5 5 5-5 M4 17v4h16v-4',
     chevron: 'M8 10l4 4 4-4',
     mail: 'M3 5h18v14H3z M3 5l9 7 9-7',
+    book: 'M12 6C8 3 5 3 2 4v15c4-1 7-1 10 2 3-3 6-3 10-2V4c-3-1-6-1-10 2v15',
+    game: 'M7 7h10a4 4 0 0 1 4 3l1 5a3 3 0 0 1-5 3l-2-2H9l-2 2a3 3 0 0 1-5-3l1-5a4 4 0 0 1 4-3z M7 10v4 M5 12h4 M16 11h.01 M19 13h.01',
+    post: 'M5 3h14v18H5z M8 7h8 M8 11h8 M8 15h5',
+    report: 'M4 3v17h17 M8 16v-4 M13 16V8 M18 16V5',
+    profile: 'M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z M4 21v-2a5 5 0 0 1 5-5h6a5 5 0 0 1 5 5v2',
     gift: 'M3 8h18v4H3z M5 12v9h14v-9 M12 8v13 M12 8C1 8 5-4 12 8 19-4 23 8 12 8',
   };
 }

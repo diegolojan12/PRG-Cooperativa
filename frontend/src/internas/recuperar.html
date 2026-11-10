@@ -1,123 +1,93 @@
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Recuperar acceso · SUMA</title>
-    <link rel="stylesheet" href="/css/styles.css" />
-  </head>
-  <body class="bodyAuth">
-    <div class="authLayout">
-      <section class="authLado">
-        <div class="authCard">
-          <a href="/" class="authLogo"
-            ><span class="logoIcon"><i></i><i></i><i></i></span>SUMA</a
-          >
-          <span class="eyebrow">VOLVAMOS A CONECTAR</span>
-          <h1 id="heading">Recupera tu acceso</h1>
-          <p class="lead" id="intro">Te ayudamos a crear una nueva contraseña.</p>
-          <form id="recovery">
-            <div class="campo" id="emailField">
-              <label for="correo">Correo electrónico</label
-              ><input
-                id="correo"
-                type="email"
-                autocomplete="email"
-                placeholder="nombre@correo.com"
-                required
-              /><span class="ayuda">Usa el correo con el que creaste tu cuenta.</span>
-            </div>
-            <div id="passwordFields" hidden>
-              <div class="campo">
-                <label for="clave">Nueva contraseña</label
-                ><input
-                  id="clave"
-                  type="password"
-                  autocomplete="new-password"
-                  minlength="8"
-                  maxlength="128"
-                /><span class="ayuda">Mínimo 8 caracteres, una mayúscula y un número.</span>
-              </div>
-              <div class="campo">
-                <label for="confirmar">Repite la contraseña</label
-                ><input id="confirmar" type="password" autocomplete="new-password" />
-              </div>
-            </div>
-            <p id="message" role="status" style="margin: 16px 0; line-height: 1.6"></p>
-            <p id="dev" style="margin: 16px 0" hidden></p>
-            <button class="btnPrimario btnAuth" id="submit" type="submit">
-              Enviar instrucciones →
-            </button>
-          </form>
-          <p class="pieAuth"><a href="iniciar-sesion.html">← Volver a iniciar sesión</a></p>
+<div class="authLayout">
+  <section class="authLado">
+    <div class="authCard">
+      <a routerLink="/" class="authLogo"
+        ><span class="logoIcon"><i></i><i></i><i></i></span>SUMA</a
+      >
+      <span class="eyebrow">VOLVAMOS A CONECTAR</span>
+      <h1 id="heading">
+        {{
+          finished()
+            ? 'Contraseña actualizada'
+            : token()
+              ? 'Crea tu nueva contraseña'
+              : 'Recupera tu acceso'
+        }}
+      </h1>
+      <p class="lead" id="intro">
+        {{
+          finished()
+            ? 'Ya puedes iniciar sesión con tu nueva contraseña.'
+            : token()
+              ? 'Elige una contraseña segura para volver a SUMA.'
+              : 'Te ayudamos a crear una nueva contraseña.'
+        }}
+      </p>
+      <form
+        id="recovery"
+        [hidden]="finished()"
+        (submit)="submit($event, correo.value, clave.value, confirmar.value)"
+      >
+        <div class="campo" id="emailField" [hidden]="!!token()">
+          <label for="correo">Correo electrónico</label
+          ><input
+            id="correo"
+            #correo
+            type="email"
+            autocomplete="email"
+            placeholder="nombre@correo.com"
+            [required]="!token()"
+          /><span class="ayuda">Usa el correo con el que creaste tu cuenta.</span>
         </div>
-      </section>
-      <aside class="authPanel">
-        <span class="eyebrow oscuro">ESTAMOS CONTIGO</span>
-        <h2>Vuelve a lo que<br />te hace sumar.</h2>
-        <p>Tu comunidad, tus conexiones y nuevas oportunidades te esperan.</p>
-        <div style="font-size: 160px; color: #12315f; margin-top: 60px" aria-hidden="true">↗</div>
-      </aside>
-    </div>
-    <script>
-      const token = new URLSearchParams(location.search).get('token'),
-        $ = (id) => document.getElementById(id);
-      if (token) {
-        $('emailField').hidden = true;
-        $('correo').required = false;
-        $('passwordFields').hidden = false;
-        $('clave').required = true;
-        $('confirmar').required = true;
-        $('heading').textContent = 'Crea tu nueva contraseña';
-        $('submit').textContent = 'Guardar contraseña →';
+        <div id="passwordFields" [hidden]="!token()">
+          <div class="campo">
+            <label for="clave">Nueva contraseña</label
+            ><input
+              id="clave"
+              #clave
+              [required]="!!token()"
+              type="password"
+              autocomplete="new-password"
+              minlength="8"
+              maxlength="128"
+            /><span class="ayuda">Mínimo 8 caracteres, una mayúscula y un número.</span>
+          </div>
+          <div class="campo">
+            <label for="confirmar">Repite la contraseña</label
+            ><input
+              id="confirmar"
+              #confirmar
+              [required]="!!token()"
+              minlength="8"
+              maxlength="128"
+              type="password"
+              autocomplete="new-password"
+            />
+          </div>
+        </div>
+        <button class="btnPrimario btnAuth" id="submit" type="submit" [disabled]="busy()">
+          {{ busy() ? 'Procesando…' : token() ? 'Guardar contraseña →' : 'Enviar instrucciones →' }}
+        </button>
+      </form>
+      <p id="message" class="recoveryStatus" role="status">{{ message() }}</p>
+      @if (devToken() && !token()) {
+        <p id="dev" class="recoveryStatus">
+          Entorno local de prueba:
+          <a
+            routerLink="/recuperar-contrasena"
+            [queryParams]="{ token: devToken() }"
+            (click)="message.set('')"
+            >Abrir enlace de recuperación</a
+          >
+        </p>
       }
-      $('recovery').onsubmit = async (event) => {
-        event.preventDefault();
-        $('dev').hidden = true;
-        if (
-          token &&
-          ($('clave').value !== $('confirmar').value ||
-            !/[A-Z]/.test($('clave').value) ||
-            !/[0-9]/.test($('clave').value))
-        ) {
-          $('message').textContent =
-            'Las contraseñas deben coincidir e incluir una mayúscula y un número.';
-          return;
-        }
-        $('submit').disabled = true;
-        try {
-          const response = await fetch('/api/auth/' + (token ? 'reset' : 'forgot'), {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(
-              token ? { token, clave: $('clave').value } : { correo: $('correo').value },
-            ),
-          });
-          const data = await response.json();
-          if (!response.ok) throw Error(data.message);
-          $('message').textContent = data.message;
-          if (data.devResetUrl) {
-            $('dev').hidden = false;
-            $('dev').textContent = 'Entorno local de prueba: ';
-            const link = document.createElement('a');
-            link.href = data.devResetUrl;
-            link.textContent = 'Abrir enlace de recuperación';
-            $('dev').append(link);
-          }
-          if (token) {
-            $('passwordFields').hidden = true;
-            $('submit').hidden = true;
-            history.replaceState(null, '', location.pathname);
-          }
-        } catch (error) {
-          $('message').textContent =
-            error.message === 'Failed to fetch'
-              ? 'No se pudo conectar al servidor.'
-              : error.message;
-        } finally {
-          $('submit').disabled = false;
-        }
-      };
-    </script>
-  </body>
-</html>
+      <p class="pieAuth"><a routerLink="/iniciar-sesion">← Volver a iniciar sesión</a></p>
+    </div>
+  </section>
+  <aside class="authPanel">
+    <span class="eyebrow oscuro">ESTAMOS CONTIGO</span>
+    <h2>Vuelve a lo que<br />te hace sumar.</h2>
+    <p>Tu comunidad, tus conexiones y nuevas oportunidades te esperan.</p>
+    <suma-auth-preview badgeLabel="Cuenta protegida" badgeValue="Acceso seguro" />
+  </aside>
+</div>
