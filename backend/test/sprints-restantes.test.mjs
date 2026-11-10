@@ -10,6 +10,7 @@ import request from 'supertest';
 import { Database } from '../src/database.mjs';
 import { createApi } from '../src/api.mjs';
 import { hoyEcuador } from '../src/dominio/campanias.mjs';
+import { ResultadoCapacitacion } from '../src/dominio/capacitaciones.mjs';
 
 const dia = 86_400_000;
 const ahora = () => new Date().toISOString();
@@ -256,6 +257,285 @@ test('Flujos integrados del backlog posterior al Sprint 2', async (t) => {
         assert.equal(ok(await pausa.a.get('/api/puntos')).saldo, 0);
         ok(await estado(c.id, 'FINALIZADA'));
         assert.equal((await estado(c.id, 'ACTIVA')).status, 409);
+      },
+    );
+
+    await t.test(
+      'HU-035, HU-036 y HU-041 a HU-043: taller, cupo concurrente, recordatorio, asistencia y reto',
+      async () => {
+        const inicio = new Date(Date.now() + 24.5 * 3_600_000).toISOString();
+        const taller = ok(
+          await gestor.post('/api/talleres').send({
+            titulo: 'Taller piloto',
+            descripcion: 'Taller de prueba',
+            inicio,
+            lugar: 'Loja',
+            cupos: 1,
+          }),
+          201,
+        );
+        const reto = ok(
+          await admin.post('/api/retos').send({
+            titulo: 'Asiste a un taller',
+            descripcion: 'Completa una asistencia',
+            inicio: fecha(-1),
+            fin: fecha(5),
+            actividad: 'TALLER',
+            meta: 1,
+            premio: 41,
+          }),
+          201,
+        );
+        const urls = '/api/talleres/' + taller.id;
+        const intentos = await Promise.all(
+          [socio, titular.a].map((a) => a.post(urls + '/inscripcion').send({})),
+        );
+        assert.deepEqual(intentos.map((r) => r.status).sort(), [201, 409]);
+        const ganador = intentos[0].status === 201 ? { a: socio, u } : titular;
+        ok(
+          await ganador.a
+            .post('/api/retos/' + reto.id + '/participar')
+            .send({}),
+        );
+        const retoPendiente = ok(
+          await admin.post('/api/retos').send({
+            titulo: 'Reto con recordatorio',
+            descripcion: 'Meta de dos asistencias',
+            inicio: fecha(-1),
+            fin: fecha(7),
+            actividad: 'TALLER',
+            meta: 2,
+            premio: 55,
+          }),
+          201,
+        );
+        ok(
+          await ganador.a
+            .post('/api/retos/' + retoPendiente.id + '/participar')
+            .send({}),
+        );
+        await api.recordatorios();
+        await api.recordatorios();
+        const notas = ok(
+          await ganador.a.get('/api/notificaciones/bandeja'),
+        ).items;
+        assert.equal(
+          notas.filter(
+            (x) =>
+              x.titulo === 'Tu taller empieza mañana' &&
+              x.mensaje === 'Taller piloto',
+          ).length,
+          1,
+        );
+        assert.equal(
+          (
+            await gestor
+              .patch(urls + '/asistencia/' + ganador.u.id)
+              .send({ asistencia: 'ASISTIO' })
+          ).status,
+          409,
+        );
+        await db.query('UPDATE "Taller" SET inicio=$2 WHERE id=$1', [
+          taller.id,
+          new Date(Date.now() - 60_000).toISOString(),
+        ]);
+        ok(
+          await gestor
+            .patch(urls + '/asistencia/' + ganador.u.id)
+            .send({ asistencia: 'ASISTIO' }),
+        );
+        assert.equal(
+          (
+            await gestor
+              .patch(urls + '/asistencia/' + ganador.u.id)
+              .send({ asistencia: 'ASISTIO' })
+          ).status,
+          409,
+        );
+        assert.equal(
+          ok(await ganador.a.get('/api/retos')).find((r) => r.id === reto.id)
+            .porcentaje,
+          100,
+        );
+        assert.ok(
+          ok(await ganador.a.get('/api/puntos')).items.some(
+            (m) => m.actividad === 'RETO' && m.cantidad === 41,
+          ),
+        );
+        assert.equal(
+          ok(await ganador.a.get('/api/retos')).find(
+            (r) => r.id === retoPendiente.id,
+          ).porcentaje,
+          50,
+        );
+        const ventana =
+          Date.parse(fecha(7) + 'T23:59:59.999-05:00') - 72.5 * 3_600_000;
+        await api.recordatorios(ventana);
+        await api.recordatorios(ventana);
+        assert.equal(
+          ok(await ganador.a.get('/api/notificaciones/bandeja')).items.filter(
+            (n) =>
+              n.titulo === 'Tu reto termina pronto' &&
+              n.mensaje === 'Reto con recordatorio',
+          ).length,
+          1,
+        );
+        const cancelar = ok(
+          await gestor.post('/api/talleres').send({
+            titulo: 'Taller para cancelar',
+            descripcion: 'Comprobar liberación',
+            inicio,
+            lugar: 'Loja',
+            cupos: 1,
+          }),
+          201,
+        );
+        ok(
+          await ganador.a
+            .post('/api/talleres/' + cancelar.id + '/inscripcion')
+            .send({}),
+          201,
+        );
+        ok(
+          await gestor
+            .patch('/api/talleres/' + cancelar.id + '/cancelar')
+            .send({}),
+        );
+        const cancelado = ok(await ganador.a.get('/api/talleres')).find(
+          (x) => x.id === cancelar.id,
+        );
+        assert.equal(cancelado.disponibles, 1);
+        assert.equal(cancelado.inscripcion, 'CANCELADA');
+      },
+    );
+
+    await t.test(
+      'HU-037 y HU-038: banco, 10 preguntas, reloj en servidor y calificación',
+      async () => {
+        const pregunta = {
+          enunciado: 'Pregunta de prueba',
+          opciones: ['Opción 1', 'Opción 2'],
+          correcta: 0,
+          tema: 'AHORRO',
+          dificultad: 'BASICO',
+        };
+        assert.equal(
+          (await socio.post('/api/trivia/preguntas').send(pregunta)).status,
+          403,
+        );
+        for (let i = 0; i < 10; i++)
+          ok(
+            await gestor
+              .post('/api/trivia/preguntas')
+              .send({ ...pregunta, enunciado: pregunta.enunciado + ' ' + i }),
+            201,
+          );
+        let p = ok(await socio.post('/api/trivia/partidas').send({}));
+        assert.equal(p.total, 10);
+        assert.equal(p.pregunta.correcta, undefined);
+        await db.query('UPDATE "PartidaTrivia" SET vence=$2 WHERE id=$1', [
+          p.id,
+          new Date(Date.now() - 1000).toISOString(),
+        ]);
+        for (let i = 0; i < 10; i++)
+          p = ok(
+            await socio
+              .post('/api/trivia/partidas/' + p.id + '/respuesta')
+              .send({ numero: p.numero, opcion: 0 }),
+          );
+        assert.equal(p.estado, 'COMPLETADA');
+        assert.equal(p.aciertos, 9);
+        assert.equal(
+          ok(await socio.get('/api/puntos')).items.filter(
+            (m) => m.actividad === 'TRIVIA',
+          ).length,
+          1,
+        );
+        for (let i = 0; i < 2; i++) {
+          const siguiente = ok(
+            await socio.post('/api/trivia/partidas').send({}),
+          );
+          const reanudada = ok(
+            await socio.post('/api/trivia/partidas').send({}),
+          );
+          assert.equal(reanudada.id, siguiente.id);
+          await db.query(
+            'UPDATE "PartidaTrivia" SET "vencePartida"=$2 WHERE id=$1',
+            [siguiente.id, new Date(Date.now() - 1000).toISOString()],
+          );
+        }
+        assert.equal(
+          (await socio.post('/api/trivia/partidas').send({})).status,
+          429,
+        );
+      },
+    );
+
+    await t.test(
+      'HU-039 y HU-040: material, evaluación, certificado PDF y crédito único',
+      async () => {
+        const preguntas = Array.from({ length: 5 }, (_, i) => ({
+          enunciado: 'Evaluación ' + i,
+          opciones: ['Sí', 'No'],
+          correcta: 0,
+        }));
+        const c = ok(
+          await gestor.post('/api/capacitaciones').send({
+            titulo: 'Curso piloto',
+            descripcion: 'Formación de prueba',
+            preguntas,
+          }),
+          201,
+        );
+        const url = '/api/capacitaciones/' + c.id;
+        assert.equal(
+          (await gestor.patch(url + '/estado').send({ estado: 'ACTIVA' }))
+            .status,
+          409,
+        );
+        const archivo = await ResultadoCapacitacion.pdf({
+          nombreCertificado: 'Prueba',
+          cursoCertificado: 'Material',
+          aciertos: 5,
+          total: 5,
+          fecha: ahora(),
+          certificado: 'prueba',
+        });
+        ok(
+          await gestor
+            .post(url + '/material')
+            .set('Content-Type', 'application/octet-stream')
+            .send(archivo),
+        );
+        ok(await gestor.patch(url + '/estado').send({ estado: 'ACTIVA' }));
+        const curso = ok(await socio.get(url));
+        assert.equal(curso.preguntas[0].correcta, undefined);
+        const r = ok(
+          await socio
+            .post(url + '/evaluar')
+            .send({ version: curso.version, respuestas: [0, 0, 0, 0, 1] }),
+        );
+        assert.equal(r.aciertos, 4);
+        const repetido = ok(
+          await socio
+            .post(url + '/evaluar')
+            .send({ version: curso.version, respuestas: [0, 0, 0, 0, 1] }),
+        );
+        assert.equal(repetido.certificado, r.certificado);
+        assert.equal(
+          ok(await socio.get('/api/puntos')).items.filter(
+            (m) => m.actividad === 'CAPACITACION',
+          ).length,
+          1,
+        );
+        const cert = await socio.get(url + '/certificado');
+        assert.equal(cert.status, 200);
+        assert.match(cert.headers['content-type'], /^application\/pdf/);
+        assert.equal(
+          ok(await request(app).get('/api/certificados/' + r.certificado))
+            .curso,
+          'Curso piloto',
+        );
       },
     );
 

@@ -1,0 +1,137 @@
+<div class="s-page-heading">
+  <div>
+    <h1>Talleres</h1>
+    <p>Consulta el calendario y reserva tu cupo.</p>
+  </div>
+  @if (puedeGestionar()) {
+    <button type="button" class="s-primary" (click)="abrir()">Publicar taller</button>
+  }
+</div>
+@if (error()) {
+  <p role="alert">{{ error() }}</p>
+}
+@if (formulario()) {
+  <form class="s-card s-settings" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+    <h2>{{ editando() ? 'Editar taller' : 'Publicar taller' }}</h2>
+    <app-campo para="tallerTitulo" etiqueta="Título" ayuda="Hasta 100 caracteres."
+      ><input id="tallerTitulo" formControlName="titulo" maxlength="100"
+    /></app-campo>
+    <app-campo
+      para="tallerDescripcion"
+      etiqueta="Descripción"
+      ayuda="Explica el propósito del taller."
+    >
+      <textarea id="tallerDescripcion" formControlName="descripcion" maxlength="500"></textarea>
+    </app-campo>
+    <app-campo
+      para="tallerInicio"
+      etiqueta="Fecha y hora"
+      ayuda="Elige una fecha futura en hora continental de Ecuador."
+      ><input id="tallerInicio" type="datetime-local" formControlName="inicio"
+    /></app-campo>
+    <app-campo para="tallerLugar" etiqueta="Lugar" ayuda="Escribe la sede o dirección."
+      ><input id="tallerLugar" formControlName="lugar" maxlength="160"
+    /></app-campo>
+    <app-campo para="tallerCupos" etiqueta="Cupos" ayuda="Número entero mayor que cero."
+      ><input id="tallerCupos" type="number" min="1" formControlName="cupos"
+    /></app-campo>
+    <div class="s-heading-actions">
+      <button type="submit" class="s-primary" [disabled]="ocupado()">Guardar taller</button>
+      <button type="button" class="s-secondary" (click)="formulario.set(false)">
+        Cerrar formulario
+      </button>
+    </div>
+  </form>
+}
+@if (tallerAsistencia(); as t) {
+  <section class="s-card s-settings">
+    <h2>Asistencia · {{ t.titulo }}</h2>
+    <p>Puedes registrarla desde el inicio del taller hasta 48 horas después.</p>
+    @for (i of inscritos(); track i.id) {
+      <div class="s-heading-actions">
+        <span>{{ i.nombre }}</span>
+        @if (i.asistencia) {
+          <span>{{ i.asistencia === 'ASISTIO' ? 'Asistió' : 'No asistió' }}</span>
+        } @else {
+          <button
+            type="button"
+            class="s-secondary"
+            [disabled]="ocupado()"
+            (click)="marcar(t, i, 'ASISTIO')"
+          >
+            Asistió
+          </button>
+          <button
+            type="button"
+            class="s-secondary"
+            [disabled]="ocupado()"
+            (click)="marcar(t, i, 'NO_ASISTIO')"
+          >
+            No asistió
+          </button>
+        }
+      </div>
+    } @empty {
+      <p>No hay inscripciones confirmadas.</p>
+    }
+    <button type="button" class="s-secondary" (click)="tallerAsistencia.set(null)">
+      Cerrar asistencia
+    </button>
+  </section>
+}
+@for (g of grupos(); track g.mes) {
+  <section>
+    <h2>{{ g.mes + '-01T12:00:00Z' | date: 'MMMM yyyy' : '-0500' }}</h2>
+    <div class="s-quick-grid">
+      @for (t of g.items; track t.id) {
+        <article class="s-card s-settings">
+          <h3>{{ t.titulo }}</h3>
+          <p>{{ t.descripcion }}</p>
+          <p>{{ t.inicio | date: 'dd/MM/yyyy HH:mm' : '-0500' }} · {{ t.lugar }}</p>
+          <p>{{ t.estado === 'CANCELADO' ? 'Cancelado' : t.disponibles + ' cupos disponibles' }}</p>
+          @if (puedeGestionar() && t.estado === 'ACTIVO') {
+            <div class="s-heading-actions">
+              <button type="button" class="s-secondary" (click)="abrir(t)">Editar</button>
+              <button type="button" class="s-secondary" (click)="verAsistencia(t)">
+                Ver asistencia
+              </button>
+              <button
+                type="button"
+                class="s-danger"
+                [disabled]="ocupado()"
+                (click)="cambiar(t, 'cancelar')"
+              >
+                Cancelar taller
+              </button>
+            </div>
+          } @else if (session.rol() === 'SOCIO' && t.estado === 'ACTIVO') {
+            @if (t.inscripcion === 'CONFIRMADA') {
+              <p>Inscripción confirmada.</p>
+              @if (t.puedeAnular) {
+                <button
+                  type="button"
+                  class="s-secondary"
+                  [disabled]="ocupado()"
+                  (click)="cambiar(t, 'anular')"
+                >
+                  Anular inscripción
+                </button>
+              }
+            } @else if (t.disponibles > 0) {
+              <button
+                type="button"
+                class="s-primary"
+                [disabled]="ocupado()"
+                (click)="cambiar(t, 'inscribir')"
+              >
+                Inscribirme
+              </button>
+            }
+          }
+        </article>
+      }
+    </div>
+  </section>
+} @empty {
+  <p>Todavía no hay talleres para mostrar.</p>
+}

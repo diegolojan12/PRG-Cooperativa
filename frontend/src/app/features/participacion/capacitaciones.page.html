@@ -1,0 +1,181 @@
+<div class="s-page-heading">
+  <div>
+    <h1>Capacitaciones</h1>
+    <p>Aprende a tu ritmo y descarga tu certificado al aprobar.</p>
+  </div>
+  @if (gestion()) {
+    <button type="button" class="s-primary" (click)="abrir()">Nueva capacitación</button>
+  }
+</div>
+@if (error()) {
+  <p role="alert">{{ error() }}</p>
+}
+@if (formulario()) {
+  <form class="s-card s-settings" (submit)="guardar($event)" novalidate>
+    <h2>{{ editando() ? 'Editar capacitación' : 'Crear capacitación' }}</h2>
+    <app-campo para="cursoTitulo" etiqueta="Título" ayuda="Hasta 100 caracteres.">
+      <input
+        id="cursoTitulo"
+        maxlength="100"
+        [value]="titulo()"
+        (input)="titulo.set($any($event.target).value)"
+      />
+    </app-campo>
+    <app-campo
+      para="cursoDescripcion"
+      etiqueta="Descripción"
+      ayuda="Describe el material y los objetivos."
+    >
+      <textarea
+        id="cursoDescripcion"
+        maxlength="500"
+        [value]="descripcion()"
+        (input)="descripcion.set($any($event.target).value)"
+      ></textarea>
+    </app-campo>
+    <h3>Cuestionario</h3>
+    <p>Agrega al menos cinco preguntas antes de publicar.</p>
+    @for (p of preguntas(); track $index; let i = $index) {
+      <app-editor-pregunta
+        [prefijo]="'curso-pregunta-' + i"
+        [datos]="p"
+        (datosChange)="editar(i, $event)"
+      />
+      <button type="button" class="s-secondary" (click)="quitar(i)">
+        Quitar pregunta {{ i + 1 }}
+      </button>
+    }
+    <div class="s-heading-actions">
+      <button
+        type="button"
+        class="s-secondary"
+        [disabled]="preguntas().length >= 30"
+        (click)="agregar()"
+      >
+        Agregar pregunta
+      </button>
+      <button type="submit" class="s-primary" [disabled]="ocupado()">Guardar capacitación</button>
+      <button type="button" class="s-secondary" (click)="formulario.set(false)">Cancelar</button>
+    </div>
+  </form>
+}
+@if (evaluacion(); as e) {
+  <section class="s-card s-settings">
+    <h2>Evaluación · {{ e.titulo }}</h2>
+    @if (resultado(); as r) {
+      <p role="status">
+        {{ r.certificado ? 'Aprobaste' : 'Aún no alcanzas el 70 %' }} · {{ r.aciertos }} de
+        {{ r.total }} aciertos.
+      </p>
+      @if (r.certificado) {
+        <a class="s-primary" [href]="'/api/capacitaciones/' + e.id + '/certificado'" download
+          >Descargar certificado</a
+        >
+      } @else {
+        <button type="button" class="s-secondary" (click)="rendir(e.id)">Volver a intentar</button>
+      }
+    } @else {
+      @for (p of e.preguntas; track $index; let i = $index) {
+        <fieldset>
+          <legend>{{ p.enunciado }}</legend>
+          @for (o of p.opciones; track $index; let j = $index) {
+            <label class="s-consent">
+              <input
+                type="radio"
+                [name]="'evaluacion-' + i"
+                [checked]="respuestas()[i] === j"
+                (change)="marcar(i, j)"
+              />
+              {{ o }}
+            </label>
+          }
+        </fieldset>
+      }
+      <button type="button" class="s-primary" [disabled]="ocupado()" (click)="calificar()">
+        Calificar evaluación
+      </button>
+    }
+    <button type="button" class="s-secondary" (click)="evaluacion.set(null)">
+      Cerrar evaluación
+    </button>
+  </section>
+}
+@if (datos(); as d) {
+  <div class="s-quick-grid">
+    @for (c of d.items; track c.id) {
+      <article class="s-card s-settings">
+        <h2>{{ c.titulo }}</h2>
+        <p>{{ c.descripcion }}</p>
+        @if (c.material) {
+          <a class="s-secondary" [href]="'/api/capacitaciones/' + c.id + '/material'" download
+            >Descargar material</a
+          >
+        }
+        @if (gestion()) {
+          <p>{{ c.estado }}</p>
+          @if (c.estado !== 'INACTIVA') {
+            <app-campo
+              [para]="'material-' + c.id"
+              etiqueta="Material"
+              ayuda="Sube un PDF o MP4 de hasta 50 MB."
+            >
+              <input
+                #archivo
+                [id]="'material-' + c.id"
+                type="file"
+                accept=".pdf,.mp4"
+                [disabled]="ocupado()"
+              />
+            </app-campo>
+            <div class="s-heading-actions">
+              <button
+                type="button"
+                class="s-secondary"
+                [disabled]="ocupado()"
+                (click)="subir(c.id, archivo.files?.item(0) ?? null)"
+              >
+                Subir material
+              </button>
+              <button type="button" class="s-secondary" (click)="abrir(c)">Editar</button>
+              @if (c.estado === 'BORRADOR') {
+                <button
+                  type="button"
+                  class="s-primary"
+                  [disabled]="ocupado()"
+                  (click)="cambiar(c.id, 'ACTIVA')"
+                >
+                  Publicar
+                </button>
+              } @else {
+                <button
+                  type="button"
+                  class="s-secondary"
+                  [disabled]="ocupado()"
+                  (click)="cambiar(c.id, 'INACTIVA')"
+                >
+                  Inactivar
+                </button>
+              }
+            </div>
+          }
+        } @else if (c.aprobada) {
+          <a class="s-primary" [href]="'/api/capacitaciones/' + c.id + '/certificado'" download
+            >Descargar certificado</a
+          >
+        } @else {
+          <button type="button" class="s-primary" [disabled]="ocupado()" (click)="rendir(c.id)">
+            Rendir evaluación
+          </button>
+        }
+      </article>
+    } @empty {
+      <p>No hay capacitaciones disponibles.</p>
+    }
+  </div>
+  <app-paginador
+    [pagina]="d.pagina"
+    [porPagina]="d.porPagina"
+    [total]="d.total"
+    (cambiar)="cargar($event)"
+  />
+}

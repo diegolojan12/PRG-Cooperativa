@@ -149,12 +149,13 @@ const web = http.createServer((req, res) => {
     await page.getByRole("button", { name: "Activar", exact: true }).click();
     await expect(page.getByRole("button", { name: "Pausar", exact: true })).toBeVisible();
     for (const [ruta, titulo] of [
-      ["gamificacion", "Niveles e insignias"],
+      ["gamificacion", "Niveles e insignias"], ["retos", "Retos"], ["juegos", "Banco de preguntas"],
+      ["capacitaciones", "Capacitaciones"], ["talleres", "Talleres"],
     ]) {
       await page.goto(base + "/panel/" + ruta);
       await expect(page.getByRole("heading", { name: titulo, exact: true })).toBeVisible();
     }
-    console.log("PASS: campaña creada y activada y pantalla de niveles e insignias");
+    console.log("PASS: campaña creada y activada y pantallas S3 a S4");
     await page.goto(base + "/panel/referidos");
     await page.getByRole("button", { name: "Nuevo referido" }).click();
     await page.getByRole("button", { name: "Registrar referido" }).click();

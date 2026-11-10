@@ -1,0 +1,109 @@
+<div class="s-page-heading">
+  <div>
+    <h1>{{ gestion() ? 'Banco de preguntas' : 'Trivia financiera' }}</h1>
+    <p>Aprende sobre ahorro, crédito, presupuesto e inversión.</p>
+  </div>
+</div>
+@if (error()) {
+  <p role="alert">{{ error() }}</p>
+}
+@if (gestion()) {
+  <section class="s-card s-settings">
+    <div class="s-heading-actions">
+      <app-campo
+        para="filtroDificultad"
+        etiqueta="Dificultad"
+        ayuda="Filtra el banco o muestra todos los niveles."
+      >
+        <select
+          id="filtroDificultad"
+          [value]="filtro()"
+          (change)="cargarBanco($any($event.target).value)"
+        >
+          <option value="">Todas</option>
+          @for (d of dificultades; track d) {
+            <option [value]="d">{{ d }}</option>
+          }
+        </select>
+      </app-campo>
+      <button type="button" class="s-primary" (click)="abrir()">Nueva pregunta</button>
+    </div>
+    @if (editor()) {
+      <app-editor-pregunta prefijo="trivia" [(datos)]="pregunta" />
+      <app-campo para="triviaTema" etiqueta="Tema" ayuda="Selecciona una de las cuatro categorías.">
+        <select id="triviaTema" [value]="tema()" (change)="tema.set($any($event.target).value)">
+          @for (t of temas; track t) {
+            <option [value]="t">{{ t }}</option>
+          }
+        </select>
+      </app-campo>
+      <app-campo
+        para="triviaDificultad"
+        etiqueta="Dificultad"
+        ayuda="Elige el nivel apropiado para la pregunta."
+      >
+        <select
+          id="triviaDificultad"
+          [value]="dificultad()"
+          (change)="dificultad.set($any($event.target).value)"
+        >
+          @for (d of dificultades; track d) {
+            <option [value]="d">{{ d }}</option>
+          }
+        </select>
+      </app-campo>
+      <button type="button" class="s-primary" [disabled]="ocupado()" (click)="guardar()">
+        Guardar pregunta
+      </button>
+      <button type="button" class="s-secondary" (click)="editor.set(false)">Cancelar</button>
+    }
+    <ul>
+      @for (p of banco(); track p.id) {
+        <li>
+          {{ p.enunciado }} · {{ p.dificultad }} · {{ p.activa ? 'Activa' : 'Inactiva' }}
+          <button type="button" class="s-secondary" (click)="abrir(p)">Editar</button>
+          @if (p.activa) {
+            <button
+              type="button"
+              class="s-secondary"
+              [disabled]="ocupado()"
+              (click)="inactivar(p.id)"
+            >
+              Inactivar
+            </button>
+          }
+        </li>
+      } @empty {
+        <li>Aún no hay preguntas para esta selección.</li>
+      }
+    </ul>
+  </section>
+} @else {
+  <section class="s-card s-settings">
+    @if (partida(); as p) {
+      @if (p.pregunta; as preguntaActual) {
+        <p>Pregunta {{ p.numero }} de {{ p.total }} · {{ segundos() }} segundos</p>
+        <h2>{{ preguntaActual.enunciado }}</h2>
+        @for (opcion of preguntaActual.opciones; track $index) {
+          <button
+            type="button"
+            class="s-secondary"
+            [disabled]="ocupado() || segundos() === 0"
+            (click)="responder($index)"
+          >
+            {{ opcion }}
+          </button>
+        }
+      } @else {
+        <h2>{{ p.estado === 'VENCIDA' ? 'Partida vencida' : 'Partida completada' }}</h2>
+        <p>Aciertos {{ p.aciertos }} de {{ p.total }}</p>
+      }
+    }
+    @if (partida()?.estado !== 'EN_CURSO') {
+      <p>10 preguntas, 30 segundos por pregunta y hasta tres partidas cada 24 horas.</p>
+      <button type="button" class="s-primary" [disabled]="ocupado()" (click)="iniciar()">
+        Iniciar o continuar partida
+      </button>
+    }
+  </section>
+}

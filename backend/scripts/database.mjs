@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { SPRINT4_DDL } from '../src/dominio/esquema-sprint4.mjs';
 import { SPRINT3_DDL } from '../src/dominio/esquema-sprint3.mjs';
 import { Database } from '../src/database.mjs';
 const db = new Database();
@@ -17,6 +18,7 @@ try {
         'sprint1-dominio',
         'sprint2',
         'sprint3',
+        'sprint4',
       ]) {
         const [done] = await db.query(
           'SELECT nombre FROM "SumaMigracion" WHERE nombre=$1',
@@ -24,13 +26,15 @@ try {
           client,
         );
         if (done) continue;
-        await client.query(
-          readFileSync(
-            new URL(`../prisma/${nombre}.sql`, import.meta.url),
-            'utf8',
-          ),
-        );
+        if (nombre !== 'sprint4')
+          await client.query(
+            readFileSync(
+              new URL(`../prisma/${nombre}.sql`, import.meta.url),
+              'utf8',
+            ),
+          );
         if (nombre === 'sprint3') await client.query(SPRINT3_DDL);
+        if (nombre === 'sprint4') await client.query(SPRINT4_DDL);
         await db.query(
           'INSERT INTO "SumaMigracion" (nombre) VALUES ($1)',
           [nombre],

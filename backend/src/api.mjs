@@ -2,6 +2,10 @@ import express from 'express';
 import { randomBytes } from 'node:crypto';
 import { AceptacionTerminos, AvisoPrivacidad, CodigoVerificacion, CuentaCooperativa, Rol, Usuario, errorDeDominio } from './dominio/acceso.mjs';
 import { CodigoReferido, Referido } from './dominio/referidos.mjs';
+import { rutasCapacitaciones } from './dominio/capacitaciones.mjs';
+import { rutasParticipacion } from './dominio/participacion.mjs';
+import { rutasTrivia } from './dominio/trivia.mjs';
+import { gestor } from './dominio/actividades.mjs';
 import { Campanias, provinciasCobertura } from './dominio/campanias.mjs';
 import { Gamificacion } from './dominio/gamificacion.mjs';
 import { rutasPerfil } from './dominio/perfil.mjs';
@@ -490,6 +494,17 @@ export async function createApi(database) {
     confirmacionCorreo, enviarConfirmacion, exigirCorreoDisponible, devExpose, mask, gamificacion, log });
   campanias.rutas({ route, current, admin, text, now });
   gamificacion.rutas({ route, current, admin, text, now, pagina, log });
+  const cargaBinaria = (limit, autorizar = (req) => gestor(req, current)) => [
+    async (req, _res, next) => {
+      try { await autorizar(req, 'panel'); next(); }
+      catch (error) { next(error); }
+    },
+    express.raw({ type: 'application/octet-stream', limit, inflate: false }),
+  ];
+  const contextoActividades = { db, route, current, admin, text, now, pagina, log, notify, gamificacion, acreditacion, cargaBinaria };
+  const recordatorios = rutasParticipacion(contextoActividades);
+  rutasTrivia(contextoActividades);
+  rutasCapacitaciones(contextoActividades);
   route('get', '/provincias', (_, res) => res.json(provinciasCobertura()));
 
   route('post', '/auth/register', async (req, res) => {
@@ -696,6 +711,7 @@ export async function createApi(database) {
     const [movimientos] = await db.query(
       "SELECT COALESCE(SUM(CASE WHEN tipo='CREDITO' THEN cantidad ELSE 0 END),0) AS otorgados FROM \"MovimientoPuntos\"",
     );
+    const [{ total: inscripciones }] = await db.query('SELECT COUNT(*) AS total FROM "Inscripcion" WHERE estado=$1', ['CONFIRMADA']);
     return {
       generadoEn: now(),
       sociosActivos: Number(socios.total),
@@ -724,7 +740,7 @@ export async function createApi(database) {
           unidad: 'pts',
         },
         { id: 'canjeados', etiqueta: 'Puntos canjeados', valor: 0, unidad: 'pts', disponibleDesde: 'Sprint 5' },
-        { id: 'talleres', etiqueta: 'Inscripciones a talleres', valor: 0, unidad: '', disponibleDesde: 'Sprint 4' },
+        { id: 'talleres', etiqueta: 'Inscripciones a talleres', valor: Number(inscripciones), unidad: '' },
       ],
     };
   }
@@ -1359,5 +1375,5 @@ export async function createApi(database) {
       ...(error.campos ? { campos: error.campos } : {}),
     });
   });
-  return { router, db };
+  return { router, db, recordatorios };
 }

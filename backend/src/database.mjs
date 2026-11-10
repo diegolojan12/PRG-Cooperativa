@@ -3,6 +3,7 @@ import { mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
 import pg from 'pg';
+import { SPRINT4_DDL } from './dominio/esquema-sprint4.mjs';
 import { SPRINT3_DDL } from './dominio/esquema-sprint3.mjs';
 import { ProteccionDatos } from './dominio/proteccion-datos.mjs';
 import { Rol } from './dominio/acceso.mjs';
@@ -247,6 +248,7 @@ export class Database {
       if (hasReferido) this.migrateSqlite();
       this.db.exec(SQLITE_SCHEMA);
       this.db.exec(SPRINT3_DDL);
+      this.db.exec(SPRINT4_DDL);
       this.db.exec(SQLITE_TRIGGERS);
     } else {
       // Explicit migration command avoids mutating an existing PostgreSQL automatically.

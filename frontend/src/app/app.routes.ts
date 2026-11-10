@@ -139,12 +139,40 @@ export const routes: Routes = [
         import('./features/ayuda/ayuda.page').then((m) => m.AyudaPage),
       ),
       {
+        path: 'retos',
+        canActivate: [moduloGuard],
+        data: { modulo: 'panel', titulo: 'Retos' },
+        loadComponent: () => import('./features/participacion/retos.page').then((m) => m.RetosPage),
+      },
+      {
+        path: 'talleres',
+        canActivate: [moduloGuard],
+        data: { modulo: 'panel', titulo: 'Talleres' },
+        loadComponent: () =>
+          import('./features/participacion/talleres.page').then((m) => m.TalleresPage),
+      },
+      {
+        path: 'juegos',
+        canActivate: [moduloGuard],
+        data: { modulo: 'panel', titulo: 'Trivia financiera' },
+        loadComponent: () =>
+          import('./features/participacion/juegos.page').then((m) => m.JuegosPage),
+      },
+      {
+        path: 'capacitaciones',
+        canActivate: [moduloGuard],
+        data: { modulo: 'panel', titulo: 'Capacitaciones' },
+        loadComponent: () =>
+          import('./features/participacion/capacitaciones.page').then((m) => m.CapacitacionesPage),
+      },
+      {
         path: 'acceso-denegado',
         data: { titulo: 'Acceso denegado' },
         title: 'Acceso denegado · SUMA',
         loadComponent: () =>
           import('./features/ayuda/acceso-denegado.page').then((m) => m.AccesoDenegadoPage),
       },
+      { path: 'aprende', redirectTo: 'capacitaciones', pathMatch: 'full' },
       {
         path: '**',
         data: { titulo: 'Página no disponible' },

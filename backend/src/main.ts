@@ -13,11 +13,20 @@ async function bootstrap() {
     origin: process.env.FRONTEND_URL || 'http://localhost:4200',
     credentials: true,
   });
-  const { router, db } = await createApi();
+  const { router, db, recordatorios } = await createApi();
   app.use('/api', router);
   app.enableShutdownHooks();
+  const revisarRecordatorios = () => {
+    void recordatorios().catch((error: unknown) =>
+      console.error('No se pudieron procesar los recordatorios.', error),
+    );
+  };
+  revisarRecordatorios();
+  const reloj = setInterval(revisarRecordatorios, 5 * 60_000);
+  reloj.unref();
   for (const event of ['SIGINT', 'SIGTERM'])
     process.once(event, () => {
+      clearInterval(reloj);
       void db.close();
     });
   app.setGlobalPrefix('api');
