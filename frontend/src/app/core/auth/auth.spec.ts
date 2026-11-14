@@ -24,6 +24,10 @@ const socio: Usuario = {
   rol: 'SOCIO',
   activo: true,
   modulos: ['panel', 'referidos', 'notificaciones', 'ayuda'],
+  menu: [],
+  esAdmin: false,
+  interfaz: 'COMUNIDAD',
+  rolNombre: 'Socio',
 };
 
 describe('Sesión, guards e interceptor (HU-002, HU-003)', () => {

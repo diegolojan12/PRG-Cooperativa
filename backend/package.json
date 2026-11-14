@@ -20,10 +20,11 @@
     "test:cov": "vitest run --coverage",
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
     "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
+    "db:crear": "node --env-file=.env scripts/crear-bd.mjs",
     "db:init": "node --env-file=.env scripts/database.mjs",
     "db:seed": "node --env-file=.env scripts/seed.mjs",
     "start:local": "node --env-file=.env dist/main.js",
-    "test:sprint": "node --test test/sprint.test.mjs",
+    "test:sprint": "node --env-file-if-exists=.env --test test/sprint.test.mjs",
     "admin:create": "node --env-file-if-exists=.env scripts/create-admin.mjs"
   },
   "dependencies": {

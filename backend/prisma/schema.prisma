@@ -26,8 +26,8 @@ model Usuario {
   tipoCuenta String?
 }
 
-// El Sprint 1 usa el repositorio SQL de src/database.mjs para compartir la API
-// entre PostgreSQL y SQLite local. Aplicar cambios con npm run db:init.
+// El Sprint 1 usa el repositorio SQL de src/database.mjs sobre PostgreSQL.
+// Las tablas Rol y Modulo se crean con las migraciones prisma/*.sql (npm run db:init).
 model RolPermiso {
   rol String @id
   modulos String

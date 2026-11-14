@@ -1,37 +1,60 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { Component, signal } from '@angular/core';
+import { Component, Type, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { SessionStore } from '../core/auth/session.store';
-import { Modulo, PaginaReferidos, Rol, Usuario } from '../core/models/domain';
+import { Interfaz, ItemMenu, Modulo, PaginaReferidos, Rol, Usuario } from '../core/models/domain';
+import { ComunidadShellComponent } from '../layout/comunidad-shell.component';
 import { ShellComponent } from '../layout/shell.component';
 import { CampoComponent } from '../shared/campo/campo.component';
 import { ConfiguracionPage } from './administracion/configuracion.page';
 import { ReferidosPage } from './referidos/referidos.page';
 
-const MODULOS: Record<Rol, Modulo[]> = {
-  ADMIN: [
-    'panel',
-    'referidos',
-    'usuarios',
-    'roles',
-    'configuracion',
-    'actividad',
-    'notificaciones',
-    'ayuda',
-  ],
-  GESTOR: ['panel', 'notificaciones', 'ayuda'],
-  SOCIO: ['panel', 'referidos', 'notificaciones', 'ayuda'],
+/** Catálogo de módulos tal como lo entrega el servidor (tabla Modulo). */
+const CATALOGO: ItemMenu[] = [
+  { id: 'panel', etiqueta: 'Resumen', grupo: 'Tu espacio', icono: 'panel', disponible: true },
+  { id: 'referidos', etiqueta: 'Referidos', grupo: 'Tu espacio', icono: 'referidos', disponible: true },
+  { id: 'aprende', etiqueta: 'Capacitaciones y talleres', grupo: 'Comunidad', icono: 'book', disponible: false },
+  { id: 'publicaciones', etiqueta: 'Publicaciones', grupo: 'Contenidos', icono: 'post', disponible: false },
+  { id: 'usuarios', etiqueta: 'Usuarios', grupo: 'Administración', icono: 'usuarios', disponible: true },
+  { id: 'actividad', etiqueta: 'Registro de actividad', grupo: 'Administración', icono: 'actividad', disponible: true },
+  { id: 'configuracion', etiqueta: 'Configuración', grupo: 'Administración', icono: 'configuracion', disponible: true },
+  { id: 'notificaciones', etiqueta: 'Notificaciones', grupo: 'Comunidad', icono: 'notificaciones', disponible: true },
+  { id: 'ayuda', etiqueta: 'Centro de ayuda', grupo: 'Comunidad', icono: 'ayuda', disponible: true },
+];
+const PERFILES: Record<string, { modulos: Modulo[]; esAdmin: boolean; interfaz: Interfaz; rolNombre: string }> = {
+  ADMIN: {
+    modulos: ['panel', 'referidos', 'usuarios', 'actividad', 'configuracion', 'notificaciones', 'ayuda'],
+    esAdmin: true,
+    interfaz: 'ADMINISTRACION',
+    rolNombre: 'Administrador',
+  },
+  GESTOR: {
+    modulos: ['panel', 'aprende', 'publicaciones', 'notificaciones', 'ayuda'],
+    esAdmin: false,
+    interfaz: 'ADMINISTRACION',
+    rolNombre: 'Gestor de contenidos',
+  },
+  SOCIO: {
+    modulos: ['panel', 'referidos', 'aprende', 'notificaciones', 'ayuda'],
+    esAdmin: false,
+    interfaz: 'COMUNIDAD',
+    rolNombre: 'Socio',
+  },
 };
-const usuario = (rol: Rol): Usuario => ({
-  id: 1,
-  nombre: 'Persona Prueba',
-  correo: 'persona@suma.ec',
-  rol,
-  activo: true,
-  modulos: MODULOS[rol],
-});
+const usuario = (rol: Rol): Usuario => {
+  const perfil = PERFILES[rol];
+  return {
+    id: 1,
+    nombre: 'Persona Prueba',
+    correo: 'persona@suma.ec',
+    rol,
+    activo: true,
+    ...perfil,
+    menu: CATALOGO.filter((m) => perfil.modulos.includes(m.id)),
+  };
+};
 
 const setup = (rol: Rol) => {
   TestBed.configureTestingModule({
@@ -41,14 +64,14 @@ const setup = (rol: Rol) => {
   return TestBed.inject(HttpTestingController);
 };
 
-describe('Menú por rol (RF-08-3)', () => {
-  const opciones = (rol: Rol) => {
+describe('Menú por rol (HU-002, RF-08-3)', () => {
+  const opciones = (rol: Rol, tipo: Type<unknown> = ShellComponent, etiqueta = 'Navegación principal') => {
     const http = setup(rol);
-    const fixture = TestBed.createComponent(ShellComponent);
+    const fixture = TestBed.createComponent(tipo);
     fixture.detectChanges();
     http.match(() => true).forEach((r) => r.flush([]));
     const enlaces = Array.from<HTMLElement>(
-      fixture.nativeElement.querySelectorAll('nav[aria-label="Navegación principal"] a'),
+      fixture.nativeElement.querySelectorAll(`nav[aria-label="${etiqueta}"] a`),
     ).map((a) => a.textContent?.trim() ?? '');
     fixture.destroy();
     return enlaces;
@@ -59,17 +82,28 @@ describe('Menú por rol (RF-08-3)', () => {
     expect(menu).toContain('Usuarios');
     expect(menu).toContain('Registro de actividad');
   });
-  it('el socio no ve opciones administrativas', () => {
-    const menu = opciones('SOCIO');
-    expect(menu).toContain('Referidos');
-    expect(menu).not.toContain('Usuarios');
-    expect(menu).not.toContain('Configuración');
-  });
   it('el gestor de contenidos ve solo sus opciones', () => {
     const menu = opciones('GESTOR');
     expect(menu).not.toContain('Referidos');
     expect(menu).not.toContain('Usuarios');
     expect(menu).toContain('Publicaciones');
+  });
+  it('el socio recibe la experiencia de comunidad, sin opciones administrativas', () => {
+    const menu = opciones('SOCIO', ComunidadShellComponent);
+    expect(menu).toContain('Inicio');
+    expect(menu).toContain('Referidos');
+    expect(menu).not.toContain('Usuarios');
+    expect(menu).not.toContain('Configuración');
+  });
+  it('un rol nuevo creado por el administrador obtiene exactamente el menú que se le asignó', () => {
+    PERFILES['ASESOR'] = {
+      modulos: ['panel', 'ayuda'],
+      esAdmin: false,
+      interfaz: 'COMUNIDAD',
+      rolNombre: 'Asesor comercial',
+    };
+    const menu = opciones('ASESOR', ComunidadShellComponent);
+    expect(menu).toEqual(['Inicio', 'Centro de ayuda']);
   });
 });
 

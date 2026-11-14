@@ -7,7 +7,6 @@ import { SessionStore } from '../../core/auth/session.store';
 import { leerError } from '../../core/http/api-error';
 import { ESTADOS, ETIQUETAS_ESTADO, Referido, Resumen } from '../../core/models/domain';
 import { IconComponent } from '../../shared/icon/icon.component';
-import { NAVEGACION } from '../../layout/navegacion';
 import { ReferidosApi } from '../referidos/referidos.api';
 
 /** Resumen del socio y del gestor de contenidos (el administrador usa TableroPage). */
@@ -33,7 +32,10 @@ export class ResumenPage implements OnInit {
   }).format(new Date());
   readonly nombre = computed(() => this.session.usuario()?.nombre.split(' ')[0] ?? '');
   readonly accesos = computed(() =>
-    NAVEGACION.filter((item) => item.id !== 'panel' && this.session.puede(item.id)).slice(0, 3),
+    this.session
+      .menu()
+      .filter((item) => item.id !== 'panel' && item.disponible)
+      .slice(0, 3),
   );
 
   ngOnInit(): void {

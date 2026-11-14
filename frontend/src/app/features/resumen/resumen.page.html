@@ -137,10 +137,10 @@
           <a
             class="s-card s-quick-link"
             [routerLink]="['/panel', item.id]"
-            [attr.aria-label]="'Ir a ' + item.label"
+            [attr.aria-label]="'Ir a ' + item.etiqueta"
           >
-            <span class="s-feature-icon yellow"><app-icon [name]="item.id" /></span>
-            <strong>{{ item.label }}</strong>
+            <span class="s-feature-icon yellow"><app-icon [name]="item.icono" /></span>
+            <strong>{{ item.etiqueta }}</strong>
             <app-icon name="arrow" />
           </a>
         }

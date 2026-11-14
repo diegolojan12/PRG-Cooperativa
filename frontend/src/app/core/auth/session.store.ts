@@ -12,7 +12,9 @@ export class SessionStore {
   readonly usuario = signal<Usuario | null>(null);
   readonly autenticado = computed(() => this.usuario() !== null);
   readonly rol = computed<Rol | null>(() => this.usuario()?.rol ?? null);
-  readonly esAdmin = computed(() => this.rol() === 'ADMIN');
+  readonly esAdmin = computed(() => this.usuario()?.esAdmin ?? false);
+  readonly interfaz = computed(() => this.usuario()?.interfaz ?? 'COMUNIDAD');
+  readonly menu = computed(() => this.usuario()?.menu ?? []);
 
   puede(modulo: Modulo): boolean {
     return this.usuario()?.modulos.includes(modulo) ?? false;

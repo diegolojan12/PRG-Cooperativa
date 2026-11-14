@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { RedirectFunction, Router, Routes } from '@angular/router';
-import { authGuard, moduloGuard, rolMatch } from './core/auth/guards';
+import { authGuard, esAdminMatch, interfazMatch, moduloGuard } from './core/auth/guards';
 import { Modulo } from './core/models/domain';
 
 const legacyAuth =
@@ -51,6 +51,49 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    // HU-002: la experiencia de entrada la define el rol (tabla Rol.interfaz), no su nombre.
+    path: 'panel',
+    canActivate: [authGuard],
+    canMatch: [interfazMatch('COMUNIDAD')],
+    loadComponent: () =>
+      import('./layout/comunidad-shell.component').then((m) => m.ComunidadShellComponent),
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        title: 'Inicio · SUMA',
+        loadComponent: () => import('./features/comunidad/feed.page').then((m) => m.FeedPage),
+      },
+      {
+        path: 'referidos',
+        canActivate: [moduloGuard],
+        data: { modulo: 'referidos' },
+        title: 'Referidos · SUMA',
+        loadChildren: () =>
+          import('./features/referidos/referidos.routes').then((m) => m.REFERIDOS_ROUTES),
+      },
+      modulo('notificaciones', 'Notificaciones', () =>
+        import('./features/notificaciones/notificaciones.page').then((m) => m.NotificacionesPage),
+      ),
+      modulo('ayuda', 'Centro de ayuda', () =>
+        import('./features/ayuda/ayuda.page').then((m) => m.AyudaPage),
+      ),
+      {
+        path: 'acceso-denegado',
+        title: 'Acceso denegado · SUMA',
+        loadComponent: () =>
+          import('./features/ayuda/acceso-denegado.page').then((m) => m.AccesoDenegadoPage),
+      },
+      {
+        path: ':modulo',
+        canActivate: [moduloGuard],
+        title: 'Comunidad · SUMA',
+        loadComponent: () =>
+          import('./features/comunidad/seccion.page').then((m) => m.SeccionPage),
+      },
+    ],
+  },
+  {
     path: 'panel',
     canActivate: [authGuard],
     loadComponent: () => import('./layout/shell.component').then((m) => m.ShellComponent),
@@ -58,7 +101,7 @@ export const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        canMatch: [rolMatch('ADMIN')],
+        canMatch: [esAdminMatch(true)],
         data: { titulo: 'Tablero' },
         title: 'Tablero · SUMA',
         loadComponent: () => import('./features/resumen/tablero.page').then((m) => m.TableroPage),
@@ -105,6 +148,7 @@ export const routes: Routes = [
       },
       {
         path: ':modulo',
+        canActivate: [moduloGuard],
         data: { titulo: 'Próximamente' },
         loadComponent: () =>
           import('./features/ayuda/proximamente.page').then((m) => m.ProximamentePage),

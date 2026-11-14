@@ -26,7 +26,7 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [{ "glob": "**/*", "input": "public" }],
-            "styles": ["src/css/styles.css", "src/css/panel.css"]
+            "styles": ["src/css/styles.css", "src/css/panel.css", "src/css/comunidad.css"]
           },
           "configurations": {
             "production": {

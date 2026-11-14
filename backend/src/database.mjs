@@ -1,13 +1,9 @@
-import { DatabaseSync } from 'node:sqlite';
-import { mkdirSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { readFileSync } from 'node:fs';
 import { randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
 import pg from 'pg';
 import { ProteccionDatos } from './dominio/proteccion-datos.mjs';
-import { Rol } from './dominio/acceso.mjs';
+import { MODULOS_INICIALES, ROLES_INICIALES } from './dominio/catalogo-inicial.mjs';
 import { Referido } from './dominio/referidos.mjs';
-
-const CLIENTE_SQLITE = Symbol('transacción SQLite');
 
 export function hashPassword(value) {
   const salt = randomBytes(16).toString('hex');
@@ -21,121 +17,40 @@ export function verifyPassword(value, stored) {
   return expected.length === actual.length && timingSafeEqual(expected, actual);
 }
 
-/* ---------- Modelo de dominio (Documento de Visión v1.1.0, RF-08-1, RF-11-4) ---------- */
-export const ROLES = Rol.nombres;
+/* ---------- Modelo de dominio (Documento de Visión v1.1.0, RF-08-1, RF-11-4) ----------
+ * Los roles, módulos y permisos NO están en el código: viven en las tablas "Rol",
+ * "Modulo" y "RolPermiso" (HU-001). Aquí solo se exportan los estados de referido. */
 export const STATES = Referido.estados;
-export const MODULES = [
-  'panel',
-  'referidos',
-  'usuarios',
-  'roles',
-  'configuracion',
-  'actividad',
-  'notificaciones',
-  'ayuda',
-];
-export const SOCIO_MODULES = ['panel', 'referidos', 'notificaciones', 'ayuda'];
-export const GESTOR_MODULES = ['panel', 'notificaciones', 'ayuda'];
-/** Módulos que cada rol puede llegar a tener (el resto se bloquea en Roles). */
-export const ROLE_LIMITS = {
-  ADMIN: MODULES,
-  GESTOR: GESTOR_MODULES,
-  SOCIO: SOCIO_MODULES,
-};
-/** Módulos que cada rol debe conservar siempre. */
-export const ROLE_REQUIRED = {
-  ADMIN: ['panel', 'ayuda', 'usuarios', 'roles'],
-  GESTOR: ['panel', 'ayuda'],
-  SOCIO: ['panel', 'ayuda'],
-};
 
-const SQLITE_SCHEMA = `CREATE TABLE IF NOT EXISTS "Usuario" (
-  id INTEGER PRIMARY KEY AUTOINCREMENT, cedula TEXT UNIQUE, correo TEXT UNIQUE NOT NULL, "correoIndice" TEXT,
-  nombre TEXT NOT NULL, rol TEXT NOT NULL DEFAULT 'SOCIO', "creadoEn" TEXT DEFAULT CURRENT_TIMESTAMP,
-  "passwordHash" TEXT, celular TEXT, activo INTEGER NOT NULL DEFAULT 1, cuenta TEXT, "tipoCuenta" TEXT,
-  "cuentaEstado" TEXT, "intentosFallidos" INTEGER NOT NULL DEFAULT 0, "bloqueadoHasta" TEXT, "codigoReferido" TEXT, "cuentaIndice" TEXT, "cuentaSolicitadaEn" TEXT, "cuentaRevisadaEn" TEXT);
-CREATE TABLE IF NOT EXISTS "RolPermiso" (rol TEXT PRIMARY KEY, modulos TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS "Sesion" (token TEXT PRIMARY KEY, "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id) ON DELETE CASCADE, expira TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS "Recuperacion" (token TEXT PRIMARY KEY, "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id) ON DELETE CASCADE, expira TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS "DosFactor" (id TEXT PRIMARY KEY, "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id) ON DELETE CASCADE, codigo TEXT NOT NULL, expira TEXT NOT NULL, intentos INTEGER NOT NULL DEFAULT 0);
-CREATE TABLE IF NOT EXISTS "Referido" (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT NOT NULL, correo TEXT NOT NULL, "correoIndice" TEXT, celular TEXT NOT NULL, estado TEXT NOT NULL DEFAULT 'PENDIENTE', "socioId" INTEGER NOT NULL REFERENCES "Usuario"(id), "creadoEn" TEXT NOT NULL, notas TEXT DEFAULT '', "eliminadoEn" TEXT, "eliminadoPor" INTEGER REFERENCES "Usuario"(id), "motivoBaja" TEXT, "usuarioId" INTEGER REFERENCES "Usuario"(id), "fechaDecision" TEXT, campania TEXT, provincia TEXT);
-CREATE UNIQUE INDEX IF NOT EXISTS referido_correo_activo ON "Referido"(correo) WHERE "eliminadoEn" IS NULL;
-CREATE INDEX IF NOT EXISTS usuario_cuenta_indice ON "Usuario"(COALESCE("cuentaIndice",cuenta));
-CREATE UNIQUE INDEX IF NOT EXISTS usuario_codigo_referido ON "Usuario"("codigoReferido");
-CREATE UNIQUE INDEX IF NOT EXISTS usuario_correo_indice ON "Usuario"(COALESCE("correoIndice",correo));
-CREATE UNIQUE INDEX IF NOT EXISTS referido_correo_indice ON "Referido"(COALESCE("correoIndice",correo)) WHERE "eliminadoEn" IS NULL;
-CREATE INDEX IF NOT EXISTS "Referido_socioId_idx" ON "Referido"("socioId");
-CREATE TABLE IF NOT EXISTS "Actividad" (id INTEGER PRIMARY KEY AUTOINCREMENT, "usuarioId" INTEGER REFERENCES "Usuario"(id), actor TEXT NOT NULL, accion TEXT NOT NULL, detalle TEXT NOT NULL, fecha TEXT NOT NULL, ip TEXT, "objetivoId" INTEGER, datos TEXT);
-CREATE INDEX IF NOT EXISTS "Actividad_fecha_idx" ON "Actividad"(fecha);
-CREATE TABLE IF NOT EXISTS "Notificacion" (id INTEGER PRIMARY KEY AUTOINCREMENT, "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id) ON DELETE CASCADE, titulo TEXT NOT NULL, mensaje TEXT NOT NULL, leida INTEGER NOT NULL DEFAULT 0, fecha TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS "MovimientoPuntos" ("referidoId" INTEGER PRIMARY KEY REFERENCES "Referido"(id), "usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id), cantidad INTEGER NOT NULL CHECK (cantidad >= 0), fecha TEXT NOT NULL);
-CREATE INDEX IF NOT EXISTS movimiento_usuario ON "MovimientoPuntos"("usuarioId");
-CREATE TABLE IF NOT EXISTS "Configuracion" (clave TEXT PRIMARY KEY, valor TEXT NOT NULL);`;
-
-/* RF-42-1: la bitácora es inmutable (no admite UPDATE ni DELETE). */
-const SQLITE_TRIGGERS = `CREATE TRIGGER IF NOT EXISTS actividad_inmutable_upd BEFORE UPDATE ON "Actividad"
-  BEGIN SELECT RAISE(ABORT, 'La bitácora es inmutable'); END;
-CREATE TRIGGER IF NOT EXISTS actividad_inmutable_del BEFORE DELETE ON "Actividad"
-  BEGIN SELECT RAISE(ABORT, 'La bitácora es inmutable'); END;`;
+/** Migraciones en orden. Cada una se aplica una sola vez (tabla SumaMigracion). */
+const MIGRACIONES = ['sprint1', 'sprint1-auditoria', 'sprint1-dominio', 'sprint1-roles'];
 
 export class Database {
-  constructor(url = process.env.DATABASE_URL || 'file:./data/suma.db') {
-    this.datos = new ProteccionDatos();
-    this.sqlite = url.startsWith('file:');
-    if (this.sqlite) {
-      const filename = resolve(url.slice(5));
-      mkdirSync(dirname(filename), { recursive: true });
-      this.db = new DatabaseSync(filename);
-      this.db.exec(
-        'PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000;',
+  /**
+   * SUMA trabaja únicamente con PostgreSQL.
+   * @param url postgresql://usuario:clave@host:5432/base
+   * @param opciones.esquema esquema aislado (lo usan las pruebas automáticas)
+   */
+  constructor(url = process.env.DATABASE_URL, { esquema } = {}) {
+    if (!/^postgres(ql)?:\/\//.test(url ?? ''))
+      throw new Error(
+        'DATABASE_URL debe ser una URL de PostgreSQL, por ejemplo postgresql://suma:suma_dev@localhost:5432/suma',
       );
-    } else {
-      this.pool = new pg.Pool({ connectionString: url, max: 10 });
-    }
+    this.datos = new ProteccionDatos();
+    this.esquema = esquema;
+    this.pool = new pg.Pool({
+      connectionString: url,
+      max: 10,
+      ...(esquema ? { options: `-c search_path=${esquema}` } : {}),
+    });
   }
   async query(sql, values = [], client) {
     return (await this.queryRaw(sql, values, client)).map((fila) => this.datos.abrirFila(fila));
   }
   async queryRaw(sql, values = [], client) {
-    if (!this.sqlite)
-      return (await (client || this.pool).query(sql, values)).rows;
-    if (client !== CLIENTE_SQLITE) await this.queue;
-    // Reorder numbered parameters too: UPDATE ... $2 ... WHERE id=$1.
-    const params = [];
-    const statement = sql
-      .replace(/\$(\d+)/g, (_, n) => {
-        params.push(values[Number(n) - 1]);
-        return '?';
-      })
-      .replace(/\bILIKE\b/g, 'LIKE');
-    const query = this.db.prepare(statement);
-    return query.all(
-      ...params.map((v) => (typeof v === 'boolean' ? Number(v) : v)),
-    );
+    return (await (client || this.pool).query(sql, values)).rows;
   }
   async transaction(work) {
-    if (this.sqlite) {
-      // Callbacks are queued so async boundaries never interleave transactions.
-      const previous = this.queue || Promise.resolve();
-      let release;
-      this.queue = new Promise((r) => {
-        release = r;
-      });
-      await previous;
-      try {
-        this.db.exec('BEGIN IMMEDIATE');
-        try {
-          const result = await work(CLIENTE_SQLITE);
-          this.db.exec('COMMIT');
-          return result;
-        } catch (error) {
-          this.db.exec('ROLLBACK');
-          throw error;
-        }
-      } finally {
-        release();
-      }
-    }
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
@@ -149,82 +64,21 @@ export class Database {
       client.release();
     }
   }
-  /** Agrega columnas faltantes en bases SQLite creadas antes de la auditoría. */
-  migrateSqlite() {
-    const columns = (table) =>
-      new Set(
-        this.db
-          .prepare(`PRAGMA table_info("${table}")`)
-          .all()
-          .map((c) => c.name),
-      );
-    const ensure = (table, definitions) => {
-      const existing = columns(table);
-      for (const [name, definition] of definitions)
-        if (!existing.has(name))
-          this.db.exec(
-            `ALTER TABLE "${table}" ADD COLUMN "${name}" ${definition}`,
-          );
-    };
-    ensure('Usuario', [
-      ['cuentaEstado', 'TEXT'],
-      ['correoIndice', 'TEXT'],
-      ['codigoReferido', 'TEXT'],
-      ['cuentaIndice', 'TEXT'],
-      ['cuentaSolicitadaEn', 'TEXT'],
-      ['cuentaRevisadaEn', 'TEXT'],
-      ['intentosFallidos', 'INTEGER NOT NULL DEFAULT 0'],
-      ['bloqueadoHasta', 'TEXT'],
-    ]);
-    ensure('Actividad', [
-      ['ip', 'TEXT'],
-      ['objetivoId', 'INTEGER'],
-      ['datos', 'TEXT'],
-    ]);
-    // El correo de Referido era UNIQUE en línea: se reconstruye la tabla para
-    // que la unicidad aplique solo a referidos activos (baja lógica, RF-11-6).
-    const legacyUnique = this.db
-      .prepare(
-        "SELECT name FROM sqlite_master WHERE type='index' AND tbl_name='Referido' AND name LIKE 'sqlite_autoindex_Referido%'",
-      )
-      .all();
-    if (legacyUnique.length) {
-      this.db.exec(`BEGIN;
-        ALTER TABLE "Referido" RENAME TO "Referido_old";
-        DROP INDEX IF EXISTS "Referido_socioId_idx";
-        CREATE TABLE "Referido" (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT NOT NULL, correo TEXT NOT NULL, "correoIndice" TEXT, celular TEXT NOT NULL, estado TEXT NOT NULL DEFAULT 'PENDIENTE', "socioId" INTEGER NOT NULL REFERENCES "Usuario"(id), "creadoEn" TEXT NOT NULL, notas TEXT DEFAULT '', "eliminadoEn" TEXT, "eliminadoPor" INTEGER REFERENCES "Usuario"(id), "motivoBaja" TEXT, "usuarioId" INTEGER REFERENCES "Usuario"(id), "fechaDecision" TEXT, campania TEXT, provincia TEXT);
-        INSERT INTO "Referido" (id,nombre,correo,celular,estado,"socioId","creadoEn",notas)
-          SELECT id,nombre,correo,celular,estado,"socioId","creadoEn",notas FROM "Referido_old";
-        DROP TABLE "Referido_old";
-        COMMIT;`);
-    } else {
-      ensure('Referido', [
-        ['eliminadoEn', 'TEXT'],
-        ['eliminadoPor', 'INTEGER REFERENCES "Usuario"(id)'],
-        ['motivoBaja', 'TEXT'],
-        ['usuarioId', 'INTEGER REFERENCES "Usuario"(id)'],
-        ['correoIndice', 'TEXT'],
-        ['fechaDecision', 'TEXT'],
-        ['campania', 'TEXT'],
-        ['provincia', 'TEXT'],
-      ]);
-    }
+  /** Aplica las migraciones pendientes; el bloqueo evita que dos servidores migren a la vez. */
+  async migrar() {
+    await this.transaction(async (client) => {
+      await client.query('SELECT pg_advisory_xact_lock(15274000)');
+      await client.query('CREATE TABLE IF NOT EXISTS "SumaMigracion" (nombre TEXT PRIMARY KEY)');
+      for (const nombre of MIGRACIONES) {
+        const [hecha] = await this.query('SELECT nombre FROM "SumaMigracion" WHERE nombre=$1', [nombre], client);
+        if (hecha) continue;
+        await client.query(readFileSync(new URL(`../prisma/${nombre}.sql`, import.meta.url), 'utf8'));
+        await this.query('INSERT INTO "SumaMigracion" (nombre) VALUES ($1)', [nombre], client);
+      }
+    });
   }
   async init() {
-    if (this.sqlite) {
-      // Las tablas existentes conservan su forma; se migran antes de crear índices nuevos.
-      const hasReferido = this.db
-        .prepare(
-          "SELECT name FROM sqlite_master WHERE type='table' AND name='Referido'",
-        )
-        .all().length;
-      if (hasReferido) this.migrateSqlite();
-      this.db.exec(SQLITE_SCHEMA);
-      this.db.exec(SQLITE_TRIGGERS);
-    } else {
-      // Explicit migration command avoids mutating an existing PostgreSQL automatically.
-      await this.query('SELECT "correoIndice","cuentaIndice" FROM "Usuario" LIMIT 1');
-    }
+    await this.migrar();
     await this.protegerDatosExistentes();
     // Estados documentados: Pendiente / Aprobado / Rechazado (G01).
     await this.query('UPDATE "Referido" SET estado=$1 WHERE estado=$2', [
@@ -235,16 +89,7 @@ export class Database {
       'APROBADO',
       'VALIDADO',
     ]);
-    for (const [rol, modulos] of [
-      ['ADMIN', MODULES],
-      ['GESTOR', GESTOR_MODULES],
-      ['SOCIO', SOCIO_MODULES],
-    ]) {
-      await this.query(
-        'INSERT INTO "RolPermiso" (rol,modulos) VALUES ($1,$2) ON CONFLICT (rol) DO NOTHING',
-        [rol, JSON.stringify(modulos)],
-      );
-    }
+    await this.sembrarAcceso();
     for (const [clave, valor] of Object.entries({
       contacto: 'soporte@suma.ec',
       puntosReferido: '100',
@@ -267,9 +112,44 @@ export class Database {
       if (!done) await this.seed();
     }
   }
+  /**
+   * Siembra el catálogo de módulos y los roles del sistema SOLO si faltan.
+   * Nunca pisa lo que el administrador ya cambió en Roles y permisos.
+   */
+  async sembrarAcceso() {
+    let orden = 0;
+    for (const m of MODULOS_INICIALES) {
+      orden += 10;
+      await this.query(
+        'INSERT INTO "Modulo" (clave,etiqueta,grupo,icono,orden,ambito,disponible) VALUES ($1,$2,$3,$4,$5,$6,$7) ON CONFLICT (clave) DO NOTHING',
+        [m.clave, m.etiqueta, m.grupo, m.icono, orden, m.ambito, m.disponible],
+      );
+    }
+    for (const r of ROLES_INICIALES) {
+      const disponibles = r.disponibles ?? MODULOS_INICIALES.map((m) => m.clave);
+      const creado = await this.query(
+        'INSERT INTO "Rol" (clave,nombre,descripcion,sistema,"requiereSegundoFactor","alcanceGlobal",interfaz,disponibles,obligatorios,"creadoEn") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) ON CONFLICT (clave) DO NOTHING RETURNING clave',
+        [
+          r.clave, r.nombre, r.descripcion, true, r.requiereSegundoFactor, r.alcanceGlobal,
+          r.interfaz, JSON.stringify(disponibles), JSON.stringify(r.obligatorios), new Date().toISOString(),
+        ],
+      );
+      const [actual] = await this.query('SELECT modulos FROM "RolPermiso" WHERE rol=$1', [r.clave]);
+      // Base nueva: permisos de partida. Base existente (anterior a HU-001): se conservan los
+      // permisos que ya tenía y solo se suman los módulos nuevos del catálogo, una única vez.
+      if (!actual || creado.length) {
+        const previos = actual ? JSON.parse(actual.modulos || '[]') : [];
+        const unidos = [...new Set([...previos, ...r.modulos])];
+        await this.query(
+          'INSERT INTO "RolPermiso" (rol,modulos) VALUES ($1,$2) ON CONFLICT (rol) DO UPDATE SET modulos=$2',
+          [r.clave, JSON.stringify(unidos)],
+        );
+      }
+    }
+  }
   async protegerDatosExistentes() {
     await this.transaction(async (client) => {
-      if (!this.sqlite) await this.query('SELECT pg_advisory_xact_lock(15274001)', [], client);
+      await this.query('SELECT pg_advisory_xact_lock(15274001)', [], client);
       const clave = 'verificadorCifrado';
       const [actual] = await this.query('SELECT valor FROM "Configuracion" WHERE clave=$1', [clave], client);
       const verificador = this.datos.huella('suma:verificador:v1');
@@ -339,7 +219,6 @@ export class Database {
     );
   }
   async close() {
-    if (this.sqlite) this.db.close();
-    else await this.pool.end();
+    await this.pool.end();
   }
 }

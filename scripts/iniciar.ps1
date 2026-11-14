@@ -1,44 +1,70 @@
+# Inicia SUMA sin Docker. Requiere Node.js 24+ y un PostgreSQL ya instalado.
+#   .\scripts\iniciar.ps1                     -> backend y web en este equipo
+#   .\scripts\iniciar.ps1 -Modo Backend       -> solo el backend (PC del servidor)
+#   .\scripts\iniciar.ps1 -Modo Frontend -BackendUrl http://192.168.1.20:3000   -> solo la web (otra PC)
+param(
+    [ValidateSet('Todo', 'Backend', 'Frontend')][string]$Modo = 'Todo',
+    [string]$BackendUrl = 'http://localhost:3000',
+    [int]$PuertoWeb = 4200
+)
 $ErrorActionPreference = 'Stop'
-$projectRoot = Split-Path -Parent $PSScriptRoot
-Set-Location -LiteralPath $projectRoot
+$raiz = Split-Path -Parent $PSScriptRoot
+Set-Location -LiteralPath $raiz
+
+function Instalar-Y-Compilar([string]$parte) {
+    if (-not (Test-Path -LiteralPath "$parte/node_modules")) {
+        Write-Host "Instalando dependencias de $parte..."
+        & npm.cmd ci --prefix $parte
+        if ($LASTEXITCODE -ne 0) { throw "No se pudieron instalar las dependencias de $parte." }
+    }
+    Write-Host "Compilando $parte..."
+    & npm.cmd run build --prefix $parte
+    if ($LASTEXITCODE -ne 0) { throw "La compilacion de $parte fallo. Revisa el mensaje anterior." }
+}
+
+$procesos = @()
 try {
-    $nodeCommand = (Get-Command node -ErrorAction Stop).Source
-    $major = [int]((& $nodeCommand --version).TrimStart('v').Split('.')[0])
-    if ($major -lt 24) { throw 'SUMA necesita Node.js 24 o superior.' }
-    if (-not (Test-Path -LiteralPath 'backend/.env')) { Copy-Item -LiteralPath 'backend/.env.example' -Destination 'backend/.env' }
-    foreach ($part in @('backend', 'frontend')) {
-        if (-not (Test-Path -LiteralPath "$part/node_modules")) {
-            Write-Host "Instalando dependencias de $part..."
-            & npm.cmd ci --prefix $part
-            if ($LASTEXITCODE -ne 0) { throw "No se pudieron instalar las dependencias de $part." }
+    $node = (Get-Command node -ErrorAction Stop).Source
+    if ([int]((& $node --version).TrimStart('v').Split('.')[0]) -lt 24) { throw 'SUMA necesita Node.js 24 o superior.' }
+    $logs = Join-Path $raiz '.local'
+    New-Item -ItemType Directory -Path $logs -Force | Out-Null
+
+    if ($Modo -in 'Todo', 'Backend') {
+        if (-not (Test-Path -LiteralPath 'backend/.env')) {
+            Copy-Item -LiteralPath 'backend/.env.example' -Destination 'backend/.env'
+            Write-Host 'Se creo backend/.env. Revisa DATABASE_URL (PostgreSQL) y vuelve a ejecutar.'
+            exit 1
         }
+        Instalar-Y-Compilar 'backend'
+        Write-Host 'Preparando la base de datos (migraciones)...'
+        & npm.cmd run db:init --prefix backend
+        if ($LASTEXITCODE -ne 0) { throw 'No se pudo preparar PostgreSQL. Si aun no existe la base, ejecuta: npm run db:crear (ver docs/LABORATORIO.md).' }
+        $procesos += Start-Process -FilePath $node -ArgumentList '--env-file=.env', 'dist/main.js' -WorkingDirectory (Join-Path $raiz 'backend') `
+            -RedirectStandardOutput (Join-Path $logs 'api.log') -RedirectStandardError (Join-Path $logs 'api-error.log') -WindowStyle Hidden -PassThru
     }
-    Write-Host 'Compilando SUMA...'
-    & npm.cmd run build
-    if ($LASTEXITCODE -ne 0) { throw 'La compilacion fallo. Revisa el mensaje anterior.' }
-    $logRoot = Join-Path $projectRoot '.local'
-    New-Item -ItemType Directory -Path $logRoot -Force | Out-Null
-    foreach ($service in @(@{Port=3000;Name='API'}, @{Port=4200;Name='Web'})) {
-        $probe = [Net.Sockets.TcpClient]::new()
-        try { $probe.Connect('127.0.0.1', $service.Port); throw "El puerto $($service.Port) ya esta en uso. Cierra la instancia anterior de SUMA antes de iniciar." }
-        catch [Net.Sockets.SocketException] {} finally { $probe.Dispose() }
+    if ($Modo -in 'Todo', 'Frontend') {
+        Instalar-Y-Compilar 'frontend'
+        $env:PORT = "$PuertoWeb"; $env:BACKEND_URL = $BackendUrl
+        $procesos += Start-Process -FilePath $node -ArgumentList 'servidor.mjs' -WorkingDirectory (Join-Path $raiz 'frontend') `
+            -RedirectStandardOutput (Join-Path $logs 'web.log') -RedirectStandardError (Join-Path $logs 'web-error.log') -WindowStyle Hidden -PassThru
     }
-    $apiProcess = Start-Process -FilePath $nodeCommand -ArgumentList '--env-file=.env', 'dist/main.js' -WorkingDirectory (Join-Path $projectRoot 'backend') -RedirectStandardOutput (Join-Path $logRoot 'api.log') -RedirectStandardError (Join-Path $logRoot 'api-error.log') -WindowStyle Hidden -PassThru
-    $webProcess = Start-Process -FilePath $nodeCommand -ArgumentList 'node_modules/@angular/cli/bin/ng.js', 'serve', '--host', '127.0.0.1', '--port', '4200' -WorkingDirectory (Join-Path $projectRoot 'frontend') -RedirectStandardOutput (Join-Path $logRoot 'web.log') -RedirectStandardError (Join-Path $logRoot 'web-error.log') -WindowStyle Hidden -PassThru
-    Write-Host 'Esperando al servidor...'
-    $ready = $false
-    for ($attempt=0; $attempt -lt 60; $attempt++) {
-        if ($apiProcess.HasExited -or $webProcess.HasExited) { throw 'Un servidor no pudo iniciar. Revisa los archivos de .local.' }
-        try { $response = Invoke-WebRequest -Uri 'http://127.0.0.1:4200/api/health' -UseBasicParsing -TimeoutSec 2; if ($response.StatusCode -eq 200) { $ready=$true; break } } catch {}
+
+    Write-Host 'Esperando a los servidores...'
+    $url = "http://127.0.0.1:$PuertoWeb/api/health"
+    if ($Modo -eq 'Backend') { $url = 'http://127.0.0.1:3000/api/health' }
+    $listo = $false
+    for ($i = 0; $i -lt 90; $i++) {
+        if ($procesos | Where-Object { $_.HasExited }) { throw 'Un servidor no pudo iniciar. Revisa los archivos de la carpeta .local.' }
+        try { if ((Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 2).StatusCode -eq 200) { $listo = $true; break } } catch {}
         Start-Sleep -Seconds 1
     }
-    if (-not $ready) { throw 'El inicio esta tardando mas de lo esperado. Revisa .local/web.log y .local/api-error.log.' }
-    Start-Process 'http://localhost:4200/internas/iniciar-sesion.html'
-    Write-Host 'SUMA esta lista en http://localhost:4200'
-    Write-Host 'Administrador: admin@suma.ec | Socio: socio@suma.ec'
-    Write-Host 'Clave de prueba: Suma2026!'
+    if (-not $listo) { throw 'El inicio tarda mas de lo esperado. Revisa .local/api-error.log y .local/web-error.log.' }
+
+    if ($Modo -ne 'Backend') { Start-Process "http://localhost:$PuertoWeb" }
+    Write-Host "SUMA esta lista ($Modo)."
+    if ($Modo -ne 'Backend') { Write-Host "Web: http://localhost:$PuertoWeb" }
+    Write-Host 'Cuentas de prueba (clave Suma2026!): admin@suma.ec | gestor@suma.ec | socio@suma.ec'
     Read-Host 'Pulsa Enter para detener los servidores de esta sesion'
 } finally {
-    if ($webProcess -and -not $webProcess.HasExited) { Stop-Process -Id $webProcess.Id -ErrorAction SilentlyContinue }
-    if ($apiProcess -and -not $apiProcess.HasExited) { Stop-Process -Id $apiProcess.Id -ErrorAction SilentlyContinue }
+    foreach ($p in $procesos) { if ($p -and -not $p.HasExited) { Stop-Process -Id $p.Id -ErrorAction SilentlyContinue } }
 }

@@ -1,12 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
 import express from 'express';
 import request from 'supertest';
 import { Database } from '../src/database.mjs';
 import { createApi, diasHabiles } from '../src/api.mjs';
+import { baseAislada } from './aislamiento-pg.mjs';
 
 async function registrar(agent, datos) {
   const alta = await agent.post('/api/auth/register').send(datos);
@@ -24,8 +22,8 @@ test('Sprint 1: criterios de aceptación documentados', async (t) => {
   process.env.SEED_DEMO = 'true';
   process.env.NODE_ENV = 'test';
   process.env.ENABLE_DEV_RESET_LINK = 'true';
-  const directory = mkdtempSync(join(tmpdir(), 'suma-test-'));
-  const db = new Database('file:' + join(directory, 'test.db'));
+  const aislada = await baseAislada();
+  const db = new Database(aislada.url, { esquema: aislada.esquema });
   const app = express();
   app.use('/api', (await createApi(db)).router);
   const admin = request.agent(app),
@@ -83,7 +81,13 @@ test('Sprint 1: criterios de aceptación documentados', async (t) => {
       );
       const s = await login(socio, 'socio@suma.ec');
       assert.equal(s.status, 200);
-      assert.deepEqual(s.body.modulos, ['panel', 'referidos', 'notificaciones', 'ayuda']);
+      assert.deepEqual(s.body.modulos, [
+        'panel', 'referidos', 'notificaciones', 'ayuda', 'comunidad', 'aprende', 'juegos', 'retos', 'recompensas',
+      ]);
+      // HU-002: el menú y la experiencia salen del rol guardado en la base.
+      assert.equal(s.body.interfaz, 'COMUNIDAD');
+      assert.equal(s.body.esAdmin, false);
+      assert.deepEqual(s.body.menu.map((m) => m.id), s.body.modulos.slice().sort((a, b) => s.body.menu.findIndex((m) => m.id === a) - s.body.menu.findIndex((m) => m.id === b)));
       assert.equal((await login(gestor, 'gestor@suma.ec')).status, 200);
     });
 
@@ -103,6 +107,42 @@ test('Sprint 1: criterios de aceptación documentados', async (t) => {
         (await admin.patch('/api/usuarios/' + me.id).send({ rol: 'SOCIO', activo: true })).status,
         400,
       );
+    });
+
+    await t.test('HU-001: roles y permisos se crean, editan y eliminan sin tocar el código', async () => {
+      const nuevo = { clave: 'ASESOR', nombre: 'Asesor comercial', descripcion: 'Atiende campañas', interfaz: 'COMUNIDAD' };
+      assert.equal((await socio.post('/api/roles').send(nuevo)).status, 403);
+      assert.equal((await admin.post('/api/roles').send({ ...nuevo, clave: 'mal clave' })).status, 400);
+      const creado = await admin.post('/api/roles').send({ ...nuevo, modulos: ['panel', 'ayuda', 'juegos'] });
+      assert.equal(creado.status, 201, JSON.stringify(creado.body));
+      assert.equal(creado.body.alcanceGlobal, false);
+      assert.equal((await admin.post('/api/roles').send(nuevo)).status, 409);
+      // Un rol nuevo no puede recibir módulos de administración.
+      assert.equal((await admin.put('/api/roles/ASESOR').send({ modulos: ['panel', 'ayuda', 'usuarios'] })).status, 400);
+      assert.equal((await admin.put('/api/roles/ASESOR').send({ modulos: ['panel', 'ayuda', 'juegos', 'retos'] })).status, 200);
+      const roles = (await admin.get('/api/roles')).body;
+      assert.deepEqual(roles.find((r) => r.rol === 'ASESOR').modulos, ['panel', 'ayuda', 'juegos', 'retos']);
+      assert.ok((await admin.get('/api/modulos')).body.some((m) => m.id === 'reportes'));
+      // Se asigna a una persona y su menú refleja el rol al entrar (HU-002).
+      const alta = await admin.post('/api/usuarios').send({ nombre: 'Rosa Asesora', correo: 'rosa@suma.ec', rol: 'ASESOR' });
+      assert.equal(alta.status, 201, JSON.stringify(alta.body));
+      const reset = await request(app)
+        .post('/api/auth/reset')
+        .send({ token: new URL(alta.body.devResetUrl).searchParams.get('token'), clave: 'Suma2026!' });
+      assert.equal(reset.status, 200);
+      const rosa = request.agent(app);
+      const entrada = await login(rosa, 'rosa@suma.ec');
+      assert.equal(entrada.status, 200);
+      assert.deepEqual(entrada.body.menu.map((m) => m.id), ['panel', 'juegos', 'retos', 'ayuda'].filter((id) => entrada.body.modulos.includes(id)));
+      assert.equal((await rosa.get('/api/usuarios')).status, 403);
+      assert.equal((await rosa.get('/api/referidos')).status, 403);
+      // En uso, no se elimina; los roles del sistema tampoco.
+      assert.equal((await admin.delete('/api/roles/ASESOR')).status, 409);
+      assert.equal((await admin.delete('/api/roles/SOCIO')).status, 409);
+      const rosaId = alta.body.id;
+      assert.equal((await admin.patch('/api/usuarios/' + rosaId).send({ rol: 'GESTOR', activo: true })).status, 200);
+      assert.equal((await admin.delete('/api/roles/ASESOR')).status, 200);
+      assert.equal((await admin.patch('/api/usuarios/' + rosaId).send({ rol: 'ASESOR', activo: true })).status, 400);
     });
 
     await t.test('RF-08-2: solo el administrador crea cuentas de Gestor o Administrador', async () => {
@@ -394,20 +434,21 @@ test('Sprint 1: criterios de aceptación documentados', async (t) => {
     });
   } finally {
     await db.close();
-    rmSync(directory, { recursive: true, force: true });
+    await aislada.limpiar();
   }
 });
 
 test('RNF-05: migra datos personales y conserva acceso y unicidad por correo', async () => {
-  const directory = mkdtempSync(join(tmpdir(), 'suma-cifrado-'));
-  const url = 'file:' + join(directory, 'test.db');
+  const aislada = await baseAislada();
+  const url = aislada.url;
+  const abrir = () => new Database(url, { esquema: aislada.esquema });
   const claveOriginal = process.env.SUMA_DATA_KEY;
   const semillaOriginal = process.env.SEED_DEMO;
   let db;
   try {
     delete process.env.SUMA_DATA_KEY;
     process.env.SEED_DEMO = 'false';
-    db = new Database(url);
+    db = abrir();
     await db.init();
     const appLegacy = express();
     appLegacy.use('/api', (await createApi(db)).router);
@@ -417,7 +458,7 @@ test('RNF-05: migra datos personales y conserva acceso y unicidad por correo', a
     await db.close();
 
     process.env.SUMA_DATA_KEY = '2a'.repeat(32);
-    db = new Database(url);
+    db = abrir();
     const app = express();
     app.use('/api', (await createApi(db)).router);
     const [guardado] = await db.queryRaw('SELECT correo,celular,cuenta,"correoIndice" FROM "Usuario"');
@@ -434,7 +475,7 @@ test('RNF-05: migra datos personales y conserva acceso y unicidad por correo', a
     await db.close();
 
     process.env.SUMA_DATA_KEY = '7b'.repeat(32);
-    db = new Database(url);
+    db = abrir();
     await assert.rejects(db.init(), /no coincide/);
   } finally {
     await db?.close();
@@ -442,6 +483,6 @@ test('RNF-05: migra datos personales y conserva acceso y unicidad por correo', a
     else process.env.SUMA_DATA_KEY = claveOriginal;
     if (semillaOriginal === undefined) delete process.env.SEED_DEMO;
     else process.env.SEED_DEMO = semillaOriginal;
-    rmSync(directory, { recursive: true, force: true });
+    await aislada.limpiar();
   }
 });

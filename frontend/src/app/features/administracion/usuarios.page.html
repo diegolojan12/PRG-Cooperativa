@@ -75,9 +75,9 @@
                 </div>
               </td>
               <td>
-                <span class="s-role-pill" [class.admin]="u.rol === 'ADMIN'"
-                  ><app-icon [name]="u.rol === 'ADMIN' ? 'roles' : 'usuarios'" />{{
-                    etiquetas[u.rol]
+                <span class="s-role-pill" [class.admin]="rolesAdmin().has(u.rol)"
+                  ><app-icon [name]="rolesAdmin().has(u.rol) ? 'roles' : 'usuarios'" />{{
+                    etiquetas()[u.rol] ?? u.rol
                   }}</span
                 >
               </td>
@@ -161,7 +161,7 @@
       <app-campo
         para="nuevoRol"
         etiqueta="Rol"
-        [ayuda]="ayudaRol[crearForm.controls.rol.value]"
+        [ayuda]="ayudaRol()[crearForm.controls.rol.value] ?? 'Elige el rol de la persona.'"
         [requerido]="true"
         [error]="errorCrear('rol')"
       >
@@ -170,8 +170,8 @@
           formControlName="rol"
           aria-describedby="nuevoRol-ayuda nuevoRol-error"
         >
-          @for (r of roles; track r) {
-            <option [value]="r">{{ etiquetas[r] }}</option>
+          @for (r of roles(); track r.rol) {
+            <option [value]="r.rol">{{ r.nombre }}</option>
           }
         </select>
       </app-campo>
@@ -194,12 +194,12 @@
       <app-campo
         para="gestionRol"
         etiqueta="Rol"
-        [ayuda]="ayudaRol[gestionForm.controls.rol.value]"
+        [ayuda]="ayudaRol()[gestionForm.controls.rol.value] ?? 'Elige el rol de la persona.'"
         [requerido]="true"
       >
         <select id="gestionRol" formControlName="rol" aria-describedby="gestionRol-ayuda">
-          @for (r of roles; track r) {
-            <option [value]="r">{{ etiquetas[r] }}</option>
+          @for (r of roles(); track r.rol) {
+            <option [value]="r.rol">{{ r.nombre }}</option>
           }
         </select>
       </app-campo>

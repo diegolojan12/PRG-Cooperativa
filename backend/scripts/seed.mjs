@@ -6,7 +6,7 @@ try {
   await db.init();
   await db.seed();
   console.log(
-    'Cuentas de prueba listas: admin@suma.ec y socio@suma.ec / Suma2026!',
+    'Cuentas de prueba listas (clave Suma2026!): admin@suma.ec, gestor@suma.ec y socio@suma.ec.',
   );
 } finally {
   await db.close();

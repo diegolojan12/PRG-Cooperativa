@@ -1,17 +1,10 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { SessionStore } from '../../core/auth/session.store';
 import { leerError } from '../../core/http/api-error';
-import {
-  CuentaPendiente,
-  ETIQUETAS_ROL,
-  Pagina,
-  ROLES,
-  Rol,
-  Usuario,
-} from '../../core/models/domain';
+import { CuentaPendiente, OpcionRol, Pagina, Rol, Usuario } from '../../core/models/domain';
 import { AvisoService } from '../../core/ui/aviso.service';
 import { CampoComponent } from '../../shared/campo/campo.component';
 import { IconComponent } from '../../shared/icon/icon.component';
@@ -24,12 +17,6 @@ import {
   sinCodigo,
 } from '../../shared/validacion';
 import { AdministracionApi } from './administracion.api';
-
-const AYUDA_ROL: Record<Rol, string> = {
-  ADMIN: 'Administra usuarios, permisos, configuración y bitácora. Ingresa con segundo factor.',
-  GESTOR: 'Publica y gestiona contenidos (capacitaciones, publicaciones).',
-  SOCIO: 'Refiere personas y participa en la comunidad.',
-};
 
 @Component({
   selector: 'app-usuarios-page',
@@ -50,9 +37,15 @@ export class UsuariosPage implements OnInit, OnDestroy {
   private fb = inject(FormBuilder).nonNullable;
   private timer?: ReturnType<typeof setTimeout>;
 
-  readonly roles = ROLES;
-  readonly etiquetas = ETIQUETAS_ROL;
-  readonly ayudaRol = AYUDA_ROL;
+  /** Los roles salen de la base de datos (HU-001): crear uno nuevo no exige cambiar esta pantalla. */
+  readonly roles = signal<OpcionRol[]>([]);
+  readonly etiquetas = computed(() =>
+    Object.fromEntries(this.roles().map((r) => [r.rol, r.nombre])),
+  );
+  readonly ayudaRol = computed(() =>
+    Object.fromEntries(this.roles().map((r) => [r.rol, r.descripcion || 'Elige el rol de la persona.'])),
+  );
+  readonly rolesAdmin = computed(() => new Set(this.roles().filter((r) => r.alcanceGlobal).map((r) => r.rol)));
   readonly pagina = signal(1);
   readonly busqueda = signal('');
   readonly datos = signal<Pagina<Usuario> | null>(null);
@@ -117,15 +110,26 @@ export class UsuariosPage implements OnInit, OnDestroy {
   readonly crearForm = this.fb.group({
     nombre: ['', [Validators.required, nombreCompleto, Validators.maxLength(100), sinCodigo]],
     correo: ['', [Validators.required, Validators.pattern(emailPattern)]],
-    rol: ['GESTOR' as Rol, Validators.required],
+    rol: ['' as Rol, Validators.required],
   });
   readonly gestionForm = this.fb.group({
-    rol: ['SOCIO' as Rol, Validators.required],
+    rol: ['' as Rol, Validators.required],
     activo: [true],
   });
 
   ngOnInit(): void {
+    void this.cargarRoles();
     void this.cargar();
+  }
+  async cargarRoles(): Promise<void> {
+    try {
+      const lista = await firstValueFrom(this.api.opcionesRol());
+      this.roles.set(lista);
+      const alta = lista.find((r) => !r.alcanceGlobal && r.interfaz === 'ADMINISTRACION') ?? lista[0];
+      if (alta) this.crearForm.controls.rol.setValue(alta.rol);
+    } catch (error) {
+      this.error.set(leerError(error).mensaje);
+    }
   }
   ngOnDestroy(): void {
     clearTimeout(this.timer);
@@ -164,14 +168,15 @@ export class UsuariosPage implements OnInit, OnDestroy {
       ? 'Escribe nombre y apellido, por ejemplo Gabriel Ortiz.'
       : campo === 'correo'
         ? 'El correo está incompleto. Escríbelo completo, por ejemplo nombre@correo.com.'
-        : 'Elige uno de los 3 roles.';
+        : 'Elige uno de los roles de la lista.';
   }
 
   abrirCrear(): void {
     this.enviado.set(false);
     this.erroresServidor.set({});
     this.enlaceDev.set(null);
-    this.crearForm.reset({ nombre: '', correo: '', rol: 'GESTOR' });
+    const alta = this.roles().find((r) => !r.alcanceGlobal && r.interfaz === 'ADMINISTRACION') ?? this.roles()[0];
+    this.crearForm.reset({ nombre: '', correo: '', rol: alta?.rol ?? '' });
     this.modal.set('crear');
   }
   abrirGestion(usuario: Usuario): void {
@@ -193,7 +198,7 @@ export class UsuariosPage implements OnInit, OnDestroy {
       this.modal.set(null);
       this.enlaceDev.set(creado.devResetUrl ?? null);
       this.avisos.exito(
-        `Cuenta de ${this.etiquetas[creado.rol].toLowerCase()} creada. Enviamos a ${creado.correo} un enlace para definir su contraseña.`,
+        `Cuenta de ${(this.etiquetas()[creado.rol] ?? creado.rol).toLowerCase()} creada. Enviamos a ${creado.correo} un enlace para definir su contraseña.`,
       );
       await this.cargar();
     } catch (error) {

@@ -2,26 +2,30 @@
  * Modelo de dominio único (Documento de Visión v1.1.0, RF-08-1, RF-11-4).
  * El compilador señala cualquier uso de estados o roles no documentados.
  */
-export type Rol = 'ADMIN' | 'GESTOR' | 'SOCIO';
+/** Clave de un rol (p. ej. ADMIN, SOCIO). Los roles se administran en la base de datos (HU-001). */
+export type Rol = string;
 export type EstadoReferido = 'PENDIENTE' | 'APROBADO' | 'RECHAZADO';
-export type Modulo =
-  | 'panel'
-  | 'referidos'
-  | 'usuarios'
-  | 'roles'
-  | 'configuracion'
-  | 'actividad'
-  | 'notificaciones'
-  | 'ayuda';
+/** Clave de un módulo del catálogo (tabla Modulo). */
+export type Modulo = string;
 
-export const ROLES: readonly Rol[] = ['ADMIN', 'GESTOR', 'SOCIO'];
+/** Experiencia que recibe un rol al entrar: red social para socios o panel de administración. */
+export type Interfaz = 'COMUNIDAD' | 'ADMINISTRACION';
+
+export interface ItemMenu {
+  id: Modulo;
+  etiqueta: string;
+  grupo: string;
+  icono: string;
+  /** false = el módulo existe en el catálogo pero su pantalla llega en un sprint posterior. */
+  disponible: boolean;
+}
+
+export interface ModuloCatalogo extends ItemMenu {
+  ambito: 'ADMIN' | 'COMUN';
+}
+
 export const ESTADOS: readonly EstadoReferido[] = ['PENDIENTE', 'APROBADO', 'RECHAZADO'];
 
-export const ETIQUETAS_ROL: Record<Rol, string> = {
-  ADMIN: 'Administrador',
-  GESTOR: 'Gestor de contenidos',
-  SOCIO: 'Socio',
-};
 export const ETIQUETAS_ESTADO: Record<EstadoReferido, string> = {
   PENDIENTE: 'Pendiente',
   APROBADO: 'Aprobado',
@@ -37,6 +41,11 @@ export interface Usuario {
   celular?: string | null;
   creadoEn?: string;
   modulos: Modulo[];
+  /** Menú del usuario, calculado en el servidor a partir de los permisos de su rol (HU-002). */
+  menu: ItemMenu[];
+  esAdmin: boolean;
+  interfaz: Interfaz;
+  rolNombre: string;
   cuentaVerificada?: boolean;
   cuentaEstado?: EstadoReferido | null;
 }
@@ -108,9 +117,24 @@ export interface Tablero {
 
 export interface RolPermiso {
   rol: Rol;
+  nombre: string;
+  descripcion: string;
+  sistema: boolean;
+  requiereSegundoFactor: boolean;
+  alcanceGlobal: boolean;
+  interfaz: Interfaz;
   modulos: Modulo[];
   disponibles: Modulo[];
   obligatorios: Modulo[];
+  usuarios: number;
+}
+
+export interface OpcionRol {
+  rol: Rol;
+  nombre: string;
+  descripcion: string;
+  alcanceGlobal: boolean;
+  interfaz: Interfaz;
 }
 
 export interface Configuracion {

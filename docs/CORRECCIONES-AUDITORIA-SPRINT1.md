@@ -34,8 +34,7 @@ corregidos (Resumen de Requisitos, Trazabilidad HU/RF/RNF).
 
 ## Migración de base de datos
 
-- **SQLite (desarrollo):** automática al iniciar (`Database.init()`), incluida la reconstrucción de
-  `Referido` para quitar el `UNIQUE` en línea.
+- **PostgreSQL (único motor):** las migraciones `backend/prisma/sprint1*.sql` se aplican solas, una vez, al iniciar (`Database.init()`) o con `npm run db:init`.
 - **PostgreSQL:** `npm run db:init` aplica `backend/prisma/sprint1-auditoria.sql` y `backend/prisma/sprint1-dominio.sql` una sola vez.
 
 ## Verificación

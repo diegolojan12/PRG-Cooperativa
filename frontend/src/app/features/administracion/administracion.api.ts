@@ -5,6 +5,8 @@ import {
   Configuracion,
   CuentaPendiente,
   Modulo,
+  ModuloCatalogo,
+  OpcionRol,
   OpcionesActividad,
   Pagina,
   Rol,
@@ -51,6 +53,24 @@ export class AdministracionApi {
   }
   roles() {
     return this.http.get<RolPermiso[]>('/api/roles');
+  }
+  opcionesRol() {
+    return this.http.get<OpcionRol[]>('/api/roles/opciones');
+  }
+  modulos() {
+    return this.http.get<ModuloCatalogo[]>('/api/modulos');
+  }
+  crearRol(datos: {
+    clave: string;
+    nombre: string;
+    descripcion: string;
+    interfaz: string;
+    requiereSegundoFactor: boolean;
+  }) {
+    return this.http.post<RolPermiso>('/api/roles', datos);
+  }
+  eliminarRol(rol: Rol) {
+    return this.http.delete<{ ok: true }>(`/api/roles/${rol}`);
   }
   guardarRol(rol: Rol, modulos: Modulo[]) {
     return this.http.put<{ ok: true }>(`/api/roles/${rol}`, { modulos });

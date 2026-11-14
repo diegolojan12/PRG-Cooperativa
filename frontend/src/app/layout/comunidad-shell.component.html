@@ -1,0 +1,128 @@
+<div class="suma-app cm-app">
+  <a class="s-skip" href="#content" (click)="saltarAlContenido($event)">Saltar al contenido</a>
+
+  <aside class="cm-rail">
+    <a class="cm-brand" routerLink="/panel" aria-label="SUMA, inicio"
+      ><span class="logoIcon"><i></i><i></i><i></i></span>SUMA<em aria-hidden="true">.</em></a
+    >
+    <nav class="cm-nav" aria-label="Navegación principal">
+      @for (item of menu(); track item.id) {
+        <a
+          [routerLink]="ruta(item.id)"
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+          [routerLinkActiveOptions]="{ exact: item.id === 'panel' }"
+          ><app-icon [name]="item.icono" />{{ item.id === 'panel' ? 'Inicio' : item.etiqueta }}
+          @if (!item.disponible) {
+            <span class="cm-soon">Pronto</span>
+          }
+        </a>
+      }
+      @for (item of utilidades(); track item.id) {
+        <a
+          [routerLink]="ruta(item.id)"
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+          ><app-icon [name]="item.icono" />{{ item.etiqueta }}
+          @if (item.id === 'notificaciones' && notificaciones.sinLeer()) {
+            <span class="cm-badge">{{ notificaciones.sinLeer() }}</span>
+          }
+        </a>
+      }
+    </nav>
+    @if (session.puede('referidos')) {
+      <a class="cm-cta" routerLink="/panel/referidos" [queryParams]="{ nuevo: 1 }">
+        <app-icon name="plus" />Nuevo referido
+      </a>
+    }
+    <div class="cm-me">
+      <span class="cm-avatar">{{ iniciales() }}</span>
+      <div>
+        <strong>{{ session.usuario()?.nombre }}</strong>
+        <small>{{ session.usuario()?.rolNombre }}</small>
+      </div>
+      <button type="button" class="cm-icon-btn" aria-label="Cerrar sesión" (click)="confirmarSalida.set(true)">
+        <app-icon name="logout" />
+      </button>
+    </div>
+  </aside>
+
+  <div class="cm-stage">
+    <header class="cm-top">
+      <a class="cm-brand" routerLink="/panel" aria-label="SUMA, inicio"
+        ><span class="logoIcon"><i></i><i></i><i></i></span>SUMA<em aria-hidden="true">.</em></a
+      >
+      <div class="cm-top-actions">
+        @if (session.puede('notificaciones')) {
+          <a routerLink="/panel/notificaciones" class="cm-icon-btn" aria-label="Ver notificaciones"
+            ><app-icon name="notificaciones" />
+            @if (notificaciones.sinLeer()) {
+              <span class="cm-bell-dot"></span>
+            }
+          </a>
+        }
+        <button type="button" class="cm-icon-btn" aria-label="Cerrar sesión" (click)="confirmarSalida.set(true)">
+          <app-icon name="logout" />
+        </button>
+      </div>
+    </header>
+    <main #content id="content" class="cm-main" tabindex="-1">
+      <router-outlet />
+    </main>
+  </div>
+
+  <nav class="cm-tabbar" aria-label="Navegación rápida">
+    @for (item of pestanas(); track item.id) {
+      <a
+        [routerLink]="ruta(item.id)"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        [routerLinkActiveOptions]="{ exact: item.id === 'panel' }"
+        ><app-icon [name]="item.icono" />{{ item.id === 'panel' ? 'Inicio' : item.etiqueta.split(' ')[0] }}</a
+      >
+    }
+    <button
+      type="button"
+      aria-controls="menu-mas"
+      [attr.aria-expanded]="masAbierto()"
+      (click)="masAbierto.set(!masAbierto())"
+    >
+      <app-icon name="menu" />Más
+    </button>
+  </nav>
+  @if (masAbierto()) {
+    <button type="button" class="cm-more-scrim" aria-label="Cerrar menú" (click)="masAbierto.set(false)"></button>
+    <div id="menu-mas" class="cm-more" role="menu" aria-label="Todas las secciones">
+      @for (item of session.menu(); track item.id) {
+        <a
+          role="menuitem"
+          [routerLink]="ruta(item.id)"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.id === 'panel' }"
+          ><app-icon [name]="item.icono" />{{ item.id === 'panel' ? 'Inicio' : item.etiqueta }}
+          @if (!item.disponible) {
+            <span class="cm-soon">Pronto</span>
+          }
+        </a>
+      }
+      <button type="button" role="menuitem" (click)="masAbierto.set(false); confirmarSalida.set(true)">
+        <app-icon name="logout" />Cerrar sesión
+      </button>
+    </div>
+  }
+
+  @if (confirmarSalida()) {
+    <app-modal [ocupado]="saliendo()" (cerrar)="confirmarSalida.set(false)">
+      <span class="s-feature-icon"><app-icon name="logout" /></span>
+      <h2 id="dialogTitle">¿Cerrar tu sesión?</h2>
+      <p>Tu comunidad te espera cuando quieras volver.</p>
+      <div class="s-form-actions">
+        <button type="button" class="s-secondary" (click)="confirmarSalida.set(false)">
+          Seguir aquí</button
+        ><button type="button" class="s-primary" [disabled]="saliendo()" (click)="salir()">
+          {{ saliendo() ? 'Cerrando…' : 'Cerrar sesión' }}
+        </button>
+      </div>
+    </app-modal>
+  }
+</div>

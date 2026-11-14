@@ -21,12 +21,11 @@ import { AuthApi } from '../core/auth/auth.api';
 import { InactividadService } from '../core/auth/inactividad.service';
 import { SessionStore } from '../core/auth/session.store';
 import { leerError } from '../core/http/api-error';
-import { ETIQUETAS_ROL } from '../core/models/domain';
+import { ItemMenu } from '../core/models/domain';
 import { AvisoService } from '../core/ui/aviso.service';
 import { NotificacionesStore } from '../features/notificaciones/notificaciones.store';
 import { IconComponent } from '../shared/icon/icon.component';
 import { ModalComponent } from '../shared/modal/modal.component';
-import { MODULOS_FUTUROS, NAVEGACION } from './navegacion';
 
 const tituloDe = (snapshot: ActivatedRouteSnapshot): string => {
   let route: ActivatedRouteSnapshot | null = snapshot;
@@ -55,7 +54,6 @@ export class ShellComponent {
   readonly menuAbierto = signal(false);
   readonly confirmarSalida = signal(false);
   readonly saliendo = signal(false);
-  readonly etiquetasRol = ETIQUETAS_ROL;
   readonly anio = new Date().getFullYear();
 
   readonly titulo = toSignal(
@@ -65,11 +63,15 @@ export class ShellComponent {
     ),
     { initialValue: tituloDe(this.router.routerState.snapshot.root) },
   );
-  readonly menu = computed(() => NAVEGACION.filter((item) => this.session.puede(item.id)));
-  readonly futuros = computed(() => {
-    const rol = this.session.rol();
-    return rol ? MODULOS_FUTUROS.filter((m) => m.roles.includes(rol)) : [];
+  /** HU-002: el menú lo calcula el servidor según el rol; aquí solo se agrupa para mostrarlo. */
+  readonly grupos = computed(() => {
+    const porGrupo = new Map<string, ItemMenu[]>();
+    for (const item of this.session.menu().filter((m) => m.disponible))
+      porGrupo.set(item.grupo, [...(porGrupo.get(item.grupo) ?? []), item]);
+    return [...porGrupo].map(([nombre, items]) => ({ nombre, items }));
   });
+  readonly futuros = computed(() => this.session.menu().filter((m) => !m.disponible));
+  readonly rolNombre = computed(() => this.session.usuario()?.rolNombre ?? '');
   readonly iniciales = computed(
     () =>
       this.session

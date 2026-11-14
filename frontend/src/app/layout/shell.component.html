@@ -15,20 +15,20 @@
     >
     <p class="s-tagline">Conectamos para crecer</p>
     <nav aria-label="Navegación principal">
-      @for (item of menu(); track item.id; let i = $index) {
-        @if (i === 0 || menu()[i - 1].group !== item.group) {
-          <span class="s-nav-label">{{ item.group }}</span>
+      @for (grupo of grupos(); track grupo.nombre) {
+        <span class="s-nav-label">{{ grupo.nombre }}</span>
+        @for (item of grupo.items; track item.id) {
+          <a
+            [routerLink]="item.id === 'panel' ? '/panel' : '/panel/' + item.id"
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: item.id === 'panel' }"
+            ><app-icon [name]="item.icono" />{{ item.etiqueta }}
+            @if (item.id === 'notificaciones' && notificaciones.sinLeer()) {
+              <span class="s-count">{{ notificaciones.sinLeer() }}</span>
+            }
+          </a>
         }
-        <a
-          [routerLink]="item.id === 'panel' ? '/panel' : '/panel/' + item.id"
-          routerLinkActive="active"
-          ariaCurrentWhenActive="page"
-          [routerLinkActiveOptions]="{ exact: item.id === 'panel' }"
-          ><app-icon [name]="item.id" />{{ item.label }}
-          @if (item.id === 'notificaciones' && notificaciones.sinLeer()) {
-            <span class="s-count">{{ notificaciones.sinLeer() }}</span>
-          }
-        </a>
       }
       @if (futuros().length) {
         <span class="s-nav-label">Próximamente</span>
@@ -38,7 +38,7 @@
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
           >
-            <app-icon [name]="item.icon" />{{ item.label }}
+            <app-icon [name]="item.icono" />{{ item.etiqueta }}
           </a>
         }
       }
@@ -69,8 +69,8 @@
         Mi comunidad <span>/</span> <strong>{{ titulo() }}</strong>
       </div>
       <div class="s-top-right">
-        @if (session.rol(); as rol) {
-          <span class="s-role"><span class="s-online"></span>{{ etiquetasRol[rol] }}</span>
+        @if (rolNombre()) {
+          <span class="s-role"><span class="s-online"></span>{{ rolNombre() }}</span>
         }
         @if (session.puede('notificaciones')) {
           <a routerLink="/panel/notificaciones" class="s-bell" aria-label="Ver notificaciones"
@@ -84,7 +84,7 @@
           <span class="s-avatar">{{ iniciales() }}</span>
           <div>
             <strong>{{ session.usuario()?.nombre }}</strong
-            ><small>{{ session.rol() ? etiquetasRol[session.rol()!] : '' }}</small>
+            ><small>{{ rolNombre() }}</small>
           </div>
         </div>
       </div>
