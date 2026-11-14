@@ -25,6 +25,7 @@
     "prettier": "^3.9.10"
   },
   "lint-staged": {
-    "*.{ts,html,scss,json,md}": "prettier --write"
+    "*.{ts,html,scss,json,md}": "prettier --write",
+    "frontend/src/**/*.{ts,html}": "node frontend/node_modules/eslint/bin/eslint.js --config frontend/eslint.config.js --max-warnings=0"
   }
 }

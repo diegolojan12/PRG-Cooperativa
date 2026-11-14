@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "node smoke.cjs",
+    "install:browsers": "playwright install chromium"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

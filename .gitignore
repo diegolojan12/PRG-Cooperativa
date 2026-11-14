@@ -8,3 +8,6 @@ coverage/
 backend/src/generated/
 e2e/test-results/
 e2e/playwright-report/
+.local/
+backend/data/
+*.tsbuildinfo

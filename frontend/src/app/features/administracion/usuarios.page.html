@@ -1,0 +1,315 @@
+<div class="s-page-heading">
+  <div>
+    <span class="s-eyebrow muted">ADMINISTRA TU COMUNIDAD</span>
+    <h1>Usuarios</h1>
+    <p>Gestiona quiénes forman parte de tu comunidad.</p>
+  </div>
+  <div class="s-heading-actions">
+    <button type="button" class="s-secondary" (click)="abrirCuentas()">
+      Cuentas por verificar
+    </button>
+    <button type="button" class="s-primary" (click)="abrirCrear()">
+      <app-icon name="plus" />Crear cuenta
+    </button>
+  </div>
+</div>
+@if (enlaceDev(); as enlace) {
+  <div class="s-info-banner">
+    <app-icon name="mail" />
+    <div>
+      <strong>Entorno local de prueba</strong>
+      <p>
+        Sin servidor de correo configurado. Enlace de activación:
+        <a [href]="enlace">abrir enlace</a>
+      </p>
+    </div>
+  </div>
+}
+<section class="s-card s-table-card">
+  <div class="s-filters">
+    <app-campo
+      para="buscarUsuarios"
+      etiqueta="Buscar"
+      ayuda="Nombre o correo completo. Ej. Daniela"
+    >
+      <input
+        id="buscarUsuarios"
+        type="search"
+        maxlength="100"
+        placeholder="Buscar personas…"
+        aria-describedby="buscarUsuarios-ayuda"
+        (input)="buscar($any($event.target).value)"
+      />
+    </app-campo>
+  </div>
+  @if (error()) {
+    <div class="s-inline-empty" role="alert">
+      {{ error() }}
+      <button type="button" class="s-secondary" (click)="cargar()">Volver a intentar</button>
+    </div>
+  } @else {
+    <div class="s-table-scroll" [attr.aria-busy]="cargando()">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Usuario</th>
+            <th scope="col">Rol</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (u of datos()?.items ?? []; track u.id) {
+            <tr>
+              <td>
+                <div class="s-person-cell">
+                  <span class="s-avatar pale">{{ u.nombre.slice(0, 1) }}</span>
+                  <div>
+                    <strong
+                      >{{ u.nombre }}
+                      @if (u.id === session.usuario()?.id) {
+                        <span class="s-you">Tú</span>
+                      }</strong
+                    ><small>{{ u.correo }}</small>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="s-role-pill" [class.admin]="rolesAdmin().has(u.rol)"
+                  ><app-icon [name]="rolesAdmin().has(u.rol) ? 'roles' : 'usuarios'" />{{
+                    etiquetas()[u.rol] ?? u.rol
+                  }}</span
+                >
+              </td>
+              <td>
+                <span class="s-status" [attr.data-state]="u.activo ? 'APROBADO' : 'RECHAZADO'">{{
+                  u.activo ? 'Activo' : 'Inactivo'
+                }}</span>
+              </td>
+              <td>
+                <button type="button" class="s-secondary" (click)="abrirGestion(u)">
+                  <app-icon name="edit" />Gestionar
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="4" class="s-inline-empty">
+                {{ cargando() ? 'Cargando…' : 'No se encontraron personas con esa búsqueda.' }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    @if (datos(); as d) {
+      <app-paginador
+        [pagina]="d.pagina"
+        [total]="d.total"
+        [porPagina]="d.porPagina"
+        (cambiar)="irA($event)"
+      />
+    }
+  }
+</section>
+<div class="s-info-line">
+  <app-icon name="roles" />
+  <p>
+    Al cambiar el rol o desactivar una cuenta, se cierran sus sesiones. Tu propio acceso de
+    administrador permanece protegido.
+  </p>
+</div>
+
+@if (modal() === 'crear') {
+  <app-modal [ocupado]="ocupado()" (cerrar)="cerrar()">
+    <span class="s-feature-icon yellow"><app-icon name="usuarios" /></span>
+    <h2 id="dialogTitle">Crear cuenta</h2>
+    <p>Solo administración crea cuentas de Gestor de contenidos o Administrador (RF-08-2).</p>
+    <form [formGroup]="crearForm" (ngSubmit)="crear()" novalidate>
+      <app-campo
+        para="nuevoNombre"
+        etiqueta="Nombres y apellidos"
+        ayuda="Ej. Gabriel Ortiz"
+        [requerido]="true"
+        [error]="errorCrear('nombre')"
+      >
+        <input
+          id="nuevoNombre"
+          formControlName="nombre"
+          maxlength="100"
+          autocomplete="off"
+          aria-describedby="nuevoNombre-ayuda nuevoNombre-error"
+          [attr.aria-invalid]="!!errorCrear('nombre')"
+        />
+      </app-campo>
+      <app-campo
+        para="nuevoCorreo"
+        etiqueta="Correo electrónico"
+        ayuda="Recibirá un enlace de 24 h para definir su contraseña. Ej. nombre@cooperativa.ec"
+        [requerido]="true"
+        [error]="errorCrear('correo')"
+      >
+        <input
+          id="nuevoCorreo"
+          type="email"
+          formControlName="correo"
+          autocomplete="off"
+          aria-describedby="nuevoCorreo-ayuda nuevoCorreo-error"
+          [attr.aria-invalid]="!!errorCrear('correo')"
+        />
+      </app-campo>
+      <app-campo
+        para="nuevoRol"
+        etiqueta="Rol"
+        [ayuda]="ayudaRol()[crearForm.controls.rol.value] ?? 'Elige el rol de la persona.'"
+        [requerido]="true"
+        [error]="errorCrear('rol')"
+      >
+        <select
+          id="nuevoRol"
+          formControlName="rol"
+          aria-describedby="nuevoRol-ayuda nuevoRol-error"
+        >
+          @for (r of roles(); track r.rol) {
+            <option [value]="r.rol">{{ r.nombre }}</option>
+          }
+        </select>
+      </app-campo>
+      <div class="s-form-actions">
+        <button type="button" class="s-secondary" [disabled]="ocupado()" (click)="cerrar()">
+          Cancelar</button
+        ><button type="submit" class="s-primary" [disabled]="ocupado()">
+          {{ ocupado() ? 'Creando…' : 'Crear cuenta' }}
+        </button>
+      </div>
+    </form>
+  </app-modal>
+}
+@if (modal() === 'gestionar' && seleccionado(); as u) {
+  <app-modal [ocupado]="ocupado()" (cerrar)="cerrar()">
+    <span class="s-feature-icon"><app-icon name="usuarios" /></span>
+    <h2 id="dialogTitle">Gestionar usuario</h2>
+    <p>{{ u.nombre }} · {{ u.correo }}</p>
+    <form [formGroup]="gestionForm" (ngSubmit)="guardar()" novalidate>
+      <app-campo
+        para="gestionRol"
+        etiqueta="Rol"
+        [ayuda]="ayudaRol()[gestionForm.controls.rol.value] ?? 'Elige el rol de la persona.'"
+        [requerido]="true"
+      >
+        <select id="gestionRol" formControlName="rol" aria-describedby="gestionRol-ayuda">
+          @for (r of roles(); track r.rol) {
+            <option [value]="r.rol">{{ r.nombre }}</option>
+          }
+        </select>
+      </app-campo>
+      <div class="s-field">
+        <label class="s-consent"
+          ><input
+            id="gestionActivo"
+            type="checkbox"
+            formControlName="activo"
+            aria-describedby="gestionActivo-ayuda"
+          /><span>Cuenta activa · Permitir iniciar sesión</span></label
+        >
+        <small class="s-help" id="gestionActivo-ayuda"
+          >Desmárcala para impedir el acceso sin borrar la cuenta.</small
+        >
+      </div>
+      <div class="s-info-line">
+        <app-icon name="roles" />
+        <p>Este cambio cerrará las sesiones de esta persona.</p>
+      </div>
+      <div class="s-form-actions">
+        <button type="button" class="s-secondary" [disabled]="ocupado()" (click)="cerrar()">
+          Cancelar</button
+        ><button type="submit" class="s-primary" [disabled]="ocupado()">
+          {{ ocupado() ? 'Guardando…' : 'Guardar cambios' }}
+        </button>
+      </div>
+    </form>
+  </app-modal>
+}
+
+@if (modal() === 'cuentas') {
+  <app-modal [ocupado]="ocupado()" (cerrar)="cerrar()">
+    <h2 id="dialogTitle">Cuentas por verificar</h2>
+    @if (cuentaSeleccionada(); as cuenta) {
+      <p>{{ cuenta.nombre }} · {{ cuenta.tipo }} · {{ cuenta.numero }}</p>
+      <p>Confirma la titularidad en los registros de la Cooperativa antes de aprobar.</p>
+      <form [formGroup]="revisionForm" (ngSubmit)="revisarCuenta()" novalidate>
+        <app-campo
+          para="cuentaDecision"
+          etiqueta="Resultado"
+          ayuda="Elige el resultado de la revisión."
+        >
+          <select
+            id="cuentaDecision"
+            formControlName="estado"
+            aria-describedby="cuentaDecision-ayuda"
+          >
+            <option value="APROBADO">Aprobar</option>
+            <option value="RECHAZADO">Rechazar</option>
+          </select>
+        </app-campo>
+        @if (revisionForm.controls.estado.value === 'RECHAZADO') {
+          <app-campo
+            para="cuentaMotivo"
+            etiqueta="Motivo del rechazo"
+            ayuda="Escribe por qué no se pudo verificar la cuenta. Máximo 300 caracteres."
+            [requerido]="true"
+            [error]="errorCuentas() || null"
+          >
+            <textarea
+              id="cuentaMotivo"
+              formControlName="motivo"
+              maxlength="300"
+              aria-describedby="cuentaMotivo-ayuda cuentaMotivo-error"
+              [attr.aria-invalid]="!!errorCuentas()"
+            ></textarea>
+          </app-campo>
+        } @else if (errorCuentas()) {
+          <p role="alert">{{ errorCuentas() }}</p>
+        }
+        <div class="s-form-actions">
+          <button
+            type="button"
+            class="s-secondary"
+            [disabled]="ocupado()"
+            (click)="cuentaSeleccionada.set(null); errorCuentas.set('')"
+          >
+            Volver al listado
+          </button>
+          <button type="submit" class="s-primary" [disabled]="ocupado()">Registrar revisión</button>
+        </div>
+      </form>
+    } @else if (cuentas(); as d) {
+      <ul>
+        @for (cuenta of d.items; track cuenta.id) {
+          <li>
+            <button type="button" class="s-secondary" (click)="seleccionarCuenta(cuenta)">
+              Revisar a {{ cuenta.nombre }}
+            </button>
+            {{ cuenta.numero }} · {{ cuenta.fecha | date: 'dd/MM/yyyy' : '-0500' }}
+            @if (cuenta.diasHabiles > 2) {
+              <span class="s-chip-alert">{{ cuenta.diasHabiles }} días hábiles</span>
+            }
+          </li>
+        } @empty {
+          <li>Actualmente no hay cuentas pendientes.</li>
+        }
+      </ul>
+      <app-paginador
+        [pagina]="d.pagina"
+        [total]="d.total"
+        [porPagina]="d.porPagina"
+        (cambiar)="abrirCuentas($event)"
+      />
+    } @else if (errorCuentas()) {
+      <p role="alert">{{ errorCuentas() }}</p>
+      <button type="button" class="s-secondary" (click)="abrirCuentas()">Volver a intentar</button>
+    } @else {
+      <p role="status">Cargando cuentas pendientes…</p>
+    }
+  </app-modal>
+}

@@ -1,0 +1,46 @@
+<div class="heroVisual" aria-hidden="true">
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="pantalla">
+      <div class="saludo">
+        <div>
+          <small>Hola, Daniela</small>
+          <h4>Tu comunidad SUMA</h4>
+        </div>
+        <span class="avatarDM">DM</span>
+      </div>
+      <div class="saldo">
+        <small>Mi saldo</small>
+        <p class="puntos">2.480 <span>puntos</span></p>
+        <div class="nivelFila"><small>Nivel Impulsor</small><small>75%</small></div>
+        <div class="barra"><div class="barraRelleno" style="width: 75%"></div></div>
+      </div>
+      <div class="atajos">
+        <div class="atajo"><small>Referir</small></div>
+        <div class="atajo"><small>Retos</small></div>
+        <div class="atajo"><small>Premios</small></div>
+      </div>
+      <div class="retoCard">
+        <div class="retoTop"><h5>RETO SEMANAL</h5></div>
+        <div class="retoInfo">
+          <strong>Ahorra con propósito</strong><small>Completa 3 acciones y gana 120 puntos.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flotante f-puntos">
+    <span class="icono amarillo">＋</span>
+    <div>
+      <small>{{ pointsLabel() }}</small
+      ><strong>{{ pointsValue() }}</strong>
+    </div>
+  </div>
+  <div class="flotante f-insignia">
+    <span class="icono azul">★</span>
+    <div>
+      <small>{{ badgeLabel() }}</small
+      ><strong>{{ badgeValue() }}</strong>
+    </div>
+  </div>
+</div>

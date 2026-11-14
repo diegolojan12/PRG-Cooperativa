@@ -1,0 +1,119 @@
+<div class="s-page-heading">
+  <div>
+    <span class="s-eyebrow muted">ADMINISTRA TU COMUNIDAD</span>
+    <h1>Registro de actividad</h1>
+    <p>Bitácora inmutable de las acciones realizadas en la plataforma.</p>
+  </div>
+  <button type="button" class="s-secondary" [disabled]="cargando()" (click)="cargar()">
+    Actualizar
+  </button>
+</div>
+<section class="s-card s-table-card">
+  <form class="s-filters" aria-label="Filtros de la bitácora" (submit)="$event.preventDefault()">
+    <app-campo para="actDesde" etiqueta="Desde" ayuda="Fecha inicial. Ej. 01/11/2026">
+      <input
+        id="actDesde"
+        type="date"
+        aria-describedby="actDesde-ayuda"
+        [value]="filtros().desde"
+        [max]="filtros().hasta || null"
+        (change)="filtrar({ desde: $any($event.target).value })"
+      />
+    </app-campo>
+    <app-campo para="actHasta" etiqueta="Hasta" ayuda="Fecha final (incluida).">
+      <input
+        id="actHasta"
+        type="date"
+        aria-describedby="actHasta-ayuda"
+        [value]="filtros().hasta"
+        [min]="filtros().desde || null"
+        (change)="filtrar({ hasta: $any($event.target).value })"
+      />
+    </app-campo>
+    <app-campo para="actUsuario" etiqueta="Usuario" ayuda="Persona que realizó la acción.">
+      <select
+        id="actUsuario"
+        aria-describedby="actUsuario-ayuda"
+        (change)="filtrar({ usuarioId: $any($event.target).value })"
+      >
+        <option value="" [selected]="!filtros().usuarioId">Todas las personas</option>
+        @for (u of opciones().usuarios; track u.id) {
+          <option [value]="u.id" [selected]="+(filtros().usuarioId || 0) === u.id">
+            {{ u.nombre }}
+          </option>
+        }
+      </select>
+    </app-campo>
+    <app-campo para="actAccion" etiqueta="Tipo de acción" ayuda="Ej. Inicio de sesión.">
+      <select
+        id="actAccion"
+        aria-describedby="actAccion-ayuda"
+        (change)="filtrar({ accion: $any($event.target).value })"
+      >
+        <option value="" [selected]="!filtros().accion">Todas las acciones</option>
+        @for (a of opciones().acciones; track a) {
+          <option [value]="a" [selected]="filtros().accion === a">{{ a }}</option>
+        }
+      </select>
+    </app-campo>
+    <div class="s-filters-actions">
+      <button type="button" class="s-secondary" (click)="limpiar()">Limpiar filtros</button>
+    </div>
+  </form>
+  @if (error()) {
+    <div class="s-inline-empty" role="alert">
+      {{ error() }}
+      <button type="button" class="s-secondary" (click)="cargar()">Volver a intentar</button>
+    </div>
+  } @else {
+    <div class="s-table-scroll" [attr.aria-busy]="cargando()">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Acción</th>
+            <th scope="col">Realizada por</th>
+            <th scope="col">Detalle</th>
+            <th scope="col">IP</th>
+            <th scope="col">Fecha y hora</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (a of datos()?.items ?? []; track a.id) {
+            <tr>
+              <td>
+                <strong>{{ a.accion }}</strong>
+              </td>
+              <td>{{ a.actor }}</td>
+              <td class="s-detail-cell">
+                {{ a.detalle }}
+                @if (cambio(a); as c) {
+                  <small class="s-muted s-block">{{ c }}</small>
+                }
+              </td>
+              <td class="s-nowrap">{{ a.ip || '—' }}</td>
+              <td class="s-nowrap">{{ a.fecha | date: 'dd/MM/yyyy · HH:mm' : '-0500' }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="s-inline-empty">
+                {{ cargando() ? 'Cargando…' : 'No hay actividades con esos filtros.' }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    @if (datos(); as d) {
+      <app-paginador
+        [pagina]="d.pagina"
+        [total]="d.total"
+        [porPagina]="d.porPagina"
+        (cambiar)="filtrar({ pagina: $event })"
+      />
+    }
+  }
+</section>
+<div class="s-info-line">
+  <app-icon name="actividad" />
+  <p>Hora de Ecuador. Los registros no se pueden modificar ni eliminar.</p>
+</div>

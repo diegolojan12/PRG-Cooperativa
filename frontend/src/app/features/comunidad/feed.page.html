@@ -1,0 +1,174 @@
+<div class="cm-feed">
+  <div class="cm-col">
+    <section
+      #heroe
+      class="cm-hero"
+      aria-labelledby="saludo"
+      (pointermove)="moverHeroe($event, heroe)"
+      (pointerleave)="soltarHeroe(heroe)"
+    >
+      <small>TU COMUNIDAD SUMA</small>
+      <h1 id="saludo">Hola, <span>{{ nombre() }}</span></h1>
+      <p>Cada conexión suma. Mira las novedades de la cooperativa y participa.</p>
+    </section>
+
+    <form class="cm-card cm-compose" (submit)="$event.preventDefault(); publicar()">
+      <span class="cm-avatar">{{ iniciales() }}</span>
+      <div class="cm-compose-body">
+        <label class="cm-sr" for="redactar">Escribe una publicación para la comunidad</label>
+        <textarea
+          id="redactar"
+          rows="1"
+          [maxLength]="maximo"
+          placeholder="¿Qué quieres compartir con la comunidad?"
+          [value]="borrador()"
+          (focus)="redactando.set(true)"
+          (input)="borrador.set($any($event.target).value)"
+        ></textarea>
+        @if (redactando() || borrador()) {
+          <div class="cm-compose-foot">
+            <small>{{ borrador().length }}/{{ maximo }}</small>
+            <button type="button" class="cm-ghost" (click)="redactando.set(false); borrador.set('')">
+              Cancelar
+            </button>
+            <button type="submit" class="cm-send" [disabled]="!borrador().trim()">Publicar</button>
+          </div>
+        }
+      </div>
+    </form>
+
+    <div class="cm-tabs" role="group" aria-label="Filtrar publicaciones">
+      @for (f of filtros; track f.id) {
+        <button type="button" [attr.aria-pressed]="filtro() === f.id" (click)="filtro.set(f.id)">
+          {{ f.etiqueta }}
+        </button>
+      }
+    </div>
+
+    <p class="cm-demo-note" role="note">
+      <app-icon name="alert" />Vista previa: estas publicaciones son de ejemplo. El módulo Comunidad
+      las reemplazará con las reales.
+    </p>
+
+    @for (p of visibles(); track p.id) {
+      <article class="cm-card cm-post" [attr.aria-label]="p.titulo || 'Publicación de ' + p.autor">
+        <header class="cm-post-head">
+          <span class="cm-avatar" [class.blue]="p.tipo !== 'anuncio'">{{ p.autor.slice(0, 1) }}</span>
+          <div>
+            <strong>{{ p.autor }}</strong>
+            <small>{{ p.rol }} · {{ p.tiempo }}</small>
+          </div>
+          <span class="cm-tag" [attr.data-tipo]="p.tipo">{{ p.etiqueta }}</span>
+        </header>
+        @if (p.titulo) {
+          <h2>{{ p.titulo }}</h2>
+        }
+        <p>{{ p.texto }}</p>
+        @if (p.destacado && p.icono) {
+          <div class="cm-media" [attr.data-tono]="p.tono" aria-hidden="true">
+            <app-icon [name]="p.icono" />
+            <strong>{{ p.destacado }}</strong>
+            @if (p.puntos) {
+              <span class="cm-pts">+{{ p.puntos }} pts</span>
+            }
+          </div>
+        }
+        <div class="cm-actions">
+          <button type="button" [attr.aria-pressed]="p.meGusta" (click)="alternarLike(p.id)">
+            <app-icon class="cm-like" name="heart" />{{ p.likes | number }}
+          </button>
+          <button
+            type="button"
+            [attr.aria-expanded]="p.abierta"
+            (click)="alternarComentarios(p.id)"
+          >
+            <app-icon name="post" />{{ p.comentarios.length }}
+          </button>
+          <button type="button" (click)="compartir(p.titulo || p.texto.slice(0, 60))"><app-icon name="link" />Compartir</button>
+          <button
+            type="button"
+            class="is-saved"
+            [attr.aria-pressed]="p.guardada"
+            [attr.aria-label]="p.guardada ? 'Quitar de guardados' : 'Guardar publicación'"
+            (click)="guardar(p.id)"
+          >
+            <app-icon name="check" />{{ p.guardada ? 'Guardada' : 'Guardar' }}
+          </button>
+        </div>
+        @if (p.abierta) {
+          <div class="cm-comments">
+            @for (c of p.comentarios; track $index) {
+              <div class="cm-comment">
+                <span class="cm-avatar blue">{{ c.autor.slice(0, 1) }}</span>
+                <div>
+                  <strong>{{ c.autor }}</strong
+                  ><br />{{ c.texto }}
+                </div>
+              </div>
+            }
+            <form class="cm-comment-form" (submit)="$event.preventDefault(); comentar(p.id, entrada)">
+              <input
+                #entrada
+                type="text"
+                maxlength="280"
+                placeholder="Escribe un comentario…"
+                aria-label="Escribe un comentario"
+              />
+              <button type="submit">Enviar</button>
+            </form>
+          </div>
+        }
+      </article>
+    } @empty {
+      <div class="cm-card cm-empty">
+        <app-icon name="post" />
+        <strong>Aún no hay publicaciones de este tipo</strong>
+        <span>Vuelve pronto: la comunidad se mueve todos los días.</span>
+      </div>
+    }
+  </div>
+
+  <aside class="cm-aside" aria-label="Tu resumen">
+    <section class="cm-card cm-widget">
+      <h2>Mi progreso</h2>
+      @if (resumen(); as r) {
+        <div class="cm-points">
+          <div class="cm-donut" [style.--p]="avance()">
+            <span [appContar]="r.puntos"></span>
+          </div>
+          <div>
+            <strong>Mis puntos</strong>
+            <p>{{ avance() }}% de tus referidos ya fueron aprobados.</p>
+          </div>
+        </div>
+        <div class="cm-mini-stats">
+          <div>
+            <strong [appContar]="r.referidos"></strong
+            ><small>Referidos</small>
+          </div>
+          <div>
+            <strong [appContar]="r.estados.APROBADO"></strong
+            ><small>Aprobados</small>
+          </div>
+        </div>
+      } @else {
+        <div class="cm-skel" role="status" aria-label="Cargando tu resumen"><i></i><i></i><i></i></div>
+      }
+    </section>
+    <section class="cm-card cm-widget">
+      <h2>Próximas actividades</h2>
+      @for (e of eventos; track e.titulo) {
+        <div class="cm-event">
+          <span class="cm-date"
+            >{{ e.dia }}<small>{{ e.mes }}</small></span
+          >
+          <div>
+            <strong>{{ e.titulo }}</strong>
+            <span>{{ e.detalle }}</span>
+          </div>
+        </div>
+      }
+      <p class="cm-foot">Ejemplo de agenda. Se conectará al módulo de talleres.</p>
+    </section>
+  </aside>
+</div>

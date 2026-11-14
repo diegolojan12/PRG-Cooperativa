@@ -1,12 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { AvisoComponent } from './shared/aviso/aviso.component';
 
 @Component({
-  imports: [RouterOutlet],
   selector: 'app-root',
-  styleUrl: './app.scss',
-  templateUrl: './app.html',
+  imports: [RouterOutlet, AvisoComponent],
+  template: '<router-outlet /><app-aviso />',
 })
-export class App {
-  protected readonly title = signal('frontend');
-}
+export class App {}

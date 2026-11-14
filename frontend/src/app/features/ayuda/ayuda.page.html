@@ -1,0 +1,83 @@
+<div class="s-page-heading">
+  <div>
+    <span class="s-eyebrow muted">TU ESPACIO SUMA</span>
+    <h1>Centro de ayuda</h1>
+    <p>Estamos aquí para acompañarte en cada paso.</p>
+  </div>
+</div>
+<section class="s-help-hero">
+  <span class="s-feature-icon yellow"><app-icon name="ayuda" /></span>
+  <div>
+    <h2>Sumar es más fácil cuando te acompañan.</h2>
+    <p>Encuentra respuestas rápidas para aprovechar tu espacio.</p>
+  </div>
+</section>
+<div class="s-help-grid">
+  <section class="s-card s-faq">
+    <h2>Preguntas frecuentes</h2>
+    <details open>
+      <summary>¿Cómo registro un referido?</summary>
+      <p>
+        Entra a Referidos y selecciona “Nuevo referido”. Completa su nombre, correo y celular.
+        Confirma que tienes autorización para compartir los datos y guarda el formulario.
+      </p>
+    </details>
+    <details>
+      <summary>¿Qué significa cada estado?</summary>
+      <p>
+        Pendiente: recién registrado, en revisión. Aprobado: administración confirmó la conexión y
+        su cuenta vinculada. Rechazado: no cumple los requisitos.
+      </p>
+    </details>
+    <details>
+      <summary>¿Puedo editar o dar de baja un referido?</summary>
+      <p>
+        Como socio, puedes hacerlo mientras esté pendiente. La baja oculta al referido del listado,
+        pero su historial se conserva.
+      </p>
+    </details>
+    <details>
+      <summary>¿Por qué se cerró mi sesión?</summary>
+      <p>
+        Por seguridad, la sesión se cierra tras 15 minutos sin actividad. Tras 5 intentos fallidos
+        de contraseña, la cuenta se bloquea 15 minutos.
+      </p>
+    </details>
+    <details>
+      <summary>¿Cómo recupero mi contraseña?</summary>
+      <p>
+        En la pantalla de inicio de sesión selecciona “¿Olvidaste tu contraseña?”. El enlace vence
+        en 30 minutos y solo funciona una vez. Al actualizarla se cierran tus sesiones anteriores.
+      </p>
+    </details>
+    <details>
+      <summary>¿Por qué no veo algunos módulos?</summary>
+      <p>
+        El menú depende de tu rol (Socio, Gestor de contenidos o Administrador) y de los permisos
+        asignados.
+      </p>
+    </details>
+    <details>
+      <summary>¿Cómo se calculan mis puntos?</summary>
+      <p>
+        El panel multiplica tus referidos aprobados por los puntos definidos por administración. El
+        canje de recompensas llegará en un sprint posterior.
+      </p>
+    </details>
+  </section>
+  <aside class="s-card s-contact">
+    <span class="s-feature-icon"><app-icon name="mail" /></span>
+    <h2>Conversemos</h2>
+    <p>Si necesitas ayuda adicional, escribe al equipo de tu comunidad.</p>
+    @if (contacto()) {
+      <a [href]="'mailto:' + contacto()" class="s-text-link"
+        >{{ contacto() }}<app-icon name="arrow"
+      /></a>
+    }
+    <div class="s-contact-note">
+      <app-icon name="roles" /><small
+        >Nunca compartas tu contraseña, códigos de verificación ni enlaces de recuperación.</small
+      >
+    </div>
+  </aside>
+</div>

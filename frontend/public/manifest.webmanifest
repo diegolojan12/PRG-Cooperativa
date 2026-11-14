@@ -1,6 +1,6 @@
 {
-  "name": "frontend",
-  "short_name": "frontend",
+  "name": "SUMA · Cooperativa Padre Julián Lorente",
+  "short_name": "SUMA",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
