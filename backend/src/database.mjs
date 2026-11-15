@@ -4,6 +4,7 @@ import pg from 'pg';
 import { ProteccionDatos } from './dominio/proteccion-datos.mjs';
 import { MODULOS_INICIALES, ROLES_INICIALES } from './dominio/catalogo-inicial.mjs';
 import { Referido } from './dominio/referidos.mjs';
+import { PUNTOS_POR_ACCION } from './dominio/administracion.mjs';
 
 export function hashPassword(value) {
   const salt = randomBytes(16).toString('hex');
@@ -23,7 +24,7 @@ export function verifyPassword(value, stored) {
 export const STATES = Referido.estados;
 
 /** Migraciones en orden. Cada una se aplica una sola vez (tabla SumaMigracion). */
-const MIGRACIONES = ['sprint1', 'sprint1-auditoria', 'sprint1-dominio', 'sprint1-roles'];
+const MIGRACIONES = ['sprint1', 'sprint1-auditoria', 'sprint1-dominio', 'sprint1-roles', 'sprint2'];
 
 export class Database {
   /**
@@ -93,6 +94,8 @@ export class Database {
     for (const [clave, valor] of Object.entries({
       contacto: 'soporte@suma.ec',
       puntosReferido: '100',
+      ...Object.fromEntries(Object.keys(PUNTOS_POR_ACCION).map((clave) => [clave, '0'])),
+      valorPunto: '0.00',
       registroAbierto: 'true',
       mensajeBienvenida: 'Cada conexión suma. Sigamos creciendo juntos.',
     })) {
@@ -169,6 +172,12 @@ export class Database {
           await this.query(actualizar, [fila.id, this.datos.correoIndice(fila.correo), ...valores], client);
         }
       }
+      const telefonos = await this.query(
+        'SELECT id,celular FROM "Usuario" WHERE "celularIndice" IS NULL AND celular IS NOT NULL', [], client,
+      );
+      for (const fila of telefonos)
+        await this.query('UPDATE "Usuario" SET "celularIndice"=$2 WHERE id=$1',
+          [fila.id, this.datos.huella('celular:' + fila.celular)], client);
       if (!actual) await this.query('INSERT INTO "Configuracion" (clave,valor) VALUES ($1,$2)', [clave, verificador], client);
     });
   }
@@ -179,8 +188,8 @@ export class Database {
       ['socio@suma.ec', 'Daniela Medina', 'SOCIO', '0991234503'],
     ]) {
       const rows = await this.query(
-        'INSERT INTO "Usuario" (correo,nombre,rol,"passwordHash",celular,"correoIndice","cuentaEstado") VALUES ($1,$2,$3,$4,$5,$6,$7) ON CONFLICT DO NOTHING RETURNING id',
-        [this.datos.cifrar('correo', correo), nombre, rol, hashPassword('Suma2026!'), this.datos.cifrar('celular', celular), this.datos.correoIndice(correo), rol === 'SOCIO' ? 'APROBADO' : null],
+        'INSERT INTO "Usuario" (correo,nombre,rol,"passwordHash",celular,"correoIndice","cuentaEstado","celularIndice") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT DO NOTHING RETURNING id',
+        [this.datos.cifrar('correo', correo), nombre, rol, hashPassword('Suma2026!'), this.datos.cifrar('celular', celular), this.datos.correoIndice(correo), rol === 'SOCIO' ? 'APROBADO' : null, this.datos.huella('celular:' + celular) ?? null],
       );
       if (rows.length)
         await this.query(

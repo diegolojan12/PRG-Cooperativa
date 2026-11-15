@@ -1,0 +1,14 @@
+ALTER TABLE "Usuario" ADD COLUMN IF NOT EXISTS "correoVerificado" BOOLEAN NOT NULL DEFAULT TRUE;
+ALTER TABLE "Usuario" ADD COLUMN IF NOT EXISTS "celularIndice" TEXT;
+ALTER TABLE "MovimientoPuntos" DROP CONSTRAINT "MovimientoPuntos_pkey";
+ALTER TABLE "MovimientoPuntos" ALTER COLUMN "referidoId" DROP NOT NULL;
+ALTER TABLE "MovimientoPuntos" ADD COLUMN clave TEXT;
+ALTER TABLE "MovimientoPuntos" ADD COLUMN actividad TEXT;
+UPDATE "MovimientoPuntos" SET clave='referido:' || "referidoId" || ':' || "usuarioId", actividad='REFERIDO';
+ALTER TABLE "MovimientoPuntos" ADD PRIMARY KEY (clave);
+ALTER TABLE "MovimientoPuntos" ALTER COLUMN actividad SET NOT NULL;
+CREATE TABLE IF NOT EXISTS "ConfirmacionCorreo" ("usuarioId" INTEGER PRIMARY KEY REFERENCES "Usuario"(id) ON DELETE CASCADE, token TEXT UNIQUE NOT NULL, "tokenExpira" TEXT NOT NULL, huella TEXT NOT NULL, vence TEXT NOT NULL, intentos INTEGER NOT NULL DEFAULT 0, reenvios TEXT NOT NULL DEFAULT '[]');
+CREATE TABLE IF NOT EXISTS "AvisoPrivacidad" (version TEXT PRIMARY KEY, terminos TEXT NOT NULL, privacidad TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS "AceptacionTerminos" ("usuarioId" INTEGER NOT NULL REFERENCES "Usuario"(id), version TEXT NOT NULL REFERENCES "AvisoPrivacidad"(version), fecha TEXT NOT NULL, PRIMARY KEY ("usuarioId",version));
+CREATE INDEX IF NOT EXISTS usuario_celular_indice ON "Usuario"((COALESCE("celularIndice",celular)));
+CREATE INDEX IF NOT EXISTS notificacion_destinatario ON "Notificacion"("usuarioId",id);

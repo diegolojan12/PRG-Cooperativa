@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { SessionStore } from '../../core/auth/session.store';
 import { leerError } from '../../core/http/api-error';
@@ -25,21 +25,17 @@ import {
   nombreCompleto,
   sinCodigo,
 } from '../../shared/validacion';
-import { FiltroReferidos, POR_PAGINA_REFERIDOS, ReferidosApi } from './referidos.api';
+import { InvitacionComponent } from './invitacion.component';
+import { FiltroReferidos, ReferidosApi } from './referidos.api';
 
 type Modal = 'form' | 'dictamen' | 'baja' | 'asociar';
-
-const csv = (value: unknown) =>
-  '"' +
-  String(value ?? '')
-    .replace(/^[=+@\-\t\r]/, "'$&")
-    .replaceAll('"', '""') +
-  '"';
 
 @Component({
   selector: 'app-referidos-page',
   imports: [
     DatePipe,
+    RouterLink,
+    InvitacionComponent,
     ReactiveFormsModule,
     CampoComponent,
     IconComponent,
@@ -54,11 +50,14 @@ export class ReferidosPage implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   protected session = inject(SessionStore);
   private fb = inject(FormBuilder).nonNullable;
+  private consulta = 0;
   private busquedaTimer?: ReturnType<typeof setTimeout>;
 
   readonly estados = ESTADOS;
   readonly etiquetas = ETIQUETAS_ESTADO;
-  readonly porPagina = POR_PAGINA_REFERIDOS;
+  readonly porPagina = computed(
+    () => this.datos()?.porPagina ?? (this.session.esAdmin() ? 20 : 10),
+  );
   readonly filtros = signal<FiltroReferidos>({
     pagina: 1,
     estado: '',
@@ -112,21 +111,24 @@ export class ReferidosPage implements OnInit, OnDestroy {
     const estado = params.get('estado') as EstadoReferido | null;
     if (estado && ESTADOS.includes(estado)) this.filtros.update((f) => ({ ...f, estado }));
     void this.cargar();
-    if (params.has('nuevo')) this.abrirFormulario();
+    if (params.has('nuevo') && (this.session.esAdmin() || this.session.usuario()?.cuentaVerificada))
+      this.abrirFormulario();
   }
   ngOnDestroy(): void {
     clearTimeout(this.busquedaTimer);
   }
 
   async cargar(): Promise<void> {
+    const consulta = ++this.consulta;
     this.cargando.set(true);
     this.error.set('');
     try {
-      this.datos.set(await firstValueFrom(this.api.listar(this.filtros())));
+      const datos = await firstValueFrom(this.api.listar(this.filtros()));
+      if (consulta === this.consulta) this.datos.set(datos);
     } catch (error) {
-      this.error.set(leerError(error).mensaje);
+      if (consulta === this.consulta) this.error.set(leerError(error).mensaje);
     } finally {
-      this.cargando.set(false);
+      if (consulta === this.consulta) this.cargando.set(false);
     }
   }
 
@@ -143,9 +145,12 @@ export class ReferidosPage implements OnInit, OnDestroy {
   }
 
   atrasado(ref: Referido): boolean {
-    return ref.estado === 'PENDIENTE' && ref.diasHabilesPendiente > 2;
+    return ref.estado === 'PENDIENTE' && (ref.diasHabilesPendiente ?? 0) > 2;
   }
   puedeEditar(ref: Referido): boolean {
+    return this.session.esAdmin() && !ref.usuarioId;
+  }
+  puedeDarDeBaja(ref: Referido): boolean {
     return this.session.esAdmin() || ref.estado === 'PENDIENTE';
   }
   puedeDictaminar(ref: Referido): boolean {
@@ -256,8 +261,8 @@ export class ReferidosPage implements OnInit, OnDestroy {
     try {
       const mensaje = await accion();
       this.modal.set(null);
-      await this.cargar();
       this.avisos.exito(mensaje);
+      await this.cargar();
     } catch (error) {
       const e = leerError(error);
       this.erroresServidor.set(e.campos);
@@ -314,30 +319,14 @@ export class ReferidosPage implements OnInit, OnDestroy {
 
   async exportar(): Promise<void> {
     try {
-      const filas = await firstValueFrom(this.api.exportar(this.filtros()));
-      const contenido = [
-        ['Nombre', 'Correo', 'Celular', 'Estado', 'Socio', 'Fecha', 'Días hábiles pendiente'],
-        ...filas.map((x) => [
-          x.nombre,
-          x.correo,
-          x.celular,
-          this.etiquetas[x.estado],
-          x.socio,
-          x.creadoEn,
-          x.diasHabilesPendiente,
-        ]),
-      ]
-        .map((row) => row.map(csv).join(';'))
-        .join('\r\n');
-      const url = URL.createObjectURL(
-        new Blob(['﻿' + contenido], { type: 'text/csv;charset=utf-8' }),
-      );
+      const archivo = await firstValueFrom(this.api.exportar(this.filtros()));
+      const url = URL.createObjectURL(archivo);
       const a = document.createElement('a');
       a.href = url;
       a.download = 'SUMA-referidos.csv';
       a.click();
-      URL.revokeObjectURL(url);
-      this.avisos.exito(`Listado exportado (${filas.length} referidos).`);
+      setTimeout(() => URL.revokeObjectURL(url), 0);
+      this.avisos.exito('Listado de referidos pendientes exportado.');
     } catch (error) {
       this.avisos.error(leerError(error).mensaje);
     }

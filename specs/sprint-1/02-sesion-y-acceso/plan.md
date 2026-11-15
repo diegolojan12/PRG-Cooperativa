@@ -1,0 +1,96 @@
+# Plan técnico · Sesión, acceso y registro
+
+Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementado
+
+## 1. Chequeo contra la constitución
+
+| Principio | ¿Se cumple? | Nota |
+| --------- | ----------- | ---- |
+| II. Nada quemado | Sí | Segundo factor según `Rol.requiereSegundoFactor`; registro abierto según `Configuracion` |
+| III. Seguridad | Sí | Solo se guardan huellas SHA-256 de tokens y códigos; cookie `httpOnly`, `sameSite=lax`, `secure` en producción |
+| IV. Trazabilidad | Sí | Inicio de sesión, bloqueos y recuperación en `Actividad` |
+| V. Prueba por criterio | Sí | Ver §7 |
+| VI. Accesibilidad | Sí | Alerta persistente de bloqueo en Login; ayuda y error en cada campo |
+| VII. Arquitectura | Sí | `Sesion`, `CodigoVerificacion`, `CuentaCooperativa` en `dominio/acceso.mjs` |
+
+## 2. Modelo de datos
+
+| Tabla / columnas | Migración | Uso |
+| ---------------- | --------- | --- |
+| `Usuario` (`passwordHash`, `celular`, `activo`, `cuenta`, `tipoCuenta`) | `sprint1.sql` | Credenciales y datos de registro |
+| `Usuario.intentosFallidos`, `bloqueadoHasta`, `cuentaEstado` | `sprint1-auditoria.sql` | Bloqueo (RF-04-2) y estado de la cuenta vinculada |
+| `Sesion` (`token` = huella, `usuarioId`, `expira`) | `sprint1.sql` | Sesión con vencimiento deslizante |
+| `Recuperacion` (`token` = huella, `usuarioId`, `expira`, usado) | `sprint1.sql` | Recuperación y activación |
+| `DosFactor` (`id`, `usuarioId`, huella del código, `expira`, usado) | `sprint1-auditoria.sql` | Desafío de segundo factor |
+
+Constantes de tiempo en `api.mjs`: `BLOQUEO_MS` 15 min · `CODIGO_2FA_MS` 5 min · `RECUPERACION_MS` 30 min ·
+`ACTIVACION_MS` 24 h · `ESPERA_REINTENTO_MS` 5 min · `Sesion.INACTIVIDAD_MS` 15 min.
+
+## 3. API
+
+| Método | Ruta | Respuestas |
+| ------ | ---- | ---------- |
+| POST | `/api/auth/login` | 200 (sesión, o `{requiere2fa, desafioId}`) · 401 · 403 (origen) · 423 (`bloqueadoHasta`) |
+| POST | `/api/auth/2fa` | 200 + cookie `suma_session` · 401 |
+| POST | `/api/auth/logout` | 200 |
+| GET | `/api/auth/me` | 200 · 401 (vencida o cuenta inactiva) |
+| POST | `/api/auth/register` | 201 · 400 (campos) · 403 (registro cerrado) · 409 (correo ya usado) |
+| POST | `/api/auth/forgot` | 200 siempre (no revela si el correo existe) |
+| POST | `/api/auth/reset` | 200 (revoca sesiones) · 400 (token inválido, usado o vencido) |
+
+En desarrollo (`ENABLE_DEV_RESET_LINK=true`) las respuestas traen `devCodigo` / `devResetUrl`; en producción nunca.
+
+## 4. Dominio
+
+`backend/src/dominio/acceso.mjs`:
+
+- `Sesion.vencimiento()`, `Sesion#estaVigente()`; `current()` en `api.mjs` renueva `expira` en cada petición.
+- `CodigoVerificacion.huella()`, `.segundoFactor()`, `.token()`, `#esValido(valor, ahora)` (un uso, vigencia).
+- `CuentaCooperativa` (10 dígitos, `PENDIENTE` → `APROBADA`/`RECHAZADA`, `numeroEnmascarado()`).
+
+Correo: cola en memoria con 3 reintentos cada 5 min; no guarda enlaces ni códigos en texto plano.
+
+## 5. Frontend
+
+| Pantalla / servicio | Ruta | Archivos |
+| ------------------- | ---- | -------- |
+| Inicio de sesión + 2FA | `/iniciar-sesion` | `features/publico/login.page.*` |
+| Registro | `/registro` | `features/publico/registro.page.*` |
+| Recuperar / activar contraseña | `/recuperar-contrasena?token=` | `features/publico/recuperar.page.*` |
+| Cierre por inactividad entre pestañas | — | `core/auth/inactividad.service.ts` |
+| Estado de sesión y 401 | — | `core/auth/session.store.ts`, `core/http/auth.interceptor.ts` |
+
+## 6. Bitácora
+
+| Acción | Cuándo |
+| ------ | ------ |
+| `Inicio de sesión` | Sesión creada (tras el 2FA cuando aplica) |
+| `Cierre de sesión` | `POST /auth/logout` |
+| `Cuenta bloqueada` | Quinto intento fallido |
+| `Registro` | Alta de un socio por `/auth/register` |
+| `Recuperación solicitada` | `POST /auth/forgot` con un correo existente |
+| `Contraseña actualizada` | `POST /auth/reset` correcto |
+| `Usuario actualizado` | Desactivación de la cuenta (`datos.activo=false`, `objetivoId`) |
+
+## 7. Estrategia de pruebas
+
+| Criterio | Prueba (`backend/test/sprint.test.mjs`) |
+| -------- | --------------------------------------- |
+| CA-01 a CA-05 | `RF-04-1 / RNF-06: credenciales, origen y segundo factor del administrador` |
+| CA-06 | `RF-04-2: bloqueo de 15 minutos tras 5 intentos fallidos consecutivos` |
+| CA-07, CA-08 | `RF-04-3: la sesión se renueva con cada acción y vence tras 15 min sin acciones` |
+| CA-09, CA-10 | `RF-04-4: desactivar cuenta y cerrar sesión` |
+| CA-11 a CA-13 | `RF-07: recuperación de un solo uso que revoca sesiones` |
+| CA-14, CA-15 | `RF-11-4: dictamen…` (registro de `otro@ejemplo.ec` y cuenta de 8 dígitos rechazada) |
+| CA-16 | `RF-14 / RF-14-2 / RF-42` (registro con `registroAbierto=false` → 403) |
+| CA-17 | `producción nunca expone enlaces ni códigos` |
+| CA-08 (cliente) | `frontend/src/app/core/auth/auth.spec.ts` (inactividad) |
+| CA-18 | Sin prueba automatizada (cola en memoria) — **pendiente** |
+
+## 8. Decisiones y riesgos
+
+| Decisión | Alternativas descartadas | Motivo |
+| -------- | ------------------------ | ------ |
+| Sesión opaca en cookie + tabla `Sesion` | JWT en `localStorage` | Se revoca al instante (logout, desactivación, recuperación) y no queda expuesta a XSS |
+| Vencimiento deslizante en servidor + aviso en cliente | Solo temporizador en cliente | El servidor es la autoridad; el cliente solo redirige a tiempo |
+| Cola de correo en memoria | Cola persistente (BullMQ/Redis) | Sin infraestructura extra; los reintentos se pierden si el proceso se reinicia (riesgo aceptado) |

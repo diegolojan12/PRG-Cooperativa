@@ -35,6 +35,12 @@ export const routes: Routes = [
     loadComponent: () => import('./features/publico/registro.page').then((m) => m.RegistroPage),
   },
   {
+    path: 'confirmar-correo',
+    title: 'Confirmar correo · SUMA',
+    loadComponent: () =>
+      import('./features/publico/confirmar-correo.page').then((m) => m.ConfirmarCorreoPage),
+  },
+  {
     path: 'recuperar-contrasena',
     title: 'Recuperar acceso · SUMA',
     loadComponent: () => import('./features/publico/recuperar.page').then((m) => m.RecuperarPage),
@@ -78,6 +84,13 @@ export const routes: Routes = [
       modulo('ayuda', 'Centro de ayuda', () =>
         import('./features/ayuda/ayuda.page').then((m) => m.AyudaPage),
       ),
+      {
+        // HU-015 / HU-017: cuenta vinculada, enlace y QR del socio (experiencia Comunidad).
+        path: 'mi-cuenta',
+        title: 'Mi cuenta · SUMA',
+        loadComponent: () =>
+          import('./features/resumen/mi-cuenta.page').then((m) => m.MiCuentaPage),
+      },
       {
         path: 'acceso-denegado',
         title: 'Acceso denegado · SUMA',

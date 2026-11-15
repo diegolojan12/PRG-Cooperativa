@@ -62,11 +62,12 @@ export class ComunidadShellComponent {
   constructor() {
     const inactividad = inject(InactividadService);
     inactividad.iniciar();
-    inject(DestroyRef).onDestroy(() => inactividad.detener());
+    const destruccion = inject(DestroyRef);
+    destruccion.onDestroy(() => inactividad.detener());
     this.router.events
       .pipe(filter((e) => e instanceof NavigationEnd))
       .subscribe(() => this.masAbierto.set(false));
-    if (this.session.puede('notificaciones')) void this.notificaciones.cargar().catch(() => null);
+    if (this.session.puede('notificaciones')) this.notificaciones.sondear(destruccion);
   }
 
   ruta(id: string): string {

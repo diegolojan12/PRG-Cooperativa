@@ -14,6 +14,7 @@ import {
   PublicacionEjemplo,
   TipoPublicacion,
 } from './contenido-ejemplo';
+import { InvitacionComponent } from '../referidos/invitacion.component';
 
 interface Publicacion extends PublicacionEjemplo {
   meGusta: boolean;
@@ -28,7 +29,7 @@ interface Publicacion extends PublicacionEjemplo {
  */
 @Component({
   selector: 'app-feed-page',
-  imports: [RouterLink, IconComponent, DecimalPipe, ContarDirective],
+  imports: [RouterLink, IconComponent, DecimalPipe, ContarDirective, InvitacionComponent],
   templateUrl: './feed.page.html',
 })
 export class FeedPage implements OnInit {

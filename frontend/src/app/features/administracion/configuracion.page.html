@@ -90,6 +90,42 @@
             [attr.aria-invalid]="!!errorDe('puntosReferido')"
           />
         </app-campo>
+        @for (bono of bonificaciones; track bono.campo) {
+          <app-campo
+            [para]="bono.campo"
+            [etiqueta]="bono.titulo"
+            ayuda="Puntos enteros entre 0 y 10000. Ej. 100."
+            [requerido]="true"
+            [error]="errorDe(bono.campo)"
+          >
+            <input
+              [id]="bono.campo"
+              type="number"
+              inputmode="numeric"
+              min="0"
+              [max]="puntosMax"
+              step="1"
+              [formControlName]="bono.campo"
+              [attr.aria-describedby]="bono.campo + '-ayuda ' + bono.campo + '-error'"
+              [attr.aria-invalid]="!!errorDe(bono.campo)"
+            />
+          </app-campo>
+        }
+        <app-campo
+          para="valorPunto"
+          etiqueta="Valor de un punto (USD)"
+          ayuda="Dólares con hasta dos decimales. Ej. 0.25."
+          [requerido]="true"
+          [error]="errorDe('valorPunto')"
+        >
+          <input
+            id="valorPunto"
+            formControlName="valorPunto"
+            inputmode="decimal"
+            aria-describedby="valorPunto-ayuda valorPunto-error"
+            [attr.aria-invalid]="!!errorDe('valorPunto')"
+          />
+        </app-campo>
         <app-campo
           para="cfgRegistro"
           etiqueta="Registro de nuevos socios"

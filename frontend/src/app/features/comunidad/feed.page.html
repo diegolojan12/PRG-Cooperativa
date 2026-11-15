@@ -155,6 +155,19 @@
         <div class="cm-skel" role="status" aria-label="Cargando tu resumen"><i></i><i></i><i></i></div>
       }
     </section>
+    <!-- HU-017 / HU-018 / RF-06-2: compartir en menos de 15 s, o el aviso para vincular la cuenta. -->
+    @if (session.puede('referidos')) {
+      <section class="cm-card cm-widget" aria-labelledby="invitaTitulo">
+        <h2 id="invitaTitulo">Invita y gana</h2>
+        @if (session.usuario()?.cuentaVerificada) {
+          <app-invitacion [compacta]="true" />
+          <a class="cm-foot" routerLink="/panel/mi-cuenta">Ver mi código QR</a>
+        } @else {
+          <p>Para referir necesitas tu cuenta de la Cooperativa aprobada.</p>
+          <a class="cm-cta" routerLink="/panel/mi-cuenta">Vincular mi cuenta</a>
+        }
+      </section>
+    }
     <section class="cm-card cm-widget">
       <h2>Próximas actividades</h2>
       @for (e of eventos; track e.titulo) {
