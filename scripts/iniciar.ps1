@@ -36,9 +36,8 @@ try {
             exit 1
         }
         Instalar-Y-Compilar 'backend'
-        Write-Host 'Preparando la base de datos (migraciones)...'
-        & npm.cmd run db:init --prefix backend
-        if ($LASTEXITCODE -ne 0) { throw 'No se pudo preparar PostgreSQL. Si aun no existe la base, ejecuta: npm run db:crear (ver docs/LABORATORIO.md).' }
+        Write-Host 'Comprobando y preparando PostgreSQL...'
+        & (Join-Path $PSScriptRoot 'preparar-postgresql.ps1')
         $procesos += Start-Process -FilePath $node -ArgumentList '--env-file=.env', 'dist/main.js' -WorkingDirectory (Join-Path $raiz 'backend') `
             -RedirectStandardOutput (Join-Path $logs 'api.log') -RedirectStandardError (Join-Path $logs 'api-error.log') -WindowStyle Hidden -PassThru
     }
