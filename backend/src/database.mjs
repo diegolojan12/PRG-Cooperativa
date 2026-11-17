@@ -24,7 +24,7 @@ export function verifyPassword(value, stored) {
 export const STATES = Referido.estados;
 
 /** Migraciones en orden. Cada una se aplica una sola vez (tabla SumaMigracion). */
-const MIGRACIONES = ['sprint1', 'sprint1-auditoria', 'sprint1-dominio', 'sprint1-roles', 'sprint2'];
+const MIGRACIONES = ['sprint1', 'sprint1-auditoria', 'sprint1-dominio', 'sprint1-roles', 'sprint2', 'sprint2-correcciones'];
 
 export class Database {
   /**
@@ -32,11 +32,14 @@ export class Database {
    * @param url postgresql://usuario:clave@host:5432/base
    * @param opciones.esquema esquema aislado (lo usan las pruebas automáticas)
    */
-  constructor(url = process.env.DATABASE_URL, { esquema } = {}) {
+  constructor(url = process.env.DATABASE_URL, { esquema = process.env.DATABASE_SCHEMA } = {}) {
     if (!/^postgres(ql)?:\/\//.test(url ?? ''))
       throw new Error(
         'DATABASE_URL debe ser una URL de PostgreSQL, por ejemplo postgresql://suma:suma_dev@localhost:5432/suma',
       );
+    // DATABASE_SCHEMA permite aislar una ejecución (prueba de navegador) en su propio esquema.
+    if (esquema && !/^[a-z_][a-z0-9_]{0,62}$/.test(esquema))
+      throw new Error('DATABASE_SCHEMA solo admite minúsculas, números y guion bajo.');
     this.datos = new ProteccionDatos();
     this.esquema = esquema;
     this.pool = new pg.Pool({

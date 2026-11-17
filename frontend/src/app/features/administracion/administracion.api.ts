@@ -14,6 +14,13 @@ import {
   Usuario,
 } from '../../core/models/domain';
 
+/** RF-47-4: estado de los términos y el aviso de privacidad publicados. */
+export interface EstadoAviso {
+  vigente: { version: string; terminos: string; privacidad: string } | null;
+  historial: { version: string; vigente: boolean; publicadoEn: string | null }[];
+  aceptaciones: number;
+}
+
 export interface FiltroActividad {
   pagina: number;
   desde?: string;
@@ -80,6 +87,12 @@ export class AdministracionApi {
   }
   guardarConfiguracion(datos: Configuracion) {
     return this.http.put<{ ok: true }>('/api/configuracion', datos);
+  }
+  avisoPrivacidad() {
+    return this.http.get<EstadoAviso>('/api/configuracion/aviso');
+  }
+  publicarAviso(datos: { version: string; terminos: string; privacidad: string }) {
+    return this.http.post<{ version: string }>('/api/configuracion/aviso', datos);
   }
   actividad(f: FiltroActividad) {
     return this.http.get<Pagina<Actividad>>('/api/actividad', { params: params(f) });

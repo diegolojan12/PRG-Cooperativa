@@ -4,12 +4,13 @@ import express from 'express';
 import request from 'supertest';
 import { AcreditacionPuntos } from '../src/dominio/administracion.mjs';
 import { CodigoVerificacion } from '../src/dominio/acceso.mjs';
+import { ProteccionDatos } from '../src/dominio/proteccion-datos.mjs';
 import { Database } from '../src/database.mjs';
 import { createApi, diasHabiles } from '../src/api.mjs';
 import { baseAislada } from './aislamiento-pg.mjs';
 
 const datosAlta = (datos) => ({
-  ...datos, confirmacionClave: datos.clave, aceptaTerminos: true, versionAviso: '0.1',
+  provincia: 'Loja', ...datos, confirmacionClave: datos.clave, aceptaTerminos: true, versionAviso: '0.1',
 });
 
 async function registrarConfirmado(agent, datos) {
@@ -22,13 +23,13 @@ async function registrarConfirmado(agent, datos) {
   return alta;
 }
 
-test('días hábiles: excluye fines de semana y feriados fijos de Ecuador', () => {
+void test('días hábiles: excluye fines de semana y feriados fijos de Ecuador', () => {
   assert.equal(diasHabiles('2026-11-06T10:00:00Z', new Date('2026-11-10T12:00:00Z')), 2);
   // 2 y 3 de noviembre son feriados nacionales.
   assert.equal(diasHabiles('2026-10-30T10:00:00Z', new Date('2026-11-04T12:00:00Z')), 1);
 });
 
-test('Sprints 1 y 2: criterios de aceptación documentados', async (t) => {
+void test('Sprints 1 y 2: criterios de aceptación documentados', async (t) => {
   process.env.SEED_DEMO = 'true';
   process.env.NODE_ENV = 'test';
   process.env.ENABLE_DEV_RESET_LINK = 'true';
@@ -623,7 +624,7 @@ test('Sprints 1 y 2: criterios de aceptación documentados', async (t) => {
   }
 });
 
-test('RNF-05: migra datos personales y conserva acceso y unicidad por correo', async () => {
+void test('RNF-05: migra datos personales y conserva acceso y unicidad por correo', async () => {
   const aislada = await baseAislada();
   const url = aislada.url;
   const abrir = () => new Database(url, { esquema: aislada.esquema });
@@ -668,6 +669,108 @@ test('RNF-05: migra datos personales y conserva acceso y unicidad por correo', a
     else process.env.SUMA_DATA_KEY = claveOriginal;
     if (semillaOriginal === undefined) delete process.env.SEED_DEMO;
     else process.env.SEED_DEMO = semillaOriginal;
+    await aislada.limpiar();
+  }
+});
+
+void test('Correcciones del Sprint 2: provincia, aviso RF-47-4, plazos y bitácora', async (t) => {
+  process.env.SEED_DEMO = 'true';
+  process.env.NODE_ENV = 'test';
+  process.env.ENABLE_DEV_RESET_LINK = 'true';
+  const aislada = await baseAislada();
+  const db = new Database(aislada.url, { esquema: aislada.esquema });
+  const app = express();
+  app.use('/api', (await createApi(db)).router);
+  const admin = request.agent(app),
+    socio = request.agent(app);
+  const primero = await admin.post('/api/auth/login').send({ correo: 'admin@suma.ec', clave: 'Suma2026!' });
+  assert.equal((await admin.post('/api/auth/2fa').send({ desafioId: primero.body.desafioId, codigo: primero.body.devCodigo })).status, 200);
+  assert.equal((await socio.post('/api/auth/login').send({ correo: 'socio@suma.ec', clave: 'Suma2026!' })).status, 200);
+  try {
+    await t.test('T-01: la provincia es obligatoria en el registro y la hereda el referido', async () => {
+      const base = { nombre: 'Persona Provincia', correo: 'provincia@ejemplo.ec', celular: '0990000901', clave: 'Valida2026!' };
+      const sinProvincia = await request(app).post('/api/auth/register').send({ ...datosAlta(base), provincia: undefined });
+      assert.equal(sinProvincia.status, 400);
+      assert.ok(sinProvincia.body.campos.provincia);
+      assert.equal((await request(app).post('/api/auth/register').send(datosAlta({ ...base, provincia: 'Atlántida' }))).status, 400);
+      assert.equal((await request(app).get('/api/auth/provincias')).body.length, 24);
+      await registrarConfirmado(request(app), { ...base, provincia: 'Zamora Chinchipe' });
+      const [fila] = await db.query('SELECT provincia FROM "Usuario" WHERE nombre=$1', [base.nombre]);
+      assert.equal(fila.provincia, 'Zamora Chinchipe');
+      const { codigo } = (await socio.post('/api/referidos/mi-codigo').send({})).body;
+      await registrarConfirmado(request(app), {
+        nombre: 'Invitado Oro', correo: 'oro@ejemplo.ec', celular: '0990000902', clave: 'Valida2026!',
+        provincia: 'El Oro', codigoReferido: codigo,
+      });
+      const filtrados = (await admin.get('/api/referidos?provincia=' + encodeURIComponent('El Oro'))).body;
+      assert.ok(filtrados.items.some((r) => r.nombre === 'Invitado Oro'));
+      assert.ok(filtrados.filtros.provincias.includes('El Oro'));
+    });
+
+    await t.test('RF-42: el dictamen deja en la bitácora el estado anterior y el nuevo', async () => {
+      const [ref] = await db.query('SELECT id FROM "Referido" WHERE nombre=$1', ['Invitado Oro']);
+      assert.equal((await admin.patch('/api/referidos/' + ref.id + '/dictamen').send({ estado: 'RECHAZADO' })).status, 200);
+      const [fila] = await db.query('SELECT datos FROM "Actividad" WHERE accion=$1 AND "objetivoId"=$2', ['Dictamen de referido', ref.id]);
+      assert.deepEqual(JSON.parse(fila.datos), { anterior: 'PENDIENTE', nuevo: 'RECHAZADO' });
+    });
+
+    await t.test('RF-11-5: no se asocia a quien se registró hace más de 30 días', async () => {
+      await registrarConfirmado(request(app), { nombre: 'Registro Antiguo', correo: 'antiguo@ejemplo.ec', celular: '0990000903', clave: 'Valida2026!' });
+      const [usuario] = await db.query('SELECT id FROM "Usuario" WHERE nombre=$1', ['Registro Antiguo']);
+      await db.query('UPDATE "Usuario" SET "creadoEn"=$2 WHERE id=$1', [usuario.id, new Date(Date.now() - 31 * 86_400_000)]);
+      const opciones = (await admin.get('/api/referidos/asociables')).body;
+      assert.ok(!opciones.usuarios.some((u) => u.id === usuario.id));
+      const patrocinador = opciones.socios.find((s) => s.correo === 'socio@suma.ec');
+      const intento = await admin.post('/api/referidos/asociar').send({ usuarioId: usuario.id, socioId: patrocinador.id });
+      assert.equal(intento.status, 409);
+    });
+
+    await t.test('RF-47-4: el administrador publica una nueva versión y el registro exige aceptarla', async () => {
+      const inicial = (await admin.get('/api/configuracion/aviso')).body;
+      assert.equal(inicial.vigente.version, '0.1');
+      assert.equal((await socio.post('/api/configuracion/aviso').send({ version: '1.0' })).status, 403);
+      const textos = {
+        terminos: 'Términos oficiales de uso de SUMA, versión 1.0.',
+        privacidad: 'Aviso de privacidad oficial de SUMA, versión 1.0.',
+      };
+      assert.equal((await admin.post('/api/configuracion/aviso').send({ ...textos, version: '0.1' })).status, 409);
+      assert.equal((await admin.post('/api/configuracion/aviso').send({ ...textos, version: 'uno' })).status, 400);
+      assert.equal((await admin.post('/api/configuracion/aviso').send({ ...textos, version: '1.0' })).status, 201);
+      const vigente = (await request(app).get('/api/auth/aviso-privacidad')).body;
+      assert.equal(vigente.version, '1.0');
+      assert.equal(vigente.terminos, textos.terminos);
+      const persona = { nombre: 'Acepta Nueva', correo: 'acepta@ejemplo.ec', celular: '0990000904', clave: 'Valida2026!' };
+      assert.equal((await request(app).post('/api/auth/register').send(datosAlta(persona))).status, 400, 'la versión 0.1 ya no es la vigente');
+      assert.equal((await request(app).post('/api/auth/register').send({ ...datosAlta(persona), versionAviso: '1.0' })).status, 201);
+      const vigentes = await db.query('SELECT version FROM "AvisoPrivacidad" WHERE vigente');
+      assert.deepEqual(vigentes.map((v) => v.version), ['1.0']);
+      const [registro] = await db.query('SELECT datos FROM "Actividad" WHERE accion=$1', ['Aviso de privacidad publicado']);
+      assert.deepEqual(JSON.parse(registro.datos), { anterior: '0.1', nuevo: '1.0' });
+    });
+
+    await t.test('HU-014 / CA-15: sin servicio de correo no se crea la cuenta', async () => {
+      process.env.ENABLE_DEV_RESET_LINK = 'false';
+      try {
+        const persona = { nombre: 'Sin Correo', correo: 'sincorreo@ejemplo.ec', celular: '0990000905', clave: 'Valida2026!' };
+        const respuesta = await request(app).post('/api/auth/register').send({ ...datosAlta(persona), versionAviso: '1.0' });
+        assert.equal(respuesta.status, 503);
+        assert.equal((await db.query('SELECT id FROM "Usuario" WHERE nombre=$1', [persona.nombre])).length, 0);
+      } finally {
+        process.env.ENABLE_DEV_RESET_LINK = 'true';
+      }
+    });
+
+    await t.test('RNF-05: producción no arranca sin SUMA_DATA_KEY', () => {
+      const entorno = process.env.NODE_ENV;
+      process.env.NODE_ENV = 'production';
+      try {
+        assert.throws(() => new ProteccionDatos(''), /SUMA_DATA_KEY/);
+      } finally {
+        process.env.NODE_ENV = entorno;
+      }
+    });
+  } finally {
+    await db.close();
     await aislada.limpiar();
   }
 });

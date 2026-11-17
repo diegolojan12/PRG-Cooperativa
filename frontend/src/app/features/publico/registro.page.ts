@@ -14,6 +14,7 @@ const CAMPO_SERVIDOR: Record<string, string> = {
   nombre: 'nombre',
   correo: 'correo',
   celular: 'celular',
+  provincia: 'provincia',
   cuenta: 'numCuenta',
   codigoReferido: 'codigoReferido',
   clave: 'clave',
@@ -24,6 +25,7 @@ const PASO_DE: Record<string, number> = {
   nombre: 1,
   correo: 1,
   celular: 1,
+  provincia: 1,
   codigoReferido: 3,
   clave2: 3,
   terms: 3,
@@ -41,10 +43,11 @@ export class RegistroPage {
   private router = inject(Router);
   private viewport = inject(ViewportScroller);
   private avisos = inject(AvisoService);
-  private identity = { nombre: '', correo: '', celular: '' };
+  private identity = { nombre: '', correo: '', celular: '', provincia: '' };
   private cuenta = '';
 
   readonly aviso = signal<AvisoPrivacidad | null>(null);
+  readonly provincias = signal<string[]>([]);
   readonly errorAviso = signal('');
   readonly codigoReferido = signal(inject(ActivatedRoute).snapshot.queryParamMap.get('ref') ?? '');
   readonly steps = ['Tus datos', 'Tu cuenta', 'Crea tu acceso'];
@@ -63,6 +66,15 @@ export class RegistroPage {
 
   constructor() {
     void this.cargarAviso();
+    void this.cargarProvincias();
+  }
+
+  async cargarProvincias(): Promise<void> {
+    try {
+      this.provincias.set(await firstValueFrom(this.auth.provincias()));
+    } catch (error) {
+      this.avisos.error(leerError(error).mensaje);
+    }
   }
 
   async cargarAviso(): Promise<void> {
@@ -80,7 +92,7 @@ export class RegistroPage {
     this.viewport.scrollToPosition([0, 0]);
   }
 
-  continueIdentity(name: string, email: string, phone: string): void {
+  continueIdentity(name: string, email: string, phone: string, province: string): void {
     const nombre = name.trim();
     const correo = email.trim();
     const celular = phone.trim();
@@ -88,8 +100,9 @@ export class RegistroPage {
     if (nombre.length < 3 || nombre.split(/\s+/).length < 2) errors.push('nombre');
     if (!emailPattern.test(correo)) errors.push('correo');
     if (!celularPattern.test(celular)) errors.push('celular');
+    if (!this.provincias().includes(province)) errors.push('provincia');
     if (errors.length) return this.showErrors(errors);
-    this.identity = { nombre, correo, celular };
+    this.identity = { nombre, correo, celular, provincia: province };
     this.goTo(2);
   }
 

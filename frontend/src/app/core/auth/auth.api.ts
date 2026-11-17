@@ -12,6 +12,8 @@ export interface NuevoSocio {
   nombre: string;
   correo: string;
   celular: string;
+  /** T-01: provincia donde vive la persona (una de las 24 del Ecuador). */
+  provincia: string;
   clave: string;
   confirmacionClave: string;
   aceptaTerminos: boolean;
@@ -39,6 +41,9 @@ export class AuthApi {
   }
   avisoPrivacidad() {
     return this.http.get<AvisoPrivacidad>('/api/auth/aviso-privacidad');
+  }
+  provincias() {
+    return this.http.get<string[]>('/api/auth/provincias');
   }
   confirmarCorreo(token: string, codigo: string) {
     return this.http.post<{ ok: true }>('/api/auth/confirmar-correo', {

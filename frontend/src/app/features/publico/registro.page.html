@@ -81,6 +81,26 @@
           </div>
         </div>
 
+        <div class="campo" id="campoProvincia" [class.error]="errors().includes('provincia')">
+          <label for="provincia">Provincia</label>
+          <select
+            id="provincia"
+            #provincia
+            [attr.aria-invalid]="errors().includes('provincia')"
+            aria-describedby="ayudaProvincia errorProvincia"
+            autocomplete="address-level1"
+          >
+            <option value="">Elige tu provincia</option>
+            @for (p of provincias(); track p) {
+              <option [value]="p">{{ p }}</option>
+            }
+          </select>
+          <span class="ayuda" id="ayudaProvincia"
+            >Donde vives. Te avisaremos de las campañas de tu provincia. Ej. Loja.</span
+          >
+          <span class="msgError" id="errorProvincia">Elige tu provincia de la lista.</span>
+        </div>
+
         <div class="nota">Solo los usamos para tu cuenta y avisos importantes.</div>
 
         <div class="accionesPaso soloDer">
@@ -88,7 +108,7 @@
             type="button"
             class="btnPrimario btnBtn"
             id="sig1"
-            (click)="continueIdentity(nombre.value, correo.value, celular.value)"
+            (click)="continueIdentity(nombre.value, correo.value, celular.value, provincia.value)"
           >
             Continuar <span>→</span>
           </button>

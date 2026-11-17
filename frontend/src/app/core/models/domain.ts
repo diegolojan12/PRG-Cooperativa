@@ -48,6 +48,7 @@ export interface Usuario {
   rolNombre: string;
   cuentaVerificada?: boolean;
   cuentaEstado?: EstadoReferido | null;
+  provincia?: string | null;
 }
 
 export interface Desafio2fa {

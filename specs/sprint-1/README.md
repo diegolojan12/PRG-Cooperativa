@@ -3,6 +3,7 @@
 | Campo | Valor |
 | ----- | ----- |
 | Estado | Implementado y verificado (fusionado en `main`, PR #1 de `sprint-1`) |
+| Alcance según el backlog | El Sprint 1 son **HU-001 a HU-003** (columna *Sprint* de `BKL-G1`). HU-004 a HU-012 son del Sprint 2 y se implementaron aquí por adelantado. |
 | Objetivo | Que socios, gestores y administradores entren de forma segura, vean solo lo que les corresponde, y que el ciclo básico del referido (alta → dictamen → puntos) funcione con trazabilidad completa |
 | Modo SDD | Documentado **a posteriori**: las specs se escribieron a partir del código y de las pruebas que ya pasan |
 

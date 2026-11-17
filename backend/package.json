@@ -23,6 +23,7 @@
     "db:crear": "node --env-file=.env scripts/crear-bd.mjs",
     "db:init": "node --env-file=.env scripts/database.mjs",
     "db:seed": "node --env-file=.env scripts/seed.mjs",
+    "db:respaldo": "node --env-file=.env scripts/respaldo.mjs",
     "start:local": "node --env-file=.env dist/main.js",
     "test:sprint": "node --env-file-if-exists=.env --test test/sprint.test.mjs",
     "admin:create": "node --env-file-if-exists=.env scripts/create-admin.mjs"

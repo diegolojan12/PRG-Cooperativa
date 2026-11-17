@@ -1,7 +1,9 @@
 # Casos de uso faltantes · Sprints 1 y 2
 
-Propuesta para completar el modelo `SUMA-Diagramas_Vistas.eapx` (paquete *Vista de Escenarios › Casos de uso*), de modo
-que cada requisito de usuario (UR) e historia (HU) de los Sprints 1 y 2 tenga un caso de uso y una evidencia en el código.
+Casos de uso agregados al modelo `SUMA-Diagramas_Vistas.eapx` (paquete *Vista de Escenarios › Casos de uso*) el
+2026-11-16, para que cada requisito de usuario (UR) e historia (HU) tenga un caso de uso y, hasta el Sprint 2, una
+evidencia en el código. **Estado: aplicado en el EAPX corregido** (`entregables/SUMA-Diagramas_Vistas.eapx`): 88 casos,
+26 diagramas de casos de uso y valores etiquetados `UR`, `HU`, `RF` y `Sprint` en todos los casos.
 
 - **Numeración:** se conservan CU-01 a CU-15. Los casos nuevos de primer nivel continúan en **CU-16**. Los sub-casos
   nuevos continúan la numeración de su caso base (por ejemplo, CU-02.4).
@@ -16,24 +18,51 @@ que cada requisito de usuario (UR) e historia (HU) de los Sprints 1 y 2 tenga un
 | -- | ------ | ----- | ---- | -- | -- |
 | CU-01.4 | Validar que el correo y el celular no estén registrados | — | «include» de CU-01 | UR-14 | HU-013 |
 | CU-02.4 | Cargar el menú y los permisos del rol | — | «include» de CU-02 | UR-04 | HU-002 |
-| CU-02.5 | Restablecer la contraseña | Socio / Cliente, Gestor, Administrador | Caso propio (sigue a CU-02.3) | UR-05 | HU-004 |
-| CU-02.6 | Cerrar sesión | Socio / Cliente, Gestor, Administrador | Caso propio | UR-03 | HU-003 |
+| CU-02.5 | Restablecer la contraseña | — | «extend» de CU-02.3 `[abre el enlace vigente]` | UR-05 | HU-004 |
+| CU-02.6 | Cerrar sesión | — | «extend» de CU-02 `[elige salir o pasan 15 min sin acciones]` | UR-03 | HU-003 |
+| CU-03.3 | Dar de baja la cuenta | — | «extend» de CU-03 | UR-06 | HU-023 (Sprint 3) |
 | CU-05.3 | Compartir el enlace por WhatsApp o redes sociales | Socio / Cliente · *Redes sociales* | «extend» de CU-05 | UR-12 | HU-018 |
 | CU-05.4 | Comprobar que la cuenta vinculada esté aprobada | — | «include» de CU-05 | UR-09 | HU-015, HU-017 |
 | CU-06.4 | Acreditar los puntos al socio y al referido | — | «extend» de CU-06.2 `[dictamen = Aprobado]` | UR-19, UR-24 | HU-021, HU-022 |
-| CU-06.5 | Gestionar los datos de un referido | Socio / Cliente, Administrador | «extend» de CU-06 | UR-13 ⚠ | HU-011 |
+| CU-06.5 | Gestionar los datos de un referido | Socio / Cliente, Administrador | «extend» de CU-06 | UR-54 (nuevo) | HU-011 |
 | CU-06.6 | Asociar manualmente un referido | Administrador | «extend» de CU-06 | UR-13 | HU-011, HU-012 |
 | **CU-16** | Gestionar roles y permisos | Administrador | Caso de primer nivel | UR-04 | HU-001, HU-002 |
 | **CU-17** | Gestionar usuarios de la plataforma | Administrador | Caso de primer nivel | UR-04 | HU-001 |
 | **CU-18** | Verificar una cuenta vinculada | Administrador | Caso de primer nivel | UR-08 | HU-016 |
 | **CU-19** | Configurar los parámetros de la plataforma | Administrador | Caso de primer nivel | UR-46 | HU-006 |
+| CU-19.2 | Publicar una nueva versión de los términos | — | «extend» de CU-19 | UR-52 | HU-013 · RF-47-4 |
 | **CU-20** | Consultar la bitácora de auditoría | Administrador | Caso de primer nivel | UR-48 | HU-007 |
 
 **HU-005 (panel de administración)** no necesita un caso nuevo: se asocia a **CU-15 Consultar indicadores de captación**,
 que ya modela el tablero. En el backlog conviene vincular HU-005 con **UR-49**, porque hoy no tiene requisito de usuario.
 
+**Casos de los Sprints 3 a 5 también agregados** (sin especificación detallada; nombre, actor, nota y trazas en el EAPX):
+
+| CU | Nombre | Actor | UR | HU |
+| -- | ------ | ----- | -- | -- |
+| CU-13.4 | Publicar en el muro («extend» de CU-13) | Socio / Cliente | UR-35 | HU-047 |
+| CU-21 | Controlar la vigencia de una campaña | Administrador | UR-23 | HU-026 |
+| CU-22 | Gestionar retos | Administrador | UR-27 | HU-035 |
+| CU-23 | Seguir el avance de los retos | Socio / Cliente | UR-27 | HU-036 |
+| CU-24 | Gestionar el banco de preguntas | Gestor | UR-28 | HU-037 |
+| CU-25 | Publicar una capacitación | Gestor | UR-30 | HU-039 |
+| CU-26 | Gestionar talleres | Gestor | UR-32 | HU-041 |
+| CU-27 | Registrar la asistencia a un taller | Gestor | UR-34 | HU-043 |
+| CU-28 | Publicar contenido oficial | Gestor | UR-36 | HU-049 |
+| CU-29 | Moderar contenido reportado | Administrador | UR-37 | HU-050 |
+| CU-30 | Publicar contenidos de salud y bienestar | Gestor | UR-38 | HU-051 |
+| CU-31 | Consultar salud y bienestar | Socio / Cliente | UR-38 | HU-051 |
+| CU-32 | Gestionar el catálogo de premios | Administrador | UR-39 | HU-044 |
+| CU-33 | Registrar la entrega de premios | Administrador | UR-41 | HU-046 |
+| CU-34 | Planificar canjes con favoritos y meta | Socio / Cliente | UR-42 | HU-055 (nueva) |
+| CU-35 | Buscar información | Socio / Cliente | UR-43 | HU-056 (nueva) |
+| CU-36 | Consultar notificaciones | Socio / Cliente | UR-44 | HU-020, HU-022, HU-026 |
+| CU-37 | Ajustar puntos manualmente | Administrador | UR-47 | HU-057 (nueva) |
+| CU-38 | Calificar una actividad | Socio / Cliente | UR-50 | HU-058 (nueva) |
+
 **Diagramas en el EAPX:**
 - Nuevo diagrama general **04 Administración de la plataforma** con CU-16, CU-17, CU-19 y CU-20.
+- Nuevos diagramas **05 Socio y administración · Sprints 3 a 5** y **06 Gestión de contenidos · Sprints 4 y 5**.
 - **CU-18** se agrega al diagrama **01 Acceso, cuenta y referidos**, junto a CU-04.
 - Un diagrama de detalle por cada caso nuevo de primer nivel (`CU-16 Detalle · …`), como los existentes.
 - Los sub-casos nuevos se agregan a los diagramas de detalle de su caso base.
@@ -220,21 +249,19 @@ por rol se aplican de inmediato».
 
 | Campo | Contenido |
 | ----- | --------- |
-| Relación | Asociado a Socio / Cliente, Gestor de contenidos y Administrador. Se inicia desde el enlace que envía CU-02.3. |
+| Relación | «extend» de CU-02.3 `[la persona abre el enlace vigente]`. |
 | Requisitos | **UR-05** · HU-004 · RF-07, RF-07-1, RF-07-2 · RNF-04, RNF-22 |
 | Precondición | La persona tiene un enlace de recuperación vigente (30 minutos) y no usado. |
 | Flujo básico | 1. La persona abre el enlace. 2. Escribe la nueva contraseña (mínimo 8 caracteres, 1 mayúscula y 1 número) y su confirmación. 3. El sistema guarda la contraseña, invalida el enlace, cierra todas las sesiones abiertas y registra el cambio en la bitácora. |
 | Alterno | El enlace venció o ya se usó: el sistema pide solicitar uno nuevo. |
 | Evidencia | `POST /api/auth/reset` ([api.mjs:637](../backend/src/api.mjs#L637)) · `recuperar.page.ts` · prueba «RF-07: recuperación de un solo uso que revoca sesiones». |
 
-> Alternativa de modelado: renombrar CU-02.3 a «Recuperar el acceso» con dos «include»: «Solicitar el enlace» y
-> «Restablecer la contraseña». Cualquiera de las dos opciones cubre UR-05.
 
 ### CU-02.6 Cerrar sesión
 
 | Campo | Contenido |
 | ----- | --------- |
-| Relación | Asociado a Socio / Cliente, Gestor de contenidos y Administrador |
+| Relación | «extend» de CU-02 `[la persona elige salir o pasan 15 minutos sin acciones]` |
 | Requisitos | **UR-03** · HU-003 · RF-04-3, RF-04-4 |
 | Flujo básico | 1. La persona elige «Cerrar sesión». 2. El sistema invalida la sesión en máximo 2 segundos, registra el cierre en la bitácora y vuelve a la pantalla de acceso. |
 | Alterno | **Cierre por inactividad (RF-04-3):** si no hay acciones durante 15 minutos, el sistema invalida la sesión y avisa al volver. |
@@ -280,11 +307,8 @@ por rol se aplican de inmediato».
 | Alternos | **A1 · Editar:** el socio solo edita sus referidos Pendientes y no vinculados a una cuenta. **A2 · Dar de baja:** con un motivo de al menos 5 caracteres, baja lógica que conserva el historial (RF-11-6). El socio solo da de baja sus Pendientes. **A3 · Sin cuenta aprobada:** el socio no puede registrar (CU-05.4). |
 | Evidencia | `POST /api/referidos`, `PATCH /api/referidos/:id`, `PATCH /api/referidos/:id/baja` ([api.mjs:863-986](../backend/src/api.mjs#L863)) · `referidos.page.html` · pruebas «RF-11 / RNF-12» y «RF-11-6». |
 
-> **Nota de trazabilidad:** ningún UR pide que el socio registre a mano los datos de otra persona. UR-11 pide justamente
-> lo contrario («sin dictarle ningún dato»). Hay dos opciones: (a) agregar un UR nuevo, por ejemplo «UR-54 Registrar
-> referidos a mano», o (b) dejar este registro solo para el administrador y vincularlo a UR-16. Además, el texto de
-> HU-011 («independientemente del rol») y el actor «Usuario General» no coinciden con el código ni con UR-04. Conviene
-> reescribir HU-011 como «Como Socio / Cliente o Administrador…».
+> **Trazabilidad resuelta:** se agregó **UR-54 Registrar referidos a mano** en la ERS y se reescribió HU-011 como
+> «Como Socio / Cliente o Administrador…», sin el actor «Usuario General». Queda a confirmar con el Product Owner.
 
 ### CU-06.6 Asociar manualmente un referido
 
@@ -321,14 +345,13 @@ Hoy estos sub-casos están unidos directamente al actor. Deben colgar de su caso
 | CU-14.1 Enviar una solicitud de soporte | Asociación con Socio | «extend» de CU-14 |
 | CU-14.2 Responder una solicitud de soporte | Asociación con Administrador | «extend» de CU-14 |
 
-**Otros ajustes del modelo**
-- **CU-04 Solicitar vinculación:** agregar el flujo alterno «Nuevo intento tras un rechazo» (RF-05-6) y la nota de que el
-  número se muestra enmascarado (RF-05-5).
-- **CU-15:** agregar HU-005 a su trazabilidad (ver el resumen).
-- **Actores:** agregar una generalización *Prospecto → Socio / Cliente*, porque la Visión define al prospecto como un
-  socio / cliente sin cuenta verificada.
-- **Trazabilidad dentro del EAPX:** en cada caso de uso, registrar en la pestaña *Requisitos* (o como valor etiquetado
-  `UR`, `HU`, `RF`) los códigos de esta tabla, para que la trazabilidad no dependa solo de los nombres.
+**Otros ajustes aplicados en el modelo**
+- **CU-04.2** lleva en su traza RF-05-5 (número enmascarado) y RF-05-6 (nuevo intento tras un rechazo).
+- **CU-15** lleva HU-005 en su valor etiquetado `HU`.
+- **Actores:** generalización *Prospecto → Socio / Cliente* y actor secundario **Redes sociales** en CU-05.3.
+- **Trazabilidad dentro del EAPX:** los 88 casos tienen valores etiquetados `UR`, `HU`, `RF` y `Sprint`.
+- `Campania` y `Campanias` del diagrama de clases **no** están duplicadas: la primera es la entidad y la segunda el
+  servicio que la gestiona. No se cambiaron.
 
 ---
 
@@ -360,4 +383,4 @@ Hoy estos sub-casos están unidos directamente al actor. Deben colgar de su caso
 | UR-49 Medir el programa | CU-15 | HU-005 | `/indicadores` (6 indicadores) | ✔ · vincular HU-005 con UR-49 |
 | UR-52 Autorizar el tratamiento de datos | CU-01.1 | HU-013 | `AvisoPrivacidad`, `AceptacionTerminos` | ✔ · falta RF-47-4 |
 | UR-53 Entender cada pantalla | Transversal (no requiere CU) | HU-009, HU-010 | `CampoComponent`, `AvisoService` | ✔ |
-| — (sin UR) | **CU-06.5** | HU-011 | `POST/PATCH /referidos` | ⚠ falta UR |
+| UR-54 Registrar referidos a mano (nuevo) | **CU-06.5** | HU-011 | `POST/PATCH /referidos` | ✔ |

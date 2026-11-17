@@ -119,6 +119,7 @@ export class Usuario {
     celular,
     creadoEn,
     cuentaEstado,
+    provincia,
   }) {
     const cuentaVerificada = CuentaCooperativa.estaAprobada(cuentaEstado);
     Object.assign(this, {
@@ -129,6 +130,7 @@ export class Usuario {
       activo: Boolean(activo),
       celular,
       creadoEn,
+      provincia: provincia ?? null,
       cuentaVerificada,
       cuentaEstado: cuentaVerificada
         ? 'APROBADO'

@@ -11,3 +11,6 @@ e2e/playwright-report/
 .local/
 backend/data/
 *.tsbuildinfo
+
+# Documentos corregidos para entregar (no forman parte del código)
+/entregables

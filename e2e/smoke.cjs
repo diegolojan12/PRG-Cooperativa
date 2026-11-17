@@ -7,24 +7,45 @@ const os = require("node:os");
 const root = path.resolve(__dirname, ".."),
   output = process.env.SUMA_QA_OUTPUT || path.join(__dirname, "test-results");
 const temporary = fs.mkdtempSync(path.join(os.tmpdir(), "suma-ui-"));
+// SUMA usa solo PostgreSQL: la prueba crea un esquema propio y lo borra al terminar.
+const pg = require(path.join(root, "backend/node_modules/pg"));
+const leerEnv = (archivo) =>
+  fs.existsSync(archivo)
+    ? Object.fromEntries(
+        fs.readFileSync(archivo, "utf8").split(/\r?\n/)
+          .map((l) => l.match(/^\s*([A-Z_]+)\s*=\s*(.*)\s*$/))
+          .filter(Boolean)
+          .map((m) => [m[1], m[2].replace(/^["']|["']$/g, "")]),
+      )
+    : {};
+const envBackend = leerEnv(path.join(root, "backend/.env"));
+const databaseUrl =
+  process.env.TEST_DATABASE_URL || process.env.DATABASE_URL ||
+  envBackend.TEST_DATABASE_URL || envBackend.DATABASE_URL;
+if (!/^postgres(ql)?:\/\//.test(databaseUrl ?? "")) {
+  console.error("Define TEST_DATABASE_URL o DATABASE_URL (PostgreSQL) para la prueba de navegador.");
+  process.exit(1);
+}
+const esquema = "e2e_" + require("node:crypto").randomBytes(5).toString("hex");
+const adminPg = new pg.Pool({ connectionString: databaseUrl, max: 1 });
 const base = "http://127.0.0.1:4300";
 fs.mkdirSync(output, { recursive: true });
-const api = spawn(process.execPath, ["dist/main.js"], {
+let api;
+const iniciarApi = () => (api = spawn(process.execPath, ["dist/main.js"], {
   cwd: path.join(root, "backend"),
   env: {
     ...process.env,
     PORT: "4301",
-    DATABASE_URL: "file:" + path.join(temporary, "ui.db"),
+    DATABASE_URL: databaseUrl,
+    DATABASE_SCHEMA: esquema,
     FRONTEND_URL: base,
     SEED_DEMO: "true",
     ENABLE_DEV_RESET_LINK: "true",
     NODE_ENV: "test",
   },
   stdio: ["ignore", "pipe", "pipe"],
-});
+}));
 let logs = "";
-api.stdout.on("data", (x) => (logs += x));
-api.stderr.on("data", (x) => (logs += x));
 const dist = path.join(root, "frontend/dist/frontend/browser");
 const mime = {
   ".js": "application/javascript",
@@ -78,6 +99,10 @@ const web = http.createServer((req, res) => {
 (async () => {
   let browser;
   try {
+    await adminPg.query("CREATE SCHEMA " + esquema);
+    iniciarApi();
+    api.stdout.on("data", (x) => (logs += x));
+    api.stderr.on("data", (x) => (logs += x));
     await new Promise((resolve) => web.listen(4300, "127.0.0.1", resolve));
     for (let i = 0; i < 80; i++) {
       try {
@@ -212,11 +237,14 @@ const web = http.createServer((req, res) => {
       path: path.join(output, "SUMA-panel-movil.png"),
       fullPage: true,
     });
-    await mp.getByRole("button", { name: "Abrir menú" }).click();
+    // Desde el Sprint 2 el socio usa la experiencia Comunidad: en móvil, barra inferior + «Más».
+    await mp.getByRole("button", { name: "Más", exact: true }).click();
+    const secciones = mp.getByRole("menu", { name: "Todas las secciones" });
     await expect(
-      mp.getByRole("link", { name: "Usuarios", exact: true }),
+      secciones.getByRole("menuitem", { name: "Usuarios", exact: true }),
     ).toHaveCount(0);
-    await mp.getByRole("link", { name: "Referidos", exact: true }).click();
+    await expect(mp.getByRole("link", { name: "Usuarios", exact: true })).toHaveCount(0);
+    await secciones.getByRole("menuitem", { name: /Referidos/ }).first().click();
     await expect(
       mp.getByRole("heading", { name: "Referidos", exact: true }),
     ).toBeVisible();
@@ -257,6 +285,7 @@ const web = http.createServer((req, res) => {
     await mp.locator("#nombre").fill("Prueba Interfaz");
     await mp.locator("#correo").fill("registro-ui@ejemplo.ec");
     await mp.locator("#celular").fill("0992222222");
+    await mp.locator("#provincia").selectOption("Loja");
     await mp.locator("#sig1").click();
     await mp.locator("#opNo").click();
     await mp.locator("#sig2").click();
@@ -288,8 +317,12 @@ const web = http.createServer((req, res) => {
   } finally {
     if (browser) await browser.close();
     await new Promise((resolve) => web.close(resolve));
-    api.kill();
-    await new Promise((r) => api.once("exit", r));
+    if (api) {
+      api.kill();
+      await new Promise((r) => (api.exitCode !== null ? r() : api.once("exit", r)));
+    }
+    await adminPg.query("DROP SCHEMA IF EXISTS " + esquema + " CASCADE");
+    await adminPg.end();
     fs.rmSync(temporary, { recursive: true, force: true });
   }
 })().catch((e) => {

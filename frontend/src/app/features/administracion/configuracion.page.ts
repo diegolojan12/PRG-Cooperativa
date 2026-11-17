@@ -8,6 +8,7 @@ import { CampoComponent } from '../../shared/campo/campo.component';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { MENSAJE_SIN_CODIGO, emailPattern, sinCodigo } from '../../shared/validacion';
 import { AdministracionApi } from './administracion.api';
+import { AvisoPrivacidadAdminComponent } from './aviso-privacidad.component';
 
 /** RF-14-1: numéricos solo enteros; textos hasta 500 caracteres. */
 export const TEXTO_MAX = 500;
@@ -27,7 +28,7 @@ const VALIDADOR_PUNTOS = [
 
 @Component({
   selector: 'app-configuracion-page',
-  imports: [ReactiveFormsModule, CampoComponent, IconComponent],
+  imports: [ReactiveFormsModule, CampoComponent, IconComponent, AvisoPrivacidadAdminComponent],
   templateUrl: './configuracion.page.html',
 })
 export class ConfiguracionPage implements OnInit {

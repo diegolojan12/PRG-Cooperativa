@@ -2,6 +2,7 @@ import express from 'express';
 import { randomBytes } from 'node:crypto';
 import { AceptacionTerminos, AvisoPrivacidad, CodigoVerificacion, CuentaCooperativa, Modulo, Rol, Sesion, Usuario, errorDeDominio } from './dominio/acceso.mjs';
 import { CodigoReferido, Referido } from './dominio/referidos.mjs';
+import { PROVINCIAS, provincia } from './dominio/provincias.mjs';
 import { ConfirmacionCorreo } from './dominio/confirmacion-correo.mjs';
 import { AcreditacionPuntos, Notificacion, ParametroGlobal, RegistroAuditoria, PUNTOS_POR_ACCION } from './dominio/administracion.mjs';
 import nodemailer from 'nodemailer';
@@ -486,8 +487,30 @@ export async function createApi(database) {
     if (!transporter && !devExpose()) fail('La confirmación por correo no está disponible en este momento.', 503);
   };
 
+  /* ---------- Aviso de privacidad y términos (RF-47, RF-47-4) ---------- */
+  /** Versión vigente: la publicada desde el panel o, antes de la primera publicación, la de la configuración. */
+  async function avisoVigente(client) {
+    const [fila] = await db.query(
+      'SELECT version,terminos,privacidad FROM "AvisoPrivacidad" WHERE vigente', [], client,
+    );
+    return fila ? new AvisoPrivacidad(fila.version, fila.terminos, fila.privacidad) : AvisoPrivacidad.vigente();
+  }
+  /** La primera aceptación deja fijada como vigente la versión de la configuración. */
+  const fijarAvisoInicial = (aviso, client) => db.query(
+    'INSERT INTO "AvisoPrivacidad" (version,terminos,privacidad,vigente,"publicadoEn") VALUES ($1,$2,$3,TRUE,$4) ON CONFLICT DO NOTHING',
+    [aviso.version, aviso.terminos, aviso.privacidad, now()], client,
+  );
+  const compararVersion = (a, b) => {
+    const x = a.split('.').map(Number), y = b.split('.').map(Number);
+    for (let i = 0; i < Math.max(x.length, y.length); i++)
+      if ((x[i] ?? 0) !== (y[i] ?? 0)) return (x[i] ?? 0) - (y[i] ?? 0);
+    return 0;
+  };
   route('get', '/auth/aviso-privacidad', async (_, res) => {
-    res.json(AvisoPrivacidad.vigente());
+    res.json(await avisoVigente());
+  });
+  route('get', '/auth/provincias', async (_, res) => {
+    res.json(PROVINCIAS);
   });
   route('post', '/auth/confirmar-correo', async (req, res) => {
     rate(req, 'confirmar-correo', 30);
@@ -513,10 +536,11 @@ export async function createApi(database) {
     ]);
     if (setting?.valor !== 'true') fail('El registro está cerrado. Contacta a la cooperativa.', 403);
     const p = person(req.body),
+      provinciaUsuario = provincia(req.body.provincia),
       clave = password(req.body.clave);
     if (clave !== req.body.confirmacionClave)
       fail('Las contraseñas no coinciden.', 400, { confirmacionClave: 'Repite exactamente la contraseña.' });
-    const aviso = AvisoPrivacidad.vigente();
+    const aviso = await avisoVigente();
     const aceptacion = new AceptacionTerminos(aviso, req.body.aceptaTerminos, req.body.versionAviso, now());
     exigirCorreoDisponible();
     const cuenta = req.body.cuenta
@@ -544,13 +568,16 @@ export async function createApi(database) {
         'SELECT id FROM "Usuario" WHERE COALESCE("celularIndice",celular)=$1', [indice ?? p.celular], client,
       );
       if (duplicado) fail('Ese celular ya está registrado.', 409, { celular: 'Escribe otro número o recupera tu cuenta.' });
-      await db.query('INSERT INTO "AvisoPrivacidad" (version,terminos,privacidad) VALUES ($1,$2,$3) ON CONFLICT (version) DO NOTHING',
-        [aviso.version, aviso.terminos, aviso.privacidad], client);
-      const [publicado] = await db.query('SELECT terminos,privacidad FROM "AvisoPrivacidad" WHERE version=$1', [aviso.version], client);
-      if (publicado.terminos !== aviso.terminos || publicado.privacidad !== aviso.privacidad)
-        fail('La versión publicada del aviso cambió. Contacta con soporte.', 503);
+      // RF-47-4: si el administrador publicó otra versión mientras la persona se registraba, debe aceptarla.
+      await db.query('LOCK TABLE "AvisoPrivacidad" IN SHARE ROW EXCLUSIVE MODE', [], client);
+      const vigente = await avisoVigente(client);
+      if (vigente.version !== aviso.version || vigente.terminos !== aviso.terminos || vigente.privacidad !== aviso.privacidad)
+        fail('Se publicó una nueva versión de los términos. Ábrela y acéptala para continuar.', 409, {
+          aceptaTerminos: 'Vuelve a abrir los textos vigentes y marca la casilla.',
+        });
+      await fijarAvisoInicial(aviso, client);
       const [user] = await db.query(
-        'INSERT INTO "Usuario" (nombre,correo,celular,"passwordHash",cuenta,"tipoCuenta","cuentaEstado","correoIndice","cuentaIndice","cuentaSolicitadaEn","celularIndice","correoVerificado") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *',
+        'INSERT INTO "Usuario" (nombre,correo,celular,"passwordHash",cuenta,"tipoCuenta","cuentaEstado","correoIndice","cuentaIndice","cuentaSolicitadaEn","celularIndice","correoVerificado",provincia) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *',
         [
           p.nombre,
           cifrar('correo', p.correo),
@@ -564,6 +591,7 @@ export async function createApi(database) {
           cuenta ? now() : null,
           indice,
           false,
+          provinciaUsuario,
         ],
         client,
       );
@@ -577,12 +605,12 @@ export async function createApi(database) {
         if (previo && (previo.socioId !== socio.id || previo.estado !== 'PENDIENTE'))
           fail('Ya existe un referido activo con ese correo.', 409, { codigoReferido: 'Contacta a soporte para revisar la asociación.' });
         const [ref] = previo
-          ? await db.query('UPDATE "Referido" SET "usuarioId"=$2,nombre=$3,celular=$4 WHERE id=$1 RETURNING id', [
-              previo.id, user.id, p.nombre, cifrar('celular', p.celular),
+          ? await db.query('UPDATE "Referido" SET "usuarioId"=$2,nombre=$3,celular=$4,provincia=$5 WHERE id=$1 RETURNING id', [
+              previo.id, user.id, p.nombre, cifrar('celular', p.celular), provinciaUsuario,
             ], client)
           : await db.query(
-              'INSERT INTO "Referido" (nombre,correo,celular,"socioId","creadoEn","usuarioId","correoIndice") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id',
-              [p.nombre, cifrar('correo', p.correo), cifrar('celular', p.celular), socio.id, now(), user.id, correoIndice(p.correo)], client,
+              'INSERT INTO "Referido" (nombre,correo,celular,"socioId","creadoEn","usuarioId","correoIndice",provincia) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id',
+              [p.nombre, cifrar('correo', p.correo), cifrar('celular', p.celular), socio.id, now(), user.id, correoIndice(p.correo), provinciaUsuario], client,
             );
         await log(req, user, 'Referido asociado por código', 'Registro mediante invitación', client, { objetivoId: ref.id, datos: { socioId: socio.id } });
         await notify(socio.id, 'Nuevo referido asociado', new Referido({ nombre: p.nombre }).nombreDePila + ' se registró con tu código.', client);
@@ -691,13 +719,15 @@ export async function createApi(database) {
     const refs = await db.query('SELECT estado FROM "Referido" WHERE "eliminadoEn" IS NULL');
     const aprobados = refs.filter((x) => x.estado === 'APROBADO').length;
     const inicioMes = `${now().slice(0, 7)}-01T00:00:00.000Z`;
+    // RF-45-1 y Acta: usuario activo = realizó al menos 1 actividad en el mes. Entrar o
+    // salir de la plataforma no cuenta como actividad.
     const [activos] = await db.query(
-      'SELECT COUNT(DISTINCT "usuarioId") AS total FROM "Actividad" WHERE accion=$1 AND fecha>=$2',
-      ['Inicio de sesión', inicioMes],
+      'SELECT COUNT(DISTINCT a."usuarioId") AS total FROM "Actividad" a WHERE a.accion NOT IN ($1,$2) AND a.fecha>=$3 AND a."usuarioId" IN (SELECT id FROM "Usuario" WHERE rol IN (' + ROLES_PARTICIPANTES + '))',
+      ['Inicio de sesión', 'Cierre de sesión', inicioMes],
     );
     const [socios] = await db.query(
-      'SELECT COUNT(*) AS total FROM "Usuario" WHERE activo=$1 AND rol=$2',
-      [true, 'SOCIO'],
+      'SELECT COUNT(*) AS total FROM "Usuario" WHERE activo=$1 AND rol IN (' + ROLES_PARTICIPANTES + ')',
+      [true],
     );
     const pendientes = await db.query(
       'SELECT "creadoEn" FROM "Referido" WHERE "eliminadoEn" IS NULL AND estado=$1',
@@ -862,7 +892,8 @@ export async function createApi(database) {
   });
   route('post', '/referidos', async (req, res) => {
     const user = await current(req, 'referidos'),
-      p = person(req.body);
+      p = person(req.body),
+      provinciaReferido = provincia(req.body.provincia, { opcional: true });
     // RF-06-1: sin cuenta vinculada Aprobada no se puede referir.
     if (!user.esAdmin && !CuentaCooperativa.estaAprobada(user.cuentaEstado))
       fail('Vincula y verifica tu cuenta de la Cooperativa antes de referir.', 403);
@@ -875,8 +906,8 @@ export async function createApi(database) {
       });
     const row = await db.transaction(async (client) => {
       const [ref] = await db.query(
-        'INSERT INTO "Referido" (nombre,correo,celular,"socioId","creadoEn",notas,"correoIndice") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *',
-        [p.nombre, cifrar('correo', p.correo), cifrar('celular', p.celular), user.id, now(), text(req.body.notas, 500, 'notas'), correoIndice(p.correo)],
+        'INSERT INTO "Referido" (nombre,correo,celular,"socioId","creadoEn",notas,"correoIndice",provincia) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *',
+        [p.nombre, cifrar('correo', p.correo), cifrar('celular', p.celular), user.id, now(), text(req.body.notas, 500, 'notas'), correoIndice(p.correo), provinciaReferido],
         client,
       );
       await log(req, user, 'Referido registrado', `Referido #${ref.id}: ${p.nombre}`, client, {
@@ -907,9 +938,10 @@ export async function createApi(database) {
         fail('Solo puedes editar tus referidos pendientes. El estado lo actualiza administración.', 403);
       if (ref.usuarioId) fail('Los datos de esta persona están vinculados a su cuenta.', 409);
       const p = person(req.body);
+      const provinciaReferido = provincia(req.body.provincia, { opcional: true }) ?? ref.provincia ?? null;
       await db.query(
-        'UPDATE "Referido" SET nombre=$2,correo=$3,celular=$4,notas=$5,"correoIndice"=$6 WHERE id=$1',
-        [ref.id, p.nombre, cifrar('correo', p.correo), cifrar('celular', p.celular), text(req.body.notas, 500, 'notas'), correoIndice(p.correo)],
+        'UPDATE "Referido" SET nombre=$2,correo=$3,celular=$4,notas=$5,"correoIndice"=$6,provincia=$7 WHERE id=$1',
+        [ref.id, p.nombre, cifrar('correo', p.correo), cifrar('celular', p.celular), text(req.body.notas, 500, 'notas'), correoIndice(p.correo), provinciaReferido],
         client,
       );
       await log(req, user, 'Referido actualizado', `Referido #${ref.id}: ${p.nombre}`, client, {
@@ -989,12 +1021,12 @@ export async function createApi(database) {
   route('get', '/referidos/asociables', async (req, res) => {
     await admin(req, 'referidos');
     const users = await db.query(
-      'SELECT u.* FROM "Usuario" u WHERE u.rol=$1 AND u.activo=$2 AND NOT EXISTS (SELECT 1 FROM "Referido" r WHERE r."usuarioId"=u.id OR (COALESCE(r."correoIndice",r.correo)=COALESCE(u."correoIndice",u.correo) AND r."eliminadoEn" IS NULL)) ORDER BY u.id DESC',
-      ['SOCIO', true],
+      'SELECT u.* FROM "Usuario" u WHERE u.rol IN (' + ROLES_PARTICIPANTES + ') AND u.activo=$1 AND u."creadoEn">=$2 AND NOT EXISTS (SELECT 1 FROM "Referido" r WHERE r."usuarioId"=u.id OR (COALESCE(r."correoIndice",r.correo)=COALESCE(u."correoIndice",u.correo) AND r."eliminadoEn" IS NULL)) ORDER BY u.id DESC',
+      [true, limiteAsociacion()],
     );
     const socios = await db.query(
-      'SELECT id,nombre,correo FROM "Usuario" WHERE rol=$1 AND activo=$2 AND "cuentaEstado" IN ($3,$4) ORDER BY nombre',
-      ['SOCIO', true, 'APROBADA', 'APROBADO'],
+      'SELECT id,nombre,correo FROM "Usuario" WHERE rol IN (' + ROLES_PARTICIPANTES + ') AND activo=$1 AND "cuentaEstado" IN ($2,$3) ORDER BY nombre',
+      [true, 'APROBADA', 'APROBADO'],
     );
     res.json({
       usuarios: users.filter((u) => toDate(u.creadoEn) >= limiteAsociacion()).map(publicUser),
@@ -1011,12 +1043,12 @@ export async function createApi(database) {
       });
     const row = await db.transaction(async (client) => {
       const [target] = await db.query(
-        'SELECT * FROM "Usuario" WHERE id=$1 AND rol=$2 AND activo=$3' + ' FOR UPDATE',
-        [usuarioId, 'SOCIO', true], client,
+        'SELECT * FROM "Usuario" WHERE id=$1 AND rol IN (' + ROLES_PARTICIPANTES + ') AND activo=$2 FOR UPDATE',
+        [usuarioId, true], client,
       );
       const [socio] = await db.query(
-        'SELECT * FROM "Usuario" WHERE id=$1 AND rol=$2 AND activo=$3',
-        [socioId, 'SOCIO', true],
+        'SELECT * FROM "Usuario" WHERE id=$1 AND rol IN (' + ROLES_PARTICIPANTES + ') AND activo=$2',
+        [socioId, true],
         client,
       );
       if (!target || !socio) fail('No se encontró el usuario o el socio.', 404);
@@ -1030,7 +1062,7 @@ export async function createApi(database) {
       );
       if (existente) fail('Este usuario ya tiene un referido asociado.', 409);
       const [ref] = await db.query(
-        'INSERT INTO "Referido" (nombre,correo,celular,"socioId","creadoEn",notas,"usuarioId","correoIndice") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *',
+        'INSERT INTO "Referido" (nombre,correo,celular,"socioId","creadoEn",notas,"usuarioId","correoIndice",provincia) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *',
         [
           target.nombre,
           cifrar('correo', target.correo),
@@ -1040,6 +1072,7 @@ export async function createApi(database) {
           'Asociación manual por administración',
           target.id,
           correoIndice(target.correo),
+          target.provincia ?? null,
         ],
         client,
       );
@@ -1129,7 +1162,8 @@ export async function createApi(database) {
     const nombre = text(req.body.nombre, 100, 'nombre'),
       correo = email(req.body.correo),
       rol = text(req.body.rol, 30, 'rol');
-    if (nombre.length < 5 || nombre.split(/\s+/).length < 2)
+    // RF-01-1: la misma regla del registro (3 a 100 caracteres, nombre y apellido).
+    if (nombre.length < 3 || nombre.split(/\s+/).length < 2)
       fail('Ingresa nombres y apellidos.', 400, {
         nombre: 'Escribe al menos un nombre y un apellido.',
       });
@@ -1355,6 +1389,50 @@ export async function createApi(database) {
       }
     });
     res.json({ ok: true });
+  });
+
+  // RF-47-4: el administrador publica una nueva versión numerada; exactamente 1 queda vigente.
+  route('get', '/configuracion/aviso', async (req, res) => {
+    await admin(req, 'configuracion');
+    let vigente = null;
+    try {
+      vigente = await avisoVigente();
+    } catch {
+      vigente = null; // Producción sin textos configurados: el administrador publica la primera versión.
+    }
+    const historial = await db.query(
+      'SELECT version,vigente,"publicadoEn" FROM "AvisoPrivacidad" ORDER BY "publicadoEn" DESC NULLS LAST, version DESC',
+    );
+    const [aceptaciones] = await db.query('SELECT COUNT(*) AS total FROM "AceptacionTerminos"');
+    res.json({ vigente, historial, aceptaciones: Number(aceptaciones.total) });
+  });
+  route('post', '/configuracion/aviso', async (req, res) => {
+    const user = await admin(req, 'configuracion');
+    const version = text(req.body.version, 20, 'version');
+    if (!/^\d+(?:\.\d+)*$/.test(version))
+      fail('La versión debe ser numérica, por ejemplo 1.0 o 1.1.', 400, { version: 'Escribe números separados por puntos, por ejemplo 1.1.' });
+    const terminos = text(req.body.terminos, 20_000, 'terminos'),
+      privacidad = text(req.body.privacidad, 20_000, 'privacidad');
+    if (terminos.length < 20) fail('Escribe el texto completo de los términos.', 400, { terminos: 'Usa al menos 20 caracteres.' });
+    if (privacidad.length < 20) fail('Escribe el texto completo del aviso de privacidad.', 400, { privacidad: 'Usa al menos 20 caracteres.' });
+    await db.transaction(async (client) => {
+      await db.query('LOCK TABLE "AvisoPrivacidad" IN SHARE ROW EXCLUSIVE MODE', [], client);
+      const [actual] = await db.query('SELECT version FROM "AvisoPrivacidad" WHERE vigente', [], client);
+      const [usada] = await db.query('SELECT version FROM "AvisoPrivacidad" WHERE version=$1', [version], client);
+      if (usada || (actual && compararVersion(version, actual.version) <= 0))
+        fail('La nueva versión debe ser mayor que la vigente' + (actual ? ' (' + actual.version + ').' : '.'), 409, {
+          version: 'Usa un número mayor que la versión vigente.',
+        });
+      await db.query('UPDATE "AvisoPrivacidad" SET vigente=FALSE WHERE vigente', [], client);
+      await db.query(
+        'INSERT INTO "AvisoPrivacidad" (version,terminos,privacidad,vigente,"publicadoEn","publicadoPor") VALUES ($1,$2,$3,TRUE,$4,$5)',
+        [version, terminos, privacidad, now(), user.id], client,
+      );
+      await log(req, user, 'Aviso de privacidad publicado', 'Versión ' + version, client, {
+        datos: { anterior: actual?.version ?? null, nuevo: version },
+      });
+    });
+    res.status(201).json({ version });
   });
 
   /* ---------- Bitácora (RF-42-2) ---------- */
