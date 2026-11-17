@@ -85,6 +85,12 @@ export const routes: Routes = [
         import('./features/ayuda/ayuda.page').then((m) => m.AyudaPage),
       ),
       {
+        // HU-055 / HU-056 (Sprint 2): configuración del perfil.
+        path: 'perfil',
+        title: 'Mi perfil · SUMA',
+        loadComponent: () => import('./features/perfil/perfil.page').then((m) => m.PerfilPage),
+      },
+      {
         // HU-015 / HU-017: cuenta vinculada, enlace y QR del socio (experiencia Comunidad).
         path: 'mi-cuenta',
         title: 'Mi cuenta · SUMA',
@@ -152,6 +158,13 @@ export const routes: Routes = [
       modulo('ayuda', 'Centro de ayuda', () =>
         import('./features/ayuda/ayuda.page').then((m) => m.AyudaPage),
       ),
+      {
+        // HU-055 / HU-056 (Sprint 2): configuración del perfil.
+        path: 'perfil',
+        data: { titulo: 'Mi perfil' },
+        title: 'Mi perfil · SUMA',
+        loadComponent: () => import('./features/perfil/perfil.page').then((m) => m.PerfilPage),
+      },
       {
         path: 'acceso-denegado',
         data: { titulo: 'Acceso denegado' },

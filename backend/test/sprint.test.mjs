@@ -770,6 +770,77 @@ void test('Correcciones del Sprint 2: provincia, aviso RF-47-4, plazos y bitáco
       }
     });
 
+    await t.test('HU-055 / HU-056 / RF-03 / RF-46: configuración del perfil', async () => {
+      const yo = request.agent(app), otro = request.agent(app);
+      const login = (agente, correo, clave) => agente.post('/api/auth/login').send({ correo, clave });
+      const alta = async (agente, persona) => {
+        const r = await agente.post('/api/auth/register').send({ ...datosAlta(persona), versionAviso: '1.0' });
+        assert.equal(r.status, 201, JSON.stringify(r.body));
+        assert.equal((await agente.post('/api/auth/confirmar-correo').send({ token: r.body.token, codigo: r.body.devCodigo })).status, 200);
+        assert.equal((await login(agente, persona.correo, persona.clave)).status, 200);
+      };
+      await alta(yo, { nombre: 'Perfil Prueba', correo: 'perfil@ejemplo.ec', celular: '0990000910', clave: 'Valida2026!' });
+      await alta(otro, { nombre: 'Otro Perfil', correo: 'otro.perfil@ejemplo.ec', celular: '0990000911', clave: 'Valida2026!' });
+
+      // Datos personales: valida igual que el registro y no repite celulares.
+      assert.equal((await yo.patch('/api/auth/perfil').send({ nombre: 'Solo' })).status, 400);
+      assert.equal((await yo.patch('/api/auth/perfil').send({ provincia: 'Atlántida' })).status, 400);
+      assert.equal((await yo.patch('/api/auth/perfil').send({ celular: '0990000911' })).status, 409);
+      const editado = await yo.patch('/api/auth/perfil').send({ nombre: 'Perfil Editado', celular: '0990000912', provincia: 'Azuay' });
+      assert.equal(editado.status, 200, JSON.stringify(editado.body));
+      assert.equal(editado.body.nombre, 'Perfil Editado');
+      assert.equal(editado.body.celular, '0990000912');
+      assert.equal(editado.body.provincia, 'Azuay');
+
+      // HU-056 / RF-46: Privado por defecto; el perfil Público nunca muestra correo, celular ni cuenta.
+      assert.equal(editado.body.perfilPublico, false);
+      const miId = editado.body.id;
+      assert.equal((await otro.get('/api/perfiles/' + miId)).status, 404, 'privado por defecto');
+      assert.equal((await yo.patch('/api/auth/perfil/privacidad').send({ perfilPublico: 'si' })).status, 400);
+      assert.equal((await yo.patch('/api/auth/perfil/privacidad').send({ perfilPublico: true })).body.perfilPublico, true);
+      const visto = await otro.get('/api/perfiles/' + miId);
+      assert.equal(visto.status, 200);
+      assert.deepEqual(Object.keys(visto.body).sort(), ['id', 'insignias', 'nivel', 'nombre']);
+      assert.equal(visto.body.nombre, 'Perfil');
+      assert.doesNotMatch(JSON.stringify(visto.body), /0990000912|perfil@ejemplo/);
+
+      // RF-03-2: cambio de contraseña con la actual; cierra las demás sesiones.
+      const segunda = request.agent(app);
+      assert.equal((await login(segunda, 'perfil@ejemplo.ec', 'Valida2026!')).status, 200);
+      assert.equal((await yo.post('/api/auth/perfil/clave').send({ actual: 'Incorrecta1', nueva: 'Nueva2026!', confirmacion: 'Nueva2026!' })).status, 400);
+      assert.equal((await yo.post('/api/auth/perfil/clave').send({ actual: 'Valida2026!', nueva: 'Nueva2026!', confirmacion: 'Otra2026!' })).status, 400);
+      assert.equal((await yo.post('/api/auth/perfil/clave').send({ actual: 'Valida2026!', nueva: 'Nueva2026!', confirmacion: 'Nueva2026!' })).status, 200);
+      assert.equal((await segunda.get('/api/auth/me')).status, 401, 'las demás sesiones se cierran');
+      assert.equal((await yo.get('/api/auth/me')).status, 200, 'la sesión actual sigue abierta');
+
+      // Cambio de correo: exige la contraseña, un correo libre y el código enviado al correo nuevo.
+      assert.equal((await yo.post('/api/auth/perfil/correo').send({ correo: 'nuevo@ejemplo.ec', clave: 'Incorrecta1' })).status, 400);
+      assert.equal((await yo.post('/api/auth/perfil/correo').send({ correo: 'otro.perfil@ejemplo.ec', clave: 'Nueva2026!' })).status, 409);
+      const cambio = await yo.post('/api/auth/perfil/correo').send({ correo: 'nuevo@ejemplo.ec', clave: 'Nueva2026!' });
+      assert.equal(cambio.status, 200);
+      const errado = cambio.body.devCodigo === '000000' ? '111111' : '000000';
+      assert.equal((await yo.post('/api/auth/perfil/correo/confirmar').send({ codigo: errado })).status, 400);
+      assert.equal((await yo.get('/api/auth/me')).body.correo, 'perfil@ejemplo.ec', 'el correo no cambia antes de confirmar');
+      const confirmado = await yo.post('/api/auth/perfil/correo/confirmar').send({ codigo: cambio.body.devCodigo });
+      assert.equal(confirmado.status, 200, JSON.stringify(confirmado.body));
+      assert.equal(confirmado.body.correo, 'nuevo@ejemplo.ec');
+      assert.equal((await login(request.agent(app), 'nuevo@ejemplo.ec', 'Nueva2026!')).status, 200);
+
+      // Baja lógica: exige la contraseña, cierra la sesión y conserva el historial.
+      assert.equal((await yo.post('/api/auth/perfil/baja').send({ clave: 'Incorrecta1' })).status, 400);
+      assert.equal((await yo.post('/api/auth/perfil/baja').send({ clave: 'Nueva2026!', motivo: 'Ya no lo uso' })).status, 200);
+      assert.equal((await yo.get('/api/auth/me')).status, 401);
+      assert.equal((await login(request.agent(app), 'nuevo@ejemplo.ec', 'Nueva2026!')).status === 200, false);
+      assert.equal((await otro.get('/api/perfiles/' + miId)).status, 404, 'una cuenta dada de baja no muestra perfil');
+      const [baja] = await db.query('SELECT activo,"bajaEn","bajaMotivo" FROM "Usuario" WHERE nombre=$1', ['Perfil Editado']);
+      assert.equal(baja.activo, false);
+      assert.ok(baja.bajaEn);
+      assert.equal(baja.bajaMotivo, 'Ya no lo uso');
+      assert.ok((await db.query('SELECT id FROM "Actividad" WHERE accion=$1', ['Baja de cuenta'])).length);
+      // El administrador no se da de baja a sí mismo desde el perfil.
+      assert.equal((await admin.post('/api/auth/perfil/baja').send({ clave: 'Suma2026!' })).status, 409);
+    });
+
     await t.test('RNF-05: producción no arranca sin SUMA_DATA_KEY', () => {
       const entorno = process.env.NODE_ENV;
       process.env.NODE_ENV = 'production';

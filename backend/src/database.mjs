@@ -24,7 +24,7 @@ export function verifyPassword(value, stored) {
 export const STATES = Referido.estados;
 
 /** Migraciones en orden. Cada una se aplica una sola vez (tabla SumaMigracion). */
-const MIGRACIONES = ['sprint1', 'sprint1-auditoria', 'sprint1-dominio', 'sprint1-roles', 'sprint2', 'sprint2-correcciones'];
+const MIGRACIONES = ['sprint1', 'sprint1-auditoria', 'sprint1-dominio', 'sprint1-roles', 'sprint2', 'sprint2-correcciones', 'sprint2-perfil'];
 
 export class Database {
   /**

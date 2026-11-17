@@ -61,6 +61,22 @@ export class FeedPage implements OnInit {
   readonly visibles = computed(() =>
     this.publicaciones().filter((p) => this.filtro() === 'todo' || p.tipo === this.filtro()),
   );
+  /** Tendencias: anuncios, programas y retos con más interacción (reacciones + comentarios). */
+  readonly tendencias = computed(() =>
+    this.publicaciones()
+      .filter((p) => p.tipo !== 'comunidad' && p.titulo)
+      .map((p) => ({ ...p, interaccion: p.likes + p.comentarios.length }))
+      .sort((a, b) => b.interaccion - a.interaccion)
+      .slice(0, 3),
+  );
+  verPublicacion(id: number): void {
+    this.filtro.set('todo');
+    requestAnimationFrame(() => {
+      const el = document.getElementById(`publicacion-${id}`);
+      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el?.focus({ preventScroll: true });
+    });
+  }
   readonly eventos = EVENTOS;
   readonly filtros = [
     { id: 'todo', etiqueta: 'Para ti' },

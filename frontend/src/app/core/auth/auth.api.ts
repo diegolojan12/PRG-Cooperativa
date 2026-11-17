@@ -68,6 +68,28 @@ export class AuthApi {
       datos,
     );
   }
+  /* ---------- HU-055 / HU-056: configuración del perfil ---------- */
+  actualizarPerfil(datos: { nombre?: string; celular?: string; provincia?: string }) {
+    return this.http.patch<Usuario>('/api/auth/perfil', datos);
+  }
+  solicitarCambioCorreo(correo: string, clave: string) {
+    return this.http.post<{ ok: true; destino: string; devCodigo?: string }>(
+      '/api/auth/perfil/correo',
+      { correo, clave },
+    );
+  }
+  confirmarCambioCorreo(codigo: string) {
+    return this.http.post<Usuario>('/api/auth/perfil/correo/confirmar', { codigo });
+  }
+  cambiarClave(actual: string, nueva: string, confirmacion: string) {
+    return this.http.post<{ ok: true }>('/api/auth/perfil/clave', { actual, nueva, confirmacion });
+  }
+  actualizarPrivacidad(perfilPublico: boolean) {
+    return this.http.patch<Usuario>('/api/auth/perfil/privacidad', { perfilPublico });
+  }
+  darDeBaja(clave: string, motivo: string) {
+    return this.http.post<{ ok: true }>('/api/auth/perfil/baja', { clave, motivo });
+  }
   olvido(correo: string) {
     return this.http.post<{ message: string; devResetUrl?: string }>('/api/auth/forgot', {
       correo,

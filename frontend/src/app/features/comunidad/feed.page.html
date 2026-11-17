@@ -51,7 +51,11 @@
     </p>
 
     @for (p of visibles(); track p.id) {
-      <article class="cm-card cm-post" [attr.aria-label]="p.titulo || 'Publicación de ' + p.autor">
+      <article
+        class="cm-card cm-post"
+        [id]="'publicacion-' + p.id"
+        tabindex="-1"
+        [attr.aria-label]="p.titulo || 'Publicación de ' + p.autor">
         <header class="cm-post-head">
           <span class="cm-avatar" [class.blue]="p.tipo !== 'anuncio'">{{ p.autor.slice(0, 1) }}</span>
           <div>
@@ -168,6 +172,20 @@
         }
       </section>
     }
+    <section class="cm-card cm-widget" aria-labelledby="tendenciasTitulo">
+      <h2 id="tendenciasTitulo">Tendencias en SUMA</h2>
+      <ol class="cm-trends">
+        @for (t of tendencias(); track t.id) {
+          <li>
+            <button type="button" (click)="verPublicacion(t.id)">
+              <small>{{ t.etiqueta }} · {{ t.tiempo }}</small>
+              <strong>{{ t.titulo }}</strong>
+              <span>{{ t.likes | number }} reacciones · {{ t.comentarios.length }} comentarios</span>
+            </button>
+          </li>
+        }
+      </ol>
+    </section>
     <section class="cm-card cm-widget">
       <h2>Próximas actividades</h2>
       @for (e of eventos; track e.titulo) {

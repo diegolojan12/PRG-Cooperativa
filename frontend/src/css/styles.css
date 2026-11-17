@@ -1029,7 +1029,7 @@ footer.mainFooter h6{ text-align: center; font-weight: 400; color: #6f819f; padd
 /*=========================================================
    PAGINAS INTERNAS: INICIAR SESION Y REGISTRO
 =========================================================*/
-app-login-page, app-registro-page, app-recuperar-page{
+app-login-page, app-registro-page, app-recuperar-page, app-confirmar-correo-page{
     display: block;
     background: #f1f5fa;
     background-image: none;

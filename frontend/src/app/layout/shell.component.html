@@ -80,13 +80,13 @@
             }
           </a>
         }
-        <div class="s-profile">
+        <a class="s-profile" routerLink="/panel/perfil" aria-label="Mi perfil">
           <span class="s-avatar">{{ iniciales() }}</span>
           <div>
             <strong>{{ session.usuario()?.nombre }}</strong
             ><small>{{ rolNombre() }}</small>
           </div>
-        </div>
+        </a>
       </div>
     </header>
     <main #content id="content" class="s-content" tabindex="-1">

@@ -117,6 +117,50 @@ export class ConfirmacionCorreo {
     });
   }
 
+  /* ---------- HU-055: cambio de correo desde el perfil ----------
+   * El correo nuevo queda en "CambioCorreo" y solo reemplaza al actual cuando la persona
+   * escribe el código de 6 dígitos que se envió a ese correo nuevo (10 minutos, 5 intentos). */
+  async iniciarCambio(usuarioId, correoCifrado, correoIndice, client) {
+    const codigo = this.emitir('cambio:' + usuarioId, Date.now());
+    await this.db.query(
+      `INSERT INTO "CambioCorreo" ("usuarioId",correo,"correoIndice",huella,vence,intentos) VALUES ($1,$2,$3,$4,$5,0)
+       ON CONFLICT ("usuarioId") DO UPDATE SET correo=$2,"correoIndice"=$3,huella=$4,vence=$5,intentos=0`,
+      [usuarioId, correoCifrado, correoIndice, codigo.huella, codigo.vence],
+      client,
+    );
+    return codigo;
+  }
+
+  /** Devuelve el correo nuevo ya confirmado, o null si el código no es válido. */
+  async confirmarCambio(usuarioId, codigo, client) {
+    if (typeof codigo !== 'string' || !/^\d{6}$/.test(codigo))
+      throw errorDeDominio('Escribe los seis dígitos del correo.', 400, {
+        codigo: 'Escribe un código de seis dígitos.',
+      });
+    const [fila] = await this.db.queryRaw(
+      'SELECT * FROM "CambioCorreo" WHERE "usuarioId"=$1 FOR UPDATE',
+      [usuarioId],
+      client,
+    );
+    if (!fila)
+      throw errorDeDominio('No tienes un cambio de correo pendiente.', 404);
+    const valido =
+      fila.intentos < 5 &&
+      new CodigoVerificacion(fila.huella, fila.vence).esValido(codigo, new Date(), (valor) =>
+        this.firmar('cambio:' + usuarioId, fila.vence, valor),
+      );
+    if (!valido) {
+      await this.db.query(
+        'UPDATE "CambioCorreo" SET intentos=intentos+1 WHERE "usuarioId"=$1',
+        [usuarioId],
+        client,
+      );
+      return null;
+    }
+    await this.db.query('DELETE FROM "CambioCorreo" WHERE "usuarioId"=$1', [usuarioId], client);
+    return { correo: fila.correo, correoIndice: fila.correoIndice };
+  }
+
   async pendiente(huella) {
     const [fila] = await this.db.query(
       'SELECT 1 AS vigente FROM "ConfirmacionCorreo" WHERE huella=$1 AND vence>$2 AND intentos<5',

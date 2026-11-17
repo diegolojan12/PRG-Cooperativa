@@ -12,7 +12,9 @@
           routerLinkActive="active"
           ariaCurrentWhenActive="page"
           [routerLinkActiveOptions]="{ exact: item.id === 'panel' }"
-          ><app-icon [name]="item.icono" />{{ item.id === 'panel' ? 'Inicio' : item.etiqueta }}
+          ><app-icon [name]="item.icono" /><span class="cm-nav-label">{{
+            item.id === 'panel' ? 'Inicio' : item.etiqueta
+          }}</span>
           @if (!item.disponible) {
             <span class="cm-soon">Pronto</span>
           }
@@ -36,11 +38,13 @@
       </a>
     }
     <div class="cm-me">
-      <span class="cm-avatar">{{ iniciales() }}</span>
-      <div>
-        <strong>{{ session.usuario()?.nombre }}</strong>
-        <small>{{ session.usuario()?.rolNombre }}</small>
-      </div>
+      <a class="cm-me-link" routerLink="/panel/perfil" aria-label="Mi perfil">
+        <span class="cm-avatar">{{ iniciales() }}</span>
+        <div>
+          <strong>{{ session.usuario()?.nombre }}</strong>
+          <small>{{ session.usuario()?.rolNombre }}</small>
+        </div>
+      </a>
       <button type="button" class="cm-icon-btn" aria-label="Cerrar sesión" (click)="confirmarSalida.set(true)">
         <app-icon name="logout" />
       </button>

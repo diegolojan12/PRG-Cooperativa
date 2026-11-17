@@ -4,6 +4,7 @@ import { AceptacionTerminos, AvisoPrivacidad, CodigoVerificacion, CuentaCooperat
 import { CodigoReferido, Referido } from './dominio/referidos.mjs';
 import { PROVINCIAS, provincia } from './dominio/provincias.mjs';
 import { ConfirmacionCorreo } from './dominio/confirmacion-correo.mjs';
+import { PerfilPublico } from './dominio/perfil.mjs';
 import { AcreditacionPuntos, Notificacion, ParametroGlobal, RegistroAuditoria, PUNTOS_POR_ACCION } from './dominio/administracion.mjs';
 import nodemailer from 'nodemailer';
 import QRCode from 'qrcode';
@@ -65,20 +66,27 @@ const password = (value) => {
     });
   return value;
 };
-const person = (body) => {
-  const nombre = text(body.nombre, 100, 'nombre'),
-    correo = email(body.correo),
-    celular = text(body.celular, 10, 'celular');
+const nombreValido = (value) => {
+  const nombre = text(value, 100, 'nombre');
   if (nombre.length < 3 || nombre.split(/\s+/).length < 2)
     fail('Ingresa nombres y apellidos.', 400, {
       nombre: 'Escribe al menos un nombre y un apellido, por ejemplo Carlos Torres.',
     });
+  return nombre;
+};
+const celularValido = (value) => {
+  const celular = text(value, 10, 'celular');
   if (!/^09\d{8}$/.test(celular))
     fail('Ingresa un celular de 10 dígitos que empiece por 09.', 400, {
       celular: 'Usa 10 dígitos que empiecen por 09, por ejemplo 0991234567.',
     });
-  return { nombre, correo, celular };
+  return celular;
 };
+const person = (body) => ({
+  nombre: nombreValido(body.nombre),
+  correo: email(body.correo),
+  celular: celularValido(body.celular),
+});
 const publicUser = (user) => new Usuario(user);
 /** Fechas guardadas como texto ISO o como Date (columnas TIMESTAMP de PostgreSQL). */
 const toDate = (value) => {
@@ -434,6 +442,159 @@ export async function createApi(database) {
   });
   route('get', '/auth/me', async (req, res) => {
     res.json(await perfil(await current(req)));
+  });
+
+  /* ---------- Configuración del perfil (Sprint 2): HU-055 (UR-06, RF-03) y HU-056 (UR-51, RF-46) ---------- */
+  const perfilActualizado = async (id) => {
+    const [fila] = await db.query('SELECT * FROM "Usuario" WHERE id=$1', [id]);
+    return perfil(await conPermisos(fila));
+  };
+  const exigirClave = (usuario, clave) => {
+    if (typeof clave !== 'string' || !verifyPassword(clave, usuario.passwordHash))
+      fail('La contraseña no es correcta.', 400, { clave: 'Escribe tu contraseña actual.' });
+  };
+  /** HU-055 / RF-03-2: el usuario actualiza su nombre, celular o provincia; el celular no puede ser de otra cuenta. */
+  route('patch', '/auth/perfil', async (req, res) => {
+    const usuario = await current(req);
+    const cambios = {};
+    if (req.body.nombre !== undefined) cambios.nombre = nombreValido(req.body.nombre);
+    if (req.body.celular !== undefined) cambios.celular = celularValido(req.body.celular);
+    if (req.body.provincia !== undefined) cambios.provincia = provincia(req.body.provincia);
+    if (!Object.keys(cambios).length) fail('No hay cambios para guardar.');
+    await db.transaction(async (client) => {
+      const campos = [], valores = [usuario.id];
+      const poner = (columna, valor) => {
+        valores.push(valor);
+        campos.push(`"${columna}"=$${valores.length}`);
+      };
+      if (cambios.celular !== undefined) {
+        const indice = celularIndice(cambios.celular);
+        await db.query('SELECT pg_advisory_xact_lock(15274004, hashtext($1))', [indice ?? cambios.celular], client);
+        const [duplicado] = await db.query(
+          'SELECT id FROM "Usuario" WHERE COALESCE("celularIndice",celular)=$1 AND id<>$2',
+          [indice ?? cambios.celular, usuario.id], client,
+        );
+        if (duplicado) fail('Ese celular ya está registrado.', 409, { celular: 'Escribe otro número.' });
+        poner('celular', cifrar('celular', cambios.celular));
+        poner('celularIndice', indice);
+      }
+      if (cambios.nombre !== undefined) poner('nombre', cambios.nombre);
+      if (cambios.provincia !== undefined) poner('provincia', cambios.provincia);
+      await db.query(`UPDATE "Usuario" SET ${campos.join(',')} WHERE id=$1`, valores, client);
+      await log(req, usuario, 'Perfil actualizado', 'Datos cambiados: ' + Object.keys(cambios).join(', '), client, {
+        objetivoId: usuario.id,
+      });
+    });
+    res.json(await perfilActualizado(usuario.id));
+  });
+  /** HU-055 / RF-03-2: cambio de correo, confirmado con un código enviado al correo nuevo. */
+  route('post', '/auth/perfil/correo', async (req, res) => {
+    rate(req, 'cambio-correo', 10);
+    const usuario = await current(req);
+    exigirClave(usuario, req.body.clave);
+    const correo = email(req.body.correo);
+    if (correo === usuario.correo)
+      fail('Ese ya es tu correo.', 400, { correo: 'Escribe un correo distinto al actual.' });
+    exigirCorreoDisponible();
+    const codigo = await db.transaction(async (client) => {
+      const [duplicado] = await db.query(
+        'SELECT id FROM "Usuario" WHERE COALESCE("correoIndice",correo)=$1', [claveCorreo(correo)], client,
+      );
+      if (duplicado) fail('Ese correo ya está registrado.', 409, { correo: 'Usa otro correo.' });
+      return confirmacionCorreo.iniciarCambio(usuario.id, cifrar('correo', correo), correoIndice(correo), client);
+    });
+    sendMail({
+      to: correo,
+      subject: 'Confirma tu nuevo correo en SUMA',
+      text: 'Tu código para cambiar el correo es ' + codigo.codigo + '. Vence en 10 minutos y es de un solo uso.',
+    }, 0, codigo.vence);
+    res.json({ ok: true, destino: mask(correo), ...(devExpose() ? { devCodigo: codigo.codigo } : {}) });
+  });
+  route('post', '/auth/perfil/correo/confirmar', async (req, res) => {
+    rate(req, 'confirmar-cambio-correo', 30);
+    const usuario = await current(req);
+    const cambio = await db.transaction(async (client) => {
+      const nuevo = await confirmacionCorreo.confirmarCambio(usuario.id, req.body.codigo, client);
+      if (!nuevo) return null;
+      const [duplicado] = await db.queryRaw(
+        'SELECT id FROM "Usuario" WHERE COALESCE("correoIndice",correo)=$1 AND id<>$2',
+        [nuevo.correoIndice ?? nuevo.correo, usuario.id], client,
+      );
+      if (duplicado) fail('Ese correo ya está registrado.', 409, { correo: 'Usa otro correo.' });
+      await db.query('UPDATE "Usuario" SET correo=$2,"correoIndice"=$3 WHERE id=$1',
+        [usuario.id, nuevo.correo, nuevo.correoIndice], client);
+      await log(req, usuario, 'Correo actualizado', 'Correo del perfil cambiado y confirmado', client, { objetivoId: usuario.id });
+      await notify(usuario.id, 'Correo actualizado', 'Desde ahora inicias sesión con tu correo nuevo.', client);
+      return nuevo;
+    });
+    if (!cambio)
+      fail('El código no es correcto, venció o agotó sus intentos. Solicita otro.', 400, {
+        codigo: 'Verifica los seis dígitos o solicita un código nuevo.',
+      });
+    sendMail({
+      to: usuario.correo,
+      subject: 'Tu correo de SUMA cambió',
+      text: 'El correo de tu cuenta SUMA se cambió. Si no fuiste tú, contacta a soporte de inmediato.',
+    });
+    res.json(await perfilActualizado(usuario.id));
+  });
+  /** HU-055 / RF-03-2: cambio de contraseña; cierra las demás sesiones abiertas. */
+  route('post', '/auth/perfil/clave', async (req, res) => {
+    rate(req, 'cambio-clave', 10);
+    const usuario = await current(req);
+    exigirClave(usuario, req.body.actual);
+    const nueva = password(req.body.nueva);
+    if (nueva !== req.body.confirmacion)
+      fail('Las contraseñas no coinciden.', 400, { confirmacion: 'Repite exactamente la contraseña nueva.' });
+    if (verifyPassword(nueva, usuario.passwordHash))
+      fail('La contraseña nueva es igual a la actual.', 400, { clave: 'Escribe una contraseña distinta a la actual.' });
+    await db.transaction(async (client) => {
+      await db.query('UPDATE "Usuario" SET "passwordHash"=$2 WHERE id=$1', [usuario.id, hashPassword(nueva)], client);
+      await db.query('DELETE FROM "Sesion" WHERE "usuarioId"=$1 AND token<>$2', [usuario.id, digest(readToken(req))], client);
+      await log(req, usuario, 'Contraseña cambiada', 'Desde el perfil; se cerraron las demás sesiones', client, { objetivoId: usuario.id });
+    });
+    sendMail({
+      to: usuario.correo,
+      subject: 'Tu contraseña de SUMA cambió',
+      text: 'La contraseña de tu cuenta SUMA se cambió. Si no fuiste tú, recupera tu acceso y contacta a soporte.',
+    });
+    res.json({ ok: true });
+  });
+  /** HU-056 / RF-46-1: el usuario elige si su perfil es Público o Privado (Privado por defecto). */
+  route('patch', '/auth/perfil/privacidad', async (req, res) => {
+    const usuario = await current(req);
+    if (typeof req.body.perfilPublico !== 'boolean')
+      fail('Elige si tu perfil es Público o Privado.', 400, { perfilPublico: 'Elige Público o Privado.' });
+    await db.query('UPDATE "Usuario" SET "perfilPublico"=$2 WHERE id=$1', [usuario.id, req.body.perfilPublico]);
+    await log(req, usuario, 'Privacidad del perfil', 'Perfil ' + (req.body.perfilPublico ? 'Público' : 'Privado'), undefined, {
+      objetivoId: usuario.id,
+    });
+    res.json(await perfilActualizado(usuario.id));
+  });
+  /** HU-056 / RF-46-2 y RF-46-3: lo único que otro usuario puede ver de un perfil Público. */
+  route('get', '/perfiles/:id', async (req, res) => {
+    await current(req);
+    const id = Number.parseInt(req.params.id, 10);
+    if (!Number.isSafeInteger(id) || id < 1) fail('Perfil no encontrado.', 404);
+    const [fila] = await db.query('SELECT id,nombre,activo,"perfilPublico" FROM "Usuario" WHERE id=$1', [id]);
+    res.json(PerfilPublico.desde(fila));
+  });
+  /** HU-055 / RF-03-3: baja lógica; conserva el historial de referidos y puntos y la bitácora. */
+  route('post', '/auth/perfil/baja', async (req, res) => {
+    rate(req, 'baja-cuenta', 5);
+    const usuario = await current(req);
+    if (usuario.esAdmin)
+      fail('Una cuenta de administrador no se da de baja desde el perfil. Pide a otro administrador que la desactive.', 409);
+    exigirClave(usuario, req.body.clave);
+    const motivo = text(req.body.motivo, 200, 'motivo');
+    await db.transaction(async (client) => {
+      await db.query('UPDATE "Usuario" SET activo=FALSE,"bajaEn"=$2,"bajaMotivo"=$3 WHERE id=$1',
+        [usuario.id, now(), motivo || null], client);
+      await db.query('DELETE FROM "Sesion" WHERE "usuarioId"=$1', [usuario.id], client);
+      await db.query('DELETE FROM "CambioCorreo" WHERE "usuarioId"=$1', [usuario.id], client);
+      await log(req, usuario, 'Baja de cuenta', motivo ? 'Motivo: ' + motivo : 'Sin motivo', client, { objetivoId: usuario.id });
+    });
+    res.clearCookie('suma_session', { path: '/' }).json({ ok: true });
   });
   async function validarCuentaDisponible(numero, client) {
     const clave = cuentaIndice(numero) ?? numero;

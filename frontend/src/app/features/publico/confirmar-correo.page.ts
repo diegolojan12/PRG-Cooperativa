@@ -60,7 +60,11 @@ import { AuthPreviewComponent } from './auth-preview.component';
           <a routerLink="/iniciar-sesion">Volver a iniciar sesión</a>
         </div>
       </section>
-      <app-auth-preview />
+      <aside class="authPanel">
+        <h2>Un paso más y ya sumas</h2>
+        <p>Confirma tu correo para activar tu cuenta y empezar a ganar puntos.</p>
+        <app-auth-preview badgeLabel="Cuenta casi lista" badgeValue="Correo por confirmar" />
+      </aside>
     </div>
   `,
 })

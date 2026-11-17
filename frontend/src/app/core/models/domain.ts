@@ -49,6 +49,8 @@ export interface Usuario {
   cuentaVerificada?: boolean;
   cuentaEstado?: EstadoReferido | null;
   provincia?: string | null;
+  /** HU-056 / RF-46-1: perfil Público o Privado (Privado por defecto). */
+  perfilPublico?: boolean;
 }
 
 export interface Desafio2fa {

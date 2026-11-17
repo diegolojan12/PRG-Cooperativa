@@ -4,7 +4,7 @@
 | ----- | ----- |
 | Estado | Implementado y verificado · correcciones de trazabilidad aplicadas el 2026-11-16 |
 | Semanas | 11–12 |
-| Historias | **HU-004 a HU-016** (columna *Sprint* de la hoja `BKL-G1`) |
+| Historias | **HU-004 a HU-016** (columna *Sprint* de la hoja `BKL-G1`) y **HU-055 a HU-057** (configuración del perfil, movidas al Sprint 2 el 2026-11-17) |
 | Objetivo | Que el usuario recupere su acceso, que la administración opere la plataforma sola, que toda pantalla se entienda sin ayuda, y que cualquier persona cree y active su cuenta, vincule su cuenta de la Cooperativa y que los referidos se gestionen con trazabilidad |
 | Fuentes | `Backlog_del_producto.xlsx` · `DocumentacionResumenRequisitos.xlsx` (UR, RF, RNF, hoja *Trazabilidad*) · `Anexo_02_-_Documento_Vision_Proyecto_PRG` v1.2.0 · `Anexo_01_-_Acta_de_Constitucion_Proyecto` · `SUMA-Diagramas_Vistas.eapx` (CU-01 a CU-38) |
 | Reorganización | El 2026-11-16 se alineó con el backlog. Entraron HU-004 a HU-012 (antes documentadas en `sprint-1/`). HU-017 a HU-022, que se construyeron en este sprint, son del Sprint 3 y sus specs están en [`sprint-3/`](../sprint-3/README.md) |
@@ -19,6 +19,7 @@
 | 04 | Gestión de referidos | HU-011, HU-012 | CU-06, CU-06.1, CU-06.2, CU-06.5, CU-06.6 | [spec](04-referidos/especificacion.md) | [plan](04-referidos/plan.md) | [tareas](04-referidos/tareas.md) | Verificada |
 | 05 | Registro en 3 pasos y confirmación del correo | HU-013, HU-014 | CU-01, CU-01.1 a CU-01.4, CU-19.2 | [spec](05-registro-y-confirmacion/especificacion.md) | [plan](05-registro-y-confirmacion/plan.md) | [tareas](05-registro-y-confirmacion/tareas.md) | Verificada |
 | 06 | Vinculación y verificación de la cuenta de la Cooperativa | HU-015, HU-016 | CU-04, CU-04.1, CU-04.2, CU-05.4, CU-18, CU-18.1 | [spec](06-cuenta-cooperativa/especificacion.md) | [plan](06-cuenta-cooperativa/plan.md) | [tareas](06-cuenta-cooperativa/tareas.md) | Verificada |
+| 07 | Configuración del perfil | HU-055, HU-056, HU-057 | CU-03, CU-03.1 a CU-03.4, CU-19.2 | [spec](07-configuracion-perfil/especificacion.md) | [plan](07-configuracion-perfil/plan.md) | [tareas](07-configuracion-perfil/tareas.md) | Verificada |
 
 ## Matriz de trazabilidad
 
@@ -36,14 +37,17 @@
 | HU-013 Registro | EPI-06 | UR-01, UR-14, UR-22, UR-52 | RF-01-1 a RF-01-6, RF-47-1, RF-47-2, RF-47-4, RF-08-2 · RNF-04, RNF-05, RNF-10, RNF-16 | CU-01, CU-01.1, CU-01.4, CU-19.2 | 05 · CA-01 a CA-08, CA-15 a CA-21 | `HU-013 / HU-014` · `T-01` · `RF-47-4` · `HU-014 / CA-15` |
 | HU-014 Confirmar correo | EPI-06 | UR-02 | RF-02-1 a RF-02-3 · RNF-14 | CU-01.2 | 05 · CA-09 a CA-13 | `HU-013 / HU-014` |
 | HU-015 Vincular cuenta | EPI-06 | UR-07, UR-09, UR-14 | RF-05-1, RF-05-2, RF-05-5, RF-05-6, RF-06 · RNF-05, RNF-23 | CU-04, CU-04.1, CU-04.2, CU-05.4 | 06 | `HU-015 / HU-016 / RF-06` · `RF-11: vinculación…` |
-| HU-016 Verificar cuentas | EPI-08 | UR-08, UR-44 | RF-05-3, RF-05-4, RF-39, RF-42 · RNF-24 | CU-18, CU-18.1 | 06 | `HU-015 / HU-016 / RF-06` |
+| HU-016 Verificar cuentas | EPI-08 | UR-08, UR-44 | RF-05-3, RF-05-4, RF-39, RF-42 · RNF-24 | CU-18, CU-18.1, CU-36 | 06 | `HU-015 / HU-016 / RF-06` |
+| HU-055 Administrar mi perfil | EPI-20 | UR-06 | RF-03, RF-03-1 a RF-03-3 · RNF-04, RNF-05 | CU-03, CU-03.1, CU-03.3, CU-03.4 | 07 · CA-01 a CA-08 | `HU-055 / HU-056 / RF-03 / RF-46` |
+| HU-056 Elegir qué datos son públicos | EPI-20 | UR-51 | RF-46, RF-46-1 a RF-46-3 | CU-03.2 | 07 · CA-09 a CA-12 | `HU-055 / HU-056 / RF-03 / RF-46` |
+| HU-057 Acuerdos de privacidad | EPI-20 | UR-52 | RF-47-4 | CU-19.2 | 07 · CA-13 | `RF-47-4` |
 
 ## Correcciones de trazabilidad (2026-11-16)
 
 | Qué | Dónde |
 | --- | ----- |
 | Specs reorganizadas por el sprint real de cada HU; spec de sesión separada en sesión (Sprint 1) y recuperación (Sprint 2); spec nueva de interfaz | `specs/` |
-| Tabla *Sprint Backlog* alineada con la columna *Sprint* (la columna no se tocó); HU-005, HU-006, HU-011, HU-012, HU-013, HU-021 y HU-022 corregidas; HU-055 a HU-058 nuevas | `Backlog_del_producto.xlsx` |
+| Tabla *Sprint Backlog* alineada con la columna *Sprint* (la columna no se tocó); HU-005, HU-006, HU-011, HU-012, HU-013, HU-021 y HU-022 corregidas; HU-058 a HU-061 nuevas (antes numeradas HU-055 a HU-058; Jira ya usaba esos números) | `Backlog_del_producto.xlsx` |
 | UR-54, provincia en RF-01 y RF-01-1, RF-08-1, RF-12-2, RF-45-1, RF-47-4; hojas *Trazabilidad* y *MODULOS* | `DocumentacionResumenRequisitos.xlsx` |
 | CU-16 a CU-38 y 15 sub-casos, 16 relaciones corregidas, valores etiquetados UR, HU, RF y Sprint | `SUMA-Diagramas_Vistas.eapx` · [`docs/CASOS-USO-FALTANTES-SPRINT1-2.md`](../../docs/CASOS-USO-FALTANTES-SPRINT1-2.md) |
 | Provincia obligatoria, publicación de versiones del aviso, roles por experiencia, usuario activo, respaldo diario, lint, `schema.prisma`, prueba de navegador sobre PostgreSQL | Código (ver specs 02, 04 y 05) |

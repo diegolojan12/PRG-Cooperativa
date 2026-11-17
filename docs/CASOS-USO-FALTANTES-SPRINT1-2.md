@@ -54,11 +54,11 @@ que ya modela el tablero. En el backlog conviene vincular HU-005 con **UR-49**, 
 | CU-31 | Consultar salud y bienestar | Socio / Cliente | UR-38 | HU-051 |
 | CU-32 | Gestionar el catálogo de premios | Administrador | UR-39 | HU-044 |
 | CU-33 | Registrar la entrega de premios | Administrador | UR-41 | HU-046 |
-| CU-34 | Planificar canjes con favoritos y meta | Socio / Cliente | UR-42 | HU-055 (nueva) |
-| CU-35 | Buscar información | Socio / Cliente | UR-43 | HU-056 (nueva) |
+| CU-34 | Planificar canjes con favoritos y meta | Socio / Cliente | UR-42 | HU-058 (nueva) |
+| CU-35 | Buscar información | Socio / Cliente | UR-43 | HU-059 (nueva) |
 | CU-36 | Consultar notificaciones | Socio / Cliente | UR-44 | HU-020, HU-022, HU-026 |
-| CU-37 | Ajustar puntos manualmente | Administrador | UR-47 | HU-057 (nueva) |
-| CU-38 | Calificar una actividad | Socio / Cliente | UR-50 | HU-058 (nueva) |
+| CU-37 | Ajustar puntos manualmente | Administrador | UR-47 | HU-060 (nueva) |
+| CU-38 | Calificar una actividad | Socio / Cliente | UR-50 | HU-061 (nueva) |
 
 **Diagramas en el EAPX:**
 - Nuevo diagrama general **04 Administración de la plataforma** con CU-16, CU-17, CU-19 y CU-20.
