@@ -80,7 +80,7 @@ El menú se dibuja con `menu` que entrega el servidor; el frontend no compara no
 | CA-05 | `RF-08: permisos por rol se aplican de inmediato` |
 | CA-08, CA-09 | `RF-04-1 / RNF-06: …` (comprueba `menu` e `interfaz` del socio) |
 | CA-12 | `RF-14 / RF-14-2 / RF-42: configuración y bitácora completa` (`rolNuevo`, `objetivoId`) |
-| CA-10, CA-13 (frontend) | `frontend/src/app/features/features.spec.ts` (guards, menú por rol) · `e2e/smoke.cjs` (móvil 390 px) |
+| CA-10 (frontend) | `frontend/src/app/features/features.spec.ts` (guards, menú por rol) · `e2e/smoke.cjs` (móvil 390 px) |
 
 ## 8. Decisiones y riesgos
 

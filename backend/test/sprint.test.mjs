@@ -707,6 +707,16 @@ void test('Correcciones del Sprint 2: provincia, aviso RF-47-4, plazos y bitáco
       assert.ok(filtrados.filtros.provincias.includes('El Oro'));
     });
 
+    await t.test('HU-019 / CA-13: el registro con código enlaza el referido cargado a mano, sin duplicarlo', async () => {
+      const persona = { nombre: 'Cargada Mano', correo: 'cargada@ejemplo.ec', celular: '0990000906' };
+      assert.equal((await socio.post('/api/referidos').send({ ...persona, consentimiento: true })).status, 201);
+      const { codigo } = (await socio.post('/api/referidos/mi-codigo').send({})).body;
+      await registrarConfirmado(request(app), { ...persona, clave: 'Valida2026!', codigoReferido: codigo });
+      const filas = await db.query('SELECT "usuarioId" FROM "Referido" WHERE nombre=$1 AND "eliminadoEn" IS NULL', [persona.nombre]);
+      assert.equal(filas.length, 1);
+      assert.ok(filas[0].usuarioId);
+    });
+
     await t.test('RF-42: el dictamen deja en la bitácora el estado anterior y el nuevo', async () => {
       const [ref] = await db.query('SELECT id FROM "Referido" WHERE nombre=$1', ['Invitado Oro']);
       assert.equal((await admin.patch('/api/referidos/' + ref.id + '/dictamen').send({ estado: 'RECHAZADO' })).status, 200);

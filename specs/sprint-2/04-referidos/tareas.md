@@ -1,6 +1,6 @@
 # Tareas · Gestión de referidos
 
-Plan: [`plan.md`](plan.md) · Estado: Completado (2 pendientes)
+Plan: [`plan.md`](plan.md) · Estado: Completado (P-01 por confirmar con el PO)
 
 ## Fase 1 · Datos
 
@@ -12,7 +12,7 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (2 pendientes)
 ## Fase 2 · Pruebas
 
 - [x] T05 — `RF-11 / RNF-12`, `RF-11-4`, `RF-11-5`, `RF-11-6`, `días hábiles`
-- [ ] T06 — Prueba del límite de 30 días en la asociación manual (CA-18)
+- [x] T06 — Prueba del límite de 30 días en la asociación manual (CA-18): `RF-11-5: no se asocia a quien se registró hace más de 30 días`
 
 ## Fase 3 · Backend
 
@@ -23,6 +23,8 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (2 pendientes)
 - [x] T11 — Baja lógica con motivo (CA-14 a CA-16 · G06)
 - [x] T12 — Asociación manual dentro de 30 días (CA-17, CA-18 · G12)
 - [x] T13 — Exportación con los mismos filtros
+- [x] T18 — Provincia heredada del usuario en el alta por código y en la asociación manual (CA-19 · 2026-11-16)
+- [x] T19 — `ROLES_PARTICIPANTES` en asociables y asociación manual (CA-20 · 2026-11-16)
 
 ## Fase 4 · Frontend
 
@@ -32,7 +34,7 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (2 pendientes)
 
 ## Fase 5 · Cierre
 
-- [ ] T17 — Resolver P-01 (quién da de baja) y P-02 (números de HU) con el PO
+- [x] T17 — P-02 resuelta con el backlog; P-01 con propuesta escrita en HU-011 (falta la confirmación del PO)
 
 ## Verificación
 
@@ -43,4 +45,6 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (2 pendientes)
 | CA-09 a CA-13 | `RF-11-4` | Sí |
 | CA-14 a CA-16 | `RF-11-6` | Sí |
 | CA-17 | `RF-11-5` | Sí |
-| CA-18 | `RF-11-5` (mismo usuario) | Parcial: falta el caso de 30 días |
+| CA-18 | `RF-11-5` (mismo usuario) · `RF-11-5: no se asocia… 30 días` | Sí |
+| CA-19 | `T-01: la provincia es obligatoria en el registro y la hereda el referido` | Sí |
+| CA-20 | `RF-11-5: no se asocia… 30 días` (lista de socios por rol participante) | Sí |

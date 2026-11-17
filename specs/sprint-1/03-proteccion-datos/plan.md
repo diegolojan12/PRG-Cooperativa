@@ -36,7 +36,7 @@ busca y valida duplicados por índice; descifra antes de responder y nunca devue
 | Criterio | Prueba |
 | -------- | ------ |
 | CA-01 a CA-06 | `RNF-05: migra datos personales y conserva acceso y unicidad por correo` (`backend/test/sprint.test.mjs`) |
-| CA-07 | Sin prueba automatizada (lo controla el constructor de `ProteccionDatos`) |
+| CA-07 | `RNF-05: producción no arranca sin SUMA_DATA_KEY` |
 
 ## 6. Decisiones y riesgos
 

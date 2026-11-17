@@ -2,13 +2,13 @@
 
 | Campo | Valor |
 | ----- | ----- |
-| Sprint | 2 |
+| Sprint | 3 (HU-020 a HU-022; implementada por adelantado durante el Sprint 2) |
 | Historias | HU-020 · HU-021 · HU-022 |
 | Épicas | EPI-07 (HU-020) · EPI-08 (HU-021) · EPI-10 Ganar puntos, niveles e insignias (HU-022) |
 | Requisitos de usuario | UR-15 · UR-16 · UR-19 · UR-24 · UR-44 |
 | Requisitos funcionales | RF-11-2 · RF-11-4 · RF-12 (RF-12-1, RF-12-2) · RF-14-3 · RF-14-4 · RF-38 (RF-38-1) · RF-39 (RF-39-1, RF-39-2) · RF-42 |
 | No funcionales | RNF-01 · RNF-13 · RNF-20 |
-| Casos de uso (EAPX) | CU-06 Consultar referidos · CU-06.2 Aprobar o rechazar un referido |
+| Casos de uso (EAPX) | CU-06 Consultar referidos · CU-06.2 Aprobar o rechazar un referido (extend) · CU-06.4 Acreditar los puntos al socio y al referido (extend de CU-06.2) · CU-36 Consultar notificaciones |
 | Clases (EAPX) | `Referido` (`consultaSocio`, `nombreDePila`, `aprobar`, `rechazar`) · `MovimientoPuntos` (`actividad`, `clave`, `usuarioId`, `cantidad`, `fecha`, `referidoId`) · `AcreditacionPuntos` (`registrar`) · `Notificacion` |
 | Estado | Implementada · Verificada |
 
@@ -53,7 +53,8 @@ la cantidad. Los puntos tienen que cuadrar siempre con sus movimientos (RNF-20).
 
 ## 5. Reglas de negocio
 
-1. Mientras no existan campañas (Sprint 3), ambas partes reciben `puntosReferido` (por defecto 100).
+1. Mientras no exista una campaña activa, ambas partes reciben `puntosReferido` (por defecto 100). Así quedó escrito
+   en RF-12-2 de la ERS y en el criterio de HU-021 (2026-11-16).
 2. Cada movimiento tiene una clave única `actividad:evento:usuario`; así un evento repetido no duplica puntos.
 3. Actividades previstas: `REFERIDO`, `CAPACITACION`, `TRIVIA`, `TALLER`, `RETO`. En este sprint solo `REFERIDO` tiene flujo real;
    las demás usan el mismo servicio cuando se construyan sus módulos (Sprint 4).
@@ -77,3 +78,4 @@ la cantidad. Los puntos tienen que cuadrar siempre con sus movimientos (RNF-20).
 | ----- | ------ | ----- |
 | 2026-11-10 | Primera implementación en la rama `sprint-2` | Equipo |
 | 2026-11-14 | Integrada en `main`; vista del socio y listados por capacidad del rol (`esAdmin`) en vez de `rol === 'ADMIN'` | Equipo |
+| 2026-11-16 | Pasa a `sprint-3/` (HU-020 a HU-022 son del Sprint 3). Regla de puntos sin campañas escrita en RF-12-2; criterio de HU-022 limitado a referidos hasta el Sprint 4; prueba de bitácora del dictamen (`RF-42: el dictamen…`); casos de uso CU-06.4 y CU-36 | Equipo |

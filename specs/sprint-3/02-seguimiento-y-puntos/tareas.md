@@ -41,6 +41,6 @@ Plan: [`plan.md`](plan.md) · Estado: Completado
 | CA-03, CA-04 | `RF-39` · `RF-11-4` | Sí |
 | CA-05 | `RF-11-4` | Sí |
 | CA-06, CA-07 | `RF-11: vinculación…` | Sí |
-| CA-08 | — | Implementado; falta una prueba que consulte la fila `Dictamen de referido` |
+| CA-08 | `RF-42: el dictamen deja en la bitácora el estado anterior y el nuevo` | Sí |
 | CA-09, CA-11 | `HU-022` | Sí |
 | CA-10, CA-12, CA-13 | `RF-11: vinculación…` | Sí |

@@ -5,7 +5,7 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (pruebas en dispositivo pendien
 ## Fase 1 · Pruebas
 
 - [x] T01 — `RF-11: vinculación, código, registro asociado y exportación privada` (CA-01 a CA-04, CA-10, CA-12)
-- [ ] T02 — Prueba de API para el código propio (CA-11) y para enlazar un referido cargado a mano (CA-13)
+- [x] T02 — Prueba de CA-13 (`HU-019 / CA-13`, 2026-11-16). CA-11 no puede darse en el alta: el código pertenece a una cuenta existente y el correo es único; la regla queda en el código como defensa
 
 ## Fase 2 · Backend
 
@@ -32,7 +32,8 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (pruebas en dispositivo pendien
 | Criterio | Prueba que lo cubre | ¿Pasa? |
 | -------- | ------------------- | ------ |
 | CA-01 a CA-04 | `RF-11: vinculación…` | Sí |
-| CA-05 a CA-08 | Pantalla · `e2e/smoke.cjs` | Implementado; e2e no ejecutado en esta integración |
-| CA-09 | `e2e/smoke.cjs` | Implementado; e2e no ejecutado en esta integración |
+| CA-05 a CA-08 | Pantalla · `e2e/smoke.cjs` | Sí (2026-11-16) |
+| CA-09 | `e2e/smoke.cjs` | Sí (2026-11-16) |
 | CA-10, CA-12 | `RF-11: vinculación…` | Sí |
-| CA-11, CA-13 | — | Regla implementada, sin prueba propia |
+| CA-11 | — | No aplica en el alta (ver T02) |
+| CA-13 | `HU-019 / CA-13: el registro con código enlaza el referido cargado a mano` | Sí |

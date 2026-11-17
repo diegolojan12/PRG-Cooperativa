@@ -2,9 +2,11 @@
 
 | Campo | Valor |
 | ----- | ----- |
-| Sprint | 1 |
+| Sprint | 2 |
 | Historias | HU-011 · HU-012 |
-| Requisitos | RF-11 · RF-11-3 · RF-11-4 · RF-11-5 · RF-11-6 |
+| Requisitos de usuario | UR-13 · UR-16 · UR-17 · UR-54 |
+| Requisitos funcionales | RF-11 · RF-11-3 · RF-11-4 · RF-11-5 · RF-11-6 |
+| Casos de uso (EAPX) | CU-06 Consultar referidos · CU-06.1 Filtrar (extend) · CU-06.2 Aprobar o rechazar (extend) · CU-06.5 Gestionar los datos de un referido (extend) · CU-06.6 Asociar manualmente (extend) |
 | No funcionales | RNF-12 · RNF-13 |
 | Estado | Implementada · Verificada |
 | Fuente previa | [`docs/CORRECCIONES-AUDITORIA-SPRINT1.md`](../../../docs/CORRECCIONES-AUDITORIA-SPRINT1.md) · auditoría G01, G06, G08, G11, G12 |
@@ -25,12 +27,13 @@ sin perder el historial y sin duplicados.
 
 ## 3. Historias de usuario
 
-- **HU-011 · Gestión de referidos (CRUD)** — Como usuario general, deseo crear, modificar o inactivar registros de referidos
-  para gestionar la información base de las personas invitadas.
-- **HU-012 · Administración de referidos** — Como usuario general, deseo administrar el listado completo de todos los referidos
-  para tener control total sobre el seguimiento general (tabla global con filtros).
+- **HU-011 · Gestión de referidos** — Como Socio / Cliente o Administrador, quiero registrar, modificar o dar de baja
+  referidos para dar seguimiento a las personas invitadas. (Texto corregido en el backlog el 2026-11-16: ya no dice
+  «usuario general» ni «independientemente del rol»; requisito de usuario nuevo UR-54.)
+- **HU-012 · Administración de referidos** — Como administrador, quiero administrar el listado completo de todos los
+  referidos para tener control total del seguimiento: tabla global de 20 por página con filtros. El socio solo ve los suyos.
 - Como administrador, quiero revisar y dictaminar los referidos pendientes para acreditar al socio que recomendó
-  (ampliado por HU-021 en el Sprint 2).
+  (ampliado por HU-021 · Sprint 3, ya programada).
 - Como administrador, quiero asociar manualmente a un usuario recién registrado con el socio que lo invitó,
   para corregir los casos en que no usó el enlace.
 
@@ -55,7 +58,9 @@ sin perder el historial y sin duplicados.
 | CA-15 | RF-11-6 | un referido dado de baja | se registra otra vez el mismo correo | se acepta |
 | CA-16 | RF-11-6 | un referido *Aprobado* | el socio intenta darlo de baja | se le niega |
 | CA-17 | RF-11-5 | un usuario registrado hace 30 días o menos | el administrador lo asocia a otro socio | se crea la relación de referido |
-| CA-18 | RF-11-5 | un usuario | se intenta asociarlo consigo mismo o pasados 30 días | se rechaza |
+| CA-18 | RF-11-5 | un usuario | se intenta asociarlo consigo mismo o pasados 30 días | se rechaza; quien se registró hace más de 30 días ni siquiera aparece en la lista de asociables |
+| CA-19 | RF-11-3 · T-01 | una persona que se registró con código | se filtra el listado por su provincia | aparece, porque el referido hereda la provincia de su usuario |
+| CA-20 | RF-11 | la lista de usuarios asociables y de socios | se arma | incluye a todos los roles participantes (experiencia Comunidad), no solo al rol llamado `SOCIO` |
 
 ## 5. Reglas de negocio
 
@@ -69,20 +74,20 @@ sin perder el historial y sin duplicados.
 
 ## 6. Fuera de alcance
 
-- Enlace y QR de invitación, alta por enlace (HU-017 a HU-019 · Sprint 2).
-- Campañas (HU-025 a HU-027 · Sprint 3). Hoy los filtros de campaña y provincia solo muestran opciones si hay datos.
+- Enlace y QR de invitación, alta por enlace (HU-017 a HU-019 · Sprint 3, ya programadas en `sprint-3/01-invitacion`).
+- Campañas (HU-025 a HU-027 · Sprint 3). El filtro de campaña solo muestra opciones cuando haya datos; el de provincia ya funciona (CA-19).
 
 ## 7. Requisitos no funcionales aplicables
 
 - RNF-12 — Validación y saneamiento de entradas.
 - RNF-13 — Bitácora de altas, cambios, dictámenes, bajas y asociaciones.
-- RNF-05 — Correo y celular del referido cifrados (ver spec 05).
+- RNF-05 — Correo y celular del referido cifrados (ver `sprint-1/03-proteccion-datos`).
 
 ## 8. Preguntas abiertas
 
 | # | Pregunta | Para | Estado |
 | - | -------- | ---- | ------ |
-| P-01 | ¿El socio puede dar de baja sus referidos *Pendientes* o solo la administración? Hoy puede el socio. | PO | Abierta |
+| P-01 | ¿El socio puede dar de baja sus referidos *Pendientes* o solo la administración? | PO | Propuesta aplicada: sí puede (HU-011 reescrita y UR-54). Falta confirmación del PO |
 | P-02 | ¿Qué número de HU corresponde a cada criterio? | PO | Resuelta: CA-01 a CA-05, CA-09, CA-14 a CA-16 → HU-011; CA-06 a CA-08 → HU-012 |
 
 ## 9. Historial
@@ -93,3 +98,4 @@ sin perder el historial y sin duplicados.
 | 2026-11 | Baja lógica (G06), listado de 20 con filtros y atraso (G08), dictamen con cuenta aprobada (G11), asociación manual (G12) | Equipo |
 | 2026-11-14 | Documentado como spec SDD a partir del código y las pruebas | Equipo |
 | 2026-11-14 | HU-011 y HU-012 identificadas en el backlog. Sprint 2: el socio necesita cuenta Aprobada para referir (RF-06-1) y ve 10 por página con nombre de pila (HU-020) | Equipo |
+| 2026-11-16 | Pasa del Sprint 1 al 2 (HU-011 y HU-012 son del Sprint 2). HU-011 y HU-012 reescritas; UR-54; CA-18 con prueba de 30 días; CA-19 (provincia) y CA-20 (roles participantes) nuevos; casos de uso CU-06.5 y CU-06.6 | Equipo |

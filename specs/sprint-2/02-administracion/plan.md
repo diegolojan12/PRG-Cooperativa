@@ -70,10 +70,12 @@ Claves internas de `Configuracion` que no se exponen: `verificadorCifrado`, `dem
 | -------- | --------------------------------------- |
 | CA-01 a CA-03 | `RF-08-2: solo el administrador crea cuentas de Gestor o Administrador` |
 | CA-04 | `RF-04-4` · `HU-001` |
-| CA-05 | Sin prueba automatizada — **pendiente** |
+| CA-05 | `HU-015 / HU-016 / RF-06: vinculación, cola de revisión, rechazo y nuevo intento` |
 | CA-06 a CA-12 | `RF-14 / RF-14-2 / RF-42: configuración y bitácora completa` |
 | CA-13, CA-14 | `RF-45-1: tablero con 6 indicadores` |
 | CA-15 | `RF-08-1 / RF-08-4` (`/api/indicadores` → 403 para el socio) |
+| CA-16 | `npm run db:respaldo` (`backend/scripts/respaldo.mjs`, `pg_dump --format=custom`); restauración con `pg_restore` (RNF-09) |
+| CA-17 | `RF-45-1: tablero con 6 indicadores` |
 | Frontend | `features.spec.ts` (configuración) · `e2e/smoke.cjs` (tablero, configuración) |
 
 ## 8. Decisiones y riesgos

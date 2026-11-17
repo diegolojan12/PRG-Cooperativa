@@ -27,13 +27,13 @@ Plan: [`plan.md`](plan.md) · Estado: Completado
 - [x] T12 — Pantalla Roles y permisos (`roles.page.ts`) (CA-02 a CA-06)
 - [x] T13 — `authGuard`, `moduloGuard`, `interfazMatch`, `esAdminMatch` y carga diferida (CA-09, CA-10 · G19)
 - [x] T14 — `ShellComponent` y `ComunidadShellComponent` dibujan `menu` (CA-08, CA-09)
-- [x] T15 — Menú desplegable bajo 768 px y barra inferior + "Más" (CA-13 · G20)
+- [x] T15 — Menú desplegable bajo 768 px (trasladado con CA-13 a `sprint-2/03-interfaz`)
 - [x] T16 — Rol Gestor de contenidos con sus límites (G02)
 
 ## Fase 5 · Cierre
 
 - [x] T17 — Análisis del diagrama de clases (`Rol`, `Modulo`, `Sesion`) en `docs/SPRINT1-HU-001-002-003.md`
-- [ ] T18 — Resolver P-01 y P-02 con el PO
+- [x] T18 — P-01 y P-02: propuesta escrita en RF-08-1 de la ERS (2026-11-16); falta la confirmación del PO
 
 ## Verificación
 
@@ -57,4 +57,3 @@ Plan: [`plan.md`](plan.md) · Estado: Completado
 | CA-10 | `RF-08-1 / RF-08-4` · `features.spec.ts` | Sí |
 | CA-11 | `RF-08-1 / RF-08-4` | Sí |
 | CA-12 | `RF-14 / RF-14-2 / RF-42` | Sí |
-| CA-13 | `e2e/smoke.cjs` (móvil 390 px) | Sí |

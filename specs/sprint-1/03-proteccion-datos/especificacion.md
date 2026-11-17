@@ -3,7 +3,7 @@
 | Campo | Valor |
 | ----- | ----- |
 | Sprint | 1 |
-| Historias | Requisito no funcional (sin HU propia) |
+| Historias | Requisito no funcional transversal (sin HU propia); se construyó en el Sprint 1 y lo usan todas las HU que guardan datos personales |
 | Requisitos | RNF-05 |
 | Estado | Implementada · Verificada |
 | Fuente previa | [`docs/CORRECCIONES-AUDITORIA-SPRINT1.md`](../../../docs/CORRECCIONES-AUDITORIA-SPRINT1.md) · auditoría G09 |
@@ -47,7 +47,7 @@ buscar por correo y evitar duplicados.
 ## 6. Fuera de alcance
 
 - Rotación de la clave.
-- Respaldo diario y retención de 5 años (auditoría G24, pendiente).
+- Respaldo diario y retención de 5 años (auditoría G24): resuelto el 2026-11-16 con `npm run db:respaldo` en la spec `sprint-2/02-administracion` (CA-16).
 
 ## 7. Preguntas abiertas
 
@@ -61,3 +61,4 @@ buscar por correo y evitar duplicados.
 | ----- | ------ | ----- |
 | 2026-11 | AES-256-GCM con índice HMAC (G09) | Equipo |
 | 2026-11-14 | Documentado como spec SDD a partir del código y las pruebas | Equipo |
+| 2026-11-16 | CA-07 con prueba automatizada; carpeta renumerada a `03-proteccion-datos` al reorganizar el Sprint 1 | Equipo |

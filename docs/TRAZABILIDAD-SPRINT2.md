@@ -2,7 +2,11 @@
 
 La línea base de historias es la hoja `BKL-G1` del Backlog del producto, filas 19 a 28. Los códigos RF y RNF corresponden a las hojas `Req. Funcionales` y `Req. No Funcionales` de la matriz de requisitos. Los nombres de entidades se conservan del diagrama de clases. Este documento complementa [la auditoría del Sprint 1](CORRECCIONES-AUDITORIA-SPRINT1.md).
 
-> **Fuente de verdad:** las especificaciones SDD en [`specs/sprint-2/`](../specs/sprint-2/README.md). Esta tabla es el resumen de evidencias.
+> **Fuente de verdad:** las especificaciones SDD en [`specs/`](../specs/README.md). Esta tabla es el resumen de evidencias.
+>
+> **Nota (2026-11-16):** este documento cubre HU-013 a HU-022, el bloque que se construyó en la rama `sprint-2`. Según la
+> columna *Sprint* del backlog, HU-013 a HU-016 son del Sprint 2 ([`specs/sprint-2/`](../specs/sprint-2/README.md)) y
+> HU-017 a HU-022 del Sprint 3 ([`specs/sprint-3/`](../specs/sprint-3/README.md)).
 
 ## Historias y evidencias
 
@@ -35,7 +39,7 @@ Las variables `SUMA_AVISO_VERSION`, `SUMA_TERMINOS` y `SUMA_PRIVACIDAD` solo def
 
 ## Cómo repetir las comprobaciones
 
-- Desde `backend`, `npm run test:sprint` ejecuta las [regresiones del Sprint 1 y los criterios nuevos](../backend/test/sprint.test.mjs). Pasan 31 pruebas (2026-11-16), incluidas las de provincia, publicación del aviso, bitácora del dictamen, plazo de 30 días, registro sin SMTP y arranque sin `SUMA_DATA_KEY`.
+- Desde `backend`, `npm run test:sprint` ejecuta las [regresiones del Sprint 1 y los criterios nuevos](../backend/test/sprint.test.mjs). Pasan 32 pruebas (2026-11-16), incluidas las de provincia, referido cargado a mano, publicación del aviso, bitácora del dictamen, plazo de 30 días, registro sin SMTP y arranque sin `SUMA_DATA_KEY`.
 - Desde `frontend`, `npm test -- --watch=false` y `npm run lint`. Pasan 17 pruebas y ESLint. Angular y Nest compilaron.
 - Desde `e2e`, `node smoke.cjs` usa las compilaciones locales y crea un esquema PostgreSQL propio (`DATABASE_SCHEMA`) que borra al terminar. Pasó en Chromium el 2026-11-16, con descarga del QR, alta por enlace, confirmación de correo y gestión de cuenta desde el perfil a 390 px.
 - En una instancia temporal de PostgreSQL 16, se aplicó dos veces la migración sobre datos del Sprint 1. Se verificaron conservación de créditos, recepción de correo por SMTP local, aprobación simultánea y créditos para ambas personas.

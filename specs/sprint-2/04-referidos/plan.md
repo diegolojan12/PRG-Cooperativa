@@ -71,7 +71,9 @@ solo dictamina *Pendientes* y exige `CuentaCooperativa.estaAprobada`.
 | CA-09 a CA-13 | `RF-11-4: dictamen reservado a administración y con cuenta vinculada aprobada` |
 | CA-12 (puntos) | `RF-14 / RF-14-2 / RF-42` (`/api/overview` devuelve 100 puntos) |
 | CA-14 a CA-16 | `RF-11-6: baja lógica que conserva el historial` |
-| CA-17, CA-18 | `RF-11-5: asociación manual dentro de 30 días` (el límite de 30 días no tiene prueba propia) |
+| CA-17, CA-18 | `RF-11-5: asociación manual dentro de 30 días` · `RF-11-5: no se asocia a quien se registró hace más de 30 días` |
+| CA-19 | `T-01: la provincia es obligatoria en el registro y la hereda el referido` |
+| CA-20 | `RF-11-5: no se asocia…` (asociables y socios por `ROLES_PARTICIPANTES`) |
 | Frontend | `features.spec.ts` (listado, baja) · `e2e/smoke.cjs` (CRUD + dictamen + baja) |
 
 ## 8. Decisiones y riesgos

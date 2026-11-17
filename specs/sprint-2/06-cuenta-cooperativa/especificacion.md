@@ -8,7 +8,7 @@
 | Requisitos de usuario | UR-07 · UR-08 · UR-09 · UR-14 · UR-44 |
 | Requisitos funcionales | RF-05 (RF-05-1 a RF-05-6) · RF-06 (RF-06-1 a RF-06-3) · RF-39 · RF-42 |
 | No funcionales | RNF-05 · RNF-12 · RNF-16 · RNF-23 · RNF-24 |
-| Casos de uso (EAPX) | CU-04 Solicitar vinculación de cuenta cooperativa · CU-04.1 Validar los datos y la unicidad de la cuenta (include) · CU-04.2 Registrar la solicitud pendiente (include) |
+| Casos de uso (EAPX) | CU-04 Solicitar vinculación de cuenta cooperativa · CU-04.1 Validar los datos y la unicidad de la cuenta (include) · CU-04.2 Registrar la solicitud pendiente (include) · CU-05.4 Comprobar que la cuenta vinculada esté aprobada (include de CU-05 y CU-12) · CU-18 Verificar una cuenta vinculada · CU-18.1 Generar el código y el enlace de referido (extend) |
 | Clases (EAPX) | `CuentaCooperativa` (`numeroCuenta`, `tipoCuenta`, `estado`, `motivo`, `fechaRevision`; `aprobar`, `rechazar`, `numeroEnmascarado`, `estaAprobada`) · `Usuario 1 — 0..1 CuentaCooperativa` |
 | Estado | Implementada · Verificada |
 
@@ -46,7 +46,7 @@ a mano. Mientras tanto, el prospecto participa en todo lo demás.
 | CA-10 | HU-016 · RF-42 | una decisión sobre la cuenta | se guarda | queda en la bitácora con autor, usuario, estado anterior y nuevo y motivo |
 | CA-11 | RF-06-1 | un usuario sin cuenta Aprobada | intenta referir o generar su enlace | se bloquea |
 | CA-12 | RF-06-2 | un usuario sin cuenta Aprobada | abre el inicio o Referidos | ve 1 aviso con el acceso a «Vincular mi cuenta» |
-| CA-13 | RF-06 · RF-09 | una cuenta que pasa a Aprobada | se aprueba | se habilitan referir y su enlace en ese momento (se genera su código, spec 03) |
+| CA-13 | RF-06 · RF-09 | una cuenta que pasa a Aprobada | se aprueba | se habilitan referir y su enlace en ese momento (se genera su código; el uso del enlace es HU-017, `sprint-3/01-invitacion`) |
 | CA-14 | RF-06-3 | un usuario sin cuenta verificada | usa capacitaciones, juegos, retos o comunidad | no se le bloquea por la cuenta |
 | CA-15 | — | un rol sin experiencia Comunidad (Gestor, Administrador) | intenta vincular una cuenta | se rechaza |
 
@@ -76,3 +76,4 @@ a mano. Mientras tanto, el prospecto participa en todo lo demás.
 | ----- | ------ | ----- |
 | 2026-11-10 | Primera implementación en la rama `sprint-2` | Equipo |
 | 2026-11-14 | Integrada en `main`; autorización por experiencia del rol en vez de `rol === 'SOCIO'`; prueba de la cola de revisión | Equipo |
+| 2026-11-16 | Carpeta renumerada a `06-cuenta-cooperativa`; casos de uso CU-18, CU-18.1 y CU-05.4 (antes faltaba el caso de uso del administrador que verifica la cuenta, UR-08) | Equipo |

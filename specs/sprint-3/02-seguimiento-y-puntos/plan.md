@@ -63,7 +63,7 @@ Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementad
 | CA-05 | `RF-11-4: dictamen reservado a administración y con cuenta vinculada aprobada` |
 | CA-06, CA-07, CA-10, CA-12, CA-13 | `RF-11: vinculación…` (dos aprobaciones simultáneas → 200 y 409; 2 créditos de 100; «Ganaste 100 puntos.»; cambio a 500 no altera lo acreditado) |
 | CA-09, CA-11 | `HU-022: acreditar una actividad interna es idempotente y usa su parámetro` |
-| CA-08 | Se escribe en la misma transacción del dictamen; ninguna prueba consulta esa fila (pendiente) |
+| CA-08 | `RF-42: el dictamen deja en la bitácora el estado anterior y el nuevo` |
 | CA-12 (bitácora de parámetros) | `RF-14 / RF-14-2 / RF-42` |
 
 ## 8. Decisiones y riesgos
@@ -71,5 +71,5 @@ Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementad
 | Decisión | Alternativas descartadas | Motivo |
 | -------- | ------------------------ | ------ |
 | Clave determinista por evento y destinatario | Bandera «acreditado» en el referido | Idempotencia para cualquier actividad futura |
-| Mismo `puntosReferido` para ambas partes | Inventar un parámetro de bienvenida | Las campañas (Sprint 3) definen los dos valores; se deja como P-01 |
+| Mismo `puntosReferido` para ambas partes | Inventar un parámetro de bienvenida | Las campañas (HU-025, Sprint 3) definen los dos valores; la regla quedó en RF-12-2 (P-01 por confirmar con el PO) |
 | Sondeo de la bandeja que no renueva la sesión | Renovar en cada consulta | Si renovara, una pestaña abierta impediría el cierre por inactividad (RF-04-3) |
