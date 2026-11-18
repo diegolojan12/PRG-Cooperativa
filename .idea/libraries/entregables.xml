@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="entregables">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/entregables/SUMA-diagramas-corregidos.zip!/" />
+      <root url="jar://$PROJECT_DIR$/entregables/SUMA-actualizacion-perfil-y-backlog.zip!/" />
+      <root url="jar://$PROJECT_DIR$/entregables/SUMA-especificaciones-sprints-1-2-3.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
