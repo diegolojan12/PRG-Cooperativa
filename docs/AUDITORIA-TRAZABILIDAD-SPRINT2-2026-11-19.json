@@ -1,0 +1,1186 @@
+{
+  "date": "2026-11-19",
+  "scope": "HU-004 a HU-016",
+  "stories": 13,
+  "subtasks": {
+    "total": 53,
+    "done": 39,
+    "todo": 14
+  },
+  "rnfCompliance": "not_evaluated",
+  "functionalFindings": [
+    "Socio sin edición en interfaz",
+    "Bienvenida configurada no visible"
+  ],
+  "matrix": [
+    {
+      "hu": "HU-004",
+      "jira": "G2-24",
+      "ur": [
+        "UR-05"
+      ],
+      "rf": [
+        "RF-07",
+        "RF-07-1",
+        "RF-07-2"
+      ],
+      "spec": "01-recuperacion-de-acceso",
+      "result": "Flujo funcional cubierto; plazo de correo del criterio sin medir.",
+      "test": "RF-07: recuperación de un solo uso; integración SMTP local.",
+      "code": "backend/src/api.mjs:788; frontend/src/app/features/publico/recuperar.page.ts",
+      "rnf": [
+        "RNF-03",
+        "RNF-04",
+        "RNF-14",
+        "RNF-16",
+        "RNF-22"
+      ]
+    },
+    {
+      "hu": "HU-005",
+      "jira": "G2-25",
+      "ur": [
+        "UR-04",
+        "UR-49"
+      ],
+      "rf": [
+        "RF-45-1",
+        "RF-08-3",
+        "RF-08-4"
+      ],
+      "spec": "02-administracion",
+      "result": "Dashboard exclusivo cubierto; RF-45-1 compartido sigue parcial: cuatro indicadores reales y dos de módulos futuros.",
+      "test": "RF-45-1: tablero con 6 indicadores; navegación administrador en Chromium.",
+      "code": "backend/src/api.mjs:860; frontend/src/app/features/resumen/tablero.page.ts:25",
+      "rnf": [
+        "RNF-01",
+        "RNF-06",
+        "RNF-11",
+        "RNF-13"
+      ]
+    },
+    {
+      "hu": "HU-006",
+      "jira": "G2-26",
+      "ur": [
+        "UR-46"
+      ],
+      "rf": [
+        "RF-14",
+        "RF-14-1",
+        "RF-14-2",
+        "RF-14-3",
+        "RF-14-4"
+      ],
+      "spec": "02-administracion",
+      "result": "INCOMPLETA en interfaz: el mensaje de bienvenida se guarda pero no se muestra en los inicios actuales.",
+      "test": "RF-14 / RF-14-2 / RF-42 pasa; auditoría de navegador reproduce bienvenida invisible.",
+      "code": "backend/src/api.mjs:1494; frontend/src/app/features/administracion/configuracion.page.html:46; frontend/src/app/features/comunidad/feed.page.html:12",
+      "rnf": [
+        "RNF-12",
+        "RNF-13"
+      ]
+    },
+    {
+      "hu": "HU-007",
+      "jira": "G2-27",
+      "ur": [
+        "UR-48"
+      ],
+      "rf": [
+        "RF-42",
+        "RF-42-1",
+        "RF-42-2"
+      ],
+      "spec": "02-administracion",
+      "result": "Registro, inmutabilidad y filtros funcionales cubiertos; no se evaluaron retención, respaldos ni plazos.",
+      "test": "RF-14 / RF-14-2 / RF-42; RF-42 dictamen; navegación bitácora.",
+      "code": "backend/src/api.mjs:1582; frontend/src/app/features/administracion/actividad.page.html:13",
+      "rnf": [
+        "RNF-08",
+        "RNF-13"
+      ]
+    },
+    {
+      "hu": "HU-008",
+      "jira": "G2-28",
+      "ur": [
+        "UR-04",
+        "UR-53"
+      ],
+      "rf": [
+        "RF-49-4",
+        "RF-08-3",
+        "RF-08-4"
+      ],
+      "spec": "03-interfaz",
+      "result": "Menús y diseño adaptable implementados; validación integral RNF excluida.",
+      "test": "features.spec.ts: menús por rol; capturas previas de gestor a 1440/768/390/360 px.",
+      "code": "frontend/src/app/layout/shell.component.ts; frontend/src/app/layout/comunidad-shell.component.ts; frontend/src/css/panel.css:1570",
+      "rnf": [
+        "RNF-06",
+        "RNF-10",
+        "RNF-13",
+        "RNF-15",
+        "RNF-16",
+        "RNF-17",
+        "RNF-18"
+      ]
+    },
+    {
+      "hu": "HU-009",
+      "jira": "G2-29",
+      "ur": [
+        "UR-53"
+      ],
+      "rf": [
+        "RF-49",
+        "RF-49-3"
+      ],
+      "spec": "03-interfaz",
+      "result": "Sistema de avisos funcional implementado; plazo de un segundo no certificado.",
+      "test": "auth.spec.ts: avisos y duración mínima; operaciones de navegador.",
+      "code": "frontend/src/app/core/ui/aviso.service.ts:13; frontend/src/app/shared/aviso/aviso.component.ts",
+      "rnf": [
+        "RNF-10",
+        "RNF-15",
+        "RNF-16",
+        "RNF-17",
+        "RNF-18"
+      ]
+    },
+    {
+      "hu": "HU-010",
+      "jira": "G2-30",
+      "ur": [
+        "UR-53"
+      ],
+      "rf": [
+        "RF-49-1",
+        "RF-49-2"
+      ],
+      "spec": "03-interfaz",
+      "result": "Ayudas y errores por campo implementados; sigue pendiente registrar la revisión completa de formularios de G2-122.",
+      "test": "features.spec.ts: validaciones de referidos/configuración y CampoComponent; inspección estática de plantillas.",
+      "code": "frontend/src/app/shared/campo/campo.component.ts:34; frontend/src/app/features/features.spec.ts",
+      "rnf": [
+        "RNF-10",
+        "RNF-15",
+        "RNF-16",
+        "RNF-17",
+        "RNF-18"
+      ]
+    },
+    {
+      "hu": "HU-011",
+      "jira": "G2-31",
+      "ur": [
+        "UR-54",
+        "UR-13"
+      ],
+      "rf": [
+        "RF-11",
+        "RF-11-5",
+        "RF-11-6"
+      ],
+      "spec": "04-referidos",
+      "result": "INCOMPLETA: API permite editar al socio, interfaz solo muestra Editar al administrador.",
+      "test": "RF-11/RF-11-5/RF-11-6 pasan; navegador confirma cero botones Editar para un referido propio Pendiente.",
+      "code": "frontend/src/app/features/referidos/referidos.page.ts:150; backend/src/api.mjs:1075; backend/src/dominio/referidos.mjs:76",
+      "rnf": [
+        "RNF-01",
+        "RNF-05",
+        "RNF-07",
+        "RNF-08",
+        "RNF-09",
+        "RNF-13"
+      ]
+    },
+    {
+      "hu": "HU-012",
+      "jira": "G2-32",
+      "ur": [
+        "UR-17",
+        "UR-16"
+      ],
+      "rf": [
+        "RF-11-3",
+        "RF-11-4"
+      ],
+      "spec": "04-referidos",
+      "result": "Listado, filtros, paginación y permisos cubiertos. Campañas: filtro preparado; gestión corresponde al Sprint 3.",
+      "test": "RF-11/RNF-12: 10/20 por página y acceso; RF-11-4; T-01 provincia.",
+      "code": "backend/src/api.mjs:961; frontend/src/app/features/referidos/referidos.page.html:65",
+      "rnf": [
+        "RNF-01",
+        "RNF-05",
+        "RNF-07",
+        "RNF-08",
+        "RNF-09",
+        "RNF-13"
+      ]
+    },
+    {
+      "hu": "HU-013",
+      "jira": "G2-33",
+      "ur": [
+        "UR-01",
+        "UR-13",
+        "UR-14",
+        "UR-52"
+      ],
+      "rf": [
+        "RF-01",
+        "RF-01-1",
+        "RF-01-2",
+        "RF-01-3",
+        "RF-01-4",
+        "RF-01-5",
+        "RF-01-6",
+        "RF-47",
+        "RF-47-1",
+        "RF-47-2",
+        "RF-08-2"
+      ],
+      "spec": "05-registro-y-confirmacion",
+      "result": "Reglas funcionales de registro y aceptación cubiertas con aviso de prueba; tiempos no medidos. UR-22 es una vinculación errónea de la spec/RF-01.",
+      "test": "HU-013/HU-014; T-01 provincia; HU-019 alta por enlace adelantada.",
+      "code": "backend/src/api.mjs:651; frontend/src/app/features/publico/registro.page.ts; frontend/src/app/features/publico/registro.page.html",
+      "rnf": [
+        "RNF-03",
+        "RNF-04",
+        "RNF-05",
+        "RNF-06",
+        "RNF-07",
+        "RNF-08",
+        "RNF-10",
+        "RNF-12",
+        "RNF-13",
+        "RNF-15",
+        "RNF-16",
+        "RNF-17",
+        "RNF-18"
+      ]
+    },
+    {
+      "hu": "HU-014",
+      "jira": "G2-34",
+      "ur": [
+        "UR-02"
+      ],
+      "rf": [
+        "RF-02",
+        "RF-02-1",
+        "RF-02-2",
+        "RF-02-3"
+      ],
+      "spec": "05-registro-y-confirmacion",
+      "result": "Código, caducidad, reenvíos y bloqueo de login cubiertos; entrega real en 60 s no medida para este flujo.",
+      "test": "HU-013/HU-014; HU-014/CA-15; integración SMTP local con destinatario Outlook.",
+      "code": "backend/src/dominio/confirmacion-correo.mjs; frontend/src/app/features/publico/confirmar-correo.page.ts",
+      "rnf": [
+        "RNF-03",
+        "RNF-14"
+      ]
+    },
+    {
+      "hu": "HU-015",
+      "jira": "G2-35",
+      "ur": [
+        "UR-07",
+        "UR-09",
+        "UR-14"
+      ],
+      "rf": [
+        "RF-05",
+        "RF-05-1",
+        "RF-05-2",
+        "RF-05-5",
+        "RF-05-6",
+        "RF-06",
+        "RF-06-1",
+        "RF-06-2",
+        "RF-06-3"
+      ],
+      "spec": "06-cuenta-cooperativa",
+      "result": "Vinculación, máscara, nuevo intento y bloqueo para referir cubiertos. RF-06/UR-09 no completos globalmente: canje y otros módulos son posteriores.",
+      "test": "HU-015/HU-016/RF-06; RF-11 vinculación y código; pruebas de cuenta repetida.",
+      "code": "backend/src/api.mjs:586; frontend/src/app/features/resumen/mi-cuenta.page.ts; frontend/src/app/features/referidos/referidos.page.html:25",
+      "rnf": [
+        "RNF-03",
+        "RNF-05",
+        "RNF-08",
+        "RNF-09",
+        "RNF-12",
+        "RNF-13",
+        "RNF-16",
+        "RNF-23",
+        "RNF-24"
+      ]
+    },
+    {
+      "hu": "HU-016",
+      "jira": "G2-36",
+      "ur": [
+        "UR-08",
+        "UR-44"
+      ],
+      "rf": [
+        "RF-05-3",
+        "RF-05-4",
+        "RF-39",
+        "RF-39-1",
+        "RF-39-2",
+        "RF-42"
+      ],
+      "spec": "06-cuenta-cooperativa",
+      "result": "Cola, antigüedad, aprobación/rechazo, notificación y contador cubiertos. Plazos y método operativo de verificar titularidad sin certificar.",
+      "test": "HU-015/HU-016/RF-06; RF-39 notificaciones por destinatario; navegador usuarios.",
+      "code": "backend/src/api.mjs:1248; backend/src/api.mjs:1266; frontend/src/app/features/notificaciones/notificaciones.store.ts:62",
+      "rnf": [
+        "RNF-03",
+        "RNF-05",
+        "RNF-08",
+        "RNF-09",
+        "RNF-12",
+        "RNF-13",
+        "RNF-16",
+        "RNF-23",
+        "RNF-24"
+      ]
+    }
+  ],
+  "rfInventory": [
+    {
+      "id": "RF-01",
+      "sourceRow": "3",
+      "title": "Registro de cuenta en 3 pasos",
+      "requirement": "El sistema deberá registrar la cuenta de un usuario en 3 pasos (datos, cuenta en la Cooperativa y acceso), guardándola en un máximo de 3 segundos al finalizar.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-01-1",
+      "sourceRow": "7",
+      "title": "Crear (Paso 1: datos)",
+      "requirement": "El sistema deberá exigir nombres y apellidos (al menos un nombre y un apellido) de entre 3 y 100 caracteres, un correo con formato válido, un celular de exactamente 10 dígitos que inicie con 09 y 1 de las 24 provincias del Ecuador.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-01-2",
+      "sourceRow": "8",
+      "title": "Validar (Unicidad)",
+      "requirement": "El sistema deberá rechazar el registro si el correo o el celular ya pertenecen a otra cuenta.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-01-3",
+      "sourceRow": "9",
+      "title": "Crear (Paso 2: cuenta)",
+      "requirement": "El sistema deberá permitir continuar sin vincular una cuenta de la Cooperativa al elegir «No, aún no».",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-01-4",
+      "sourceRow": "10",
+      "title": "Crear (Paso 3: contraseña)",
+      "requirement": "El sistema deberá exigir una contraseña de al menos 8 caracteres con 1 mayúscula y 1 número, y que su confirmación coincida exactamente.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-01-5",
+      "sourceRow": "11",
+      "title": "Crear (Código de referido)",
+      "requirement": "El sistema deberá llenar automáticamente el código de referido cuando la persona llegue por un enlace o QR válido, y permitir escribirlo a mano o dejarlo vacío.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-01-6",
+      "sourceRow": "12",
+      "title": "Leer (Progreso)",
+      "requirement": "El sistema deberá mostrar el paso actual (1 a 3) con su porcentaje y conservar los datos ingresados al volver a un paso anterior.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-02",
+      "sourceRow": "13",
+      "title": "Confirmación de correo",
+      "requirement": "El sistema deberá enviar un código de confirmación al correo del usuario en un máximo de 60 segundos tras crear la cuenta o cambiar el correo.",
+      "result": "Regla funcional implementada; plazo incrustado en RF no medido de forma concluyente."
+    },
+    {
+      "id": "RF-02-1",
+      "sourceRow": "17",
+      "title": "Crear (Código)",
+      "requirement": "El sistema deberá generar un código numérico de exactamente 6 dígitos que expire a los 10 minutos.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-02-2",
+      "sourceRow": "18",
+      "title": "Validar (Reenvío)",
+      "requirement": "El sistema deberá permitir un máximo de 3 reenvíos del código por hora.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-02-3",
+      "sourceRow": "19",
+      "title": "Validar (Activación)",
+      "requirement": "El sistema deberá impedir el inicio de sesión de una cuenta mientras su correo no esté confirmado.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-05",
+      "sourceRow": "35",
+      "title": "Vinculación de la cuenta de la Cooperativa",
+      "requirement": "El sistema deberá registrar la vinculación de una cuenta de la Cooperativa con estado «Pendiente» en un máximo de 3 segundos, para su verificación manual por el administrador.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-05-1",
+      "sourceRow": "39",
+      "title": "Crear (Datos de la cuenta)",
+      "requirement": "El sistema deberá aceptar 1 de 2 tipos de cuenta (Ahorros o Corriente) y un número de cuenta de exactamente 10 dígitos.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-05-2",
+      "sourceRow": "40",
+      "title": "Validar (Unicidad)",
+      "requirement": "El sistema deberá rechazar un número de cuenta que ya esté vinculado a otro usuario en estado «Pendiente» o «Aprobado».",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-05-3",
+      "sourceRow": "41",
+      "title": "Leer (Pendientes)",
+      "requirement": "El sistema deberá mostrar al administrador las vinculaciones Pendientes de la más antigua a la más reciente, 20 por página, resaltando las que superen 2 días hábiles.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-05-4",
+      "sourceRow": "42",
+      "title": "Actualizar (Verificación)",
+      "requirement": "El sistema deberá cambiar el estado de una vinculación Pendiente únicamente a 1 de 2 valores («Aprobado» o «Rechazado») en máximo 2 segundos.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-05-5",
+      "sourceRow": "43",
+      "title": "Leer (Enmascarado)",
+      "requirement": "El sistema deberá mostrar el número de cuenta oculto, con solo sus 4 últimos dígitos visibles, salvo cuando el propio usuario pida verlo.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-05-6",
+      "sourceRow": "44",
+      "title": "Actualizar (Nuevo intento)",
+      "requirement": "El sistema deberá permitir al usuario ingresar otra cuenta cuando su vinculación anterior haya sido «Rechazada».",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-06",
+      "sourceRow": "45",
+      "title": "Acceso según la verificación de la cuenta",
+      "requirement": "El sistema deberá habilitar las funciones de referir y canjear en un máximo de 3 segundos después de que la cuenta vinculada del usuario sea Aprobada.",
+      "result": "Parcial global: referir protegido; canje pendiente en Sprint 5."
+    },
+    {
+      "id": "RF-06-1",
+      "sourceRow": "49",
+      "title": "Validar (Bloqueo)",
+      "requirement": "El sistema deberá bloquear el 100 % de los intentos de referir o canjear de usuarios sin cuenta vinculada en estado «Aprobado».",
+      "result": "Parcial global: referir protegido; canje pendiente en Sprint 5."
+    },
+    {
+      "id": "RF-06-2",
+      "sourceRow": "50",
+      "title": "Leer (Aviso)",
+      "requirement": "El sistema deberá mostrar al usuario bloqueado 1 aviso con el acceso directo a «Vincular mi cuenta».",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-06-3",
+      "sourceRow": "51",
+      "title": "Leer (Funciones abiertas)",
+      "requirement": "El sistema deberá permitir a todos los usuarios activos participar en capacitaciones, talleres, juegos, retos y comunidad, sin importar el estado de su cuenta vinculada.",
+      "result": "Regla sin bloqueo por cuenta en módulos disponibles; capacitaciones, juegos, talleres y retos completos son posteriores."
+    },
+    {
+      "id": "RF-07",
+      "sourceRow": "52",
+      "title": "Recuperación de acceso",
+      "requirement": "El sistema deberá enviar al correo registrado un enlace temporal de recuperación en un máximo de 60 segundos tras la solicitud.",
+      "result": "Regla funcional implementada; plazo incrustado en RF no medido de forma concluyente."
+    },
+    {
+      "id": "RF-07-1",
+      "sourceRow": "56",
+      "title": "Crear (Enlace)",
+      "requirement": "El sistema deberá generar 1 enlace de recuperación de un solo uso que expire a los 30 minutos.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-07-2",
+      "sourceRow": "57",
+      "title": "Actualizar (Contraseña)",
+      "requirement": "El sistema deberá exigir que la nueva contraseña tenga al menos 8 caracteres con 1 mayúscula y 1 número.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-08",
+      "sourceRow": "58",
+      "title": "Roles y permisos",
+      "requirement": "El sistema deberá actualizar el rol de un usuario en un máximo de 3 segundos.",
+      "result": "Dependencia heredada del Sprint 1; roles y auditoría con código y pruebas existentes."
+    },
+    {
+      "id": "RF-08-1",
+      "sourceRow": "62",
+      "title": "Actualizar (Rol)",
+      "requirement": "El sistema deberá incluir 3 roles base que no se pueden eliminar (Socio / Cliente, Gestor de contenidos y Administrador) y permitir al administrador crear roles adicionales; los permisos se asignan por rol, no por persona.",
+      "result": "Dependencia heredada del Sprint 1; roles y auditoría con código y pruebas existentes."
+    },
+    {
+      "id": "RF-08-2",
+      "sourceRow": "63",
+      "title": "Crear (Rol por defecto)",
+      "requirement": "El sistema deberá asignar el rol «Socio / Cliente» a toda cuenta creada en el registro y permitir solo al administrador crear cuentas de Gestor de contenidos o Administrador.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-08-3",
+      "sourceRow": "64",
+      "title": "Leer (Menú por rol)",
+      "requirement": "El sistema deberá mostrar exclusivamente las opciones del menú asociadas al rol del usuario, con 0 opciones de otros roles.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-08-4",
+      "sourceRow": "65",
+      "title": "Validar (Acceso)",
+      "requirement": "El sistema deberá rechazar el 100 % de los intentos de acceso a funciones no autorizadas para el rol, con un mensaje de acceso denegado.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-08-5",
+      "sourceRow": "66",
+      "title": "Leer (Auditoría de roles)",
+      "requirement": "El sistema deberá registrar en la bitácora 3 datos (ID del autor, ID del usuario y nuevo rol) en cada cambio.",
+      "result": "Dependencia heredada del Sprint 1; roles y auditoría con código y pruebas existentes."
+    },
+    {
+      "id": "RF-11",
+      "sourceRow": "81",
+      "title": "Registro y gestión de referidos",
+      "requirement": "El sistema deberá registrar a un referido con estado «Pendiente», vinculado al socio dueño del código, en un máximo de 3 segundos al crearse su cuenta con un código válido.",
+      "result": "Registro automático/manual en API cubierto; gestión HU-011 incompleta por edición del socio ausente en UI."
+    },
+    {
+      "id": "RF-11-1",
+      "sourceRow": "85",
+      "title": "Validar (Código)",
+      "requirement": "El sistema deberá aceptar solo códigos que existan y pertenezcan a un socio con cuenta Aprobada, y rechazar el código propio del usuario.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-11-2",
+      "sourceRow": "86",
+      "title": "Leer (Consulta propia)",
+      "requirement": "El sistema deberá mostrar al socio sus referidos con nombre de pila, fecha de registro y estado, 10 por página.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-11-3",
+      "sourceRow": "87",
+      "title": "Leer (Listado global)",
+      "requirement": "El sistema deberá mostrar al administrador todos los referidos, 20 por página, con filtros por estado, campaña, provincia y fecha, resaltando los Pendientes con más de 2 días hábiles.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-11-4",
+      "sourceRow": "88",
+      "title": "Actualizar (Dictamen)",
+      "requirement": "El sistema deberá cambiar un referido Pendiente a «Aprobado» solo si su cuenta vinculada está Aprobada, o a «Rechazado», en máximo 2 segundos.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-11-5",
+      "sourceRow": "89",
+      "title": "Crear (Asociación manual)",
+      "requirement": "El sistema deberá permitir al administrador asociar a un socio referidor un usuario que se registró sin código, dentro de los 30 días siguientes a su registro.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-11-6",
+      "sourceRow": "90",
+      "title": "Eliminar (Baja lógica)",
+      "requirement": "El sistema deberá ocultar un referido del listado mediante 1 borrado lógico, conservando su historial.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-11-7",
+      "sourceRow": "91",
+      "title": "Crear (Exportación)",
+      "requirement": "El sistema deberá exportar en CSV, en máximo 10 segundos, los referidos Pendientes con nombre, correo, celular, socio referidor y fecha de registro.",
+      "result": "Compartido con HU-024, Sprint 3; CSV ya implementado. No se exige cierre de esa historia en Sprint 2."
+    },
+    {
+      "id": "RF-14",
+      "sourceRow": "112",
+      "title": "Parámetros globales",
+      "requirement": "El sistema deberá aplicar el cambio de un parámetro en un máximo de 5 segundos tras guardarlo.",
+      "result": "Parcial: bienvenida configurada no visible en los inicios actuales."
+    },
+    {
+      "id": "RF-14-1",
+      "sourceRow": "116",
+      "title": "Validar (Tipo)",
+      "requirement": "El sistema deberá aceptar en los parámetros numéricos solo números enteros y en los de texto un máximo de 500 caracteres.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-14-2",
+      "sourceRow": "117",
+      "title": "Leer (Auditoría)",
+      "requirement": "El sistema deberá registrar en la bitácora 3 campos (parámetro, valor anterior y valor nuevo) en cada cambio.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-14-3",
+      "sourceRow": "118",
+      "title": "Actualizar (Puntos por acción)",
+      "requirement": "El sistema deberá mantener 1 valor entero entre 0 y 10,000 para cada acción bonificable (capacitación aprobada, partida de trivia, asistencia a taller y reto cumplido).",
+      "result": "Valores configurables implementados por adelantado; uso completo compartido con HU-029/módulos posteriores."
+    },
+    {
+      "id": "RF-14-4",
+      "sourceRow": "119",
+      "title": "Actualizar (Valor del punto)",
+      "requirement": "El sistema deberá mantener el valor en dólares de 1 punto, con 2 decimales, para calcular el costo por captación (RF-45).",
+      "result": "Valores configurables implementados por adelantado; uso completo compartido con HU-029/módulos posteriores."
+    },
+    {
+      "id": "RF-39",
+      "sourceRow": "299",
+      "title": "Alertas de referidos y de cuenta vinculada",
+      "requirement": "El sistema deberá notificar al usuario en un máximo de 5 segundos cuando cambie el estado de su cuenta vinculada o de uno de sus referidos.",
+      "result": "Regla funcional implementada; plazo incrustado en RF no medido de forma concluyente."
+    },
+    {
+      "id": "RF-39-1",
+      "sourceRow": "303",
+      "title": "Crear (Privacidad)",
+      "requirement": "El sistema deberá mostrar del referido solo su nombre de pila, sin apellidos ni datos de contacto.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-39-2",
+      "sourceRow": "304",
+      "title": "Validar (Duplicidad)",
+      "requirement": "El sistema deberá bloquear el envío si el estado se actualiza al mismo valor que tenía en los últimos 5 minutos.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-42",
+      "sourceRow": "319",
+      "title": "Bitácora de auditoría",
+      "requirement": "El sistema deberá registrar cada acción crítica en la bitácora en un máximo de 2 segundos.",
+      "result": "Regla funcional implementada; plazo incrustado en RF no medido de forma concluyente."
+    },
+    {
+      "id": "RF-42-1",
+      "sourceRow": "323",
+      "title": "Crear (Registro)",
+      "requirement": "El sistema deberá guardar 4 datos inmutables (usuario, acción, IP y fecha) por cada acción crítica.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-42-2",
+      "sourceRow": "324",
+      "title": "Leer (Filtros)",
+      "requirement": "El sistema deberá filtrar por rango de fechas, usuario y tipo de acción en máximo 5 segundos, mostrando 50 registros por página.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-45",
+      "sourceRow": "338",
+      "title": "Tablero de indicadores",
+      "requirement": "El sistema deberá mostrar al administrador el tablero de indicadores de captación y fidelización en un máximo de 5 segundos, con datos de máximo 24 horas de antigüedad.",
+      "result": "Parcial global: 4 indicadores calculados; 2 marcados como futuros (talleres/canje). HU-005 sí tiene dashboard exclusivo."
+    },
+    {
+      "id": "RF-45-1",
+      "sourceRow": "342",
+      "title": "Leer (Indicadores)",
+      "requirement": "El sistema deberá mostrar 6 indicadores: referidos registrados, % de referidos Aprobados, usuarios activos en el mes (con al menos 1 actividad distinta de iniciar o cerrar sesión), puntos otorgados, puntos canjeados e inscripciones a talleres.",
+      "result": "Parcial global: 4 indicadores calculados; 2 marcados como futuros (talleres/canje). HU-005 sí tiene dashboard exclusivo."
+    },
+    {
+      "id": "RF-45-2",
+      "sourceRow": "343",
+      "title": "Leer (Costo por captación)",
+      "requirement": "El sistema deberá calcular el costo por captación como (puntos otorgados por referidos × valor del punto) / referidos Aprobados.",
+      "result": "Fuera de aceptación Sprint 2: reportes completos HU-054, Sprint 5."
+    },
+    {
+      "id": "RF-45-3",
+      "sourceRow": "344",
+      "title": "Leer (Participación)",
+      "requirement": "El sistema deberá mostrar por cada reto y juego el número de participantes y el % que lo completó.",
+      "result": "Fuera de aceptación Sprint 2: reportes completos HU-054, Sprint 5."
+    },
+    {
+      "id": "RF-45-4",
+      "sourceRow": "345",
+      "title": "Crear (Exportación)",
+      "requirement": "El sistema deberá exportar los indicadores en CSV en máximo 10 segundos.",
+      "result": "Fuera de aceptación Sprint 2: reportes completos HU-054, Sprint 5."
+    },
+    {
+      "id": "RF-47",
+      "sourceRow": "353",
+      "title": "Autorización de tratamiento de datos",
+      "requirement": "El sistema deberá condicionar la creación de la cuenta a la aceptación expresa de los términos y del aviso de privacidad vigente, validándola en un máximo de 2 segundos.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-47-1",
+      "sourceRow": "357",
+      "title": "Validar (Aceptación)",
+      "requirement": "El sistema deberá bloquear la creación de la cuenta mientras la casilla de aceptación no esté marcada.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-47-2",
+      "sourceRow": "358",
+      "title": "Crear (Evidencia)",
+      "requirement": "El sistema deberá registrar 3 datos de evidencia (fecha, hora y versión del aviso aceptado).",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-47-3",
+      "sourceRow": "359",
+      "title": "Leer (Conservación)",
+      "requirement": "El sistema deberá conservar la evidencia durante un mínimo de 5 años.",
+      "result": "Conservación/operación diferida; no se evalúa aquí por acuerdo del usuario."
+    },
+    {
+      "id": "RF-47-4",
+      "sourceRow": "360",
+      "title": "Crear (Versión del aviso)",
+      "requirement": "El sistema deberá permitir al administrador publicar una nueva versión numerada del aviso, manteniendo exactamente 1 vigente; la persona que se registra debe aceptar la versión vigente.",
+      "result": "Fuera de Sprint 2: HU-057 reprogramada al Sprint 5; código adelantado conservado."
+    },
+    {
+      "id": "RF-49",
+      "sourceRow": "368",
+      "title": "Navegación, ayudas y mensajes de la interfaz",
+      "requirement": "El sistema deberá mostrar un mensaje de éxito o de error en un máximo de 1 segundo después de cada acción del usuario.",
+      "result": "Reglas de mensajes implementadas; plazo incrustado en RF no medido de forma concluyente."
+    },
+    {
+      "id": "RF-49-1",
+      "sourceRow": "372",
+      "title": "Leer (Ayuda en campos)",
+      "requirement": "El sistema deberá mostrar en el 100 % de los campos de los formularios un texto de ayuda o un ejemplo.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-49-2",
+      "sourceRow": "373",
+      "title": "Leer (Campos con error)",
+      "requirement": "El sistema deberá marcar en rojo cada campo con error y mostrar debajo la causa y la corrección esperada.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-49-3",
+      "sourceRow": "374",
+      "title": "Leer (Mensajes)",
+      "requirement": "El sistema deberá mostrar un aviso de éxito o error durante al menos 4 segundos o hasta que el usuario lo cierre.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    },
+    {
+      "id": "RF-49-4",
+      "sourceRow": "375",
+      "title": "Leer (Menú)",
+      "requirement": "El sistema deberá mostrar el menú del rol completo en pantallas de 768 píxeles o más y como menú desplegable en pantallas menores.",
+      "result": "Regla funcional cubierta por código y pruebas del alcance; ver matiz temporal si aplica."
+    }
+  ],
+  "browserEvidence": {
+    "altaSocioStatus": 201,
+    "socioEditButtons": 0,
+    "socioBajaButtons": 1,
+    "editarSocioApiStatus": 200,
+    "configGuardarStatus": 200,
+    "bienvenidaApi": "Bienvenida de auditoria sprint dos",
+    "bienvenidaVisible": 0,
+    "indicadores": [
+      {
+        "id": "referidos",
+        "etiqueta": "Referidos registrados",
+        "valor": 4,
+        "unidad": ""
+      },
+      {
+        "id": "aprobados",
+        "etiqueta": "% de referidos aprobados",
+        "valor": 25,
+        "unidad": "%"
+      },
+      {
+        "id": "activos",
+        "etiqueta": "Usuarios activos en el mes",
+        "valor": 1,
+        "unidad": ""
+      },
+      {
+        "id": "otorgados",
+        "etiqueta": "Puntos otorgados",
+        "valor": 0,
+        "unidad": "pts"
+      },
+      {
+        "id": "canjeados",
+        "etiqueta": "Puntos canjeados",
+        "valor": 0,
+        "unidad": "pts",
+        "disponibleDesde": "Sprint 5"
+      },
+      {
+        "id": "talleres",
+        "etiqueta": "Inscripciones a talleres",
+        "valor": 0,
+        "unidad": "",
+        "disponibleDesde": "Sprint 4"
+      }
+    ]
+  },
+  "urInventory": [
+    {
+      "id": "UR-01",
+      "row": "3",
+      "title": "Crear una cuenta",
+      "requirement": "Se requiere que una persona, sea socio o prospecto, pueda crear su cuenta por sí misma, sin acudir a una agencia de la Cooperativa.",
+      "hu": [
+        "HU-013"
+      ],
+      "rf": [
+        "RF-01",
+        "RF-01-1",
+        "RF-01-2",
+        "RF-01-3",
+        "RF-01-4",
+        "RF-01-5",
+        "RF-01-6",
+        "RF-47",
+        "RF-47-1",
+        "RF-47-2",
+        "RF-08-2"
+      ]
+    },
+    {
+      "id": "UR-02",
+      "row": "4",
+      "title": "Confirmar el correo",
+      "requirement": "Se requiere que el usuario confirme que el correo registrado le pertenece antes de usar su cuenta.",
+      "hu": [
+        "HU-014"
+      ],
+      "rf": [
+        "RF-02",
+        "RF-02-1",
+        "RF-02-2",
+        "RF-02-3"
+      ]
+    },
+    {
+      "id": "UR-04",
+      "row": "6",
+      "title": "Ver solo las opciones de su rol",
+      "requirement": "Se requiere que el 100 % de los usuarios vea únicamente las opciones de su rol (socio/cliente, gestor de contenidos o administrador).",
+      "hu": [
+        "HU-005",
+        "HU-008"
+      ],
+      "rf": [
+        "RF-45-1",
+        "RF-08-3",
+        "RF-08-4",
+        "RF-49-4"
+      ]
+    },
+    {
+      "id": "UR-05",
+      "row": "7",
+      "title": "Recuperar el acceso",
+      "requirement": "Se requiere que un usuario que olvidó su contraseña pueda recuperar el acceso por sí mismo, sin ayuda del administrador.",
+      "hu": [
+        "HU-004"
+      ],
+      "rf": [
+        "RF-07",
+        "RF-07-1",
+        "RF-07-2"
+      ]
+    },
+    {
+      "id": "UR-07",
+      "row": "9",
+      "title": "Vincular la cuenta de la Cooperativa",
+      "requirement": "Se requiere que el usuario pueda asociar su cuenta de ahorros o corriente de la Cooperativa a su perfil, al registrarse o en cualquier momento posterior.",
+      "hu": [
+        "HU-015"
+      ],
+      "rf": [
+        "RF-05",
+        "RF-05-1",
+        "RF-05-2",
+        "RF-05-5",
+        "RF-05-6",
+        "RF-06",
+        "RF-06-1",
+        "RF-06-2",
+        "RF-06-3"
+      ]
+    },
+    {
+      "id": "UR-08",
+      "row": "10",
+      "title": "Verificar las cuentas vinculadas",
+      "requirement": "Se requiere que el administrador confirme que cada cuenta vinculada pertenece a su titular, sin que ninguna permanezca más de 2 días hábiles sin revisarse.",
+      "hu": [
+        "HU-016"
+      ],
+      "rf": [
+        "RF-05-3",
+        "RF-05-4",
+        "RF-39",
+        "RF-39-1",
+        "RF-39-2",
+        "RF-42"
+      ]
+    },
+    {
+      "id": "UR-09",
+      "row": "11",
+      "title": "Acceso según la verificación",
+      "requirement": "Se requiere que un usuario sin cuenta verificada pueda participar en capacitaciones, talleres, juegos, retos y comunidad, y que el 100 % de sus intentos de referir o canjear premios se bloquee hasta que su cuenta sea Aprobada.",
+      "hu": [
+        "HU-015"
+      ],
+      "rf": [
+        "RF-05",
+        "RF-05-1",
+        "RF-05-2",
+        "RF-05-5",
+        "RF-05-6",
+        "RF-06",
+        "RF-06-1",
+        "RF-06-2",
+        "RF-06-3"
+      ]
+    },
+    {
+      "id": "UR-13",
+      "row": "15",
+      "title": "Quedar asociado a quien invitó",
+      "requirement": "Se requiere que el 100 % de las personas que llegan invitadas por un socio queden asociadas a él al registrarse sin recordar ningún dato, y que quien no llegó invitado pueda indicar a mano quién lo refirió.",
+      "hu": [
+        "HU-011",
+        "HU-013"
+      ],
+      "rf": [
+        "RF-11",
+        "RF-11-5",
+        "RF-11-6",
+        "RF-01",
+        "RF-01-1",
+        "RF-01-2",
+        "RF-01-3",
+        "RF-01-4",
+        "RF-01-5",
+        "RF-01-6",
+        "RF-47",
+        "RF-47-1",
+        "RF-47-2",
+        "RF-08-2"
+      ]
+    },
+    {
+      "id": "UR-14",
+      "row": "16",
+      "title": "Evitar registros repetidos",
+      "requirement": "Se requiere que el 100 % de los intentos de crear una cuenta con un correo o celular ya registrado, o de vincular una cuenta de la Cooperativa ya vinculada, sea rechazado.",
+      "hu": [
+        "HU-013",
+        "HU-015"
+      ],
+      "rf": [
+        "RF-01",
+        "RF-01-1",
+        "RF-01-2",
+        "RF-01-3",
+        "RF-01-4",
+        "RF-01-5",
+        "RF-01-6",
+        "RF-47",
+        "RF-47-1",
+        "RF-47-2",
+        "RF-08-2",
+        "RF-05",
+        "RF-05-1",
+        "RF-05-2",
+        "RF-05-5",
+        "RF-05-6",
+        "RF-06",
+        "RF-06-1",
+        "RF-06-2",
+        "RF-06-3"
+      ]
+    },
+    {
+      "id": "UR-16",
+      "row": "18",
+      "title": "Aprobar o rechazar referidos",
+      "requirement": "Se requiere que el administrador decida si cada referido es válido, aprobándolo solo cuando su cuenta de la Cooperativa esté verificada.",
+      "hu": [
+        "HU-012"
+      ],
+      "rf": [
+        "RF-11-3",
+        "RF-11-4"
+      ]
+    },
+    {
+      "id": "UR-17",
+      "row": "19",
+      "title": "Atender los referidos pendientes",
+      "requirement": "Se requiere que el administrador identifique qué referidos llevan más tiempo esperando, sin que ninguno supere 2 días hábiles sin atención.",
+      "hu": [
+        "HU-012"
+      ],
+      "rf": [
+        "RF-11-3",
+        "RF-11-4"
+      ]
+    },
+    {
+      "id": "UR-44",
+      "row": "46",
+      "title": "Enterarse de lo importante",
+      "requirement": "Se requiere que el usuario se entere de sus puntos, nivel, referidos, cuenta vinculada, campañas y recordatorios en máximo 1 minuto desde que ocurren.",
+      "hu": [
+        "HU-016"
+      ],
+      "rf": [
+        "RF-05-3",
+        "RF-05-4",
+        "RF-39",
+        "RF-39-1",
+        "RF-39-2",
+        "RF-42"
+      ]
+    },
+    {
+      "id": "UR-46",
+      "row": "48",
+      "title": "Configurar la plataforma",
+      "requirement": "Se requiere que el administrador cambie los textos, límites y puntos por acción de la plataforma sin ayuda del área técnica.",
+      "hu": [
+        "HU-006"
+      ],
+      "rf": [
+        "RF-14",
+        "RF-14-1",
+        "RF-14-2",
+        "RF-14-3",
+        "RF-14-4"
+      ]
+    },
+    {
+      "id": "UR-48",
+      "row": "50",
+      "title": "Auditar acciones",
+      "requirement": "Se requiere que el administrador identifique quién realizó cada acción crítica y cuándo.",
+      "hu": [
+        "HU-007"
+      ],
+      "rf": [
+        "RF-42",
+        "RF-42-1",
+        "RF-42-2"
+      ]
+    },
+    {
+      "id": "UR-49",
+      "row": "51",
+      "title": "Medir el programa",
+      "requirement": "Se requiere que la Gerencia conozca los indicadores de captación, fidelización y costo por captación con un desfase máximo de 24 horas.",
+      "hu": [
+        "HU-005"
+      ],
+      "rf": [
+        "RF-45-1",
+        "RF-08-3",
+        "RF-08-4"
+      ]
+    },
+    {
+      "id": "UR-52",
+      "row": "54",
+      "title": "Autorizar el tratamiento de datos",
+      "requirement": "Se requiere que el 100 % de los usuarios registrados haya aceptado expresamente los términos y el aviso de privacidad vigente.",
+      "hu": [
+        "HU-013"
+      ],
+      "rf": [
+        "RF-01",
+        "RF-01-1",
+        "RF-01-2",
+        "RF-01-3",
+        "RF-01-4",
+        "RF-01-5",
+        "RF-01-6",
+        "RF-47",
+        "RF-47-1",
+        "RF-47-2",
+        "RF-08-2"
+      ]
+    },
+    {
+      "id": "UR-53",
+      "row": "55",
+      "title": "Entender cada pantalla",
+      "requirement": "Se requiere que el 100 % de los campos indique qué dato se espera y que el 100 % de las acciones informe si salió bien o mal.",
+      "hu": [
+        "HU-008",
+        "HU-009",
+        "HU-010"
+      ],
+      "rf": [
+        "RF-49-4",
+        "RF-08-3",
+        "RF-08-4",
+        "RF-49",
+        "RF-49-3",
+        "RF-49-1",
+        "RF-49-2"
+      ]
+    },
+    {
+      "id": "UR-54",
+      "row": "56",
+      "title": "Registrar referidos a mano",
+      "requirement": "Se requiere que el socio con cuenta verificada y el administrador puedan registrar a una persona interesada, con su autorización, cuando ella no pueda registrarse por sí misma.",
+      "hu": [
+        "HU-011"
+      ],
+      "rf": [
+        "RF-11",
+        "RF-11-5",
+        "RF-11-6"
+      ]
+    }
+  ]
+}

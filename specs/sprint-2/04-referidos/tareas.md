@@ -34,7 +34,7 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (P-01 por confirmar con el PO)
 
 ## Fase 5 · Cierre
 
-- [x] T17 — P-02 resuelta con el backlog; P-01 con propuesta escrita en HU-011 (falta la confirmación del PO)
+- [x] T17 — P-02 resuelta con el backlog; P-01 confirmada por el usuario al autorizar la corrección de HU-011/HU-012 en Jira (2026-11-19)
 
 ## Verificación
 

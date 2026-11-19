@@ -1,6 +1,6 @@
 # Tareas · Sesión y acceso
 
-Plan: [`plan.md`](plan.md) · Estado: Completado (CA-18 sin prueba automatizada, por decisión)
+Plan: [`plan.md`](plan.md) · Estado: Base funcional verificada; recepción real y tiempos con usuarios pendientes
 
 ## Fase 1 · Datos
 
@@ -10,7 +10,7 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (CA-18 sin prueba automatizada,
 ## Fase 2 · Pruebas
 
 - [x] T03 — Pruebas `RF-04-1 / RNF-06`, `RF-04-2`, `RF-04-3`, `RF-04-4`, `producción nunca expone…`
-- [x] T04 — CA-18: se decide no automatizar (la cola es en memoria a propósito); se documenta en el plan §8
+- [x] T04 — CA-18: prueba automatizada de reintentos y vigencia en `backend/test/correo.test.mjs` (añadida 2026-11-19; reemplaza la excepción anterior)
 
 ## Fase 3 · Backend
 
@@ -42,4 +42,4 @@ T10 (recuperación) pasó a `sprint-2/01-recuperacion-de-acceso`; T11 y T12 (reg
 | CA-07, CA-08 | `RF-04-3` · `auth.spec.ts` | Sí |
 | CA-09, CA-10 | `RF-04-4` | Sí |
 | CA-17 | `producción nunca expone enlaces ni códigos` | Sí |
-| CA-18 | — | Sin prueba automatizada (decisión) |
+| CA-18 | `backend/test/correo.test.mjs` | Sí (2026-11-19); entrega real pendiente |

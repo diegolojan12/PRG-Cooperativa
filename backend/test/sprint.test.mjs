@@ -9,6 +9,10 @@ import { Database } from '../src/database.mjs';
 import { createApi, diasHabiles } from '../src/api.mjs';
 import { baseAislada } from './aislamiento-pg.mjs';
 
+// Las suites nunca usan credenciales reales de correo heredadas de .env.
+for (const clave of ['SMTP_SERVICE', 'SMTP_HOST', 'SMTP_USER', 'SMTP_PASSWORD', 'SMTP_ACCESS_TOKEN'])
+  delete process.env[clave];
+
 const datosAlta = (datos) => ({
   provincia: 'Loja', ...datos, confirmacionClave: datos.clave, aceptaTerminos: true, versionAviso: '0.1',
 });

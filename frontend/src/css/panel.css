@@ -15,7 +15,11 @@
     radial-gradient(circle at 8% 94%, #2e6dad15 0 130px, transparent 131px),
     linear-gradient(#17345508 1px, transparent 1px),
     linear-gradient(90deg, #17345508 1px, transparent 1px);
-  background-size: auto, auto, 28px 28px, 28px 28px;
+  background-size:
+    auto,
+    auto,
+    28px 28px,
+    28px 28px;
 }
 .suma-app button,
 .suma-app input,
@@ -87,7 +91,9 @@
   z-index: 20;
   inset: 0 auto 0 0;
   width: 250px;
-  background: radial-gradient(circle at 48% 94%, #2e6dad55, transparent 45%), linear-gradient(180deg, #071b33, #12315a);
+  background:
+    radial-gradient(circle at 48% 94%, #2e6dad55, transparent 45%),
+    linear-gradient(180deg, #071b33, #12315a);
   color: #fff;
   border-right: 1px solid #ffffff24;
   padding: 31px 20px 18px;
@@ -1960,7 +1966,6 @@
   }
 }
 
-
 .s-sidebar > nav {
   flex: 1;
   min-height: 0;
@@ -2280,4 +2285,46 @@ app-perfil-page .s-heading-actions {
   opacity: 0.55;
   cursor: not-allowed;
   transform: none;
+}
+
+/* Ajustes exclusivos del panel de contenidos. */
+.s-editor {
+  --muted: #4c6078;
+  background: #f1f5fa;
+  background-image: radial-gradient(circle at 95% 5%, #fff1c5 0, transparent 340px);
+}
+.s-editor .s-tagline,
+.s-editor .s-nav-label,
+.s-editor .s-version {
+  color: #d0deed;
+}
+.s-editor .s-breadcrumb {
+  color: #4c6078;
+}
+.s-editor .s-community .s-tiny {
+  color: #695211;
+}
+.s-editor .s-sidebar nav a {
+  font-size: 14px;
+}
+.s-editor .s-nav-label {
+  font-size: 11px;
+}
+.s-editor .s-tagline {
+  font-size: 12px;
+}
+.s-editor .s-role {
+  font-size: 12px;
+}
+.s-editor .s-footer {
+  color: #4c6078;
+}
+.s-editor .s-sidebar :focus-visible {
+  outline-color: #ffda52;
+}
+.s-editor .s-logout {
+  color: #d0deed;
+}
+.s-editor .s-logout:hover {
+  color: #ffda52;
 }

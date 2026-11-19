@@ -1,4 +1,4 @@
-<div class="suma-app">
+<div class="suma-app" [class.s-editor]="vistaContenidos()">
   <a class="s-skip" href="#content" (click)="saltarAlContenido($event)">Saltar al contenido</a>
   @if (menuAbierto()) {
     <button
@@ -66,7 +66,8 @@
         <app-icon name="menu" />
       </button>
       <div class="s-breadcrumb">
-        Mi comunidad <span>/</span> <strong>{{ titulo() }}</strong>
+        {{ vistaContenidos() ? 'Gestión de contenidos' : 'Mi comunidad' }} <span>/</span>
+        <strong>{{ titulo() }}</strong>
       </div>
       <div class="s-top-right">
         @if (rolNombre()) {

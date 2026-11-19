@@ -18,3 +18,11 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (falta la revisión formal de a
 | CA-02 | `e2e/smoke.cjs` (390 px) | Sí |
 | CA-03, CA-04 | `auth.spec.ts` | Sí |
 | CA-05, CA-06 | `features.spec.ts` | Sí |
+
+## Refinamiento del dashboard del gestor
+
+- [x] T08 — Vista previa de contenidos con bienvenida y accesos según permisos.
+- [x] T09 — Verificar contraste, navegación, escritorio y móvil sin añadir lógica de campañas.
+
+
+Verificación del refinamiento (2026-11-19): compilación y lint correctos; 18 pruebas unitarias aprobadas. Chromium: gestor en 1440, 768, 390 y 360 px, sin desbordamiento de página, menú móvil y permisos verificados. Se midieron 73 textos visibles del dashboard: contraste mínimo 5,89:1 sobre sus fondos calculados. No equivale a una auditoría completa WCAG. Capturas en `.local/test-results/SUMA-gestor-*.png`. Las ocho pantallas de administrador pasaron; la regresión general posterior se detuvo por tiempo de espera al iniciar sesión como socio. Advertencia no bloqueante de compilación: CSS del componente 6,88 kB frente a presupuesto recomendado de 4 kB (límite de error 8 kB). No se modificó Jira ni se implementaron campañas o lógica de contenidos.

@@ -6,7 +6,7 @@ import { PROVINCIAS, provincia } from './dominio/provincias.mjs';
 import { ConfirmacionCorreo } from './dominio/confirmacion-correo.mjs';
 import { PerfilPublico } from './dominio/perfil.mjs';
 import { AcreditacionPuntos, Notificacion, ParametroGlobal, RegistroAuditoria, PUNTOS_POR_ACCION } from './dominio/administracion.mjs';
-import nodemailer from 'nodemailer';
+import { crearCorreo } from './infraestructura/correo.mjs';
 import QRCode from 'qrcode';
 import { Database, hashPassword, verifyPassword, STATES } from './database.mjs';
 
@@ -20,8 +20,6 @@ const ASOCIACION_DIAS = 30; // RF-11-5
 const POR_PAGINA_SOCIO = 10;
 const POR_PAGINA_REFERIDOS = 20; // RF-11-3
 const POR_PAGINA_BITACORA = 50; // RF-42-2
-const REINTENTOS_CORREO = 3; // RNF-14
-const ESPERA_REINTENTO_MS = 5 * 60_000; // RNF-14
 const TEXTO_MAX_CONFIG = 500; // RF-14-1
 // Feriados nacionales de fecha fija en Ecuador (MM-DD). Los móviles (Carnaval,
 // Viernes Santo) y los traslados se agregarán cuando exista el calendario oficial.
@@ -182,37 +180,13 @@ export async function createApi(database) {
   const acreditacion = new AcreditacionPuntos(db, notify);
 
   /* ---------- Correo con reintentos (RNF-14: 3 reintentos cada 5 min) ---------- */
-  const transporter = process.env.SMTP_HOST
-    ? nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: Number(process.env.SMTP_PORT || 1025),
-        secure: process.env.SMTP_SECURE === 'true',
-        auth: process.env.SMTP_USER
-          ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD }
-          : undefined,
-      })
-    : null;
-  // La cola vive en memoria a propósito: los mensajes incluyen enlaces y códigos
-  // de un solo uso que no deben persistirse en texto plano.
-  function sendMail(message, intento = 0, vence, sigueVigente) {
-    if (!transporter || (vence && Date.parse(vence) <= Date.now())) return;
-    transporter
-      .sendMail({ from: process.env.SMTP_FROM || 'SUMA <no-reply@suma.ec>', ...message })
-      .catch(() => {
-        if (intento >= REINTENTOS_CORREO) {
-          console.error(`No se pudo entregar "${message.subject}" tras ${intento + 1} intentos.`);
-          return;
-        }
-        setTimeout(async () => {
-          try {
-            if (!sigueVigente || await sigueVigente())
-              sendMail(message, intento + 1, vence, sigueVigente);
-          } catch {
-            console.error('No se pudo comprobar la vigencia del correo antes de reintentar.');
-          }
-        }, ESPERA_REINTENTO_MS).unref();
-      });
-  }
+  const correoTransaccional = crearCorreo();
+  const { sendMail } = correoTransaccional;
+  const recuperacionVigente = async (url) => {
+    const token = new URL(url).searchParams.get('token');
+    const [fila] = await db.query('SELECT 1 FROM "Recuperacion" WHERE token=$1 AND expira>$2', [digest(token), now()]);
+    return !!fila;
+  };
 
   /* ---------- Sesión ---------- */
   const readToken = (req) =>
@@ -366,6 +340,7 @@ export async function createApi(database) {
       fail('Correo o contraseña incorrectos.', 401);
     }
     const requiereSegundoFactor = Boolean(user.correoVerificado && (await cargarRol(user.rol))?.requiereSegundoFactor);
+    if (requiereSegundoFactor) exigirCorreoDisponible();
     const desafioId = requiereSegundoFactor ? randomBytes(16).toString('hex') : null;
     const codigo = requiereSegundoFactor ? CodigoVerificacion.segundoFactor() : null;
     await db.transaction(async (client) => {
@@ -389,10 +364,13 @@ export async function createApi(database) {
       fail('Vuelve a intentar iniciar sesión.', 409);
     }
     if (requiereSegundoFactor) {
-      sendMail({
+      void sendMail({
         to: user.correo,
         subject: 'Tu código de acceso a SUMA',
         text: `Tu código de verificación es ${codigo}. Vence en 5 minutos y solo funciona una vez.`,
+      }, 0, new Date(Date.now() + CODIGO_2FA_MS).toISOString(), async () => {
+        const [vigente] = await db.query('SELECT 1 FROM "DosFactor" WHERE id=$1 AND codigo=$2 AND expira>$3 AND intentos<5', [digest(desafioId), digest(codigo), now()]);
+        return !!vigente;
       });
       return res.json({
         requiere2fa: true,
@@ -503,11 +481,14 @@ export async function createApi(database) {
       if (duplicado) fail('Ese correo ya está registrado.', 409, { correo: 'Usa otro correo.' });
       return confirmacionCorreo.iniciarCambio(usuario.id, cifrar('correo', correo), correoIndice(correo), client);
     });
-    sendMail({
+    void sendMail({
       to: correo,
       subject: 'Confirma tu nuevo correo en SUMA',
       text: 'Tu código para cambiar el correo es ' + codigo.codigo + '. Vence en 10 minutos y es de un solo uso.',
-    }, 0, codigo.vence);
+    }, 0, codigo.vence, async () => {
+      const [vigente] = await db.query('SELECT 1 FROM "CambioCorreo" WHERE "usuarioId"=$1 AND huella=$2 AND vence>$3 AND intentos<5', [usuario.id, codigo.huella, now()]);
+      return !!vigente;
+    });
     res.json({ ok: true, destino: mask(correo), ...(devExpose() ? { devCodigo: codigo.codigo } : {}) });
   });
   route('post', '/auth/perfil/correo/confirmar', async (req, res) => {
@@ -531,7 +512,7 @@ export async function createApi(database) {
       fail('El código no es correcto, venció o agotó sus intentos. Solicita otro.', 400, {
         codigo: 'Verifica los seis dígitos o solicita un código nuevo.',
       });
-    sendMail({
+    void sendMail({
       to: usuario.correo,
       subject: 'Tu correo de SUMA cambió',
       text: 'El correo de tu cuenta SUMA se cambió. Si no fuiste tú, contacta a soporte de inmediato.',
@@ -553,7 +534,7 @@ export async function createApi(database) {
       await db.query('DELETE FROM "Sesion" WHERE "usuarioId"=$1 AND token<>$2', [usuario.id, digest(readToken(req))], client);
       await log(req, usuario, 'Contraseña cambiada', 'Desde el perfil; se cerraron las demás sesiones', client, { objetivoId: usuario.id });
     });
-    sendMail({
+    void sendMail({
       to: usuario.correo,
       subject: 'Tu contraseña de SUMA cambió',
       text: 'La contraseña de tu cuenta SUMA se cambió. Si no fuiste tú, recupera tu acceso y contacta a soporte.',
@@ -639,13 +620,13 @@ export async function createApi(database) {
     });
     res.status(201).json({ cuentaEstado: cuenta.estado, cuentaVerificada: false });
   });
-  const enviarConfirmacion = (correo, prueba) => sendMail({
+  const enviarConfirmacion = (correo, prueba) => void sendMail({
     to: correo,
     subject: 'Confirma tu correo en SUMA',
     text: 'Tu código de confirmación es ' + prueba.codigo + '. Vence en 10 minutos y es de un solo uso.',
   }, 0, prueba.vence, () => confirmacionCorreo.pendiente(prueba.huella));
   const exigirCorreoDisponible = () => {
-    if (!transporter && !devExpose()) fail('La confirmación por correo no está disponible en este momento.', 503);
+    if (!correoTransaccional.disponible && !devExpose()) fail('El servicio de correo no está disponible en este momento.', 503);
   };
 
   /* ---------- Aviso de privacidad y términos (RF-47, RF-47-4) ---------- */
@@ -811,13 +792,13 @@ export async function createApi(database) {
     const result = {
       message: 'Si el correo está registrado, recibirás instrucciones para recuperar tu contraseña.',
     };
-    if (user?.activo) {
+    if (user?.activo && (correoTransaccional.disponible || devExpose())) {
       const url = await db.transaction((client) => createResetLink(user.id, RECUPERACION_MS, client));
-      sendMail({
+      void sendMail({
         to: correo,
         subject: 'Recupera tu acceso a SUMA',
         text: `Crea una nueva contraseña: ${url}\nEl enlace vence en 30 minutos. Si no lo solicitaste, ignora este mensaje.`,
-      });
+      }, 0, new Date(Date.now() + RECUPERACION_MS).toISOString(), () => recuperacionVigente(url));
       if (devExpose()) result.devResetUrl = url;
       await log(req, user, 'Recuperación solicitada', 'Se generó un enlace temporal');
     }
@@ -1320,6 +1301,7 @@ export async function createApi(database) {
   });
   route('post', '/usuarios', async (req, res) => {
     const user = await admin(req, 'usuarios');
+    exigirCorreoDisponible();
     const nombre = text(req.body.nombre, 100, 'nombre'),
       correo = email(req.body.correo),
       rol = text(req.body.rol, 30, 'rol');
@@ -1342,11 +1324,11 @@ export async function createApi(database) {
       });
       return { created: nuevo, url: await createResetLink(nuevo.id, ACTIVACION_MS, client) };
     });
-    sendMail({
+    void sendMail({
       to: correo,
       subject: 'Activa tu cuenta en SUMA',
       text: `Se creó tu cuenta de ${nuevoRol.nombre.toLowerCase()}. Define tu contraseña: ${url}\nEl enlace vence en 24 horas.`,
-    });
+    }, 0, new Date(Date.now() + ACTIVACION_MS).toISOString(), () => recuperacionVigente(url));
     res.status(201).json({ ...publicUser(created), ...(devExpose() ? { devResetUrl: url } : {}) });
   });
   route('patch', '/usuarios/:id', async (req, res) => {

@@ -29,3 +29,7 @@ Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementad
 | CA-02 | `e2e/smoke.cjs` · «móvil, menú por rol y acceso denegado» (390 px) |
 | CA-03, CA-04 | `auth.spec.ts` · «un 403 muestra un aviso de error» · revisión de `AvisoComponent` |
 | CA-05, CA-06 | `features.spec.ts` · «Campos con ayuda y error (RF-49-1, RF-49-2)» y «no deshabilita el envío… (RNF-16)» |
+
+## Dashboard del gestor · 2026-11-19
+
+Componente independiente cargado en la entrada no administrativa del panel. Datos ilustrativos locales etiquetados, enlaces derivados del menú autorizado, estilos encapsulados y ajustes del shell limitados a esta experiencia. Verificar compilación, lint, pruebas y capturas en escritorio y móvil.

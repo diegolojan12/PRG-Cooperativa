@@ -1,6 +1,6 @@
 # Tareas · Registro en 3 pasos y confirmación del correo
 
-Plan: [`plan.md`](plan.md) · Estado: Completado (2 pendientes externas: textos oficiales y SMTP)
+Plan: [`plan.md`](plan.md) · Estado: Base funcional implementada; gestión de acuerdos trasladada al Sprint 5, mediciones RNF diferidas
 
 ## Fase 1 · Datos
 
@@ -27,14 +27,12 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (2 pendientes externas: textos 
 - [x] T12 — `ConfirmarCorreoPage` con reenvío (CA-10 a CA-12)
 - [x] T13 — Login redirige a confirmar correo (CA-13)
 - [x] T17 — Provincia en el paso 1, `GET /auth/provincias` y migración `sprint2-correcciones.sql` (CA-16 · 2026-11-16)
-- [x] T18 — Publicar versiones del aviso: `GET/POST /configuracion/aviso` y `AvisoPrivacidadAdminComponent` (CA-17 a CA-19 · 2026-11-16)
-- [x] T19 — Pruebas `T-01`, `RF-47-4` y `HU-014 / CA-15` (2026-11-16)
+- [x] T19 — Pruebas `T-01` y `HU-014 / CA-15` (la prueba adelantada `RF-47-4` se acepta en Sprint 5) (2026-11-16)
 
 ## Fase 5 · Cierre
 
 - [x] T14 — Spec, plan y matriz del sprint
-- [ ] T15 — Publicar desde Configuración los textos oficiales del aviso, versión 1.0 (P-01)
-- [ ] T16 — Configurar SMTP de producción y medir la entrega en menos de 60 s (P-02, RNF-14)
+- [ ] T16 — Medición RNF-14 y configuración definitiva de producción, diferidas. Gmail de desarrollo configurado; recepción de 2FA confirmada por el usuario.
 
 ## Verificación
 
@@ -55,6 +53,7 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (2 pendientes externas: textos 
 | CA-14 | `RF-11: vinculación…` | Sí |
 | CA-15 | `HU-014 / CA-15` · `producción nunca expone enlaces ni códigos` | Sí |
 | CA-16 | `T-01` | Sí |
-| CA-17 a CA-19 | `RF-47-4` | Sí |
 | CA-20 | `RF-14 / RF-14-2 / RF-42` | Sí |
 | CA-21 | `RF-11-4` (cuenta de 8 dígitos) | Sí |
+
+T15 (obtener/publicar textos oficiales) y T18 (publicación de versiones, CA-17 a CA-19) pasan a Sprint 5 · HU-057. Se conservan sus números como antecedente; no se marcan como completadas ni se exige su aprobación para el alcance funcional del Sprint 2.

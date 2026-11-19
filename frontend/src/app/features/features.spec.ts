@@ -10,6 +10,27 @@ import { ShellComponent } from '../layout/shell.component';
 import { CampoComponent } from '../shared/campo/campo.component';
 import { ConfiguracionPage } from './administracion/configuracion.page';
 import { ReferidosPage } from './referidos/referidos.page';
+import { GestorPage } from './resumen/gestor.page';
+
+describe('Vista previa del gestor', () => {
+  it('muestra ejemplos y solamente accesos autorizados sin consultar contenidos', () => {
+    const http = setup('GESTOR');
+    const fixture = TestBed.createComponent(GestorPage);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('Hola, Persona');
+    expect(fixture.nativeElement.textContent).toContain('VISTA PREVIA');
+    const links = Array.from<HTMLAnchorElement>(fixture.nativeElement.querySelectorAll('a'));
+    expect(links.map((a) => a.getAttribute('href'))).toEqual([
+      '/panel/aprende',
+      '/panel/publicaciones',
+    ]);
+    TestBed.inject(SessionStore).usuario.update((u) => (u ? { ...u, menu: [] } : u));
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelectorAll('a').length).toBe(0);
+    http.expectNone(() => true);
+    fixture.destroy();
+  });
+});
 
 /** Catálogo de módulos tal como lo entrega el servidor (tabla Modulo). */
 const CATALOGO: ItemMenu[] = [

@@ -55,6 +55,9 @@ export class ShellComponent {
   readonly confirmarSalida = signal(false);
   readonly saliendo = signal(false);
   readonly anio = new Date().getFullYear();
+  readonly vistaContenidos = computed(
+    () => this.session.interfaz() === 'ADMINISTRACION' && !this.session.esAdmin(),
+  );
 
   readonly titulo = toSignal(
     this.router.events.pipe(

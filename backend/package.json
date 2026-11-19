@@ -26,7 +26,10 @@
     "db:respaldo": "node --env-file=.env scripts/respaldo.mjs",
     "start:local": "node --env-file=.env dist/main.js",
     "test:sprint": "node --env-file-if-exists=.env --test test/sprint.test.mjs",
-    "admin:create": "node --env-file-if-exists=.env scripts/create-admin.mjs"
+    "admin:create": "node --env-file-if-exists=.env scripts/create-admin.mjs",
+    "admin:email": "node --env-file-if-exists=.env scripts/admin-email.mjs",
+    "mail:verify": "node --env-file-if-exists=.env scripts/verificar-correo.mjs",
+    "test:correo": "node --env-file-if-exists=.env --test test/correo.test.mjs test/correo-integracion.test.mjs"
   },
   "dependencies": {
     "@nestjs/bullmq": "^12.0.0",

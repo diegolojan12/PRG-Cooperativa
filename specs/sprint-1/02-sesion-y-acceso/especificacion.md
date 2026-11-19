@@ -83,3 +83,4 @@ Los criterios conservan su número original. CA-11 a CA-16 se trasladaron a otra
 | 2026-11 | Auditoría G03 (inactividad), G04 (bloqueo), G05 (2FA), G18 (reintentos) | Equipo |
 | 2026-11-14 | Documentado como spec SDD a partir del código y las pruebas | Equipo |
 | 2026-11-16 | Alcance reducido a HU-003, según la columna *Sprint* del backlog (Sprint 1 = HU-001 a HU-003). Recuperación y registro pasan al Sprint 2. Casos de uso del EAPX agregados | Equipo |
+| 2026-11-19 | CA-18 con prueba automatizada; transporte y vigencia de mensajes precisados en `sprint-2/08-correo-transaccional`. No se declara medida la recepción real | Revisión G2 |

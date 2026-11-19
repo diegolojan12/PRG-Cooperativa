@@ -22,7 +22,7 @@ Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementad
 | `Sesion` (`token` = huella, `usuarioId`, `expira`) | `sprint1.sql` | Sesión con vencimiento deslizante |
 | `DosFactor` (`id`, `usuarioId`, huella del código, `expira`, `intentos`) | `sprint1-auditoria.sql` | Desafío de segundo factor |
 
-Constantes de tiempo en `api.mjs`: `BLOQUEO_MS` 15 min · `CODIGO_2FA_MS` 5 min · `ESPERA_REINTENTO_MS` 5 min ·
+Constantes de tiempo en `api.mjs`: `BLOQUEO_MS` 15 min · `CODIGO_2FA_MS` 5 min; en `infraestructura/correo.mjs`, reintento cada 5 min ·
 `Sesion.INACTIVIDAD_MS` 15 min.
 
 ## 3. API
@@ -72,7 +72,7 @@ Correo: cola en memoria con 3 reintentos cada 5 min; no guarda códigos en texto
 | CA-08 (cliente) | `frontend/src/app/core/auth/auth.spec.ts` (inactividad) |
 | CA-09, CA-10 | `RF-04-4: desactivar cuenta y cerrar sesión` |
 | CA-17 | `producción nunca expone enlaces ni códigos` |
-| CA-18 | Sin prueba automatizada: la cola vive en memoria (decisión de §8) |
+| CA-18 | `backend/test/correo.test.mjs`: 3 reintentos cada 5 min y descarte de mensajes vencidos/sustituidos (2026-11-19) |
 | Flujo completo | `e2e/smoke.cjs` · «portada, acceso administrador con 2FA y tablero» |
 
 ## 8. Decisiones y riesgos

@@ -1,0 +1,182 @@
+<div class="gestor-dashboard">
+  <section class="bienvenida" aria-labelledby="saludo-gestor">
+    <div class="bienvenida-texto">
+      <p class="eyebrow">TU COMUNIDAD, SIEMPRE CONECTADA</p>
+      <h1 id="saludo-gestor">
+        Hola, <span>{{ nombre() }}</span>
+      </h1>
+      <p>Un espacio para crear, organizar e inspirar a nuestra comunidad.</p>
+      <span class="hero-etiqueta"
+        ><span aria-hidden="true">●</span> Panel de gestión de contenidos</span
+      >
+    </div>
+    <div class="hero-arte" aria-hidden="true">
+      <div class="arte-hoja"><app-icon name="post" /><i></i><i></i><i></i></div>
+      <span class="arte-icono"><app-icon name="book" /></span><span class="arte-estrella">✦</span>
+      <p>Las buenas ideas<br /><strong>nos hacen crecer.</strong></p>
+    </div>
+  </section>
+
+  <div class="aviso-preview" role="note">
+    <span class="preview-insignia">VISTA PREVIA</span>
+    <p>Así se verá tu espacio de trabajo. Los indicadores y contenidos son ejemplos.</p>
+  </div>
+
+  @if (accesos().length) {
+    <section aria-labelledby="accesos-titulo" class="seccion-accesos">
+      <div class="encabezado">
+        <h2 id="accesos-titulo">Accesos rápidos</h2>
+        <span>Todo a tu alcance</span>
+      </div>
+      <div class="accesos">
+        @for (item of accesos(); track item.id) {
+          <a [routerLink]="['/panel', item.id]"
+            ><app-icon [name]="item.icono" /><strong>{{ item.etiqueta }}</strong
+            ><small>{{ item.disponible ? 'Abrir sección' : 'Próximamente' }}</small></a
+          >
+        }
+      </div>
+    </section>
+  }
+
+  <section aria-labelledby="resumen-titulo">
+    <div class="encabezado">
+      <h2 id="resumen-titulo">Tu contenido, de un vistazo</h2>
+      <span>Datos de ejemplo</span>
+    </div>
+    <div class="indicadores">
+      @for (item of indicadores; track item.titulo) {
+        <article class="indicador" [class]="'indicador ' + item.tono">
+          <app-icon [name]="item.icono" /><strong class="numero">{{ item.valor }}</strong>
+          <h3>{{ item.titulo }}</h3>
+          <p>{{ item.detalle }}</p>
+        </article>
+      }
+    </div>
+  </section>
+
+  <div class="columnas">
+    <section class="tarjeta recientes" aria-labelledby="recientes-titulo">
+      <div class="encabezado">
+        <h2 id="recientes-titulo">Contenido reciente</h2>
+        <span>Ejemplo</span>
+      </div>
+      <p class="subtitulo">Un vistazo a las últimas novedades de tu espacio.</p>
+      <div
+        class="tabla-scroll"
+        tabindex="0"
+        role="region"
+        aria-label="Tabla de contenido reciente de ejemplo"
+      >
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Contenido</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Actualización</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of contenidos; track item.titulo) {
+              <tr>
+                <td>
+                  <div class="contenido-nombre">
+                    <span class="miniatura"><app-icon [name]="item.icono" /></span>
+                    <div>
+                      <strong>{{ item.titulo }}</strong
+                      ><small>{{ item.tipo }}</small>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span [class]="'estado ' + item.clase">{{ item.estado }}</span>
+                </td>
+                <td>{{ item.fecha }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="tarjeta rendimiento" aria-labelledby="rendimiento-titulo">
+      <div class="encabezado"><h2 id="rendimiento-titulo">Comunidad en movimiento</h2></div>
+      <p class="subtitulo">Interacciones · últimos 7 días · ejemplo</p>
+      <div class="dato-grafico">
+        <strong>1.240</strong><span>Participaciones de la comunidad</span>
+      </div>
+      <svg
+        class="grafico"
+        viewBox="0 0 420 150"
+        role="img"
+        aria-labelledby="grafico-titulo grafico-desc"
+      >
+        <title id="grafico-titulo">Interacciones diarias de ejemplo</title>
+        <desc id="grafico-desc">
+          Viernes 80, sábado 120, domingo 100, lunes 160, martes 220, miércoles 240 y jueves 320.
+          Total 1240.
+        </desc>
+        <g stroke="#dce4ee"><path d="M10 20H410 M10 60H410 M10 100H410 M10 140H410" /></g>
+        <path d="M20 112 85 98 150 105 215 84 280 63 345 56 400 28V140H20Z" fill="#e2eefc" />
+        <path
+          d="M20 112 85 98 150 105 215 84 280 63 345 56 400 28"
+          fill="none"
+          stroke="#185da3"
+          stroke-width="3"
+        />
+        <g fill="#185da3">
+          <circle cx="20" cy="112" r="4" />
+          <circle cx="85" cy="98" r="4" />
+          <circle cx="150" cy="105" r="4" />
+          <circle cx="215" cy="84" r="4" />
+          <circle cx="280" cy="63" r="4" />
+          <circle cx="345" cy="56" r="4" />
+          <circle cx="400" cy="28" r="4" />
+        </g>
+      </svg>
+      <div class="dias" aria-hidden="true">
+        <span>Vie</span><span>Sáb</span><span>Dom</span><span>Lun</span><span>Mar</span
+        ><span>Mié</span><span>Jue</span>
+      </div>
+    </section>
+
+    <section class="tarjeta agenda" aria-labelledby="agenda-titulo">
+      <div class="encabezado">
+        <h2 id="agenda-titulo"><app-icon name="clock" /> Próximas publicaciones</h2>
+        <span>Ejemplo</span>
+      </div>
+      <p class="subtitulo">Ideas que pronto llegarán a la comunidad.</p>
+      <div class="agenda-fila">
+        <span class="fecha"><strong>20</strong>NOV</span>
+        <div>
+          <strong>Consejos para cuidar tu economía</strong
+          ><small>Publicación · Comunidad general</small>
+        </div>
+        <span class="hora">10:00</span>
+      </div>
+      <div class="agenda-fila">
+        <span class="fecha"><strong>22</strong>NOV</span>
+        <div>
+          <strong>Aprendamos a ahorrar juntos</strong
+          ><small>Capacitación · Educación financiera</small>
+        </div>
+        <span class="hora">16:00</span>
+      </div>
+    </section>
+
+    <section class="tarjeta cronologia" aria-labelledby="actividad-titulo">
+      <div class="encabezado">
+        <h2 id="actividad-titulo"><app-icon name="actividad" /> Actividad reciente</h2>
+        <span>Ejemplo</span>
+      </div>
+      <p class="subtitulo">Cada pequeño paso suma.</p>
+      <ol>
+        <li><strong>Se actualizó una capacitación</strong><small>Hoy · 09:30</small></li>
+        <li>
+          <strong>Se guardó una nueva publicación como borrador</strong><small>Ayer · 15:45</small>
+        </li>
+        <li><strong>Se publicó una trivia para la comunidad</strong><small>Ayer · 11:00</small></li>
+      </ol>
+    </section>
+  </div>
+</div>

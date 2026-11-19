@@ -71,3 +71,7 @@ Ninguna.
 | ----- | ------ | ----- |
 | 2026-11 | Auditoría G16 (ayuda obligatoria en campos), G17 (avisos distinguibles), G20 (menú móvil) | Equipo |
 | 2026-11-16 | Spec propia del Sprint 2 (HU-008 a HU-010 son del Sprint 2 según el backlog) | Equipo |
+
+## Refinamiento visual del gestor · 2026-11-19
+
+Dashboard de entrada para la interfaz Administración sin privilegios de administrador. Combina bienvenida, accesos permitidos, indicadores y agenda de ejemplo. Se identifica como vista previa; no incorpora campañas, persistencia ni operaciones de publicación. Los permisos siguen determinados por el servidor. Texto con contraste mínimo 4,5:1, foco visible y adaptación móvil.

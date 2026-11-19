@@ -42,6 +42,11 @@ const iniciarApi = () => (api = spawn(process.execPath, ["dist/main.js"], {
     SEED_DEMO: "true",
     ENABLE_DEV_RESET_LINK: "true",
     NODE_ENV: "test",
+    SMTP_SERVICE: "",
+    SMTP_HOST: "",
+    SMTP_USER: "",
+    SMTP_PASSWORD: "",
+    SMTP_ACCESS_TOKEN: "",
   },
   stdio: ["ignore", "pipe", "pipe"],
 }));

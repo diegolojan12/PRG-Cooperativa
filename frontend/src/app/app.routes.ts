@@ -130,7 +130,7 @@ export const routes: Routes = [
         pathMatch: 'full',
         data: { titulo: 'Resumen' },
         title: 'Mi comunidad · SUMA',
-        loadComponent: () => import('./features/resumen/resumen.page').then((m) => m.ResumenPage),
+        loadComponent: () => import('./features/resumen/gestor.page').then((m) => m.GestorPage),
       },
       {
         path: 'referidos',

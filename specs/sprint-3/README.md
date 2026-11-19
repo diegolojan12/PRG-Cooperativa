@@ -2,7 +2,7 @@
 
 | Campo | Valor |
 | ----- | ----- |
-| Estado | En parte: HU-017 a HU-022 implementadas y verificadas por adelantado durante el Sprint 2; HU-023 a HU-029 por especificar |
+| Estado | En parte: HU-017 a HU-022 implementadas y verificadas por adelantado durante el Sprint 2; HU-023 documentada con implementación adelantada; HU-024 a HU-029 pendientes de especificación/aceptación |
 | Semanas | 13–14 |
 | Historias | **HU-017 a HU-029** (columna *Sprint* de la hoja `BKL-G1`) |
 | Objetivo | Que el socio verificado invite con su enlace o QR, siga a sus referidos y reciba puntos, y que la administración maneje campañas, puntos, niveles e insignias |
@@ -13,7 +13,8 @@
 | - | ------------- | -- | ------------ | ---- | ---- | ------ | ------ |
 | 01 | Enlace, QR, compartir y alta por enlace | HU-017, HU-018, HU-019 | CU-05, CU-05.1 a CU-05.4, CU-01.3, CU-18.1 | [spec](01-invitacion/especificacion.md) | [plan](01-invitacion/plan.md) | [tareas](01-invitacion/tareas.md) | Verificada · pruebas en dispositivo pendientes |
 | 02 | Estado de referidos, dictamen y puntos automáticos | HU-020, HU-021, HU-022 | CU-06, CU-06.2, CU-06.4, CU-36 | [spec](02-seguimiento-y-puntos/especificacion.md) | [plan](02-seguimiento-y-puntos/plan.md) | [tareas](02-seguimiento-y-puntos/tareas.md) | Verificada |
-| — | Perfil, lista comercial, campañas, puntos, niveles, inicio e insignias | HU-023 a HU-029 | CU-03, CU-06.3, CU-07, CU-08, CU-21 | — | — | — | Por especificar ([`backlog.md`](../backlog.md)) |
+| 03 | Datos del perfil y baja | HU-023 (HU-055 duplicada) | CU-03 | [spec](03-configuracion-perfil/especificacion.md) | [plan](03-configuracion-perfil/plan.md) | [tareas](03-configuracion-perfil/tareas.md) | Implementación adelantada; aceptación pendiente |
+| — | Lista comercial, campañas, saldo y reglas de puntos | HU-024 a HU-029 | CU-03, CU-06.3, CU-07, CU-08 | — | — | — | Por especificar; perfil, CSV y reglas tienen código reutilizable ([auditoría G2](../../docs/AUDITORIA-G2-SPRINTS-1-3-2026-11-19.md)) |
 
 ## Matriz de trazabilidad (historias ya implementadas)
 

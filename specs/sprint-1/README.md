@@ -2,7 +2,7 @@
 
 | Campo | Valor |
 | ----- | ----- |
-| Estado | Implementado y verificado (fusionado en `main`, PR #1 de `sprint-1`) |
+| Estado | Base funcional implementada y verificada (PR #1); cierre integral pendiente de correo real, tiempos con usuarios y custodia de clave (auditoría 2026-11-19) |
 | Semanas | 9–10 |
 | Historias | **HU-001 · HU-002 · HU-003** (columna *Sprint* de la hoja `BKL-G1`) |
 | Objetivo | Que administradores, gestores y socios entren de forma segura y vean solo lo que les corresponde según su rol |

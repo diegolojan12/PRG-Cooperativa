@@ -84,8 +84,7 @@ y poder auditar quién hizo qué.
 1. Parámetros configurables: `contacto` (correo), `registroAbierto` (sí/no), `mensajeBienvenida` (1 a 500 caracteres),
    `puntosReferido` (entero de 0 a 10000; valor inicial 100) y, adelantados de HU-029, los puntos por acción y el valor
    del punto. Los límites de trivia, talleres y retos se agregan con esos módulos (Sprint 4).
-5. La versión de los términos y el aviso de privacidad se publica en la misma pantalla de Configuración (RF-47-4, ver
-   `05-registro-y-confirmacion` CA-17 a CA-19).
+La publicación de términos y aviso desde Configuración es implementación adelantada: su aceptación se traslada a HU-057, Sprint 5, junto con los textos oficiales. Ver [spec de privacidad y acuerdos](../../sprint-5/04-privacidad-y-acuerdos/especificacion.md).
 2. Un parámetro sin cambios no genera fila en la bitácora.
 3. La bitácora es de solo lectura para todos, incluido el administrador.
 4. Las cuentas creadas por el administrador no tienen contraseña hasta que la persona usa su enlace.

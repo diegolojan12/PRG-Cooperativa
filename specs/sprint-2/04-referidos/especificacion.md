@@ -87,7 +87,7 @@ sin perder el historial y sin duplicados.
 
 | # | Pregunta | Para | Estado |
 | - | -------- | ---- | ------ |
-| P-01 | ¿El socio puede dar de baja sus referidos *Pendientes* o solo la administración? | PO | Propuesta aplicada: sí puede (HU-011 reescrita y UR-54). Falta confirmación del PO |
+| P-01 | ¿El socio puede dar de baja sus referidos *Pendientes* o solo la administración? | PO | Confirmado: sí puede (HU-011 reescrita y UR-54). Confirmada por el usuario al autorizar la corrección de HU-011/HU-012 (2026-11-19) |
 | P-02 | ¿Qué número de HU corresponde a cada criterio? | PO | Resuelta: CA-01 a CA-05, CA-09, CA-14 a CA-16 → HU-011; CA-06 a CA-08 → HU-012 |
 
 ## 9. Historial
