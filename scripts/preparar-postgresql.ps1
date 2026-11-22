@@ -6,6 +6,10 @@ param(
 $ErrorActionPreference = 'Stop'
 $raiz = Split-Path -Parent $PSScriptRoot
 $backend = Join-Path $raiz 'backend'
+# Arranca la instalacion local del proyecto cuando esta disponible.
+if (-not $SoloDiagnostico -and (Test-Path -LiteralPath (Join-Path $raiz '.local\postgresql\data\PG_VERSION'))) {
+    & (Join-Path $PSScriptRoot 'postgresql-local.ps1')
+}
 $comprobar = Join-Path $PSScriptRoot 'comprobar-postgresql.mjs'
 if (-not (Test-Path -LiteralPath (Join-Path $backend '.env'))) {
     throw 'Falta backend/.env. Copia backend/.env.example a backend/.env y revisa DATABASE_URL.'
