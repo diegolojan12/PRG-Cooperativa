@@ -868,7 +868,7 @@ export async function createApi(database) {
       ['Inicio de sesión', 'Cierre de sesión', inicioMes],
     );
     const [socios] = await db.query(
-      'SELECT COUNT(*) AS total FROM "Usuario" WHERE activo=$1 AND rol IN (' + ROLES_PARTICIPANTES + ')',
+      'SELECT COUNT(*) AS registrados, COUNT(*) FILTER (WHERE activo=$1 AND rol IN (' + ROLES_PARTICIPANTES + ')) AS total FROM "Usuario"',
       [true],
     );
     const pendientes = await db.query(
@@ -880,6 +880,7 @@ export async function createApi(database) {
     );
     return {
       generadoEn: now(),
+      usuariosRegistrados: Number(socios.registrados),
       sociosActivos: Number(socios.total),
       pendientesAtrasados: pendientes.filter((x) => diasHabiles(x.creadoEn) > 2).length,
       estados: Object.fromEntries(

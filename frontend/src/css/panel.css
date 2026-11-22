@@ -2328,3 +2328,45 @@ app-perfil-page .s-heading-actions {
 .s-editor .s-logout:hover {
   color: #ffda52;
 }
+
+/* Apariencia del área administrativa. */
+.s-admin {
+  --muted: #495e76;
+  background: linear-gradient(145deg, #f7faff, #e8f1fa);
+}
+.s-admin .s-topbar {
+  background: #f7faff;
+  border-color: transparent;
+  min-height: 63px;
+  padding-block: 8px;
+}
+.s-admin .s-content {
+  padding-top: 14px;
+}
+.s-admin .s-sidebar {
+  background: #072542;
+}
+.s-admin .s-sidebar-bottom {
+  padding-top: 12px;
+  border-top: 1px solid #52718e;
+}
+.s-admin .s-sidebar nav a {
+  font-size: 14px;
+  padding-block: 9px;
+}
+.s-admin .s-breadcrumb,
+.s-admin .s-footer {
+  color: #495e76;
+}
+.s-admin .s-sidebar .s-version,
+.s-admin .s-sidebar .s-tagline,
+.s-admin .s-sidebar .s-nav-label,
+.s-admin .s-sidebar .s-logout {
+  color: #d7e6f6;
+}
+.s-admin .s-sidebar .s-logout:hover {
+  color: #ffda52;
+}
+.s-admin .s-footer-star {
+  color: #745000;
+}

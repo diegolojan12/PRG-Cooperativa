@@ -370,6 +370,8 @@ void test('Sprints 1 y 2: criterios de aceptación documentados', async (t) => {
 
     await t.test('RF-45-1: tablero con 6 indicadores', async () => {
       const data = (await admin.get('/api/indicadores')).body;
+      const [usuarios] = await db.query('SELECT COUNT(*) AS total FROM "Usuario"');
+      assert.equal(data.usuariosRegistrados, Number(usuarios.total));
       assert.equal(data.indicadores.length, 6);
       assert.ok(data.indicadores.find((x) => x.id === 'activos').valor >= 2);
       assert.equal(data.indicadores.find((x) => x.id === 'canjeados').valor, 0);
