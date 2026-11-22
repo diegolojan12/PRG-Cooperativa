@@ -1,0 +1,50 @@
+# Tareas · Gestión de referidos
+
+Plan: [`plan.md`](plan.md) · Estado: Completado (P-01 por confirmar con el PO)
+
+## Fase 1 · Datos
+
+- [x] T01 — Tabla `Referido` y `Notificacion` (`sprint1.sql`) (CA-01)
+- [x] T02 — Columnas de baja lógica y fin del `UNIQUE(correo)` (`sprint1-auditoria.sql`) (CA-14, CA-15)
+- [x] T03 — `fechaDecision`, `campania`, `provincia`, `correoIndice`, `MovimientoPuntos` (`sprint1-dominio.sql`) (CA-07, CA-12)
+- [x] T04 — Migración de estados CONTACTADO→PENDIENTE, VALIDADO→APROBADO (G01)
+
+## Fase 2 · Pruebas
+
+- [x] T05 — `RF-11 / RNF-12`, `RF-11-4`, `RF-11-5`, `RF-11-6`, `días hábiles`
+- [x] T06 — Prueba del límite de 30 días en la asociación manual (CA-18): `RF-11-5: no se asocia a quien se registró hace más de 30 días`
+
+## Fase 3 · Backend
+
+- [x] T07 — Alta con validación, consentimiento, saneamiento y duplicados (CA-01 a CA-05)
+- [x] T08 — Listado de 20 por página con filtros, `porEstado` y `diasHabilesPendiente` (CA-06 a CA-08 · G08)
+- [x] T09 — Aislamiento por socio en el servidor (CA-09)
+- [x] T10 — Dictamen solo de administración con cuenta aprobada, puntos y notificación (CA-10 a CA-13 · G11)
+- [x] T11 — Baja lógica con motivo (CA-14 a CA-16 · G06)
+- [x] T12 — Asociación manual dentro de 30 días (CA-17, CA-18 · G12)
+- [x] T13 — Exportación con los mismos filtros
+- [x] T18 — Provincia heredada del usuario en el alta por código y en la asociación manual (CA-19 · 2026-11-16)
+- [x] T19 — `ROLES_PARTICIPANTES` en asociables y asociación manual (CA-20 · 2026-11-16)
+
+## Fase 4 · Frontend
+
+- [x] T14 — Pantalla de referidos: alta, edición, filtros, paginación, atraso resaltado, baja con motivo
+- [x] T15 — Dictamen y asociación manual en la vista de administración
+- [x] T16 — Notificaciones del socio
+
+## Fase 5 · Cierre
+
+- [x] T17 — P-02 resuelta con el backlog; P-01 con propuesta escrita en HU-011 (falta la confirmación del PO)
+
+## Verificación
+
+| Criterio | Prueba que lo cubre | ¿Pasa? |
+| -------- | ------------------- | ------ |
+| CA-01 a CA-07 | `RF-11 / RNF-12` | Sí |
+| CA-08 | `días hábiles` · `RF-11 / RNF-12` | Sí |
+| CA-09 a CA-13 | `RF-11-4` | Sí |
+| CA-14 a CA-16 | `RF-11-6` | Sí |
+| CA-17 | `RF-11-5` | Sí |
+| CA-18 | `RF-11-5` (mismo usuario) · `RF-11-5: no se asocia… 30 días` | Sí |
+| CA-19 | `T-01: la provincia es obligatoria en el registro y la hereda el referido` | Sí |
+| CA-20 | `RF-11-5: no se asocia… 30 días` (lista de socios por rol participante) | Sí |

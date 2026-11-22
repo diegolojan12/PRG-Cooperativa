@@ -1,0 +1,1641 @@
+diff --git a/backend/test/sprint.test.mjs b/backend/test/sprint.test.mjs
+index f4fc5aa..8953959 100644
+--- a/backend/test/sprint.test.mjs
++++ b/backend/test/sprint.test.mjs
+@@ -707,6 +707,16 @@ void test('Correcciones del Sprint 2: provincia, aviso RF-47-4, plazos y bitáco
+       assert.ok(filtrados.filtros.provincias.includes('El Oro'));
+     });
+ 
++    await t.test('HU-019 / CA-13: el registro con código enlaza el referido cargado a mano, sin duplicarlo', async () => {
++      const persona = { nombre: 'Cargada Mano', correo: 'cargada@ejemplo.ec', celular: '0990000906' };
++      assert.equal((await socio.post('/api/referidos').send({ ...persona, consentimiento: true })).status, 201);
++      const { codigo } = (await socio.post('/api/referidos/mi-codigo').send({})).body;
++      await registrarConfirmado(request(app), { ...persona, clave: 'Valida2026!', codigoReferido: codigo });
++      const filas = await db.query('SELECT "usuarioId" FROM "Referido" WHERE nombre=$1 AND "eliminadoEn" IS NULL', [persona.nombre]);
++      assert.equal(filas.length, 1);
++      assert.ok(filas[0].usuarioId);
++    });
++
+     await t.test('RF-42: el dictamen deja en la bitácora el estado anterior y el nuevo', async () => {
+       const [ref] = await db.query('SELECT id FROM "Referido" WHERE nombre=$1', ['Invitado Oro']);
+       assert.equal((await admin.patch('/api/referidos/' + ref.id + '/dictamen').send({ estado: 'RECHAZADO' })).status, 200);
+diff --git a/docs/TRAZABILIDAD-SPRINT2.md b/docs/TRAZABILIDAD-SPRINT2.md
+index 0f65059..649c239 100644
+--- a/docs/TRAZABILIDAD-SPRINT2.md
++++ b/docs/TRAZABILIDAD-SPRINT2.md
+@@ -2,7 +2,11 @@
+ 
+ La línea base de historias es la hoja `BKL-G1` del Backlog del producto, filas 19 a 28. Los códigos RF y RNF corresponden a las hojas `Req. Funcionales` y `Req. No Funcionales` de la matriz de requisitos. Los nombres de entidades se conservan del diagrama de clases. Este documento complementa [la auditoría del Sprint 1](CORRECCIONES-AUDITORIA-SPRINT1.md).
+ 
+-> **Fuente de verdad:** las especificaciones SDD en [`specs/sprint-2/`](../specs/sprint-2/README.md). Esta tabla es el resumen de evidencias.
++> **Fuente de verdad:** las especificaciones SDD en [`specs/`](../specs/README.md). Esta tabla es el resumen de evidencias.
++>
++> **Nota (2026-11-16):** este documento cubre HU-013 a HU-022, el bloque que se construyó en la rama `sprint-2`. Según la
++> columna *Sprint* del backlog, HU-013 a HU-016 son del Sprint 2 ([`specs/sprint-2/`](../specs/sprint-2/README.md)) y
++> HU-017 a HU-022 del Sprint 3 ([`specs/sprint-3/`](../specs/sprint-3/README.md)).
+ 
+ ## Historias y evidencias
+ 
+@@ -35,7 +39,7 @@ Las variables `SUMA_AVISO_VERSION`, `SUMA_TERMINOS` y `SUMA_PRIVACIDAD` solo def
+ 
+ ## Cómo repetir las comprobaciones
+ 
+-- Desde `backend`, `npm run test:sprint` ejecuta las [regresiones del Sprint 1 y los criterios nuevos](../backend/test/sprint.test.mjs). Pasan 31 pruebas (2026-11-16), incluidas las de provincia, publicación del aviso, bitácora del dictamen, plazo de 30 días, registro sin SMTP y arranque sin `SUMA_DATA_KEY`.
++- Desde `backend`, `npm run test:sprint` ejecuta las [regresiones del Sprint 1 y los criterios nuevos](../backend/test/sprint.test.mjs). Pasan 32 pruebas (2026-11-16), incluidas las de provincia, referido cargado a mano, publicación del aviso, bitácora del dictamen, plazo de 30 días, registro sin SMTP y arranque sin `SUMA_DATA_KEY`.
+ - Desde `frontend`, `npm test -- --watch=false` y `npm run lint`. Pasan 17 pruebas y ESLint. Angular y Nest compilaron.
+ - Desde `e2e`, `node smoke.cjs` usa las compilaciones locales y crea un esquema PostgreSQL propio (`DATABASE_SCHEMA`) que borra al terminar. Pasó en Chromium el 2026-11-16, con descarga del QR, alta por enlace, confirmación de correo y gestión de cuenta desde el perfil a 390 px.
+ - En una instancia temporal de PostgreSQL 16, se aplicó dos veces la migración sobre datos del Sprint 1. Se verificaron conservación de créditos, recepción de correo por SMTP local, aprobación simultánea y créditos para ambas personas.
+diff --git a/specs/README.md b/specs/README.md
+index 59a7d5c..6a3dd21 100644
+--- a/specs/README.md
++++ b/specs/README.md
+@@ -39,7 +39,7 @@ specs/
+ ## Convenciones
+ 
+ - **Identificadores.** Se reutilizan los de la documentación de requisitos: `HU-###` y `EPI-##` (hoja `BKL-G1` del backlog),
+-  `UR-##`, `RF-##-#`, `RNF-##` (matriz de requisitos) y `CU-##` (casos de uso de `SUMA-Diagramas.eapx`).
++  `UR-##`, `RF-##-#`, `RNF-##` (matriz de requisitos) y `CU-##` (casos de uso de `SUMA-Diagramas_Vistas.eapx`, CU-01 a CU-38).
+   Dentro de una spec, los criterios se numeran `CA-01`, `CA-02`… y cada uno cita el RF que cubre.
+ - **Criterios de aceptación** en formato *Dado / Cuando / Entonces*, verificables.
+ - **Todo criterio tiene una prueba**, y el nombre de la prueba cita el RF o la HU
+@@ -53,6 +53,10 @@ specs/
+ 
+ | Sprint | Estado | Funcionalidades |
+ | ------ | ------ | --------------- |
+-| [Sprint 1](sprint-1/README.md) | Implementado y verificado | [Roles y permisos](sprint-1/01-roles-y-permisos/especificacion.md) · [Sesión y acceso](sprint-1/02-sesion-y-acceso/especificacion.md) · [Referidos](sprint-1/03-referidos/especificacion.md) · [Administración](sprint-1/04-administracion/especificacion.md) · [Protección de datos](sprint-1/05-proteccion-datos/especificacion.md) |
+-| [Sprint 2](sprint-2/README.md) | Implementado y verificado | [Registro y confirmación](sprint-2/01-registro-y-confirmacion/especificacion.md) · [Cuenta de la Cooperativa](sprint-2/02-cuenta-cooperativa/especificacion.md) · [Invitación](sprint-2/03-invitacion/especificacion.md) · [Seguimiento y puntos](sprint-2/04-seguimiento-y-puntos/especificacion.md) |
+-| Sprints 3–5 | Por especificar | [`backlog.md`](backlog.md) |
++| [Sprint 1](sprint-1/README.md) · HU-001 a HU-003 | Implementado y verificado | [Roles y permisos](sprint-1/01-roles-y-permisos/especificacion.md) · [Sesión y acceso](sprint-1/02-sesion-y-acceso/especificacion.md) · [Protección de datos](sprint-1/03-proteccion-datos/especificacion.md) |
++| [Sprint 2](sprint-2/README.md) · HU-004 a HU-016 | Implementado y verificado | [Recuperación de acceso](sprint-2/01-recuperacion-de-acceso/especificacion.md) · [Administración](sprint-2/02-administracion/especificacion.md) · [Interfaz](sprint-2/03-interfaz/especificacion.md) · [Referidos](sprint-2/04-referidos/especificacion.md) · [Registro y confirmación](sprint-2/05-registro-y-confirmacion/especificacion.md) · [Cuenta de la Cooperativa](sprint-2/06-cuenta-cooperativa/especificacion.md) |
++| [Sprint 3](sprint-3/README.md) · HU-017 a HU-029 | En parte (HU-017 a HU-022 adelantadas) | [Invitación](sprint-3/01-invitacion/especificacion.md) · [Seguimiento y puntos](sprint-3/02-seguimiento-y-puntos/especificacion.md) · resto en [`backlog.md`](backlog.md) |
++| Sprints 4–5 | Por especificar | [`backlog.md`](backlog.md) |
++
++El reparto sigue la columna *Sprint* de la hoja `BKL-G1` (reorganizado el 2026-11-16). Los criterios `CA-##` que se
++trasladaron de una spec a otra conservan su número original y el destino queda anotado en la spec de origen.
+diff --git a/specs/backlog.md b/specs/backlog.md
+index 5511c70..22590bb 100644
+--- a/specs/backlog.md
++++ b/specs/backlog.md
+@@ -8,45 +8,41 @@ Cuando se planifica un sprint, cada HU de su bloque pasa a `specs/sprint-N/NN-fu
+ | Sprint | Historias | Dónde están especificadas |
+ | ------ | --------- | ------------------------- |
+ | 1 | HU-001 a HU-003 | [`sprint-1/`](sprint-1/README.md) |
+-| 2 | HU-004 a HU-016 | HU-004 a HU-012 en [`sprint-1/`](sprint-1/README.md); HU-013 a HU-016 en [`sprint-2/`](sprint-2/README.md) |
+-| 3 | HU-017 a HU-029 | HU-017 a HU-022 ya programadas en [`sprint-2/`](sprint-2/README.md); HU-023 a HU-029 abajo |
++| 2 | HU-004 a HU-016 | [`sprint-2/`](sprint-2/README.md) |
++| 3 | HU-017 a HU-029 | HU-017 a HU-022 en [`sprint-3/`](sprint-3/README.md) (implementadas por adelantado); HU-023 a HU-029 abajo |
+ | 4 | HU-030 a HU-043 | Abajo |
+ | 5 | HU-044 a HU-054 | Abajo |
+ 
+-## Sprint 2 · Especificado e implementado
+-
+-HU-013 a HU-022 → [`sprint-2/`](sprint-2/README.md) (HU-017 a HU-022 son del Sprint 3 según el backlog).
+-
+-## Sprint 3 · Perfil, campañas y fidelización
++## Sprint 3 · Perfil, campañas y puntos (lo que falta especificar)
+ 
+ | HU | Título | Agrupación sugerida |
+ | -- | ------ | ------------------- |
+-| HU-023 | Perfil y baja | 01-perfil |
+-| HU-024 | Lista comercial | 02-lista-comercial · **endpoint CSV ya implementado en el Sprint 2** |
+-| HU-025 | Crear campañas | 03-campanias |
+-| HU-026 | Estado de campaña | 03-campanias |
+-| HU-027 | Campañas vigentes | 03-campanias |
+-| HU-028 | Saldo e historial | 04-puntos |
+-| HU-029 | Reglas de puntos | 04-puntos · **parámetros y valor del punto ya implementados en el Sprint 2** |
+-| HU-030 | Niveles | 05-niveles |
+-| HU-031 | Nivel y ranking | 05-niveles |
+-| HU-032 | Inicio del socio | 06-inicio-socio |
+-| HU-033 | Obtener insignias | 07-insignias |
+-| HU-034 | Gestionar insignias | 07-insignias |
++| HU-023 | Perfil y baja | 03-perfil |
++| HU-024 | Lista comercial | 04-lista-comercial · **endpoint CSV ya implementado** |
++| HU-025 | Crear campañas | 05-campanias |
++| HU-026 | Estado de campaña | 05-campanias |
++| HU-027 | Campañas vigentes | 05-campanias |
++| HU-028 | Saldo e historial | 06-puntos |
++| HU-029 | Reglas de puntos | 06-puntos · **parámetros y valor del punto ya implementados** |
+ 
+-## Sprint 4 · Participación y aprendizaje
++## Sprint 4 · Niveles, insignias, participación y aprendizaje
+ 
+ | HU | Título | Agrupación sugerida |
+ | -- | ------ | ------------------- |
+-| HU-035 | Crear y finalizar retos | 01-retos |
+-| HU-036 | Participación y avance | 01-retos |
+-| HU-037 | Banco de preguntas | 02-trivia |
+-| HU-038 | Partida de trivia | 02-trivia |
+-| HU-039 | Publicar capacitaciones | 03-capacitaciones |
+-| HU-040 | Evaluación y certificado | 03-capacitaciones |
+-| HU-041 | Gestionar talleres | 04-talleres |
+-| HU-042 | Inscripción | 04-talleres |
+-| HU-043 | Asistencia | 04-talleres |
++| HU-030 | Niveles | 01-niveles |
++| HU-031 | Nivel y ranking | 01-niveles |
++| HU-032 | Inicio del socio | 02-inicio-socio |
++| HU-033 | Obtener insignias | 03-insignias |
++| HU-034 | Gestionar insignias | 03-insignias |
++| HU-035 | Crear y finalizar retos | 04-retos |
++| HU-036 | Participación y avance | 04-retos |
++| HU-037 | Banco de preguntas | 05-trivia |
++| HU-038 | Partida de trivia | 05-trivia |
++| HU-039 | Publicar capacitaciones | 06-capacitaciones |
++| HU-040 | Evaluación y certificado | 06-capacitaciones |
++| HU-041 | Gestionar talleres | 07-talleres |
++| HU-042 | Inscripción | 07-talleres |
++| HU-043 | Asistencia | 07-talleres |
+ 
+ ## Sprint 5 · Recompensas, comunidad y reportes
+ 
+@@ -80,9 +76,9 @@ Estos requisitos de usuario no tenían historia. Sus casos de uso ya están en e
+ | Origen | Pendiente | Destino propuesto |
+ | ------ | --------- | ----------------- |
+ | Auditoría G24 | ~~Respaldo diario y retención de 5 años~~ `npm run db:respaldo`; falta programarlo en el servidor | Hecho 2026-11-16 |
+-| Spec 02 · P-02 | ~~`AvisoPrivacidad` / `AceptacionTerminos` en el registro~~ | Hecho en Sprint 2 · 01-registro-y-confirmacion (HU-013) |
+-| Spec 01 · P-01 | Permisos por persona (`UsuarioPermiso`) | Solo si el PO lo pide |
+-| Spec 04 | Indicador de premios canjeados | Sprint 5 · 01-recompensas |
+-| Sprint 2 · 01 | ~~RF-47-4: publicar nueva versión del aviso desde el panel~~ | Hecho 2026-11-16 |
+-| Sprint 2 · 04 | Puntos del referido distintos de los del socio (campañas, RF-13-3) | Sprint 3 · 03-campanias |
+-| Sprint 2 · 03 | Pruebas de QR en dispositivo (RNF-19) y de compartir en 15 s (RNF-21) | Antes del despliegue (Sprint 5) |
++| Sesión · P-02 | ~~`AvisoPrivacidad` / `AceptacionTerminos` en el registro~~ | Hecho en `sprint-2/05-registro-y-confirmacion` (HU-013) |
++| `sprint-1/01` · P-01 | Permisos por persona (`UsuarioPermiso`) | Solo si el PO lo pide (RF-08-1 propone permisos por rol) |
++| `sprint-2/02` | Indicador de premios canjeados | Sprint 5 · 01-recompensas |
++| `sprint-2/05` | ~~RF-47-4: publicar nueva versión del aviso desde el panel~~ | Hecho 2026-11-16 |
++| `sprint-3/02` | Puntos del referido distintos de los del socio (campañas, RF-13-3) | Sprint 3 · 05-campanias |
++| `sprint-3/01` | Pruebas de QR en dispositivo (RNF-19) y de compartir en 15 s (RNF-21) | Antes del despliegue (Sprint 5) |
+diff --git a/specs/sprint-1/01-roles-y-permisos/especificacion.md b/specs/sprint-1/01-roles-y-permisos/especificacion.md
+index bfbf5a3..2f288ca 100644
+--- a/specs/sprint-1/01-roles-y-permisos/especificacion.md
++++ b/specs/sprint-1/01-roles-y-permisos/especificacion.md
+@@ -3,8 +3,10 @@
+ | Campo | Valor |
+ | ----- | ----- |
+ | Sprint | 1 |
+-| Historias | HU-001 · HU-002 · HU-008 (menú accesible y adaptable, CA-13) |
+-| Requisitos | UR-04 · RF-08 · RF-08-1 · RF-08-2 · RF-08-3 · RF-08-4 · RF-08-5 · RF-49-4 |
++| Historias | HU-001 · HU-002 |
++| Requisitos de usuario | UR-04 |
++| Requisitos funcionales | RF-08 · RF-08-1 · RF-08-2 · RF-08-3 · RF-08-4 · RF-08-5 |
++| Casos de uso (EAPX) | CU-16 Gestionar roles y permisos · CU-17 Gestionar usuarios de la plataforma · CU-02.4 Cargar el menú y los permisos del rol (include de CU-02) |
+ | No funcionales | RNF-13 · RNF-15 · RNF-18 |
+ | Estado | Implementada · Verificada |
+ | Fuente previa | [`docs/SPRINT1-HU-001-002-003.md`](../../../docs/SPRINT1-HU-001-002-003.md) |
+@@ -29,14 +31,12 @@ El objetivo es que el administrador gestione roles y permisos desde la plataform
+   qué puede hacer cada tipo de usuario sin tocar el código.
+ - **HU-002 · Acceso a módulos según el rol** — Como administrador, deseo gestionar los accesos a los distintos módulos
+   para asegurar que cada rol solo vea lo que le corresponde.
+-- **HU-008 · Interfaz clara** (transversal) — Como usuario, deseo una interfaz visual clara y fácil de entender para navegar
+-  cómodamente; criterio: el diseño se adapta a la pantalla y tiene menús accesibles (CA-13).
+ 
+ ## 4. Criterios de aceptación
+ 
+ | ID | Requisito | Dado | Cuando | Entonces |
+ | -- | --------- | ---- | ------ | -------- |
+-| CA-01 | RF-08-1 | una instalación nueva | se inicia la plataforma | existen los roles Administrador, Gestor de contenidos y Socio, con sus módulos iniciales |
++| CA-01 | RF-08-1 | una instalación nueva | se inicia la plataforma | existen los 3 roles base (Administrador, Gestor de contenidos y Socio), con sus módulos iniciales, y no se pueden eliminar |
+ | CA-02 | HU-001 | un administrador con sesión | crea un rol con clave, nombre, descripción, experiencia y módulos | el rol queda disponible y nunca tiene alcance global |
+ | CA-03 | HU-001 | un rol ya existente | se intenta crear otro con la misma clave | se rechaza por duplicado |
+ | CA-04 | HU-001 | un rol que no es del sistema | se le intenta asignar un módulo de administración | se rechaza y el rol queda como estaba |
+@@ -48,7 +48,7 @@ El objetivo es que el administrador gestione roles y permisos desde la plataform
+ | CA-10 | RF-08-4 | un usuario sin un módulo | escribe a mano la dirección de ese módulo | el servidor lo rechaza y se muestra "Acceso denegado" |
+ | CA-11 | RF-08 | un administrador con sesión | intenta cambiar su propio rol a otro o desactivarse | se rechaza: nadie se quita su propio acceso de administrador, así siempre queda al menos uno activo |
+ | CA-12 | RF-08-5 / RNF-13 | cualquier cambio de roles o de rol de un usuario | se guarda | queda en la bitácora con autor, usuario afectado, rol anterior y rol nuevo |
+-| CA-13 | RF-49-4 | una pantalla de menos de 768 px | se abre la plataforma | el menú pasa a ser desplegable (panel) o barra inferior + "Más" (socio) |
++| ~~CA-13~~ | RF-49-4 | — | — | Trasladado a [`sprint-2/03-interfaz`](../../sprint-2/03-interfaz/especificacion.md) (HU-008) |
+ 
+ ## 5. Reglas de negocio
+ 
+@@ -70,15 +70,14 @@ El objetivo es que el administrador gestione roles y permisos desde la plataform
+ ## 7. Requisitos no funcionales aplicables
+ 
+ - RNF-13 — Bitácora de todas las acciones administrativas.
+-- RNF-15 — WCAG 2.1 AA en menú y pantallas de roles.
+-- RNF-18 — Funcional de 360 a 1920 px.
++- RNF-15 — WCAG 2.2 AA en menú y pantallas de roles.
+ 
+ ## 8. Preguntas abiertas
+ 
+ | # | Pregunta | Para | Estado |
+ | - | -------- | ---- | ------ |
+-| P-01 | La HU dice "asignar permisos a los usuarios". ¿Se necesitan excepciones por persona (tabla `UsuarioPermiso`) o basta RBAC? | PO | Abierta |
+-| P-02 | RF-08-1 dice "restringir a 1 de 3 roles", pero HU-001 pide gestionar roles. ¿Se permiten roles nuevos o se oculta "Nuevo rol"? | PO | Abierta |
++| P-01 | La HU dice "asignar permisos a los usuarios". ¿Se necesitan excepciones por persona o basta RBAC? | PO | Propuesta aplicada en la ERS (RF-08-1): permisos por rol, no por persona. Falta confirmación del PO |
++| P-02 | RF-08-1 decía "1 de 3 roles", pero HU-001 pide gestionar roles | PO | Propuesta aplicada en la ERS (RF-08-1): 3 roles base que no se borran y roles adicionales. Falta confirmación del PO |
+ 
+ ## 9. Historial
+ 
+@@ -88,3 +87,4 @@ El objetivo es que el administrador gestione roles y permisos desde la plataform
+ | 2026-11 | Auditoría G02, G14, G19, G20 corregidas | Equipo |
+ | 2026-11-14 | Documentado como spec SDD a partir del código y las pruebas | Equipo |
+ | 2026-11-14 | Numeración oficial del backlog `BKL-G1`: se suma HU-008 | Equipo |
++| 2026-11-16 | HU-008 y CA-13 pasan a `sprint-2/03-interfaz` (HU-008 es del Sprint 2). RF-08-1 corregido en la ERS; casos de uso CU-16, CU-17 y CU-02.4 | Equipo |
+diff --git a/specs/sprint-1/01-roles-y-permisos/plan.md b/specs/sprint-1/01-roles-y-permisos/plan.md
+index 8b842c0..491a7f0 100644
+--- a/specs/sprint-1/01-roles-y-permisos/plan.md
++++ b/specs/sprint-1/01-roles-y-permisos/plan.md
+@@ -80,7 +80,7 @@ El menú se dibuja con `menu` que entrega el servidor; el frontend no compara no
+ | CA-05 | `RF-08: permisos por rol se aplican de inmediato` |
+ | CA-08, CA-09 | `RF-04-1 / RNF-06: …` (comprueba `menu` e `interfaz` del socio) |
+ | CA-12 | `RF-14 / RF-14-2 / RF-42: configuración y bitácora completa` (`rolNuevo`, `objetivoId`) |
+-| CA-10, CA-13 (frontend) | `frontend/src/app/features/features.spec.ts` (guards, menú por rol) · `e2e/smoke.cjs` (móvil 390 px) |
++| CA-10 (frontend) | `frontend/src/app/features/features.spec.ts` (guards, menú por rol) · `e2e/smoke.cjs` (móvil 390 px) |
+ 
+ ## 8. Decisiones y riesgos
+ 
+diff --git a/specs/sprint-1/01-roles-y-permisos/tareas.md b/specs/sprint-1/01-roles-y-permisos/tareas.md
+index 0d0fe9c..3eb3cca 100644
+--- a/specs/sprint-1/01-roles-y-permisos/tareas.md
++++ b/specs/sprint-1/01-roles-y-permisos/tareas.md
+@@ -27,13 +27,13 @@ Plan: [`plan.md`](plan.md) · Estado: Completado
+ - [x] T12 — Pantalla Roles y permisos (`roles.page.ts`) (CA-02 a CA-06)
+ - [x] T13 — `authGuard`, `moduloGuard`, `interfazMatch`, `esAdminMatch` y carga diferida (CA-09, CA-10 · G19)
+ - [x] T14 — `ShellComponent` y `ComunidadShellComponent` dibujan `menu` (CA-08, CA-09)
+-- [x] T15 — Menú desplegable bajo 768 px y barra inferior + "Más" (CA-13 · G20)
++- [x] T15 — Menú desplegable bajo 768 px (trasladado con CA-13 a `sprint-2/03-interfaz`)
+ - [x] T16 — Rol Gestor de contenidos con sus límites (G02)
+ 
+ ## Fase 5 · Cierre
+ 
+ - [x] T17 — Análisis del diagrama de clases (`Rol`, `Modulo`, `Sesion`) en `docs/SPRINT1-HU-001-002-003.md`
+-- [ ] T18 — Resolver P-01 y P-02 con el PO
++- [x] T18 — P-01 y P-02: propuesta escrita en RF-08-1 de la ERS (2026-11-16); falta la confirmación del PO
+ 
+ ## Verificación
+ 
+@@ -57,4 +57,3 @@ Plan: [`plan.md`](plan.md) · Estado: Completado
+ | CA-10 | `RF-08-1 / RF-08-4` · `features.spec.ts` | Sí |
+ | CA-11 | `RF-08-1 / RF-08-4` | Sí |
+ | CA-12 | `RF-14 / RF-14-2 / RF-42` | Sí |
+-| CA-13 | `e2e/smoke.cjs` (móvil 390 px) | Sí |
+diff --git a/specs/sprint-1/02-sesion-y-acceso/especificacion.md b/specs/sprint-1/02-sesion-y-acceso/especificacion.md
+index 421cc3d..4d10413 100644
+--- a/specs/sprint-1/02-sesion-y-acceso/especificacion.md
++++ b/specs/sprint-1/02-sesion-y-acceso/especificacion.md
+@@ -1,38 +1,37 @@
+-# Especificación · Sesión, acceso y registro
++# Especificación · Sesión y acceso
+ 
+ | Campo | Valor |
+ | ----- | ----- |
+ | Sprint | 1 |
+-| Historias | HU-003 · HU-004 (recuperación) · registro básico (ampliado por HU-013 en el Sprint 2) |
+-| Requisitos | RF-04 · RF-04-1 · RF-04-2 · RF-04-3 · RF-04-4 · RF-07 · RF-07-1 |
++| Historias | HU-003 |
++| Requisitos de usuario | UR-03 |
++| Requisitos funcionales | RF-04 · RF-04-1 · RF-04-2 · RF-04-3 · RF-04-4 |
+ | No funcionales | RNF-04 · RNF-06 · RNF-12 · RNF-14 · RNF-22 |
++| Casos de uso (EAPX) | CU-02 Iniciar sesión · CU-02.1 Validar las credenciales (include) · CU-02.2 Confirmar el segundo factor (extend) · CU-02.6 Cerrar sesión (extend) |
+ | Estado | Implementada · Verificada |
+-| Fuente previa | [`docs/SPRINT1-HU-001-002-003.md`](../../../docs/SPRINT1-HU-001-002-003.md) · auditoría G03, G04, G05, G18, G21 |
++| Fuente previa | [`docs/SPRINT1-HU-001-002-003.md`](../../../docs/SPRINT1-HU-001-002-003.md) · auditoría G03, G04, G05, G18 |
+ 
+ ## 1. Problema y objetivo
+ 
+ La plataforma maneja datos de socios de una cooperativa de ahorro y crédito. Hay que garantizar que solo
+-entre quien debe, que una sesión olvidada no quede abierta y que una cuenta se pueda recuperar de forma segura.
++entre quien debe y que una sesión olvidada no quede abierta.
+ 
+ ## 2. Actores
+ 
+ | Actor | Qué puede hacer |
+ | ----- | --------------- |
+-| Visitante | Registrarse como socio (si el registro está abierto) y recuperar su contraseña. |
+ | Socio / Gestor | Iniciar y cerrar sesión. |
+ | Administrador | Iniciar sesión con segundo factor; desactivar cuentas. |
+ 
+ ## 3. Historias de usuario
+ 
+-- **HU-003 · Sesión** — Como usuario, quiero iniciar sesión de forma segura y que se cierre sola si dejo de usarla,
+-  para que nadie use mi cuenta en un equipo compartido.
+-- **Registro** — Como visitante, quiero registrarme con mis datos y, si quiero, mi cuenta de la cooperativa,
+-  para participar en el programa de referidos.
+-- **HU-004 · Recuperación** — Como usuario, deseo recuperar el acceso a mi sesión para volver a entrar si olvido mi contraseña;
+-  criterio: se envía un enlace temporal al correo para restablecer el acceso.
++- **HU-003 · Sesión** — Como usuario, quiero crear mi sesión e iniciar o cerrar de forma segura, para entrar a mi
++  cuenta y proteger mi información. Criterio del backlog: se permite la creación de la sesión y el cierre por inactividad.
+ 
+ ## 4. Criterios de aceptación
+ 
++Los criterios conservan su número original. CA-11 a CA-16 se trasladaron a otras specs del Sprint 2.
++
+ | ID | Requisito | Dado | Cuando | Entonces |
+ | -- | --------- | ---- | ------ | -------- |
+ | CA-01 | RF-04-1 | un visitante sin sesión | pide datos protegidos | se le responde "no autenticado" |
+@@ -45,49 +44,42 @@ entre quien debe, que una sesión olvidada no quede abierta y que una cuenta se
+ | CA-08 | RF-04-3 | una sesión abierta | pasan 15 min sin acciones | la sesión vence y el usuario vuelve al inicio de sesión, en todas sus pestañas |
+ | CA-09 | RF-04-4 | un usuario con sesión | pulsa "Cerrar sesión" | la sesión deja de servir de inmediato |
+ | CA-10 | RF-04-4 | un usuario con sesión | el administrador desactiva su cuenta | su sesión deja de servir de inmediato |
+-| CA-11 | RF-07 | un usuario que olvidó su contraseña | pide recuperarla | recibe un enlace de un solo uso válido por 30 min |
+-| CA-12 | RF-07 | un enlace de recuperación usado o vencido | se intenta usar | se rechaza |
+-| CA-13 | RF-07 | una contraseña cambiada por recuperación | se guarda | se cierran todas las sesiones abiertas de esa cuenta |
+-| CA-14 | Registro | un visitante | se registra con nombre, correo, celular y contraseña válidos | se crea su cuenta de socio |
+-| CA-15 | Registro | un visitante que da su cuenta de la cooperativa | el número no tiene 10 dígitos | se rechaza con mensaje en el campo |
+-| CA-16 | Registro / RF-14 | el registro cerrado por configuración | un visitante intenta registrarse | se rechaza |
+-| CA-17 | RNF-12 | producción | se pide un código o un enlace | nunca aparece en la respuesta; solo llega por correo |
+-| CA-18 | RNF-14 | un correo que no se pudo enviar | falla el envío | se reintenta 3 veces, cada 5 min |
++| ~~CA-11 a CA-13~~ | RF-07 | — | — | Trasladados a [`sprint-2/01-recuperacion-de-acceso`](../../sprint-2/01-recuperacion-de-acceso/especificacion.md) (HU-004) |
++| ~~CA-14 a CA-16~~ | RF-01 | — | — | Trasladados a [`sprint-2/05-registro-y-confirmacion`](../../sprint-2/05-registro-y-confirmacion/especificacion.md) (HU-013) |
++| CA-17 | RNF-12 | producción | se pide un código | nunca aparece en la respuesta; solo llega por correo |
++| CA-18 | RNF-14 | un correo con el código que no se pudo enviar | falla el envío | se reintenta 3 veces, cada 5 min, mientras el código siga vigente |
+ 
+ ## 5. Reglas de negocio
+ 
+ 1. Contraseña: de 8 a 128 caracteres, con al menos una mayúscula y un número.
+-2. Celular ecuatoriano: 10 dígitos que empiezan con `09`.
+-3. Cuenta de la cooperativa (opcional al registrarse): 10 dígitos + tipo (ahorros o corriente). Queda *Pendiente*
+-   hasta que un administrador la revise.
+-4. El registro no pide cédula.
+-5. El bloqueo es por cuenta. Además, hay un límite por IP como defensa adicional.
+-6. Las cuentas que crea el administrador reciben un enlace de activación válido por 24 h (ver spec 04).
++2. El bloqueo es por cuenta. Además, hay un límite por IP como defensa adicional.
++3. El segundo factor depende del rol (`requiereSegundoFactor`), no de un nombre de rol escrito en el código.
++4. Una cuenta con el correo sin confirmar no puede iniciar sesión (ver HU-014).
+ 
+ ## 6. Fuera de alcance
+ 
+-- Registro en tres pasos y confirmación de correo (HU-013, HU-014 · Sprint 2).
++- Recuperación de la contraseña (HU-004 · Sprint 2).
++- Registro de la cuenta (HU-013 · Sprint 2).
+ - Inicio de sesión con redes sociales.
+ 
+ ## 7. Requisitos no funcionales aplicables
+ 
+-- RNF-04 — Contraseñas con hash y sal.
++- RNF-04 — Contraseñas con hash y sal (scrypt).
+ - RNF-06 — Segundo factor para administradores.
+ - RNF-12 — Validación y saneamiento de entradas.
+ - RNF-14 — Reintentos de correo.
+-- RNF-22 — Sesión segura (cookie `httpOnly`).
++- RNF-22 — Inicio de sesión en 30 segundos o menos (medición con usuarios: [`docs/PROTOCOLO-PRUEBAS-USUARIOS.md`](../../../docs/PROTOCOLO-PRUEBAS-USUARIOS.md)).
+ 
+ ## 8. Preguntas abiertas
+ 
+ | # | Pregunta | Para | Estado |
+ | - | -------- | ---- | ------ |
+-| P-01 | ¿Qué números de HU corresponden a registro y recuperación? | PO | Resuelta: HU-004 (recuperación); el registro completo es HU-013 (Sprint 2) |
+-| P-02 | ¿El registro debe pedir aceptar el aviso de privacidad y los términos? | PO | Resuelta: sí, en HU-013 / RF-47 (Sprint 2) |
++| P-01 | ¿Qué números de HU corresponden a registro y recuperación? | PO | Resuelta: HU-004 (recuperación) y HU-013 (registro), ambas del Sprint 2 |
+ 
+ ## 9. Historial
+ 
+ | Fecha | Cambio | Autor |
+ | ----- | ------ | ----- |
+-| 2026-11 | Auditoría G03 (inactividad), G04 (bloqueo), G05 (2FA), G18 (reintentos), G21 (registro sin cédula, cuenta de 10 dígitos) | Equipo |
++| 2026-11 | Auditoría G03 (inactividad), G04 (bloqueo), G05 (2FA), G18 (reintentos) | Equipo |
+ | 2026-11-14 | Documentado como spec SDD a partir del código y las pruebas | Equipo |
+-| 2026-11-14 | HU-004 identificada en el backlog; el registro pasa a la spec 01 del Sprint 2 (confirmación de correo y consentimiento) | Equipo |
++| 2026-11-16 | Alcance reducido a HU-003, según la columna *Sprint* del backlog (Sprint 1 = HU-001 a HU-003). Recuperación y registro pasan al Sprint 2. Casos de uso del EAPX agregados | Equipo |
+diff --git a/specs/sprint-1/02-sesion-y-acceso/plan.md b/specs/sprint-1/02-sesion-y-acceso/plan.md
+index a432e81..da273bc 100644
+--- a/specs/sprint-1/02-sesion-y-acceso/plan.md
++++ b/specs/sprint-1/02-sesion-y-acceso/plan.md
+@@ -1,4 +1,4 @@
+-# Plan técnico · Sesión, acceso y registro
++# Plan técnico · Sesión y acceso
+ 
+ Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementado
+ 
+@@ -6,57 +6,50 @@ Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementad
+ 
+ | Principio | ¿Se cumple? | Nota |
+ | --------- | ----------- | ---- |
+-| II. Nada quemado | Sí | Segundo factor según `Rol.requiereSegundoFactor`; registro abierto según `Configuracion` |
++| II. Nada quemado | Sí | Segundo factor según `Rol.requiereSegundoFactor` |
+ | III. Seguridad | Sí | Solo se guardan huellas SHA-256 de tokens y códigos; cookie `httpOnly`, `sameSite=lax`, `secure` en producción |
+-| IV. Trazabilidad | Sí | Inicio de sesión, bloqueos y recuperación en `Actividad` |
++| IV. Trazabilidad | Sí | Inicio de sesión, cierre y bloqueos en `Actividad` |
+ | V. Prueba por criterio | Sí | Ver §7 |
+ | VI. Accesibilidad | Sí | Alerta persistente de bloqueo en Login; ayuda y error en cada campo |
+-| VII. Arquitectura | Sí | `Sesion`, `CodigoVerificacion`, `CuentaCooperativa` en `dominio/acceso.mjs` |
++| VII. Arquitectura | Sí | `Sesion` y `CodigoVerificacion` en `dominio/acceso.mjs` |
+ 
+ ## 2. Modelo de datos
+ 
+ | Tabla / columnas | Migración | Uso |
+ | ---------------- | --------- | --- |
+-| `Usuario` (`passwordHash`, `celular`, `activo`, `cuenta`, `tipoCuenta`) | `sprint1.sql` | Credenciales y datos de registro |
+-| `Usuario.intentosFallidos`, `bloqueadoHasta`, `cuentaEstado` | `sprint1-auditoria.sql` | Bloqueo (RF-04-2) y estado de la cuenta vinculada |
++| `Usuario` (`passwordHash`, `activo`) | `sprint1.sql` | Credenciales |
++| `Usuario.intentosFallidos`, `bloqueadoHasta` | `sprint1-auditoria.sql` | Bloqueo (RF-04-2) |
+ | `Sesion` (`token` = huella, `usuarioId`, `expira`) | `sprint1.sql` | Sesión con vencimiento deslizante |
+-| `Recuperacion` (`token` = huella, `usuarioId`, `expira`, usado) | `sprint1.sql` | Recuperación y activación |
+-| `DosFactor` (`id`, `usuarioId`, huella del código, `expira`, usado) | `sprint1-auditoria.sql` | Desafío de segundo factor |
++| `DosFactor` (`id`, `usuarioId`, huella del código, `expira`, `intentos`) | `sprint1-auditoria.sql` | Desafío de segundo factor |
+ 
+-Constantes de tiempo en `api.mjs`: `BLOQUEO_MS` 15 min · `CODIGO_2FA_MS` 5 min · `RECUPERACION_MS` 30 min ·
+-`ACTIVACION_MS` 24 h · `ESPERA_REINTENTO_MS` 5 min · `Sesion.INACTIVIDAD_MS` 15 min.
++Constantes de tiempo en `api.mjs`: `BLOQUEO_MS` 15 min · `CODIGO_2FA_MS` 5 min · `ESPERA_REINTENTO_MS` 5 min ·
++`Sesion.INACTIVIDAD_MS` 15 min.
+ 
+ ## 3. API
+ 
+ | Método | Ruta | Respuestas |
+ | ------ | ---- | ---------- |
+-| POST | `/api/auth/login` | 200 (sesión, o `{requiere2fa, desafioId}`) · 401 · 403 (origen) · 423 (`bloqueadoHasta`) |
++| POST | `/api/auth/login` | 200 (sesión, `{requiere2fa, desafioId}` o `{requiereConfirmacion}`) · 401 · 403 (origen) · 423 (`bloqueadoHasta`) |
+ | POST | `/api/auth/2fa` | 200 + cookie `suma_session` · 401 |
+ | POST | `/api/auth/logout` | 200 |
+ | GET | `/api/auth/me` | 200 · 401 (vencida o cuenta inactiva) |
+-| POST | `/api/auth/register` | 201 · 400 (campos) · 403 (registro cerrado) · 409 (correo ya usado) |
+-| POST | `/api/auth/forgot` | 200 siempre (no revela si el correo existe) |
+-| POST | `/api/auth/reset` | 200 (revoca sesiones) · 400 (token inválido, usado o vencido) |
+ 
+-En desarrollo (`ENABLE_DEV_RESET_LINK=true`) las respuestas traen `devCodigo` / `devResetUrl`; en producción nunca.
++En desarrollo (`ENABLE_DEV_RESET_LINK=true`) la respuesta del login trae `devCodigo`; en producción nunca.
+ 
+ ## 4. Dominio
+ 
+ `backend/src/dominio/acceso.mjs`:
+ 
+-- `Sesion.vencimiento()`, `Sesion#estaVigente()`; `current()` en `api.mjs` renueva `expira` en cada petición.
+-- `CodigoVerificacion.huella()`, `.segundoFactor()`, `.token()`, `#esValido(valor, ahora)` (un uso, vigencia).
+-- `CuentaCooperativa` (10 dígitos, `PENDIENTE` → `APROBADA`/`RECHAZADA`, `numeroEnmascarado()`).
++- `Sesion.vencimiento()`; `current()` en `api.mjs` renueva `expira` en cada petición.
++- `CodigoVerificacion.huella()`, `.segundoFactor()`, `.token()`, `esValido(valor, ahora)` (un uso, vigencia).
+ 
+-Correo: cola en memoria con 3 reintentos cada 5 min; no guarda enlaces ni códigos en texto plano.
++Correo: cola en memoria con 3 reintentos cada 5 min; no guarda códigos en texto plano.
+ 
+ ## 5. Frontend
+ 
+ | Pantalla / servicio | Ruta | Archivos |
+ | ------------------- | ---- | -------- |
+ | Inicio de sesión + 2FA | `/iniciar-sesion` | `features/publico/login.page.*` |
+-| Registro | `/registro` | `features/publico/registro.page.*` |
+-| Recuperar / activar contraseña | `/recuperar-contrasena?token=` | `features/publico/recuperar.page.*` |
+ | Cierre por inactividad entre pestañas | — | `core/auth/inactividad.service.ts` |
+ | Estado de sesión y 401 | — | `core/auth/session.store.ts`, `core/http/auth.interceptor.ts` |
+ 
+@@ -67,9 +60,6 @@ Correo: cola en memoria con 3 reintentos cada 5 min; no guarda enlaces ni códig
+ | `Inicio de sesión` | Sesión creada (tras el 2FA cuando aplica) |
+ | `Cierre de sesión` | `POST /auth/logout` |
+ | `Cuenta bloqueada` | Quinto intento fallido |
+-| `Registro` | Alta de un socio por `/auth/register` |
+-| `Recuperación solicitada` | `POST /auth/forgot` con un correo existente |
+-| `Contraseña actualizada` | `POST /auth/reset` correcto |
+ | `Usuario actualizado` | Desactivación de la cuenta (`datos.activo=false`, `objetivoId`) |
+ 
+ ## 7. Estrategia de pruebas
+@@ -79,13 +69,11 @@ Correo: cola en memoria con 3 reintentos cada 5 min; no guarda enlaces ni códig
+ | CA-01 a CA-05 | `RF-04-1 / RNF-06: credenciales, origen y segundo factor del administrador` |
+ | CA-06 | `RF-04-2: bloqueo de 15 minutos tras 5 intentos fallidos consecutivos` |
+ | CA-07, CA-08 | `RF-04-3: la sesión se renueva con cada acción y vence tras 15 min sin acciones` |
++| CA-08 (cliente) | `frontend/src/app/core/auth/auth.spec.ts` (inactividad) |
+ | CA-09, CA-10 | `RF-04-4: desactivar cuenta y cerrar sesión` |
+-| CA-11 a CA-13 | `RF-07: recuperación de un solo uso que revoca sesiones` |
+-| CA-14, CA-15 | `RF-11-4: dictamen…` (registro de `otro@ejemplo.ec` y cuenta de 8 dígitos rechazada) |
+-| CA-16 | `RF-14 / RF-14-2 / RF-42` (registro con `registroAbierto=false` → 403) |
+ | CA-17 | `producción nunca expone enlaces ni códigos` |
+-| CA-08 (cliente) | `frontend/src/app/core/auth/auth.spec.ts` (inactividad) |
+-| CA-18 | Sin prueba automatizada (cola en memoria) — **pendiente** |
++| CA-18 | Sin prueba automatizada: la cola vive en memoria (decisión de §8) |
++| Flujo completo | `e2e/smoke.cjs` · «portada, acceso administrador con 2FA y tablero» |
+ 
+ ## 8. Decisiones y riesgos
+ 
+@@ -93,4 +81,4 @@ Correo: cola en memoria con 3 reintentos cada 5 min; no guarda enlaces ni códig
+ | -------- | ------------------------ | ------ |
+ | Sesión opaca en cookie + tabla `Sesion` | JWT en `localStorage` | Se revoca al instante (logout, desactivación, recuperación) y no queda expuesta a XSS |
+ | Vencimiento deslizante en servidor + aviso en cliente | Solo temporizador en cliente | El servidor es la autoridad; el cliente solo redirige a tiempo |
+-| Cola de correo en memoria | Cola persistente (BullMQ/Redis) | Sin infraestructura extra; los reintentos se pierden si el proceso se reinicia (riesgo aceptado) |
++| Cola de correo en memoria | Cola persistente (BullMQ/Redis) | Los códigos de un solo uso no se guardan en claro; los reintentos se pierden si el proceso se reinicia (riesgo aceptado, P-13 de la revisión del 2026-11-16) |
+diff --git a/specs/sprint-1/02-sesion-y-acceso/tareas.md b/specs/sprint-1/02-sesion-y-acceso/tareas.md
+index 944ed0d..cbcedd6 100644
+--- a/specs/sprint-1/02-sesion-y-acceso/tareas.md
++++ b/specs/sprint-1/02-sesion-y-acceso/tareas.md
+@@ -1,16 +1,16 @@
+-# Tareas · Sesión, acceso y registro
++# Tareas · Sesión y acceso
+ 
+-Plan: [`plan.md`](plan.md) · Estado: Completado (1 pendiente)
++Plan: [`plan.md`](plan.md) · Estado: Completado (CA-18 sin prueba automatizada, por decisión)
+ 
+ ## Fase 1 · Datos
+ 
+-- [x] T01 — `Usuario`, `Sesion`, `Recuperacion` en `sprint1.sql` (CA-01, CA-07, CA-11)
+-- [x] T02 — `intentosFallidos`, `bloqueadoHasta`, `cuentaEstado`, tabla `DosFactor` en `sprint1-auditoria.sql` (CA-04, CA-06)
++- [x] T01 — `Usuario` y `Sesion` en `sprint1.sql` (CA-01, CA-07)
++- [x] T02 — `intentosFallidos`, `bloqueadoHasta` y tabla `DosFactor` en `sprint1-auditoria.sql` (CA-04, CA-06)
+ 
+ ## Fase 2 · Pruebas
+ 
+-- [x] T03 — Pruebas `RF-04-1 / RNF-06`, `RF-04-2`, `RF-04-3`, `RF-04-4`, `RF-07`, `producción nunca expone…`
+-- [ ] T04 — Prueba de los reintentos de correo (CA-18)
++- [x] T03 — Pruebas `RF-04-1 / RNF-06`, `RF-04-2`, `RF-04-3`, `RF-04-4`, `producción nunca expone…`
++- [x] T04 — CA-18: se decide no automatizar (la cola es en memoria a propósito); se documenta en el plan §8
+ 
+ ## Fase 3 · Backend
+ 
+@@ -19,32 +19,27 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (1 pendiente)
+ - [x] T07 — Bloqueo por cuenta tras 5 fallos, respuesta 423 (CA-06 · G04)
+ - [x] T08 — Vencimiento deslizante de 15 min en `current()` (CA-07, CA-08 · G03)
+ - [x] T09 — Logout y revocación al desactivar la cuenta (CA-09, CA-10)
+-- [x] T10 — Recuperación de un solo uso, 30 min, que revoca sesiones (CA-11 a CA-13)
+-- [x] T11 — Registro sin cédula, celular `09…`, cuenta de 10 dígitos opcional (CA-14, CA-15 · G21)
+-- [x] T12 — Registro cerrado según `registroAbierto` (CA-16)
+-- [x] T13 — Ocultar `devCodigo` / `devResetUrl` en producción (CA-17)
++- [x] T13 — Ocultar `devCodigo` en producción (CA-17)
+ - [x] T14 — Cola de correo con 3 reintentos cada 5 min (CA-18 · G18)
+ 
++T10 (recuperación) pasó a `sprint-2/01-recuperacion-de-acceso`; T11 y T12 (registro) a `sprint-2/05-registro-y-confirmacion`.
++
+ ## Fase 4 · Frontend
+ 
+ - [x] T15 — Login con paso de 2FA y alerta persistente de bloqueo (CA-04, CA-06)
+ - [x] T16 — `InactividadService` compartido entre pestañas (CA-08 · G03)
+-- [x] T17 — Pantallas de registro y recuperación (CA-11, CA-14, CA-15)
+ 
+ ## Fase 5 · Cierre
+ 
+-- [ ] T18 — Confirmar números de HU y decidir P-02 (aviso de privacidad) con el PO
++- [x] T18 — Números de HU confirmados con el backlog (HU-003 en el Sprint 1)
+ 
+-## Verificación
++## Verificación (2026-11-16)
+ 
+ | Criterio | Prueba que lo cubre | ¿Pasa? |
+ | -------- | ------------------- | ------ |
+-| CA-01 a CA-05 | `RF-04-1 / RNF-06` | Sí |
++| CA-01 a CA-05 | `RF-04-1 / RNF-06` · `e2e/smoke.cjs` | Sí |
+ | CA-06 | `RF-04-2` | Sí |
+ | CA-07, CA-08 | `RF-04-3` · `auth.spec.ts` | Sí |
+ | CA-09, CA-10 | `RF-04-4` | Sí |
+-| CA-11 a CA-13 | `RF-07` | Sí |
+-| CA-14, CA-15 | `RF-11-4` (registro) | Sí |
+-| CA-16 | `RF-14 / RF-14-2 / RF-42` | Sí |
+ | CA-17 | `producción nunca expone enlaces ni códigos` | Sí |
+-| CA-18 | — | Sin prueba automatizada |
++| CA-18 | — | Sin prueba automatizada (decisión) |
+diff --git a/specs/sprint-1/05-proteccion-datos/especificacion.md b/specs/sprint-1/03-proteccion-datos/especificacion.md
+similarity index 86%
+rename from specs/sprint-1/05-proteccion-datos/especificacion.md
+rename to specs/sprint-1/03-proteccion-datos/especificacion.md
+index ab9f092..942f455 100644
+--- a/specs/sprint-1/05-proteccion-datos/especificacion.md
++++ b/specs/sprint-1/03-proteccion-datos/especificacion.md
+@@ -3,7 +3,7 @@
+ | Campo | Valor |
+ | ----- | ----- |
+ | Sprint | 1 |
+-| Historias | Requisito no funcional (sin HU propia) |
++| Historias | Requisito no funcional transversal (sin HU propia); se construyó en el Sprint 1 y lo usan todas las HU que guardan datos personales |
+ | Requisitos | RNF-05 |
+ | Estado | Implementada · Verificada |
+ | Fuente previa | [`docs/CORRECCIONES-AUDITORIA-SPRINT1.md`](../../../docs/CORRECCIONES-AUDITORIA-SPRINT1.md) · auditoría G09 |
+@@ -47,7 +47,7 @@ buscar por correo y evitar duplicados.
+ ## 6. Fuera de alcance
+ 
+ - Rotación de la clave.
+-- Respaldo diario y retención de 5 años (auditoría G24, pendiente).
++- Respaldo diario y retención de 5 años (auditoría G24): resuelto el 2026-11-16 con `npm run db:respaldo` en la spec `sprint-2/02-administracion` (CA-16).
+ 
+ ## 7. Preguntas abiertas
+ 
+@@ -61,3 +61,4 @@ buscar por correo y evitar duplicados.
+ | ----- | ------ | ----- |
+ | 2026-11 | AES-256-GCM con índice HMAC (G09) | Equipo |
+ | 2026-11-14 | Documentado como spec SDD a partir del código y las pruebas | Equipo |
++| 2026-11-16 | CA-07 con prueba automatizada; carpeta renumerada a `03-proteccion-datos` al reorganizar el Sprint 1 | Equipo |
+diff --git a/specs/sprint-1/05-proteccion-datos/plan.md b/specs/sprint-1/03-proteccion-datos/plan.md
+similarity index 96%
+rename from specs/sprint-1/05-proteccion-datos/plan.md
+rename to specs/sprint-1/03-proteccion-datos/plan.md
+index 4d69284..5e62276 100644
+--- a/specs/sprint-1/05-proteccion-datos/plan.md
++++ b/specs/sprint-1/03-proteccion-datos/plan.md
+@@ -36,7 +36,7 @@ busca y valida duplicados por índice; descifra antes de responder y nunca devue
+ | Criterio | Prueba |
+ | -------- | ------ |
+ | CA-01 a CA-06 | `RNF-05: migra datos personales y conserva acceso y unicidad por correo` (`backend/test/sprint.test.mjs`) |
+-| CA-07 | Sin prueba automatizada (lo controla el constructor de `ProteccionDatos`) |
++| CA-07 | `RNF-05: producción no arranca sin SUMA_DATA_KEY` |
+ 
+ ## 6. Decisiones y riesgos
+ 
+diff --git a/specs/sprint-1/05-proteccion-datos/tareas.md b/specs/sprint-1/03-proteccion-datos/tareas.md
+similarity index 83%
+rename from specs/sprint-1/05-proteccion-datos/tareas.md
+rename to specs/sprint-1/03-proteccion-datos/tareas.md
+index 7dcb074..8ed1376 100644
+--- a/specs/sprint-1/05-proteccion-datos/tareas.md
++++ b/specs/sprint-1/03-proteccion-datos/tareas.md
+@@ -1,6 +1,6 @@
+ # Tareas · Protección de datos personales en reposo
+ 
+-Plan: [`plan.md`](plan.md) · Estado: Completado (1 pendiente)
++Plan: [`plan.md`](plan.md) · Estado: Completado
+ 
+ - [x] T01 — Columnas `correoIndice` y `cuentaIndice` (`sprint1-dominio.sql`) (CA-04)
+ - [x] T02 — Prueba `RNF-05: migra datos personales…` (CA-01 a CA-06)
+@@ -10,7 +10,7 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (1 pendiente)
+ - [x] T06 — Quitar el índice de todas las respuestas (CA-05)
+ - [x] T07 — Verificador de clave en `Configuracion` (CA-06)
+ - [x] T08 — Error al arrancar en producción sin clave (CA-07)
+-- [ ] T09 — Prueba automatizada de CA-07
++- [x] T09 — Prueba automatizada de CA-07 (2026-11-16)
+ - [ ] T10 — Definir custodia y respaldo de `SUMA_DATA_KEY` (P-01)
+ 
+ ## Verificación
+@@ -18,4 +18,4 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (1 pendiente)
+ | Criterio | Prueba que lo cubre | ¿Pasa? |
+ | -------- | ------------------- | ------ |
+ | CA-01 a CA-06 | `RNF-05: migra datos personales y conserva acceso y unicidad por correo` | Sí |
+-| CA-07 | — | Sin prueba automatizada |
++| CA-07 | `RNF-05: producción no arranca sin SUMA_DATA_KEY` | Sí |
+diff --git a/specs/sprint-1/README.md b/specs/sprint-1/README.md
+index 84502c7..4aa198d 100644
+--- a/specs/sprint-1/README.md
++++ b/specs/sprint-1/README.md
+@@ -1,95 +1,61 @@
+-# Sprint 1 · Acceso, roles, referidos y administración
++# Sprint 1 · Roles, permisos y sesión
+ 
+ | Campo | Valor |
+ | ----- | ----- |
+ | Estado | Implementado y verificado (fusionado en `main`, PR #1 de `sprint-1`) |
+-| Alcance según el backlog | El Sprint 1 son **HU-001 a HU-003** (columna *Sprint* de `BKL-G1`). HU-004 a HU-012 son del Sprint 2 y se implementaron aquí por adelantado. |
+-| Objetivo | Que socios, gestores y administradores entren de forma segura, vean solo lo que les corresponde, y que el ciclo básico del referido (alta → dictamen → puntos) funcione con trazabilidad completa |
++| Semanas | 9–10 |
++| Historias | **HU-001 · HU-002 · HU-003** (columna *Sprint* de la hoja `BKL-G1`) |
++| Objetivo | Que administradores, gestores y socios entren de forma segura y vean solo lo que les corresponde según su rol |
+ | Modo SDD | Documentado **a posteriori**: las specs se escribieron a partir del código y de las pruebas que ya pasan |
++| Reorganización | El 2026-11-16 se alineó con el backlog. HU-004 a HU-012 se habían construido y documentado aquí, pero son del Sprint 2: sus specs están ahora en [`sprint-2/`](../sprint-2/README.md) |
+ 
+ ## Funcionalidades
+ 
+-| # | Funcionalidad | HU | Spec | Plan | Tareas | Estado |
+-| - | ------------- | -- | ---- | ---- | ------ | ------ |
+-| 01 | Roles, permisos y menú según el rol | HU-001, HU-002, HU-008 | [spec](01-roles-y-permisos/especificacion.md) | [plan](01-roles-y-permisos/plan.md) | [tareas](01-roles-y-permisos/tareas.md) | Verificada |
+-| 02 | Sesión, acceso y registro | HU-003, HU-004 | [spec](02-sesion-y-acceso/especificacion.md) | [plan](02-sesion-y-acceso/plan.md) | [tareas](02-sesion-y-acceso/tareas.md) | Verificada · 1 prueba pendiente |
+-| 03 | Gestión de referidos | HU-011, HU-012 | [spec](03-referidos/especificacion.md) | [plan](03-referidos/plan.md) | [tareas](03-referidos/tareas.md) | Verificada · 1 prueba pendiente |
+-| 04 | Administración: usuarios, configuración, bitácora, tablero | HU-005, HU-006, HU-007 | [spec](04-administracion/especificacion.md) | [plan](04-administracion/plan.md) | [tareas](04-administracion/tareas.md) | Verificada · 1 prueba pendiente |
+-| 05 | Protección de datos en reposo | RNF-05 | [spec](05-proteccion-datos/especificacion.md) | [plan](05-proteccion-datos/plan.md) | [tareas](05-proteccion-datos/tareas.md) | Verificada · 1 prueba pendiente |
++| # | Funcionalidad | HU | Casos de uso | Spec | Plan | Tareas | Estado |
++| - | ------------- | -- | ------------ | ---- | ---- | ------ | ------ |
++| 01 | Roles, permisos y menú según el rol | HU-001, HU-002 | CU-16, CU-17, CU-02.4 | [spec](01-roles-y-permisos/especificacion.md) | [plan](01-roles-y-permisos/plan.md) | [tareas](01-roles-y-permisos/tareas.md) | Verificada |
++| 02 | Sesión y acceso | HU-003 | CU-02, CU-02.1, CU-02.2, CU-02.6 | [spec](02-sesion-y-acceso/especificacion.md) | [plan](02-sesion-y-acceso/plan.md) | [tareas](02-sesion-y-acceso/tareas.md) | Verificada |
++| 03 | Protección de datos en reposo (transversal) | RNF-05 | — | [spec](03-proteccion-datos/especificacion.md) | [plan](03-proteccion-datos/plan.md) | [tareas](03-proteccion-datos/tareas.md) | Verificada |
+ 
+ ## Matriz de trazabilidad
+ 
+-| Requisito | Spec · criterio | Prueba (`backend/test/sprint.test.mjs` salvo indicación) |
+-| --------- | --------------- | -------------------------------------------------------- |
+-| HU-001 · RF-08 | 01 · CA-02 a CA-07 | `HU-001: roles y permisos se crean, editan y eliminan sin tocar el código` · `RF-08: permisos por rol se aplican de inmediato` |
+-| RF-08-1 · RF-08-4 | 01 · CA-01, CA-10, CA-11 | `RF-08-1 / RF-08-4: 3 roles y acceso denegado en servidor` |
+-| HU-002 · RF-08-3 | 01 · CA-08, CA-09 | `HU-001…` · `RF-04-1 / RNF-06` · `features.spec.ts` |
+-| RF-08-5 · RNF-13 | 01 · CA-12 | `RF-14 / RF-14-2 / RF-42` |
+-| HU-008 · RF-49-4 · RNF-18 | 01 · CA-13 | `e2e/smoke.cjs` (390 px) |
+-| HU-003 · RF-04-1 · RNF-06 | 02 · CA-01 a CA-05 | `RF-04-1 / RNF-06: credenciales, origen y segundo factor del administrador` |
+-| RF-04-2 | 02 · CA-06 | `RF-04-2: bloqueo de 15 minutos tras 5 intentos fallidos consecutivos` |
+-| RF-04-3 | 02 · CA-07, CA-08 | `RF-04-3: la sesión se renueva…` · `auth.spec.ts` |
+-| RF-04-4 | 02 · CA-09, CA-10 | `RF-04-4: desactivar cuenta y cerrar sesión` |
+-| HU-004 · RF-07 | 02 · CA-11 a CA-13 | `RF-07: recuperación de un solo uso que revoca sesiones` |
+-| RNF-12 (códigos) | 02 · CA-17 | `producción nunca expone enlaces ni códigos` |
+-| RNF-14 | 02 · CA-18 | — (pendiente) |
+-| HU-011 · HU-012 · RF-11 · RF-11-3 · RNF-12 | 03 · CA-01 a CA-08 | `RF-11 / RNF-12: valida, rechaza código, evita duplicados y pagina de 20` · `días hábiles…` |
+-| RF-11-4 | 03 · CA-09 a CA-13 | `RF-11-4: dictamen reservado a administración y con cuenta vinculada aprobada` |
+-| RF-11-5 | 03 · CA-17, CA-18 | `RF-11-5: asociación manual dentro de 30 días` (falta el caso de 30 días) |
+-| HU-011 · RF-11-6 | 03 · CA-14 a CA-16 | `RF-11-6: baja lógica que conserva el historial` |
+-| RF-08-2 | 04 · CA-01 a CA-03 | `RF-08-2: solo el administrador crea cuentas de Gestor o Administrador` |
+-| HU-006 · RF-14 · RF-14-1 · RF-14-2 | 04 · CA-06 a CA-09 | `RF-14 / RF-14-2 / RF-42: configuración y bitácora completa` |
+-| HU-007 · RF-42 · RF-42-1 · RF-42-2 | 04 · CA-10 a CA-12 | `RF-14 / RF-14-2 / RF-42` |
+-| HU-005 · RF-45-1 | 04 · CA-13 a CA-15 | `RF-45-1: tablero con 6 indicadores` |
+-| RNF-05 | 05 · CA-01 a CA-06 | `RNF-05: migra datos personales y conserva acceso y unicidad por correo` |
++| HU | Épica | UR | RF / RNF | Caso de uso | Criterios | Prueba (`backend/test/sprint.test.mjs` salvo indicación) |
++| -- | ----- | -- | -------- | ----------- | --------- | -------------------------------------------------------- |
++| HU-001 Roles y permisos | EPI-01 | UR-04 | RF-08, RF-08-1, RF-08-2, RF-08-5 · RNF-13 | CU-16, CU-17 | 01 · CA-01 a CA-07, CA-11, CA-12 | `HU-001: roles y permisos…` · `RF-08: permisos por rol…` · `RF-08-1 / RF-08-4` · `RF-08-2` |
++| HU-002 Acceso a módulos | EPI-01 | UR-04 | RF-08-3, RF-08-4 | CU-02.4 | 01 · CA-08 a CA-10 | `RF-08-1 / RF-08-4` · `features.spec.ts` · `auth.spec.ts` |
++| HU-003 Sesión | EPI-02 | UR-03 | RF-04-1 a RF-04-4 · RNF-04, RNF-06, RNF-12, RNF-14 | CU-02, CU-02.1, CU-02.2, CU-02.6 | 02 · CA-01 a CA-10, CA-17, CA-18 | `RF-04-1 / RNF-06` · `RF-04-2` · `RF-04-3` · `RF-04-4` · `producción nunca expone…` · `e2e/smoke.cjs` |
++| Transversal | — | UR-51 | RNF-05 | — | 03 · CA-01 a CA-07 | `RNF-05: migra datos personales…` · `RNF-05: producción no arranca sin SUMA_DATA_KEY` |
+ 
+-## Historias transversales de interfaz (EPI-04)
+-
+-| HU | Criterio del backlog | Dónde se cumple | Prueba |
+-| -- | -------------------- | --------------- | ------ |
+-| HU-008 · Interfaz clara | El diseño se adapta a la pantalla y tiene menús accesibles | Spec 01 · CA-13; `panel.css`, `comunidad.css` | `e2e/smoke.cjs` (390 px) |
+-| HU-009 · Mensajes y alertas | Avisos al terminar una acción con éxito o error | `AvisoService` + `AvisoComponent` (rol `alert`/`status`, color e icono) — auditoría G17 | `features.spec.ts` (avisos) |
+-| HU-010 · Ayuda en formularios | Todos los campos tienen textos de ayuda o ejemplos | `CampoComponent` con ayuda obligatoria — auditoría G16 | `features.spec.ts` (campos) |
+-
+-## Brechas de la auditoría (G01–G24) por funcionalidad
++## Brechas de la auditoría (G01–G24) que cubre este sprint
+ 
+ | Funcionalidad | Brechas |
+ | ------------- | ------- |
+-| 01 · Roles y permisos | G02, G14, G19, G20 |
+-| 02 · Sesión y acceso | G03, G04, G05, G18, G21 |
+-| 03 · Referidos | G01, G06, G08, G11 (dictamen), G12 |
+-| 04 · Administración | G07, G10, G11 (revisión de cuentas), G13, G15 |
+-| 05 · Protección de datos | G09 |
+-| Transversales | G16 = **HU-010** (ayuda y error en todos los campos: `CampoComponent`), G17 = **HU-009** (avisos distinguibles: `AvisoService`), G22 (ESLint y pre-commit), G23 (dependencias sin uso y PWA) |
+-| **Pendiente** | G24 — respaldo diario y retención de 5 años → [`backlog.md`](../backlog.md) |
+-
+-## Decisiones abiertas con el Product Owner
++| 01 · Roles y permisos | G02, G14, G19 |
++| 02 · Sesión y acceso | G03, G04, G05, G18 |
++| 03 · Protección de datos | G09 |
++| Transversales | G22 (ESLint y pre-commit), G23 (dependencias sin uso y PWA) |
+ 
+-| # | Decisión | Spec |
+-| - | -------- | ---- |
+-| 1 | ¿Permisos por persona (`UsuarioPermiso`) o solo por rol? | 01 · P-01 |
+-| 2 | RF-08-1 "exactamente 3 roles" frente a HU-001 "gestionar roles" | 01 · P-02 |
+-| 3 | ~~¿El registro pide aceptar aviso de privacidad y términos?~~ Resuelta: sí, HU-013 / RF-47 (Sprint 2) | 02 · P-02 |
+-| 4 | ¿El socio puede dar de baja sus referidos *Pendientes*? | 03 · P-01 |
+-| 5 | ~~Números de HU~~ Resuelta con el backlog `BKL-G1`: HU-004, HU-005 a HU-007, HU-008 a HU-010, HU-011 y HU-012 | 02, 03, 04 · P-01 |
+-| 6 | ¿Se mantiene "SUMA" como nombre del producto? | 04 · P-02 |
+-| 7 | Custodia de `SUMA_DATA_KEY` en producción | 05 · P-01 |
++Las demás brechas (G01, G06–G08, G10–G13, G15–G17, G20, G21, G24) están en las specs del Sprint 2.
+ 
+-## Pruebas pendientes para cerrar el sprint al 100 %
++## Decisiones abiertas con el Product Owner
+ 
+-1. Reintentos de correo (02 · CA-18).
+-2. Límite de 30 días en la asociación manual (03 · CA-18).
+-3. Revisión de cuentas vinculadas por API (04 · CA-05).
+-4. Arranque en producción sin `SUMA_DATA_KEY` (05 · CA-07).
++| # | Decisión | Spec | Estado |
++| - | -------- | ---- | ------ |
++| 1 | ¿Permisos por persona o solo por rol? | 01 · P-01 | Propuesta en RF-08-1: por rol. Falta confirmación |
++| 2 | RF-08-1 «3 roles» frente a HU-001 «gestionar roles» | 01 · P-02 | Propuesta en RF-08-1: 3 roles base y roles adicionales. Falta confirmación |
++| 3 | Custodia de `SUMA_DATA_KEY` en producción | 03 · P-01 | Abierta |
+ 
+-## Verificación del sprint
++## Verificación del sprint (2026-11-16)
+ 
+-| Comando | Qué cubre |
++| Comando | Resultado |
+ | ------- | --------- |
+-| `cd backend && npm run test:sprint` | 18 pruebas de integración y criterios de aceptación (PostgreSQL, esquema aislado) |
+-| `cd frontend && npx ng test --watch=false` | 16 pruebas: guards, inactividad, avisos, menú por rol, campos, listado, baja, configuración |
+-| `cd frontend && npx ng lint && npx ng build` | 0 errores de lint; build con carga diferida |
+-| `cd e2e && node smoke.cjs` | Flujo completo en Chromium: 2FA, tablero, CRUD + dictamen + baja, configuración, móvil 390 px, recuperación, registro |
++| `cd backend && npm run test:sprint` | 32/32 pasan (todas las pruebas de los Sprints 1 a 3) |
++| `cd backend && npm run lint` | 0 errores |
++| `cd frontend && npx ng test --watch=false` | 17/17 pasan |
++| `cd frontend && npx ng lint && npx ng build` | 0 errores; build con carga diferida |
++| `cd e2e && node smoke.cjs` | Pasa: 2FA del administrador, menú por rol y móvil a 390 px |
++
++Único criterio sin prueba automatizada: 02 · CA-18 (reintentos de correo en memoria), por decisión documentada en su plan.
+ 
+ ## Documentos previos (evidencia histórica)
+ 
+diff --git a/specs/sprint-1/04-administracion/especificacion.md b/specs/sprint-2/02-administracion/especificacion.md
+similarity index 70%
+rename from specs/sprint-1/04-administracion/especificacion.md
+rename to specs/sprint-2/02-administracion/especificacion.md
+index 71dba16..2cb63a5 100644
+--- a/specs/sprint-1/04-administracion/especificacion.md
++++ b/specs/sprint-2/02-administracion/especificacion.md
+@@ -2,10 +2,12 @@
+ 
+ | Campo | Valor |
+ | ----- | ----- |
+-| Sprint | 1 |
+-| Historias | HU-005 (tablero) · HU-006 (configuración) · HU-007 (bitácora) · revisión de cuentas (ampliada por HU-016 en el Sprint 2) |
+-| Requisitos | RF-08-2 · RF-14 · RF-14-1 · RF-14-2 · RF-42 · RF-42-1 · RF-42-2 · RF-45-1 |
+-| No funcionales | RNF-13 · RNF-15 |
++| Sprint | 2 |
++| Historias | HU-005 (tablero) · HU-006 (configuración) · HU-007 (bitácora) · revisión de cuentas (detallada en `06-cuenta-cooperativa`, HU-016) |
++| Requisitos de usuario | UR-04 · UR-46 · UR-48 · UR-49 |
++| Requisitos funcionales | RF-08-2 · RF-14 · RF-14-1 · RF-14-2 · RF-14-3 · RF-14-4 · RF-42 · RF-42-1 · RF-42-2 · RF-45-1 |
++| Casos de uso (EAPX) | CU-17 Gestionar usuarios de la plataforma · CU-19 Configurar los parámetros (CU-19.1 puntos por acción, CU-19.2 versión de los términos) · CU-20 Consultar la bitácora (CU-20.1 filtrar) · CU-15 Consultar indicadores |
++| No funcionales | RNF-08 · RNF-09 · RNF-13 · RNF-15 |
+ | Estado | Implementada · Verificada |
+ | Fuente previa | [`docs/CORRECCIONES-AUDITORIA-SPRINT1.md`](../../../docs/CORRECCIONES-AUDITORIA-SPRINT1.md) · auditoría G07, G10, G11, G13, G15 |
+ 
+@@ -42,7 +44,7 @@ y poder auditar quién hizo qué.
+ | CA-01 | RF-08-2 | un administrador | crea una cuenta con nombre, correo y rol | la cuenta se crea y la persona recibe un enlace para definir su contraseña, válido por 24 h |
+ | CA-02 | RF-08-2 | alguien que no es administrador | intenta crear una cuenta | se le niega |
+ | CA-03 | RF-08-2 | un rol que no existe | se usa al crear una cuenta | se rechaza |
+-| CA-04 | RF-08 | un administrador | cambia el rol o desactiva a un usuario | el cambio rige al instante (ver specs 01 y 02) |
++| CA-04 | RF-08 | un administrador | cambia el rol o desactiva a un usuario | el cambio rige al instante (ver specs `sprint-1/01` y `sprint-1/02`) |
+ | CA-05 | G11 | una cuenta de la cooperativa *Pendiente* | el administrador la aprueba o la rechaza | cambia de estado y queda en la bitácora; un número ya aprobado en otra cuenta no se puede aprobar otra vez |
+ 
+ ### Configuración
+@@ -69,11 +71,21 @@ y poder auditar quién hizo qué.
+ | CA-13 | RF-45-1 | un administrador | entra a su inicio | ve un tablero con 6 indicadores |
+ | CA-14 | RF-45-1 | un indicador cuyo módulo aún no existe | se muestra | indica desde qué sprint estará disponible |
+ | CA-15 | RF-45-1 | un socio | pide los indicadores | se le niega; ve su propio resumen |
++| CA-17 | RF-45-1 | el indicador «usuarios activos en el mes» | se calcula | cuenta los usuarios de roles participantes con al menos 1 actividad distinta de iniciar o cerrar sesión; «socios activos» se calcula por roles participantes, no por el nombre `SOCIO` |
++
++### Respaldo y conservación (RNF-08, RNF-09, RNF-13)
++
++| ID | Requisito | Dado | Cuando | Entonces |
++| -- | --------- | ---- | ------ | -------- |
++| CA-16 | RNF-08 · RNF-13 · RF-47-3 | la tarea programada de respaldo | se ejecuta cada día | genera 1 respaldo completo y conserva los diarios de 35 días y el del día 1 de cada mes durante 5 años |
+ 
+ ## 5. Reglas de negocio
+ 
+-1. Parámetros configurables en el Sprint 1: `contacto` (correo), `registroAbierto` (sí/no), `mensajeBienvenida`
+-   (1 a 500 caracteres), `puntosReferido` (entero de 0 a 10000; valor inicial 100).
++1. Parámetros configurables: `contacto` (correo), `registroAbierto` (sí/no), `mensajeBienvenida` (1 a 500 caracteres),
++   `puntosReferido` (entero de 0 a 10000; valor inicial 100) y, adelantados de HU-029, los puntos por acción y el valor
++   del punto. Los límites de trivia, talleres y retos se agregan con esos módulos (Sprint 4).
++5. La versión de los términos y el aviso de privacidad se publica en la misma pantalla de Configuración (RF-47-4, ver
++   `05-registro-y-confirmacion` CA-17 a CA-19).
+ 2. Un parámetro sin cambios no genera fila en la bitácora.
+ 3. La bitácora es de solo lectura para todos, incluido el administrador.
+ 4. Las cuentas creadas por el administrador no tienen contraseña hasta que la persona usa su enlace.
+@@ -81,7 +93,7 @@ y poder auditar quién hizo qué.
+ ## 6. Fuera de alcance
+ 
+ - Reportes descargables (HU-054 · Sprint 5).
+-- Respaldo diario y retención de 5 años (auditoría G24 · pendiente de operación).
++- Programar la tarea de respaldo en el servidor de producción (lo hace TI de la Cooperativa).
+ 
+ ## 7. Requisitos no funcionales aplicables
+ 
+@@ -94,6 +106,7 @@ y poder auditar quién hizo qué.
+ | - | -------- | ---- | ------ |
+ | P-01 | ¿Qué números de HU corresponden a usuarios, configuración y bitácora? | PO | Resuelta: HU-006 configuración, HU-007 bitácora; usuarios internos = RF-08-2 sin HU propia |
+ | P-02 | ¿Se mantiene "SUMA" como nombre del producto? | PO | Abierta |
++| P-03 | HU-005 no tenía requisito de usuario | PO | Resuelta en el backlog: HU-005 → UR-49 y CU-15 |
+ 
+ ## 9. Historial
+ 
+@@ -101,4 +114,5 @@ y poder auditar quién hizo qué.
+ | ----- | ------ | ----- |
+ | 2026-11 | Bitácora con IP, inmutable y filtros (G07); tablero de 6 indicadores (G10); revisión de cuentas (G11); una fila por parámetro (G13); alta de Gestor/Admin (G15) | Equipo |
+ | 2026-11-14 | Documentado como spec SDD a partir del código y las pruebas | Equipo |
+-| 2026-11-14 | HU-006 y HU-007 identificadas. Sprint 2: la revisión de cuentas se documenta en `sprint-2/02-cuenta-cooperativa` (HU-016) | Equipo |
++| 2026-11-14 | HU-006 y HU-007 identificadas. Sprint 2: la revisión de cuentas se documenta en `sprint-2/06-cuenta-cooperativa` (HU-016) | Equipo |
++| 2026-11-16 | Pasa del Sprint 1 al 2 (HU-005 a HU-007 son del Sprint 2 según el backlog). CA-05 con prueba; CA-16 respaldo y CA-17 usuarios activos nuevos; casos de uso CU-15, CU-17, CU-19 y CU-20 | Equipo |
+diff --git a/specs/sprint-1/04-administracion/plan.md b/specs/sprint-2/02-administracion/plan.md
+similarity index 94%
+rename from specs/sprint-1/04-administracion/plan.md
+rename to specs/sprint-2/02-administracion/plan.md
+index d5ef491..21faf0e 100644
+--- a/specs/sprint-1/04-administracion/plan.md
++++ b/specs/sprint-2/02-administracion/plan.md
+@@ -70,10 +70,12 @@ Claves internas de `Configuracion` que no se exponen: `verificadorCifrado`, `dem
+ | -------- | --------------------------------------- |
+ | CA-01 a CA-03 | `RF-08-2: solo el administrador crea cuentas de Gestor o Administrador` |
+ | CA-04 | `RF-04-4` · `HU-001` |
+-| CA-05 | Sin prueba automatizada — **pendiente** |
++| CA-05 | `HU-015 / HU-016 / RF-06: vinculación, cola de revisión, rechazo y nuevo intento` |
+ | CA-06 a CA-12 | `RF-14 / RF-14-2 / RF-42: configuración y bitácora completa` |
+ | CA-13, CA-14 | `RF-45-1: tablero con 6 indicadores` |
+ | CA-15 | `RF-08-1 / RF-08-4` (`/api/indicadores` → 403 para el socio) |
++| CA-16 | `npm run db:respaldo` (`backend/scripts/respaldo.mjs`, `pg_dump --format=custom`); restauración con `pg_restore` (RNF-09) |
++| CA-17 | `RF-45-1: tablero con 6 indicadores` |
+ | Frontend | `features.spec.ts` (configuración) · `e2e/smoke.cjs` (tablero, configuración) |
+ 
+ ## 8. Decisiones y riesgos
+diff --git a/specs/sprint-1/04-administracion/tareas.md b/specs/sprint-2/02-administracion/tareas.md
+similarity index 67%
+rename from specs/sprint-1/04-administracion/tareas.md
+rename to specs/sprint-2/02-administracion/tareas.md
+index 6c887cc..20d8f32 100644
+--- a/specs/sprint-1/04-administracion/tareas.md
++++ b/specs/sprint-2/02-administracion/tareas.md
+@@ -1,6 +1,6 @@
+ # Tareas · Administración: usuarios, configuración, bitácora y tablero
+ 
+-Plan: [`plan.md`](plan.md) · Estado: Completado (1 pendiente)
++Plan: [`plan.md`](plan.md) · Estado: Completado (programar el respaldo en producción)
+ 
+ ## Fase 1 · Datos
+ 
+@@ -11,7 +11,7 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (1 pendiente)
+ ## Fase 2 · Pruebas
+ 
+ - [x] T04 — `RF-08-2`, `RF-14 / RF-14-2 / RF-42`, `RF-45-1`
+-- [ ] T05 — Prueba de API de la revisión de cuentas vinculadas (CA-05)
++- [x] T05 — Prueba de API de la revisión de cuentas vinculadas (CA-05): `HU-015 / HU-016 / RF-06` y `RF-11: vinculación…`
+ 
+ ## Fase 3 · Backend
+ 
+@@ -21,6 +21,9 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (1 pendiente)
+ - [x] T09 — Una fila de bitácora por parámetro cambiado (CA-09 · G13)
+ - [x] T10 — Bitácora con IP, 50 por página y filtros (CA-10, CA-11 · G07)
+ - [x] T11 — `GET /indicadores` con 6 indicadores (CA-13 a CA-15 · G10)
++- [x] T17 — Usuarios activos sin inicios de sesión y roles por `ROLES_PARTICIPANTES` (CA-17 · 2026-11-16)
++- [x] T18 — `backend/scripts/respaldo.mjs` y `npm run db:respaldo` (CA-16 · G24 · 2026-11-16)
++- [ ] T19 — Programar `npm run db:respaldo` en el servidor (diario, 02:00)
+ 
+ ## Fase 4 · Frontend
+ 
+@@ -31,7 +34,7 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (1 pendiente)
+ 
+ ## Fase 5 · Cierre
+ 
+-- [ ] T16 — Confirmar números de HU con el PO (P-01)
++- [x] T16 — Números de HU confirmados con el backlog (P-01)
+ 
+ ## Verificación
+ 
+@@ -39,7 +42,9 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (1 pendiente)
+ | -------- | ------------------- | ------ |
+ | CA-01 a CA-03 | `RF-08-2` | Sí |
+ | CA-04 | `RF-04-4` · `HU-001` | Sí |
+-| CA-05 | — | Sin prueba de API |
++| CA-05 | `HU-015 / HU-016 / RF-06` · `RF-11: vinculación…` | Sí |
+ | CA-06 a CA-12 | `RF-14 / RF-14-2 / RF-42` | Sí |
+ | CA-13, CA-14 | `RF-45-1` | Sí |
+ | CA-15 | `RF-08-1 / RF-08-4` | Sí |
++| CA-16 | Ejecución manual de `npm run db:respaldo` (2026-11-16, 34,6 KB) | Sí, falta programarlo |
++| CA-17 | `RF-45-1: tablero con 6 indicadores` | Sí |
+diff --git a/specs/sprint-1/03-referidos/especificacion.md b/specs/sprint-2/04-referidos/especificacion.md
+similarity index 72%
+rename from specs/sprint-1/03-referidos/especificacion.md
+rename to specs/sprint-2/04-referidos/especificacion.md
+index 03d38cf..e89cb4c 100644
+--- a/specs/sprint-1/03-referidos/especificacion.md
++++ b/specs/sprint-2/04-referidos/especificacion.md
+@@ -2,9 +2,11 @@
+ 
+ | Campo | Valor |
+ | ----- | ----- |
+-| Sprint | 1 |
++| Sprint | 2 |
+ | Historias | HU-011 · HU-012 |
+-| Requisitos | RF-11 · RF-11-3 · RF-11-4 · RF-11-5 · RF-11-6 |
++| Requisitos de usuario | UR-13 · UR-16 · UR-17 · UR-54 |
++| Requisitos funcionales | RF-11 · RF-11-3 · RF-11-4 · RF-11-5 · RF-11-6 |
++| Casos de uso (EAPX) | CU-06 Consultar referidos · CU-06.1 Filtrar (extend) · CU-06.2 Aprobar o rechazar (extend) · CU-06.5 Gestionar los datos de un referido (extend) · CU-06.6 Asociar manualmente (extend) |
+ | No funcionales | RNF-12 · RNF-13 |
+ | Estado | Implementada · Verificada |
+ | Fuente previa | [`docs/CORRECCIONES-AUDITORIA-SPRINT1.md`](../../../docs/CORRECCIONES-AUDITORIA-SPRINT1.md) · auditoría G01, G06, G08, G11, G12 |
+@@ -25,12 +27,13 @@ sin perder el historial y sin duplicados.
+ 
+ ## 3. Historias de usuario
+ 
+-- **HU-011 · Gestión de referidos (CRUD)** — Como usuario general, deseo crear, modificar o inactivar registros de referidos
+-  para gestionar la información base de las personas invitadas.
+-- **HU-012 · Administración de referidos** — Como usuario general, deseo administrar el listado completo de todos los referidos
+-  para tener control total sobre el seguimiento general (tabla global con filtros).
++- **HU-011 · Gestión de referidos** — Como Socio / Cliente o Administrador, quiero registrar, modificar o dar de baja
++  referidos para dar seguimiento a las personas invitadas. (Texto corregido en el backlog el 2026-11-16: ya no dice
++  «usuario general» ni «independientemente del rol»; requisito de usuario nuevo UR-54.)
++- **HU-012 · Administración de referidos** — Como administrador, quiero administrar el listado completo de todos los
++  referidos para tener control total del seguimiento: tabla global de 20 por página con filtros. El socio solo ve los suyos.
+ - Como administrador, quiero revisar y dictaminar los referidos pendientes para acreditar al socio que recomendó
+-  (ampliado por HU-021 en el Sprint 2).
++  (ampliado por HU-021 · Sprint 3, ya programada).
+ - Como administrador, quiero asociar manualmente a un usuario recién registrado con el socio que lo invitó,
+   para corregir los casos en que no usó el enlace.
+ 
+@@ -55,7 +58,9 @@ sin perder el historial y sin duplicados.
+ | CA-15 | RF-11-6 | un referido dado de baja | se registra otra vez el mismo correo | se acepta |
+ | CA-16 | RF-11-6 | un referido *Aprobado* | el socio intenta darlo de baja | se le niega |
+ | CA-17 | RF-11-5 | un usuario registrado hace 30 días o menos | el administrador lo asocia a otro socio | se crea la relación de referido |
+-| CA-18 | RF-11-5 | un usuario | se intenta asociarlo consigo mismo o pasados 30 días | se rechaza |
++| CA-18 | RF-11-5 | un usuario | se intenta asociarlo consigo mismo o pasados 30 días | se rechaza; quien se registró hace más de 30 días ni siquiera aparece en la lista de asociables |
++| CA-19 | RF-11-3 · T-01 | una persona que se registró con código | se filtra el listado por su provincia | aparece, porque el referido hereda la provincia de su usuario |
++| CA-20 | RF-11 | la lista de usuarios asociables y de socios | se arma | incluye a todos los roles participantes (experiencia Comunidad), no solo al rol llamado `SOCIO` |
+ 
+ ## 5. Reglas de negocio
+ 
+@@ -69,20 +74,20 @@ sin perder el historial y sin duplicados.
+ 
+ ## 6. Fuera de alcance
+ 
+-- Enlace y QR de invitación, alta por enlace (HU-017 a HU-019 · Sprint 2).
+-- Campañas (HU-025 a HU-027 · Sprint 3). Hoy los filtros de campaña y provincia solo muestran opciones si hay datos.
++- Enlace y QR de invitación, alta por enlace (HU-017 a HU-019 · Sprint 3, ya programadas en `sprint-3/01-invitacion`).
++- Campañas (HU-025 a HU-027 · Sprint 3). El filtro de campaña solo muestra opciones cuando haya datos; el de provincia ya funciona (CA-19).
+ 
+ ## 7. Requisitos no funcionales aplicables
+ 
+ - RNF-12 — Validación y saneamiento de entradas.
+ - RNF-13 — Bitácora de altas, cambios, dictámenes, bajas y asociaciones.
+-- RNF-05 — Correo y celular del referido cifrados (ver spec 05).
++- RNF-05 — Correo y celular del referido cifrados (ver `sprint-1/03-proteccion-datos`).
+ 
+ ## 8. Preguntas abiertas
+ 
+ | # | Pregunta | Para | Estado |
+ | - | -------- | ---- | ------ |
+-| P-01 | ¿El socio puede dar de baja sus referidos *Pendientes* o solo la administración? Hoy puede el socio. | PO | Abierta |
++| P-01 | ¿El socio puede dar de baja sus referidos *Pendientes* o solo la administración? | PO | Propuesta aplicada: sí puede (HU-011 reescrita y UR-54). Falta confirmación del PO |
+ | P-02 | ¿Qué número de HU corresponde a cada criterio? | PO | Resuelta: CA-01 a CA-05, CA-09, CA-14 a CA-16 → HU-011; CA-06 a CA-08 → HU-012 |
+ 
+ ## 9. Historial
+@@ -93,3 +98,4 @@ sin perder el historial y sin duplicados.
+ | 2026-11 | Baja lógica (G06), listado de 20 con filtros y atraso (G08), dictamen con cuenta aprobada (G11), asociación manual (G12) | Equipo |
+ | 2026-11-14 | Documentado como spec SDD a partir del código y las pruebas | Equipo |
+ | 2026-11-14 | HU-011 y HU-012 identificadas en el backlog. Sprint 2: el socio necesita cuenta Aprobada para referir (RF-06-1) y ve 10 por página con nombre de pila (HU-020) | Equipo |
++| 2026-11-16 | Pasa del Sprint 1 al 2 (HU-011 y HU-012 son del Sprint 2). HU-011 y HU-012 reescritas; UR-54; CA-18 con prueba de 30 días; CA-19 (provincia) y CA-20 (roles participantes) nuevos; casos de uso CU-06.5 y CU-06.6 | Equipo |
+diff --git a/specs/sprint-1/03-referidos/plan.md b/specs/sprint-2/04-referidos/plan.md
+similarity index 95%
+rename from specs/sprint-1/03-referidos/plan.md
+rename to specs/sprint-2/04-referidos/plan.md
+index 1031046..d400594 100644
+--- a/specs/sprint-1/03-referidos/plan.md
++++ b/specs/sprint-2/04-referidos/plan.md
+@@ -71,7 +71,9 @@ solo dictamina *Pendientes* y exige `CuentaCooperativa.estaAprobada`.
+ | CA-09 a CA-13 | `RF-11-4: dictamen reservado a administración y con cuenta vinculada aprobada` |
+ | CA-12 (puntos) | `RF-14 / RF-14-2 / RF-42` (`/api/overview` devuelve 100 puntos) |
+ | CA-14 a CA-16 | `RF-11-6: baja lógica que conserva el historial` |
+-| CA-17, CA-18 | `RF-11-5: asociación manual dentro de 30 días` (el límite de 30 días no tiene prueba propia) |
++| CA-17, CA-18 | `RF-11-5: asociación manual dentro de 30 días` · `RF-11-5: no se asocia a quien se registró hace más de 30 días` |
++| CA-19 | `T-01: la provincia es obligatoria en el registro y la hereda el referido` |
++| CA-20 | `RF-11-5: no se asocia…` (asociables y socios por `ROLES_PARTICIPANTES`) |
+ | Frontend | `features.spec.ts` (listado, baja) · `e2e/smoke.cjs` (CRUD + dictamen + baja) |
+ 
+ ## 8. Decisiones y riesgos
+diff --git a/specs/sprint-1/03-referidos/tareas.md b/specs/sprint-2/04-referidos/tareas.md
+similarity index 67%
+rename from specs/sprint-1/03-referidos/tareas.md
+rename to specs/sprint-2/04-referidos/tareas.md
+index 577cfe9..e1e03a5 100644
+--- a/specs/sprint-1/03-referidos/tareas.md
++++ b/specs/sprint-2/04-referidos/tareas.md
+@@ -1,6 +1,6 @@
+ # Tareas · Gestión de referidos
+ 
+-Plan: [`plan.md`](plan.md) · Estado: Completado (2 pendientes)
++Plan: [`plan.md`](plan.md) · Estado: Completado (P-01 por confirmar con el PO)
+ 
+ ## Fase 1 · Datos
+ 
+@@ -12,7 +12,7 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (2 pendientes)
+ ## Fase 2 · Pruebas
+ 
+ - [x] T05 — `RF-11 / RNF-12`, `RF-11-4`, `RF-11-5`, `RF-11-6`, `días hábiles`
+-- [ ] T06 — Prueba del límite de 30 días en la asociación manual (CA-18)
++- [x] T06 — Prueba del límite de 30 días en la asociación manual (CA-18): `RF-11-5: no se asocia a quien se registró hace más de 30 días`
+ 
+ ## Fase 3 · Backend
+ 
+@@ -23,6 +23,8 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (2 pendientes)
+ - [x] T11 — Baja lógica con motivo (CA-14 a CA-16 · G06)
+ - [x] T12 — Asociación manual dentro de 30 días (CA-17, CA-18 · G12)
+ - [x] T13 — Exportación con los mismos filtros
++- [x] T18 — Provincia heredada del usuario en el alta por código y en la asociación manual (CA-19 · 2026-11-16)
++- [x] T19 — `ROLES_PARTICIPANTES` en asociables y asociación manual (CA-20 · 2026-11-16)
+ 
+ ## Fase 4 · Frontend
+ 
+@@ -32,7 +34,7 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (2 pendientes)
+ 
+ ## Fase 5 · Cierre
+ 
+-- [ ] T17 — Resolver P-01 (quién da de baja) y P-02 (números de HU) con el PO
++- [x] T17 — P-02 resuelta con el backlog; P-01 con propuesta escrita en HU-011 (falta la confirmación del PO)
+ 
+ ## Verificación
+ 
+@@ -43,4 +45,6 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (2 pendientes)
+ | CA-09 a CA-13 | `RF-11-4` | Sí |
+ | CA-14 a CA-16 | `RF-11-6` | Sí |
+ | CA-17 | `RF-11-5` | Sí |
+-| CA-18 | `RF-11-5` (mismo usuario) | Parcial: falta el caso de 30 días |
++| CA-18 | `RF-11-5` (mismo usuario) · `RF-11-5: no se asocia… 30 días` | Sí |
++| CA-19 | `T-01: la provincia es obligatoria en el registro y la hereda el referido` | Sí |
++| CA-20 | `RF-11-5: no se asocia… 30 días` (lista de socios por rol participante) | Sí |
+diff --git a/specs/sprint-2/01-registro-y-confirmacion/especificacion.md b/specs/sprint-2/05-registro-y-confirmacion/especificacion.md
+similarity index 63%
+rename from specs/sprint-2/01-registro-y-confirmacion/especificacion.md
+rename to specs/sprint-2/05-registro-y-confirmacion/especificacion.md
+index 5ff7b4b..62275ed 100644
+--- a/specs/sprint-2/01-registro-y-confirmacion/especificacion.md
++++ b/specs/sprint-2/05-registro-y-confirmacion/especificacion.md
+@@ -5,10 +5,10 @@
+ | Sprint | 2 |
+ | Historias | HU-013 · HU-014 |
+ | Épica | EPI-06 · Crear mi cuenta y vincularla con la Cooperativa |
+-| Requisitos de usuario | UR-01 · UR-02 · UR-13 · UR-14 · UR-52 |
+-| Requisitos funcionales | RF-01 (RF-01-1 a RF-01-6) · RF-02 (RF-02-1 a RF-02-3) · RF-47 (RF-47-1, RF-47-2) · RF-08-2 |
++| Requisitos de usuario | UR-01 · UR-02 · UR-13 · UR-14 · UR-22 · UR-52 |
++| Requisitos funcionales | RF-01 (RF-01-1 a RF-01-6, con provincia) · RF-02 (RF-02-1 a RF-02-3) · RF-47 (RF-47-1, RF-47-2, RF-47-4) · RF-08-2 · RF-14 |
+ | No funcionales | RNF-04 · RNF-05 · RNF-10 · RNF-12 · RNF-14 · RNF-16 |
+-| Casos de uso (EAPX) | CU-01 Registrar y activar una cuenta · CU-01.1 Aceptar términos y aviso de privacidad (include) · CU-01.2 Confirmar el correo con un código · CU-01.3 Vincular el registro a un referido |
++| Casos de uso (EAPX) | CU-01 Registrar y activar una cuenta · CU-01.1 Aceptar términos y aviso de privacidad (include) · CU-01.2 Confirmar el correo con un código (include) · CU-01.3 Vincular el registro a un referido (extend) · CU-01.4 Validar que el correo y el celular no estén registrados (include) · CU-19.2 Publicar una nueva versión de los términos (extend de CU-19) |
+ | Clases (EAPX) | `Usuario` · `AvisoPrivacidad` · `AceptacionTerminos` · `ConfirmacionCorreo` · `CodigoVerificacion` |
+ | Estado | Implementada · Verificada |
+ 
+@@ -36,7 +36,7 @@ expresa del tratamiento de sus datos (UR-52).
+ | ID | Requisito | Dado | Cuando | Entonces |
+ | -- | --------- | ---- | ------ | -------- |
+ | CA-01 | HU-013 · RF-01 · RF-01-6 | un visitante en `/registro` | avanza por el formulario | ve 3 pasos (datos, cuenta, acceso) con su porcentaje y, al volver atrás, conserva lo escrito |
+-| CA-02 | HU-013 · RF-01-1 | el paso 1 | escribe nombres y apellidos, correo y celular | se exigen nombres de 3 a 100 caracteres, correo válido y celular de 10 dígitos que empiece con 09; **no** se pide cédula |
++| CA-02 | HU-013 · RF-01-1 | el paso 1 | escribe nombres y apellidos, correo, celular y provincia | se exigen nombres de 3 a 100 caracteres (nombre y apellido), correo válido, celular de 10 dígitos que empiece con 09 y 1 de las 24 provincias del Ecuador; **no** se pide cédula |
+ | CA-03 | HU-013 · RF-01-2 · UR-14 | un correo o un celular ya registrados | se intenta crear la cuenta | se rechaza indicando el campo |
+ | CA-04 | HU-013 · RF-01-3 | el paso 2 | elige «No, aún no» | puede continuar sin vincular cuenta |
+ | CA-05 | HU-013 · RF-01-4 | el paso 3 | escribe la contraseña | se exigen 8+ caracteres, 1 mayúscula, 1 número, y que la confirmación coincida |
+@@ -48,20 +48,29 @@ expresa del tratamiento de sus datos (UR-52).
+ | CA-11 | HU-014 · RF-02 | un código vencido, incorrecto o con 5 intentos fallidos | se usa | se rechaza y se ofrece pedir otro |
+ | CA-12 | HU-014 · RF-02-2 | 3 reenvíos en la última hora | pide un cuarto | se rechaza hasta que pase la hora |
+ | CA-13 | HU-014 · RF-02-3 | una cuenta sin confirmar | inicia sesión con la contraseña correcta | no recibe sesión; se le lleva a confirmar su correo |
+-| CA-14 | RF-01-5 | un visitante que abre el enlace o el QR de un socio | llega al paso 3 | el código del socio ya está escrito (ver spec 03) |
+-| CA-15 | RNF-12 · RNF-14 | producción sin correo configurado | alguien intenta registrarse | se rechaza: nunca se muestra el código en pantalla |
++| CA-14 | RF-01-5 | un visitante que abre el enlace o el QR de un socio | llega al paso 3 | el código del socio ya está escrito (ver `sprint-3/01-invitacion`) |
++| CA-15 | RNF-12 · RNF-14 | producción sin correo configurado | alguien intenta registrarse | se rechaza y no se crea la cuenta; nunca se muestra el código en pantalla |
++| CA-16 | RF-01-1 · T-01 | el paso 1 sin provincia o con una que no existe | se envía | se rechaza indicando el campo `provincia` |
++| CA-17 | RF-47-4 | el administrador en Configuración | publica una versión mayor que la vigente con términos y aviso de 20 caracteres o más | queda como la única vigente y la bitácora guarda la versión anterior y la nueva |
++| CA-18 | RF-47-4 | una versión igual o menor que la vigente, o un número mal escrito | se publica | se rechaza |
++| CA-19 | RF-47-1 · RF-47-4 | una persona que aceptó una versión que ya no es la vigente | envía el registro | se rechaza y debe abrir y aceptar la versión nueva |
++| CA-20 | RF-01 · RF-14 | el registro cerrado por configuración | un visitante intenta registrarse | se rechaza (antes `sprint-1/02` · CA-16) |
++| CA-21 | RF-01 · RF-05-1 | un visitante que da su cuenta de la Cooperativa | el número no tiene 10 dígitos | se rechaza con mensaje en el campo (antes `sprint-1/02` · CA-15) |
+ 
+ ## 5. Reglas de negocio
+ 
+-1. Datos del paso 1: nombres y apellidos (3–100 caracteres, al menos 2 palabras), correo, celular `09XXXXXXXX`.
++1. Datos del paso 1: nombres y apellidos (3–100 caracteres, al menos 2 palabras), correo, celular `09XXXXXXXX` y
++   provincia. La misma regla del nombre vale para las cuentas que crea el administrador.
+ 2. El celular y el correo son únicos entre todas las cuentas (se comparan por su índice HMAC, RNF-05).
+-3. Los textos de términos y aviso de privacidad tienen versión numerada; para cambiarlos hay que subir la versión.
++3. Los textos de términos y aviso de privacidad tienen versión numerada; siempre hay exactamente 1 vigente. Las variables
++   `SUMA_AVISO_VERSION`, `SUMA_TERMINOS` y `SUMA_PRIVACIDAD` solo definen la primera; las siguientes las publica el
++   administrador desde Configuración.
+ 4. Las cuentas creadas antes del Sprint 2 se consideran confirmadas (no se les bloquea el acceso).
+ 5. El código de confirmación se guarda solo como huella firmada; el enlace de reanudación vence a las 24 h.
++6. La provincia del usuario la hereda su referido; sirve para el filtro de referidos y para las campañas por provincia (Sprint 3).
+ 
+ ## 6. Fuera de alcance
+ 
+-- Publicar una nueva versión del aviso desde el panel (RF-47-4) · se publica por variables de entorno.
+ - Cambio de correo desde el perfil con confirmación (HU-023 · Sprint 3).
+ - Medir con usuarios el objetivo de 3 minutos (RNF-10): requiere una prueba de usabilidad con 10 participantes.
+ 
+@@ -69,7 +78,8 @@ expresa del tratamiento de sus datos (UR-52).
+ 
+ | # | Pregunta | Para | Estado |
+ | - | -------- | ---- | ------ |
+-| P-01 | ¿Cuáles son los textos oficiales de términos y aviso de privacidad (versión 1.0)? Hoy hay textos de prueba (versión 0.1). | Cooperativa / PO | Abierta |
++| P-01 | ¿Cuáles son los textos oficiales de términos y aviso de privacidad (versión 1.0)? Hoy hay textos de prueba (versión 0.1); ya se pueden publicar desde Configuración. | Cooperativa / PO | Abierta |
++| P-03 | ¿La provincia es obligatoria en el registro? | PO | Propuesta aplicada: sí (RF-01 y RF-01-1 de la ERS). Falta confirmación del PO |
+ | P-02 | ¿Qué proveedor SMTP se usará en producción? | TI | Abierta |
+ 
+ ## 8. Historial
+@@ -78,3 +88,4 @@ expresa del tratamiento de sus datos (UR-52).
+ | ----- | ------ | ----- |
+ | 2026-11-10 | Primera implementación en la rama `sprint-2` | Equipo |
+ | 2026-11-14 | Integrada en `main` sobre los roles dinámicos del Sprint 1; sin SQLite; spec SDD | Equipo |
++| 2026-11-16 | Provincia en el paso 1 (CA-16), publicación de versiones del aviso (CA-17 a CA-19, RF-47-4), criterios de registro traídos de la spec de sesión (CA-20, CA-21), CA-15 con prueba; carpeta renumerada a `05-registro-y-confirmacion`; casos de uso CU-01.4 y CU-19.2 | Equipo |
+diff --git a/specs/sprint-2/01-registro-y-confirmacion/plan.md b/specs/sprint-2/05-registro-y-confirmacion/plan.md
+similarity index 68%
+rename from specs/sprint-2/01-registro-y-confirmacion/plan.md
+rename to specs/sprint-2/05-registro-y-confirmacion/plan.md
+index 222af73..35257e8 100644
+--- a/specs/sprint-2/01-registro-y-confirmacion/plan.md
++++ b/specs/sprint-2/05-registro-y-confirmacion/plan.md
+@@ -22,6 +22,7 @@ Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementad
+ | Tabla `ConfirmacionCorreo` (`usuarioId` PK, `token`, `tokenExpira`, `huella`, `vence`, `intentos`, `reenvios`) | Código de 6 dígitos, 10 min, 5 intentos, 3 reenvíos por hora |
+ | Tabla `AvisoPrivacidad` (`version` PK, `terminos`, `privacidad`) | Textos versionados (clase `AvisoPrivacidad` del EAPX) |
+ | Tabla `AceptacionTerminos` (`usuarioId`, `version`, `fecha`) | Evidencia RF-47-2 (clase `AceptacionTerminos` del EAPX, `Usuario 1 — 1..* AceptacionTerminos`) |
++| `sprint2-correcciones.sql`: `Usuario.provincia`; `AvisoPrivacidad.vigente`, `publicadoEn`, `publicadoPor` e índice único parcial `WHERE vigente` | Provincia (CA-16) y exactamente 1 versión vigente (CA-17 a CA-19) |
+ 
+ La migración se registra en `SumaMigracion` y se aplica una sola vez desde `Database.init()` (`MIGRACIONES` en `backend/src/database.mjs`).
+ 
+@@ -29,7 +30,10 @@ La migración se registra en `SumaMigracion` y se aplica una sola vez desde `Dat
+ 
+ | Método | Ruta | Acceso | Respuestas |
+ | ------ | ---- | ------ | ---------- |
+-| GET | `/api/auth/aviso-privacidad` | público | 200 `{version, terminos, privacidad}` · 503 si no hay aviso publicado en producción |
++| GET | `/api/auth/aviso-privacidad` | público | 200 `{version, terminos, privacidad}` de la versión vigente · 503 si no hay aviso publicado en producción |
++| GET | `/api/auth/provincias` | público | 200 lista de las 24 provincias |
++| GET | `/api/configuracion/aviso` | `admin(req, 'configuracion')` | 200 `{vigente, historial, aceptaciones}` |
++| POST | `/api/configuracion/aviso` | `admin(req, 'configuracion')` | 201 `{version}` · 400 (versión o textos) · 409 (versión no mayor que la vigente) |
+ | POST | `/api/auth/register` | público | 201 `{requiereConfirmacion, token, destino}` · 400 (`campos`) · 403 (registro cerrado) · 409 (correo, celular o cuenta ya usados) · 503 |
+ | POST | `/api/auth/confirmar-correo` | `token` de reanudación | 200 · 400 |
+ | POST | `/api/auth/reenviar-confirmacion` | `token` de reanudación | 200 · 429 (3 reenvíos por hora) |
+@@ -39,7 +43,11 @@ En desarrollo (`ENABLE_DEV_RESET_LINK=true`) las respuestas traen `devCodigo`; e
+ 
+ ## 4. Dominio
+ 
+-- `AvisoPrivacidad.vigente()` — lee `SUMA_AVISO_VERSION`, `SUMA_TERMINOS`, `SUMA_PRIVACIDAD`; en desarrollo usa la versión `0.1` de prueba.
++- `avisoVigente(client)` en `api.mjs` — devuelve la fila con `vigente = TRUE`; si todavía no hay ninguna, usa
++  `AvisoPrivacidad.vigente()` (variables `SUMA_AVISO_VERSION`, `SUMA_TERMINOS`, `SUMA_PRIVACIDAD`, o la versión `0.1` de
++  prueba en desarrollo) y la primera aceptación la deja fijada. El registro bloquea la tabla y compara la versión
++  aceptada con la vigente.
++- `provincia()` en `dominio/provincias.mjs` — valida 1 de las 24 provincias (`PROVINCIAS`).
+ - `AceptacionTerminos(aviso, aceptado, version, fecha)` — exige `aceptado === true` y la versión vigente.
+ - `ConfirmacionCorreo` — `iniciar`, `reanudar`, `confirmar`, `reenviar`, `pendiente` (operaciones del diagrama de clases).
+ - `CodigoVerificacion.segundoFactor()` genera los 6 dígitos; la huella se firma con HMAC.
+@@ -48,14 +56,16 @@ En desarrollo (`ENABLE_DEV_RESET_LINK=true`) las respuestas traen `devCodigo`; e
+ 
+ | Pantalla | Ruta | Archivos |
+ | -------- | ---- | -------- |
+-| Registro en 3 pasos | `/registro?ref=CODIGO` | `features/publico/registro.page.ts`, `registro.page.html` |
++| Registro en 3 pasos (con provincia en el paso 1) | `/registro?ref=CODIGO` | `features/publico/registro.page.ts`, `registro.page.html` |
++| Publicar versión de términos y aviso | `/panel/configuracion` | `features/administracion/aviso-privacidad.component.ts` |
+ | Confirmar correo | `/confirmar-correo` | `features/publico/confirmar-correo.page.ts` |
+ | Inicio de sesión (redirige a confirmar) | `/iniciar-sesion` | `features/publico/login.page.ts` |
+ | Cliente HTTP | — | `core/auth/auth.api.ts` |
+ 
+ ## 6. Bitácora
+ 
+-`Registro` (`objetivoId` = nuevo usuario) · `Referido asociado por código` (si llegó con código, `datos.socioId`).
++`Registro` (`objetivoId` = nuevo usuario) · `Referido asociado por código` (si llegó con código, `datos.socioId`) ·
++`Aviso de privacidad publicado` (`datos: {anterior, nuevo}`).
+ 
+ ## 7. Estrategia de pruebas
+ 
+@@ -63,9 +73,13 @@ En desarrollo (`ENABLE_DEV_RESET_LINK=true`) las respuestas traen `devCodigo`; e
+ | -------- | --------------------------------------- |
+ | CA-03, CA-05, CA-06, CA-07, CA-09 a CA-13 | `HU-013 / HU-014: consentimiento, unicidad, confirmación, vencimiento y reenvíos` |
+ | CA-03 (cuenta), CA-14 | `RF-11: vinculación, código, registro asociado y exportación privada` |
+-| CA-15 | `producción nunca expone enlaces ni códigos` (no se muestran códigos); el bloqueo del registro sin SMTP no tiene prueba propia |
++| CA-15 | `HU-014 / CA-15: sin servicio de correo no se crea la cuenta` · `producción nunca expone enlaces ni códigos` |
++| CA-16 | `T-01: la provincia es obligatoria en el registro y la hereda el referido` |
++| CA-17 a CA-19 | `RF-47-4: el administrador publica una nueva versión y el registro exige aceptarla` |
++| CA-20 | `RF-14 / RF-14-2 / RF-42` (registro con `registroAbierto=false` → 403) |
++| CA-21 | `RF-11-4: dictamen…` (cuenta de 8 dígitos rechazada) |
+ | CA-08 | Indirecta: en `RF-11: vinculación…` la cuenta nueva usa módulos del rol Socio (`/referidos`, `/auth/cuenta`) |
+-| CA-01, CA-02, CA-04 | Frontend: `registro.page` (progreso y conservación de datos) · `e2e/smoke.cjs` (alta por enlace a 390 px) |
++| CA-01, CA-02, CA-04 | Frontend: `registro.page` (progreso, provincia y conservación de datos) · `e2e/smoke.cjs` (alta por enlace a 390 px) |
+ | Migración sobre datos del Sprint 1 | Verificada manualmente en PostgreSQL 16 (créditos y cuentas anteriores conservados; doble `init()` sin error) |
+ 
+ ## 8. Decisiones y riesgos
+diff --git a/specs/sprint-2/01-registro-y-confirmacion/tareas.md b/specs/sprint-2/05-registro-y-confirmacion/tareas.md
+similarity index 71%
+rename from specs/sprint-2/01-registro-y-confirmacion/tareas.md
+rename to specs/sprint-2/05-registro-y-confirmacion/tareas.md
+index 30d9c52..aeb4103 100644
+--- a/specs/sprint-2/01-registro-y-confirmacion/tareas.md
++++ b/specs/sprint-2/05-registro-y-confirmacion/tareas.md
+@@ -1,6 +1,6 @@
+ # Tareas · Registro en 3 pasos y confirmación del correo
+ 
+-Plan: [`plan.md`](plan.md) · Estado: Completado (2 pendientes externas)
++Plan: [`plan.md`](plan.md) · Estado: Completado (2 pendientes externas: textos oficiales y SMTP)
+ 
+ ## Fase 1 · Datos
+ 
+@@ -26,27 +26,35 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (2 pendientes externas)
+ - [x] T11 — Registro en 3 pasos con porcentaje, «No, aún no», requisitos de contraseña y casilla de términos (CA-01 a CA-06)
+ - [x] T12 — `ConfirmarCorreoPage` con reenvío (CA-10 a CA-12)
+ - [x] T13 — Login redirige a confirmar correo (CA-13)
++- [x] T17 — Provincia en el paso 1, `GET /auth/provincias` y migración `sprint2-correcciones.sql` (CA-16 · 2026-11-16)
++- [x] T18 — Publicar versiones del aviso: `GET/POST /configuracion/aviso` y `AvisoPrivacidadAdminComponent` (CA-17 a CA-19 · 2026-11-16)
++- [x] T19 — Pruebas `T-01`, `RF-47-4` y `HU-014 / CA-15` (2026-11-16)
+ 
+ ## Fase 5 · Cierre
+ 
+ - [x] T14 — Spec, plan y matriz del sprint
+-- [ ] T15 — Publicar textos oficiales del aviso, versión 1.0 (P-01)
++- [ ] T15 — Publicar desde Configuración los textos oficiales del aviso, versión 1.0 (P-01)
+ - [ ] T16 — Configurar SMTP de producción y medir la entrega en menos de 60 s (P-02, RNF-14)
+ 
+ ## Verificación
+ 
+ | Comando | Resultado | Fecha |
+ | ------- | --------- | ----- |
+-| `cd backend && npm run test:sprint` | 24/24 pasan | 2026-11-14 |
+-| `cd frontend && npx ng test --watch=false` | 17/17 pasan | 2026-11-14 |
+-| `cd frontend && npx ng lint && npx ng build` | Sin errores | 2026-11-14 |
++| `cd backend && npm run test:sprint` | 32/32 pasan | 2026-11-16 |
++| `cd frontend && npx ng test --watch=false` | 17/17 pasan | 2026-11-16 |
++| `cd frontend && npx ng lint && npx ng build` | Sin errores | 2026-11-16 |
++| `cd e2e && node smoke.cjs` | Pasa (incluye registro con provincia y código precargado) | 2026-11-16 |
+ 
+ | Criterio | Prueba que lo cubre | ¿Pasa? |
+ | -------- | ------------------- | ------ |
+-| CA-01, CA-02, CA-04 | Pantalla de registro · `e2e/smoke.cjs` | Implementado; e2e no ejecutado en esta integración |
++| CA-01, CA-02, CA-04 | Pantalla de registro · `e2e/smoke.cjs` | Sí |
+ | CA-03 | `HU-013 / HU-014` · `RF-11: vinculación…` | Sí |
+ | CA-05, CA-06, CA-07 | `HU-013 / HU-014` | Sí |
+ | CA-08 | Indirecta en `RF-11: vinculación…` (usa módulos del rol Socio) | Sí |
+ | CA-09 a CA-13 | `HU-013 / HU-014` | Sí |
+ | CA-14 | `RF-11: vinculación…` | Sí |
+-| CA-15 | `producción nunca expone enlaces ni códigos` | Parcial: el bloqueo sin SMTP no tiene prueba propia |
++| CA-15 | `HU-014 / CA-15` · `producción nunca expone enlaces ni códigos` | Sí |
++| CA-16 | `T-01` | Sí |
++| CA-17 a CA-19 | `RF-47-4` | Sí |
++| CA-20 | `RF-14 / RF-14-2 / RF-42` | Sí |
++| CA-21 | `RF-11-4` (cuenta de 8 dígitos) | Sí |
+diff --git a/specs/sprint-2/02-cuenta-cooperativa/especificacion.md b/specs/sprint-2/06-cuenta-cooperativa/especificacion.md
+similarity index 92%
+rename from specs/sprint-2/02-cuenta-cooperativa/especificacion.md
+rename to specs/sprint-2/06-cuenta-cooperativa/especificacion.md
+index 97b7035..813d900 100644
+--- a/specs/sprint-2/02-cuenta-cooperativa/especificacion.md
++++ b/specs/sprint-2/06-cuenta-cooperativa/especificacion.md
+@@ -8,7 +8,7 @@
+ | Requisitos de usuario | UR-07 · UR-08 · UR-09 · UR-14 · UR-44 |
+ | Requisitos funcionales | RF-05 (RF-05-1 a RF-05-6) · RF-06 (RF-06-1 a RF-06-3) · RF-39 · RF-42 |
+ | No funcionales | RNF-05 · RNF-12 · RNF-16 · RNF-23 · RNF-24 |
+-| Casos de uso (EAPX) | CU-04 Solicitar vinculación de cuenta cooperativa · CU-04.1 Validar los datos y la unicidad de la cuenta (include) · CU-04.2 Registrar la solicitud pendiente (include) |
++| Casos de uso (EAPX) | CU-04 Solicitar vinculación de cuenta cooperativa · CU-04.1 Validar los datos y la unicidad de la cuenta (include) · CU-04.2 Registrar la solicitud pendiente (include) · CU-05.4 Comprobar que la cuenta vinculada esté aprobada (include de CU-05 y CU-12) · CU-18 Verificar una cuenta vinculada · CU-18.1 Generar el código y el enlace de referido (extend) |
+ | Clases (EAPX) | `CuentaCooperativa` (`numeroCuenta`, `tipoCuenta`, `estado`, `motivo`, `fechaRevision`; `aprobar`, `rechazar`, `numeroEnmascarado`, `estaAprobada`) · `Usuario 1 — 0..1 CuentaCooperativa` |
+ | Estado | Implementada · Verificada |
+ 
+@@ -46,7 +46,7 @@ a mano. Mientras tanto, el prospecto participa en todo lo demás.
+ | CA-10 | HU-016 · RF-42 | una decisión sobre la cuenta | se guarda | queda en la bitácora con autor, usuario, estado anterior y nuevo y motivo |
+ | CA-11 | RF-06-1 | un usuario sin cuenta Aprobada | intenta referir o generar su enlace | se bloquea |
+ | CA-12 | RF-06-2 | un usuario sin cuenta Aprobada | abre el inicio o Referidos | ve 1 aviso con el acceso a «Vincular mi cuenta» |
+-| CA-13 | RF-06 · RF-09 | una cuenta que pasa a Aprobada | se aprueba | se habilitan referir y su enlace en ese momento (se genera su código, spec 03) |
++| CA-13 | RF-06 · RF-09 | una cuenta que pasa a Aprobada | se aprueba | se habilitan referir y su enlace en ese momento (se genera su código; el uso del enlace es HU-017, `sprint-3/01-invitacion`) |
+ | CA-14 | RF-06-3 | un usuario sin cuenta verificada | usa capacitaciones, juegos, retos o comunidad | no se le bloquea por la cuenta |
+ | CA-15 | — | un rol sin experiencia Comunidad (Gestor, Administrador) | intenta vincular una cuenta | se rechaza |
+ 
+@@ -76,3 +76,4 @@ a mano. Mientras tanto, el prospecto participa en todo lo demás.
+ | ----- | ------ | ----- |
+ | 2026-11-10 | Primera implementación en la rama `sprint-2` | Equipo |
+ | 2026-11-14 | Integrada en `main`; autorización por experiencia del rol en vez de `rol === 'SOCIO'`; prueba de la cola de revisión | Equipo |
++| 2026-11-16 | Carpeta renumerada a `06-cuenta-cooperativa`; casos de uso CU-18, CU-18.1 y CU-05.4 (antes faltaba el caso de uso del administrador que verifica la cuenta, UR-08) | Equipo |
+diff --git a/specs/sprint-2/02-cuenta-cooperativa/plan.md b/specs/sprint-2/06-cuenta-cooperativa/plan.md
+similarity index 100%
+rename from specs/sprint-2/02-cuenta-cooperativa/plan.md
+rename to specs/sprint-2/06-cuenta-cooperativa/plan.md
+diff --git a/specs/sprint-2/02-cuenta-cooperativa/tareas.md b/specs/sprint-2/06-cuenta-cooperativa/tareas.md
+similarity index 100%
+rename from specs/sprint-2/02-cuenta-cooperativa/tareas.md
+rename to specs/sprint-2/06-cuenta-cooperativa/tareas.md
+diff --git a/specs/sprint-2/README.md b/specs/sprint-2/README.md
+index 4838af2..476a904 100644
+--- a/specs/sprint-2/README.md
++++ b/specs/sprint-2/README.md
+@@ -1,114 +1,82 @@
+-# Sprint 2 · Registro, vinculación e invitaciones
++# Sprint 2 · Recuperación, administración, interfaz, referidos, registro y cuenta de la Cooperativa
+ 
+ | Campo | Valor |
+ | ----- | ----- |
+-| Estado | Implementado y verificado · correcciones de trazabilidad aplicadas el 2026-11-16 (ver [Correcciones](#correcciones-de-trazabilidad-2026-11-16)) |
+-| Semanas | 11–12 (hoja `BKL-G1` del Backlog del producto) |
+-| Alcance según el backlog | Columna *Sprint* de `BKL-G1` (fuente correcta, confirmada el 2026-11-16): **Sprint 1 = HU-001 a HU-003 · Sprint 2 = HU-004 a HU-016 · Sprint 3 = HU-017 a HU-029**. Esta carpeta se armó con la tabla *Sprint Backlog* anterior (Sprint 2 = HU-013 a HU-022): HU-004 a HU-012 están en [`sprint-1/`](../sprint-1/README.md) y HU-017 a HU-022 quedan programadas por adelantado respecto del Sprint 3. |
+-| Objetivo | Que cualquier persona cree y active su cuenta sola, vincule su cuenta de la Cooperativa, y que el socio verificado invite con su enlace o QR y reciba puntos cuando su referido se aprueba |
+-| Fuentes | `Backlog_del_producto.xlsx` · `DocumentacionResumenRequisitos.xlsx` (UR, RF, RNF, hoja *Trazabilidad*) · `Anexo_02_-_Documento_Vision_Proyecto_PRG` v1.2.0 · `Anexo_01_-_Acta_de_Constitucion_Proyecto` · `SUMA-Diagramas_Vistas.eapx` (CU-01 a CU-38 y diagrama de clases) |
+-| Modo SDD | Especificado a partir del backlog y la ERS; implementación tomada de la rama `origin/sprint-2` (commit `48f1760`) e integrada en `main` con los ajustes listados abajo |
++| Estado | Implementado y verificado · correcciones de trazabilidad aplicadas el 2026-11-16 |
++| Semanas | 11–12 |
++| Historias | **HU-004 a HU-016** (columna *Sprint* de la hoja `BKL-G1`) |
++| Objetivo | Que el usuario recupere su acceso, que la administración opere la plataforma sola, que toda pantalla se entienda sin ayuda, y que cualquier persona cree y active su cuenta, vincule su cuenta de la Cooperativa y que los referidos se gestionen con trazabilidad |
++| Fuentes | `Backlog_del_producto.xlsx` · `DocumentacionResumenRequisitos.xlsx` (UR, RF, RNF, hoja *Trazabilidad*) · `Anexo_02_-_Documento_Vision_Proyecto_PRG` v1.2.0 · `Anexo_01_-_Acta_de_Constitucion_Proyecto` · `SUMA-Diagramas_Vistas.eapx` (CU-01 a CU-38) |
++| Reorganización | El 2026-11-16 se alineó con el backlog. Entraron HU-004 a HU-012 (antes documentadas en `sprint-1/`). HU-017 a HU-022, que se construyeron en este sprint, son del Sprint 3 y sus specs están en [`sprint-3/`](../sprint-3/README.md) |
+ 
+ ## Funcionalidades
+ 
+ | # | Funcionalidad | HU | Casos de uso | Spec | Plan | Tareas | Estado |
+ | - | ------------- | -- | ------------ | ---- | ---- | ------ | ------ |
+-| 01 | Registro en 3 pasos y confirmación del correo | HU-013, HU-014 | CU-01, CU-01.1, CU-01.2, CU-01.4, CU-19.2 | [spec](01-registro-y-confirmacion/especificacion.md) | [plan](01-registro-y-confirmacion/plan.md) | [tareas](01-registro-y-confirmacion/tareas.md) | Verificada |
+-| 02 | Vinculación y verificación de la cuenta de la Cooperativa | HU-015, HU-016 | CU-04, CU-04.1, CU-04.2, CU-05.4, CU-18, CU-18.1 | [spec](02-cuenta-cooperativa/especificacion.md) | [plan](02-cuenta-cooperativa/plan.md) | [tareas](02-cuenta-cooperativa/tareas.md) | Verificada |
+-| 03 | Enlace, QR, compartir y alta por enlace | HU-017, HU-018, HU-019 | CU-05, CU-05.1, CU-05.2, CU-05.3, CU-01.3 | [spec](03-invitacion/especificacion.md) | [plan](03-invitacion/plan.md) | [tareas](03-invitacion/tareas.md) | Verificada · pruebas en dispositivo pendientes |
+-| 04 | Estado de referidos, dictamen y puntos automáticos | HU-020, HU-021, HU-022 | CU-06, CU-06.2, CU-06.4, CU-36 | [spec](04-seguimiento-y-puntos/especificacion.md) | [plan](04-seguimiento-y-puntos/plan.md) | [tareas](04-seguimiento-y-puntos/tareas.md) | Verificada |
++| 01 | Recuperación de acceso | HU-004 | CU-02.3, CU-02.5 | [spec](01-recuperacion-de-acceso/especificacion.md) | [plan](01-recuperacion-de-acceso/plan.md) | [tareas](01-recuperacion-de-acceso/tareas.md) | Verificada |
++| 02 | Administración: usuarios, configuración, bitácora, tablero y respaldo | HU-005, HU-006, HU-007 | CU-15, CU-17, CU-19, CU-20 | [spec](02-administracion/especificacion.md) | [plan](02-administracion/plan.md) | [tareas](02-administracion/tareas.md) | Verificada · respaldo por programar |
++| 03 | Interfaz clara, avisos y ayuda en formularios | HU-008, HU-009, HU-010 | Transversal (CU-02.4) | [spec](03-interfaz/especificacion.md) | [plan](03-interfaz/plan.md) | [tareas](03-interfaz/tareas.md) | Verificada · revisión WCAG pendiente |
++| 04 | Gestión de referidos | HU-011, HU-012 | CU-06, CU-06.1, CU-06.2, CU-06.5, CU-06.6 | [spec](04-referidos/especificacion.md) | [plan](04-referidos/plan.md) | [tareas](04-referidos/tareas.md) | Verificada |
++| 05 | Registro en 3 pasos y confirmación del correo | HU-013, HU-014 | CU-01, CU-01.1 a CU-01.4, CU-19.2 | [spec](05-registro-y-confirmacion/especificacion.md) | [plan](05-registro-y-confirmacion/plan.md) | [tareas](05-registro-y-confirmacion/tareas.md) | Verificada |
++| 06 | Vinculación y verificación de la cuenta de la Cooperativa | HU-015, HU-016 | CU-04, CU-04.1, CU-04.2, CU-05.4, CU-18, CU-18.1 | [spec](06-cuenta-cooperativa/especificacion.md) | [plan](06-cuenta-cooperativa/plan.md) | [tareas](06-cuenta-cooperativa/tareas.md) | Verificada |
+ 
+ ## Matriz de trazabilidad
+ 
+-| HU | Épica | UR | RF / RNF | Clases (EAPX) | Prueba (`backend/test/sprint.test.mjs`) |
+-| -- | ----- | -- | -------- | ------------- | --------------------------------------- |
+-| HU-013 Registro en 3 pasos | EPI-06 | UR-01, UR-13, UR-14, UR-22, UR-52 | RF-01-1 a 01-6 (con provincia), RF-47-1, 47-2, 47-4, RF-08-2 · RNF-04, 05, 10, 16 | `Usuario`, `AvisoPrivacidad`, `AceptacionTerminos` | `HU-013 / HU-014…` · `T-01…` · `RF-47-4…` · `HU-014 / CA-15…` |
+-| HU-014 Confirmar correo | EPI-06 | UR-02 | RF-02-1 a 02-3 · RNF-14 | `ConfirmacionCorreo`, `CodigoVerificacion` | `HU-013 / HU-014…` |
+-| HU-015 Vincular cuenta | EPI-06 | UR-07, UR-09, UR-14 | RF-05-1, 05-2, 05-5, 05-6, RF-06 · RNF-05, 23 | `CuentaCooperativa` | `HU-015 / HU-016 / RF-06…` · `RF-11: vinculación…` |
+-| HU-016 Verificar cuentas | EPI-08 | UR-08, UR-44 | RF-05-3, 05-4, RF-39, RF-42 · RNF-24 | `CuentaCooperativa`, `Notificacion` | `HU-015 / HU-016 / RF-06…` |
+-| HU-017 Enlace y QR | EPI-07 | UR-10, UR-11 | RF-09-1 a 09-3, RF-06-2 · RNF-19 | `CodigoReferido` | `RF-11: vinculación…` |
+-| HU-018 Compartir | EPI-07 | UR-12 | RF-10-1 a 10-3 · RNF-17, 21 | — (frontend) | Pantalla · `e2e/smoke.cjs` |
+-| HU-019 Alta por enlace | EPI-07 | UR-13 | RF-01-5, RF-11, RF-11-1 | `CodigoReferido`, `Referido` | `RF-11: vinculación…` · `e2e/smoke.cjs` |
+-| HU-020 Estado de referidos | EPI-07 | UR-15, UR-44 | RF-11-2, RF-39-1, 39-2 | `Referido.consultaSocio`, `Notificacion` | `RF-11 / RNF-12…` · `RF-39…` |
+-| HU-021 Dictamen | EPI-08 | UR-16, UR-19 | RF-11-4, RF-12-2, RF-42 | `Referido`, `AcreditacionPuntos` | `RF-11-4…` · `RF-11: vinculación…` · `RF-42: el dictamen…` |
+-| HU-022 Puntos automáticos | EPI-10 | UR-24 | RF-12-1, RF-14-3, 14-4, RF-38-1 · RNF-20 | `MovimientoPuntos`, `AcreditacionPuntos` | `HU-022…` · `RF-11: vinculación…` |
+-
+-## Ajustes al integrar la rama `sprint-2` en `main`
+-
+-La rama partía de un `main` anterior a los roles dinámicos (commit `24e6019`). Al traerla:
+-
+-1. **Roles sin nombres en el código (constitución II).** Se reemplazaron `rol === 'ADMIN'` y `rol === 'SOCIO'` por
+-   `esAdmin` (alcance global) y `esParticipante()` / `ROLES_PARTICIPANTES` (experiencia *Comunidad*).
+-2. **Solo PostgreSQL (constitución VII).** Se eliminaron el esquema y las ramas de SQLite; `sprint2` se agregó a la lista
+-   única de migraciones de `Database.init()`.
+-3. **Experiencia del socio.** *Mi cuenta* pasó al shell *Comunidad* (`/panel/mi-cuenta`), y el inicio del socio
+-   (`FeedPage`) tiene el bloque «Invita y gana». El resumen del Gestor quedó igual que en `main`.
+-4. **Sondeo de notificaciones** en `NotificacionesStore.sondear()`, usado por los dos shells.
+-5. **Edición de referidos:** se mantuvo la regla de `main` (el socio edita sus Pendientes, HU-011), en lugar de
+-   «solo administración» que traía la rama.
+-6. **Prueba nueva:** `HU-015 / HU-016 / RF-06` (cola de revisión, rechazo, nuevo intento, bloqueo de referir, rol sin Comunidad).
+-7. **Migración** probada sobre una base con datos del Sprint 1 (créditos y cuentas conservados; doble `init()` sin error).
+-
+-## Adelantos de otros sprints que ya están en el código
+-
+-| Qué | HU de destino | Nota |
+-| --- | ------------- | ---- |
+-| Exportar Pendientes a CSV (`GET /referidos/exportar`) | HU-024 · Sprint 3 | Columnas de RF-11-7; falta su spec |
+-| Puntos por acción y valor del punto en Configuración | HU-029 · Sprint 3 | Cubre RF-14-3 y RF-14-4; falta su spec |
++| HU | Épica | UR | RF / RNF | Caso de uso | Criterios | Prueba (`backend/test/sprint.test.mjs` salvo indicación) |
++| -- | ----- | -- | -------- | ----------- | --------- | -------------------------------------------------------- |
++| HU-004 Recuperación | EPI-02 | UR-05 | RF-07, RF-07-1, RF-07-2 · RNF-22 | CU-02.3, CU-02.5 | 01 · CA-01 a CA-06 | `RF-07` · `producción nunca expone…` · `e2e/smoke.cjs` |
++| HU-005 Panel | EPI-03 | UR-49 | RF-45-1 | CU-15 | 02 · CA-13 a CA-15, CA-17 | `RF-45-1: tablero con 6 indicadores` |
++| HU-006 Configuración | EPI-03 | UR-46 | RF-14, RF-14-1 a RF-14-4 | CU-19, CU-19.1 | 02 · CA-06 a CA-09 | `RF-14 / RF-14-2 / RF-42` |
++| HU-007 Bitácora | EPI-03 | UR-48 | RF-42, RF-42-1, RF-42-2 · RNF-08, RNF-13 | CU-20, CU-20.1 | 02 · CA-10 a CA-12, CA-16 | `RF-14 / RF-14-2 / RF-42` · `npm run db:respaldo` |
++| HU-008 Interfaz | EPI-04 | UR-04, UR-53 | RF-49-4 · RNF-18 | CU-02.4 | 03 · CA-01, CA-02, CA-07 | `features.spec.ts` · `e2e/smoke.cjs` (390 px) |
++| HU-009 Avisos | EPI-04 | UR-53 | RF-49-3 · RNF-15 | — | 03 · CA-03, CA-04 | `auth.spec.ts` |
++| HU-010 Ayuda | EPI-04 | UR-53 | RF-49-1, RF-49-2 · RNF-16 | — | 03 · CA-05, CA-06 | `features.spec.ts` |
++| HU-011 Gestión de referidos | EPI-05 | UR-13, UR-54 | RF-11, RF-11-5, RF-11-6 · RNF-12 | CU-06.5, CU-06.6 | 04 · CA-01 a CA-05, CA-09, CA-14 a CA-18, CA-20 | `RF-11 / RNF-12` · `RF-11-6` · `RF-11-5` (x2) |
++| HU-012 Administración de referidos | EPI-05 | UR-16, UR-17 | RF-11-3, RF-11-4 | CU-06, CU-06.1, CU-06.2 | 04 · CA-06 a CA-08, CA-10 a CA-13, CA-19 | `RF-11 / RNF-12` · `días hábiles` · `RF-11-4` · `T-01` |
++| HU-013 Registro | EPI-06 | UR-01, UR-14, UR-22, UR-52 | RF-01-1 a RF-01-6, RF-47-1, RF-47-2, RF-47-4, RF-08-2 · RNF-04, RNF-05, RNF-10, RNF-16 | CU-01, CU-01.1, CU-01.4, CU-19.2 | 05 · CA-01 a CA-08, CA-15 a CA-21 | `HU-013 / HU-014` · `T-01` · `RF-47-4` · `HU-014 / CA-15` |
++| HU-014 Confirmar correo | EPI-06 | UR-02 | RF-02-1 a RF-02-3 · RNF-14 | CU-01.2 | 05 · CA-09 a CA-13 | `HU-013 / HU-014` |
++| HU-015 Vincular cuenta | EPI-06 | UR-07, UR-09, UR-14 | RF-05-1, RF-05-2, RF-05-5, RF-05-6, RF-06 · RNF-05, RNF-23 | CU-04, CU-04.1, CU-04.2, CU-05.4 | 06 | `HU-015 / HU-016 / RF-06` · `RF-11: vinculación…` |
++| HU-016 Verificar cuentas | EPI-08 | UR-08, UR-44 | RF-05-3, RF-05-4, RF-39, RF-42 · RNF-24 | CU-18, CU-18.1 | 06 | `HU-015 / HU-016 / RF-06` |
+ 
+ ## Correcciones de trazabilidad (2026-11-16)
+ 
+-Revisión completa de UR → CU → HU → código hasta el Sprint 2. Detalle de cada caso de uso en
+-[`docs/CASOS-USO-FALTANTES-SPRINT1-2.md`](../../docs/CASOS-USO-FALTANTES-SPRINT1-2.md).
+-
+ | Qué | Dónde |
+ | --- | ----- |
+-| Tabla *Sprint Backlog* alineada con la columna *Sprint* de cada HU (Sprint 1 = HU-001 a HU-003; la columna no se tocó); HU-005, HU-006, HU-011, HU-012, HU-013, HU-021 y HU-022 corregidas; HU-055 a HU-058 nuevas para UR-42, UR-43, UR-47 y UR-50 | `Backlog_del_producto.xlsx` |
+-| UR-54 (registro manual de referidos), provincia en RF-01 y RF-01-1, RF-08-1 (roles base y adicionales), RF-12-2 (puntos sin campañas), RF-45-1 (usuario activo), hojas *Trazabilidad* y *MODULOS* | `DocumentacionResumenRequisitos.xlsx` |
+-| CU-16 a CU-38 y 15 sub-casos nuevos, 16 relaciones corregidas a `include` / `extend`, generalización Prospecto → Socio, valores etiquetados UR, HU, RF y Sprint en los 88 casos | `SUMA-Diagramas_Vistas.eapx` |
+-| Versión 1.2.0, provincia en los supuestos y ubicación de los diagramas | Documento de Visión |
+-| Provincia obligatoria en el registro (`Usuario.provincia`, `GET /api/auth/provincias`), heredada por el referido | `api.mjs`, `registro.page`, `sprint2-correcciones.sql` |
+-| Publicación de versiones del aviso de privacidad desde Configuración (RF-47-4) | `POST /api/configuracion/aviso`, `aviso-privacidad.component.ts` |
+-| Roles sin nombres escritos en la asociación manual y los indicadores; regla única del nombre; usuarios activos sin contar inicios de sesión | `api.mjs` |
+-| Lint del backend sin errores; `schema.prisma` regenerado desde la base; carpeta `modules/` sin uso eliminada | `backend/`, raíz |
+-| Prueba de navegador sobre PostgreSQL (esquema propio) y con la experiencia Comunidad del socio | `e2e/smoke.cjs` |
+-| Respaldo diario y conservación de 5 años (RNF-08, RNF-13) | `npm run db:respaldo` |
+-| Protocolo de pruebas con usuarios y dispositivos | [`docs/PROTOCOLO-PRUEBAS-USUARIOS.md`](../../docs/PROTOCOLO-PRUEBAS-USUARIOS.md) |
++| Specs reorganizadas por el sprint real de cada HU; spec de sesión separada en sesión (Sprint 1) y recuperación (Sprint 2); spec nueva de interfaz | `specs/` |
++| Tabla *Sprint Backlog* alineada con la columna *Sprint* (la columna no se tocó); HU-005, HU-006, HU-011, HU-012, HU-013, HU-021 y HU-022 corregidas; HU-055 a HU-058 nuevas | `Backlog_del_producto.xlsx` |
++| UR-54, provincia en RF-01 y RF-01-1, RF-08-1, RF-12-2, RF-45-1, RF-47-4; hojas *Trazabilidad* y *MODULOS* | `DocumentacionResumenRequisitos.xlsx` |
++| CU-16 a CU-38 y 15 sub-casos, 16 relaciones corregidas, valores etiquetados UR, HU, RF y Sprint | `SUMA-Diagramas_Vistas.eapx` · [`docs/CASOS-USO-FALTANTES-SPRINT1-2.md`](../../docs/CASOS-USO-FALTANTES-SPRINT1-2.md) |
++| Provincia obligatoria, publicación de versiones del aviso, roles por experiencia, usuario activo, respaldo diario, lint, `schema.prisma`, prueba de navegador sobre PostgreSQL | Código (ver specs 02, 04 y 05) |
+ 
+ ## Decisiones abiertas con el Product Owner
+ 
+-| # | Decisión | Spec |
+-| - | -------- | ---- |
+-| 1 | Textos oficiales de términos y aviso de privacidad (versión 1.0) | 01 · P-01 |
+-| 2 | Proveedor SMTP de producción | 01 · P-02 |
+-| 3 | Cómo se comprueba la titularidad de la cuenta | 02 · P-01 |
+-| 4 | Dominio oficial del enlace y texto del mensaje de WhatsApp | 03 · P-01, P-02 |
+-| 5 | ~~Puntos del referido mientras no haya campañas~~ Aplicado: `puntosReferido` para ambas partes (RF-12-2), a confirmar | 04 · P-01 |
+-| 6 | ~~Columna *Sprint* del backlog~~ Resuelta: la columna es la correcta; se corrigió la tabla *Sprint Backlog* | Este README |
+-| 7 | Provincia obligatoria en el registro (aplicada), roles base más roles adicionales (RF-08-1) y UR-54 para el registro manual de referidos: confirmar | Correcciones |
++| # | Decisión | Spec | Estado |
++| - | -------- | ---- | ------ |
++| 1 | Textos oficiales de términos y aviso de privacidad (versión 1.0) | 05 · P-01 | Abierta; ya se pueden publicar desde Configuración |
++| 2 | Proveedor SMTP de producción | 05 · P-02 · 01 · P-01 | Abierta |
++| 3 | Cómo se comprueba la titularidad de la cuenta | 06 · P-01 | Abierta |
++| 4 | Provincia obligatoria en el registro | 05 · P-03 | Aplicada, falta confirmación |
++| 5 | El socio puede dar de baja sus referidos *Pendientes* (UR-54) | 04 · P-01 | Aplicada, falta confirmación |
++| 6 | ¿Se mantiene «SUMA» como nombre del producto? | 02 · P-02 | Abierta |
+ 
+ ## Pendientes para cerrar el sprint al 100 %
+ 
+-1. ~~Pruebas de API: bitácora del dictamen (04 · CA-08), registro sin SMTP (01 · CA-15), plazo de 30 días y arranque sin `SUMA_DATA_KEY`~~ Hechas.
+-   El código propio no se puede usar en el alta (el correo es único) y el referido precargado lo cubre `e2e/smoke.cjs`.
+-2. ~~Ejecutar `e2e/smoke.cjs`~~ Pasa completo (2026-11-16).
+-3. Pruebas con usuarios y dispositivos: 3 minutos de registro (RNF-10), 15 s para compartir (RNF-21), lectura del QR (RNF-19),
+-   según [`docs/PROTOCOLO-PRUEBAS-USUARIOS.md`](../../docs/PROTOCOLO-PRUEBAS-USUARIOS.md).
+-4. SMTP real y medición de entrega en menos de 60 s (RNF-14).
++1. Pruebas con usuarios y dispositivos: registro en 3 minutos (RNF-10), recuperación en 5 minutos (RNF-22), accesibilidad
++   (RNF-15) y navegadores (RNF-17), según [`docs/PROTOCOLO-PRUEBAS-USUARIOS.md`](../../docs/PROTOCOLO-PRUEBAS-USUARIOS.md).
++2. SMTP real y medición de la entrega en menos de 60 s (RNF-14).
++3. Programar `npm run db:respaldo` en el servidor (02 · T19).
+ 
+-## Verificación del sprint
++## Verificación del sprint (2026-11-16)
+ 
+-| Comando | Resultado (2026-11-16) |
+-| ------- | ---------------------- |
+-| `cd backend && npm run test:sprint` | 31/31 pasan (PostgreSQL 16, esquema aislado) |
++| Comando | Resultado |
++| ------- | --------- |
++| `cd backend && npm run test:sprint` | 32/32 pasan (PostgreSQL 16, esquema aislado) |
+ | `cd backend && npm run lint` | 0 errores |
+ | `cd backend && npm run build` | Compila |
+ | `cd frontend && npx ng test --watch=false` | 17/17 pasan |
+-| `cd frontend && npx ng lint` | Sin errores |
+-| `cd frontend && npx ng build` | Compila, con carga diferida |
++| `cd frontend && npx ng lint && npx ng build` | Sin errores; compila con carga diferida |
+ | `cd e2e && node smoke.cjs` | Pasa: 7 bloques en Chromium, sin errores de JavaScript |
+ 
+-
+ ## Documento previo
+ 
+ [`docs/TRAZABILIDAD-SPRINT2.md`](../../docs/TRAZABILIDAD-SPRINT2.md) — trazabilidad escrita por el equipo en la rama `sprint-2`, actualizada a `main`.
+diff --git a/specs/sprint-2/03-invitacion/especificacion.md b/specs/sprint-3/01-invitacion/especificacion.md
+similarity index 90%
+rename from specs/sprint-2/03-invitacion/especificacion.md
+rename to specs/sprint-3/01-invitacion/especificacion.md
+index 956c61a..cabe049 100644
+--- a/specs/sprint-2/03-invitacion/especificacion.md
++++ b/specs/sprint-3/01-invitacion/especificacion.md
+@@ -2,13 +2,13 @@
+ 
+ | Campo | Valor |
+ | ----- | ----- |
+-| Sprint | 2 |
++| Sprint | 3 (HU-017 a HU-019; implementada por adelantado durante el Sprint 2) |
+ | Historias | HU-017 · HU-018 · HU-019 |
+ | Épica | EPI-07 · Invitar personas con mi enlace |
+ | Requisitos de usuario | UR-10 · UR-11 · UR-12 · UR-13 |
+ | Requisitos funcionales | RF-09 (RF-09-1 a RF-09-3) · RF-10 (RF-10-1 a RF-10-3) · RF-01-5 · RF-11 · RF-11-1 |
+ | No funcionales | RNF-17 · RNF-18 · RNF-19 · RNF-21 |
+-| Casos de uso (EAPX) | CU-05 Invitar nuevos socios · CU-05.1 Obtener el enlace de referido · CU-05.2 Descargar el código QR de invitación (extend) · CU-01.3 Vincular el registro a un referido |
++| Casos de uso (EAPX) | CU-05 Invitar nuevos socios · CU-05.1 Obtener el enlace de referido · CU-05.2 Descargar el código QR de invitación (extend) · CU-05.3 Compartir el enlace por WhatsApp o redes sociales (extend, actor secundario Redes sociales) · CU-05.4 Comprobar que la cuenta vinculada esté aprobada (include) · CU-01.3 Vincular el registro a un referido (extend) |
+ | Clases (EAPX) | `CodigoReferido` (`codigo`; `generar()`, `enlace()`) · `Usuario 1 — 0..1 CodigoReferido` · `Referido 0..1 — 0..1 Usuario` («se registra como») |
+ | Estado | Implementada · Verificada |
+ 
+@@ -74,3 +74,4 @@ quede automáticamente como su referido.
+ | ----- | ------ | ----- |
+ | 2026-11-10 | Primera implementación en la rama `sprint-2` | Equipo |
+ | 2026-11-14 | Integrada en `main`; bloque «Invita y gana» en el inicio del socio y QR visible en *Mi cuenta* | Equipo |
++| 2026-11-16 | Pasa a `sprint-3/` (HU-017 a HU-019 son del Sprint 3 según la columna *Sprint* del backlog). El referido hereda la provincia de quien se registra; casos de uso CU-05.3 y CU-05.4 | Equipo |
+diff --git a/specs/sprint-2/03-invitacion/plan.md b/specs/sprint-3/01-invitacion/plan.md
+similarity index 100%
+rename from specs/sprint-2/03-invitacion/plan.md
+rename to specs/sprint-3/01-invitacion/plan.md
+diff --git a/specs/sprint-2/03-invitacion/tareas.md b/specs/sprint-3/01-invitacion/tareas.md
+similarity index 76%
+rename from specs/sprint-2/03-invitacion/tareas.md
+rename to specs/sprint-3/01-invitacion/tareas.md
+index 51262cc..da05004 100644
+--- a/specs/sprint-2/03-invitacion/tareas.md
++++ b/specs/sprint-3/01-invitacion/tareas.md
+@@ -5,7 +5,7 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (pruebas en dispositivo pendien
+ ## Fase 1 · Pruebas
+ 
+ - [x] T01 — `RF-11: vinculación, código, registro asociado y exportación privada` (CA-01 a CA-04, CA-10, CA-12)
+-- [ ] T02 — Prueba de API para el código propio (CA-11) y para enlazar un referido cargado a mano (CA-13)
++- [x] T02 — Prueba de CA-13 (`HU-019 / CA-13`, 2026-11-16). CA-11 no puede darse en el alta: el código pertenece a una cuenta existente y el correo es único; la regla queda en el código como defensa
+ 
+ ## Fase 2 · Backend
+ 
+@@ -32,7 +32,8 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (pruebas en dispositivo pendien
+ | Criterio | Prueba que lo cubre | ¿Pasa? |
+ | -------- | ------------------- | ------ |
+ | CA-01 a CA-04 | `RF-11: vinculación…` | Sí |
+-| CA-05 a CA-08 | Pantalla · `e2e/smoke.cjs` | Implementado; e2e no ejecutado en esta integración |
+-| CA-09 | `e2e/smoke.cjs` | Implementado; e2e no ejecutado en esta integración |
++| CA-05 a CA-08 | Pantalla · `e2e/smoke.cjs` | Sí (2026-11-16) |
++| CA-09 | `e2e/smoke.cjs` | Sí (2026-11-16) |
+ | CA-10, CA-12 | `RF-11: vinculación…` | Sí |
+-| CA-11, CA-13 | — | Regla implementada, sin prueba propia |
++| CA-11 | — | No aplica en el alta (ver T02) |
++| CA-13 | `HU-019 / CA-13: el registro con código enlaza el referido cargado a mano` | Sí |
+diff --git a/specs/sprint-2/04-seguimiento-y-puntos/especificacion.md b/specs/sprint-3/02-seguimiento-y-puntos/especificacion.md
+similarity index 88%
+rename from specs/sprint-2/04-seguimiento-y-puntos/especificacion.md
+rename to specs/sprint-3/02-seguimiento-y-puntos/especificacion.md
+index 8a9f688..bd47a79 100644
+--- a/specs/sprint-2/04-seguimiento-y-puntos/especificacion.md
++++ b/specs/sprint-3/02-seguimiento-y-puntos/especificacion.md
+@@ -2,13 +2,13 @@
+ 
+ | Campo | Valor |
+ | ----- | ----- |
+-| Sprint | 2 |
++| Sprint | 3 (HU-020 a HU-022; implementada por adelantado durante el Sprint 2) |
+ | Historias | HU-020 · HU-021 · HU-022 |
+ | Épicas | EPI-07 (HU-020) · EPI-08 (HU-021) · EPI-10 Ganar puntos, niveles e insignias (HU-022) |
+ | Requisitos de usuario | UR-15 · UR-16 · UR-19 · UR-24 · UR-44 |
+ | Requisitos funcionales | RF-11-2 · RF-11-4 · RF-12 (RF-12-1, RF-12-2) · RF-14-3 · RF-14-4 · RF-38 (RF-38-1) · RF-39 (RF-39-1, RF-39-2) · RF-42 |
+ | No funcionales | RNF-01 · RNF-13 · RNF-20 |
+-| Casos de uso (EAPX) | CU-06 Consultar referidos · CU-06.2 Aprobar o rechazar un referido |
++| Casos de uso (EAPX) | CU-06 Consultar referidos · CU-06.2 Aprobar o rechazar un referido (extend) · CU-06.4 Acreditar los puntos al socio y al referido (extend de CU-06.2) · CU-36 Consultar notificaciones |
+ | Clases (EAPX) | `Referido` (`consultaSocio`, `nombreDePila`, `aprobar`, `rechazar`) · `MovimientoPuntos` (`actividad`, `clave`, `usuarioId`, `cantidad`, `fecha`, `referidoId`) · `AcreditacionPuntos` (`registrar`) · `Notificacion` |
+ | Estado | Implementada · Verificada |
+ 
+@@ -53,7 +53,8 @@ la cantidad. Los puntos tienen que cuadrar siempre con sus movimientos (RNF-20).
+ 
+ ## 5. Reglas de negocio
+ 
+-1. Mientras no existan campañas (Sprint 3), ambas partes reciben `puntosReferido` (por defecto 100).
++1. Mientras no exista una campaña activa, ambas partes reciben `puntosReferido` (por defecto 100). Así quedó escrito
++   en RF-12-2 de la ERS y en el criterio de HU-021 (2026-11-16).
+ 2. Cada movimiento tiene una clave única `actividad:evento:usuario`; así un evento repetido no duplica puntos.
+ 3. Actividades previstas: `REFERIDO`, `CAPACITACION`, `TRIVIA`, `TALLER`, `RETO`. En este sprint solo `REFERIDO` tiene flujo real;
+    las demás usan el mismo servicio cuando se construyan sus módulos (Sprint 4).
+@@ -77,3 +78,4 @@ la cantidad. Los puntos tienen que cuadrar siempre con sus movimientos (RNF-20).
+ | ----- | ------ | ----- |
+ | 2026-11-10 | Primera implementación en la rama `sprint-2` | Equipo |
+ | 2026-11-14 | Integrada en `main`; vista del socio y listados por capacidad del rol (`esAdmin`) en vez de `rol === 'ADMIN'` | Equipo |
++| 2026-11-16 | Pasa a `sprint-3/` (HU-020 a HU-022 son del Sprint 3). Regla de puntos sin campañas escrita en RF-12-2; criterio de HU-022 limitado a referidos hasta el Sprint 4; prueba de bitácora del dictamen (`RF-42: el dictamen…`); casos de uso CU-06.4 y CU-36 | Equipo |
+diff --git a/specs/sprint-2/04-seguimiento-y-puntos/plan.md b/specs/sprint-3/02-seguimiento-y-puntos/plan.md
+similarity index 95%
+rename from specs/sprint-2/04-seguimiento-y-puntos/plan.md
+rename to specs/sprint-3/02-seguimiento-y-puntos/plan.md
+index 0fc0a55..33075c9 100644
+--- a/specs/sprint-2/04-seguimiento-y-puntos/plan.md
++++ b/specs/sprint-3/02-seguimiento-y-puntos/plan.md
+@@ -63,7 +63,7 @@ Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementad
+ | CA-05 | `RF-11-4: dictamen reservado a administración y con cuenta vinculada aprobada` |
+ | CA-06, CA-07, CA-10, CA-12, CA-13 | `RF-11: vinculación…` (dos aprobaciones simultáneas → 200 y 409; 2 créditos de 100; «Ganaste 100 puntos.»; cambio a 500 no altera lo acreditado) |
+ | CA-09, CA-11 | `HU-022: acreditar una actividad interna es idempotente y usa su parámetro` |
+-| CA-08 | Se escribe en la misma transacción del dictamen; ninguna prueba consulta esa fila (pendiente) |
++| CA-08 | `RF-42: el dictamen deja en la bitácora el estado anterior y el nuevo` |
+ | CA-12 (bitácora de parámetros) | `RF-14 / RF-14-2 / RF-42` |
+ 
+ ## 8. Decisiones y riesgos
+@@ -71,5 +71,5 @@ Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementad
+ | Decisión | Alternativas descartadas | Motivo |
+ | -------- | ------------------------ | ------ |
+ | Clave determinista por evento y destinatario | Bandera «acreditado» en el referido | Idempotencia para cualquier actividad futura |
+-| Mismo `puntosReferido` para ambas partes | Inventar un parámetro de bienvenida | Las campañas (Sprint 3) definen los dos valores; se deja como P-01 |
++| Mismo `puntosReferido` para ambas partes | Inventar un parámetro de bienvenida | Las campañas (HU-025, Sprint 3) definen los dos valores; la regla quedó en RF-12-2 (P-01 por confirmar con el PO) |
+ | Sondeo de la bandeja que no renueva la sesión | Renovar en cada consulta | Si renovara, una pestaña abierta impediría el cierre por inactividad (RF-04-3) |
+diff --git a/specs/sprint-2/04-seguimiento-y-puntos/tareas.md b/specs/sprint-3/02-seguimiento-y-puntos/tareas.md
+similarity index 95%
+rename from specs/sprint-2/04-seguimiento-y-puntos/tareas.md
+rename to specs/sprint-3/02-seguimiento-y-puntos/tareas.md
+index 7210846..90340b0 100644
+--- a/specs/sprint-2/04-seguimiento-y-puntos/tareas.md
++++ b/specs/sprint-3/02-seguimiento-y-puntos/tareas.md
+@@ -41,6 +41,6 @@ Plan: [`plan.md`](plan.md) · Estado: Completado
+ | CA-03, CA-04 | `RF-39` · `RF-11-4` | Sí |
+ | CA-05 | `RF-11-4` | Sí |
+ | CA-06, CA-07 | `RF-11: vinculación…` | Sí |
+-| CA-08 | — | Implementado; falta una prueba que consulte la fila `Dictamen de referido` |
++| CA-08 | `RF-42: el dictamen deja en la bitácora el estado anterior y el nuevo` | Sí |
+ | CA-09, CA-11 | `HU-022` | Sí |
+ | CA-10, CA-12, CA-13 | `RF-11: vinculación…` | Sí |
