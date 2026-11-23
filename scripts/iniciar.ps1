@@ -23,7 +23,6 @@ function Instalar-Y-Compilar([string]$parte) {
     if ($LASTEXITCODE -ne 0) { throw "La compilacion de $parte fallo. Revisa el mensaje anterior." }
 }
 
-<<<<<<< HEAD
 # Reutiliza SUMA si ya esta activa; nunca detiene un proceso ajeno.
 function Test-SumaActiva([int]$puerto) {
     $cliente = New-Object System.Net.Sockets.TcpClient
@@ -37,7 +36,8 @@ function Test-SumaActiva([int]$puerto) {
         if ($salud.status -eq 'ok' -and $salud.app -eq 'SUMA' -and $salud.database -eq 'PostgreSQL') { return $true }
     } catch {}
     throw "El puerto $puerto esta ocupado, pero no responde como SUMA saludable. Revisa la aplicacion que usa ese puerto antes de volver a iniciar."
-=======
+}
+
 function Preparar-CorreoReal {
     $archivo = Join-Path $raiz 'backend/.env'
     $estado = & $node --env-file=$archivo -p 'JSON.stringify({ smtp: Boolean(process.env.SMTP_SERVICE || process.env.SMTP_HOST), demo: process.env.NODE_ENV !== ''production'' && process.env.SEED_DEMO === ''true'', destino: process.env.SUMA_ADMIN_DEMO_EMAIL?.trim() })'
@@ -64,7 +64,6 @@ function Preparar-CorreoReal {
     } elseif ($estado.demo -and $estado.destino -eq 'admin@suma.ec') {
         throw 'Configura SUMA_ADMIN_DEMO_EMAIL con una bandeja real; admin@suma.ec es una cuenta de prueba.'
     }
->>>>>>> cbf663aa25cbc7b3a810de68c9a3619cfa5ab168
 }
 
 $procesos = @()
@@ -123,14 +122,9 @@ try {
     if ($Modo -ne 'Backend') { Start-Process "http://localhost:$PuertoWeb" }
     Write-Host "SUMA esta lista ($Modo)."
     if ($Modo -ne 'Backend') { Write-Host "Web: http://localhost:$PuertoWeb" }
-<<<<<<< HEAD
-    Write-Host 'Cuentas de prueba (clave Suma2026!): admin@suma.ec | gestor@suma.ec | socio@suma.ec'
-    Read-Host 'Pulsa Enter para cerrar (solo se detienen los servidores iniciados por esta ventana)'
-=======
     Write-Host 'Cuentas de prueba (clave inicial Suma2026!): gestor@suma.ec | socio@suma.ec'
     Write-Host 'Administrador de prueba: admin@suma.ec o el correo configurado en SUMA_ADMIN_DEMO_EMAIL.'
-    Read-Host 'Pulsa Enter para detener los servidores de esta sesion'
->>>>>>> cbf663aa25cbc7b3a810de68c9a3619cfa5ab168
+    Read-Host 'Pulsa Enter para cerrar (solo se detienen los servidores iniciados por esta ventana)'
 } finally {
     foreach ($p in $procesos) { if ($p -and -not $p.HasExited) { Stop-Process -Id $p.Id -ErrorAction SilentlyContinue } }
 }
