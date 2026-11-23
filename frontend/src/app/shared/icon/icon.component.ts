@@ -9,6 +9,12 @@ import { Component, input } from '@angular/core';
 export class IconComponent {
   readonly name = input('panel');
   readonly paths: Record<string, string> = {
+    // Lucide icons. See public/licenses/lucide.txt.
+    'lucide-invitar': 'M2 21a8 8 0 0 1 13.292-6 M19 16v6 M22 19h-6 M14 8a5 5 0 1 1-10 0 5 5 0 0 1 10 0',
+    'lucide-objetivo': 'M22 12a10 10 0 1 1-20 0 10 10 0 1 1 20 0 M18 12a6 6 0 1 1-12 0 6 6 0 1 1 12 0 M14 12a2 2 0 1 1-4 0 2 2 0 1 1 4 0',
+    'lucide-regalo': 'M5 11v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9 M12 7v14 M4 7h16a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1Z M12 7H7.5A2.5 2.5 0 1 1 10 4.5C10 6 12 7 12 7Z M12 7h4.5A2.5 2.5 0 1 0 14 4.5C14 6 12 7 12 7Z',
+    'lucide-monedas': 'M16 9a7 7 0 1 1-14 0 7 7 0 0 1 14 0 M8.95 18.75A7 7 0 1 0 18.75 8.95 M7 7h2v4 M17.29 14.88l1.41 1.41-2.83 2.83',
+    'lucide-medalla': 'M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15 M11 12 5.12 2.2 M13 12l5.88-9.8 M8 7h8 M17 17a5 5 0 1 1-10 0 5 5 0 0 1 10 0 M12 18v-2h-.5',
     tablero: 'M4 20V10 M10 20V4 M16 20v-7 M22 20H2',
     alert: 'M12 3 2 21h20z M12 10v5 M12 18h.01',
     link: 'M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1 M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1',

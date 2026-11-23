@@ -26,7 +26,13 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [{ "glob": "**/*", "input": "public" }],
-            "styles": ["src/css/styles.css", "src/css/panel.css", "src/css/comunidad.css"]
+            "styles": [
+              "src/css/styles.css",
+              "src/css/panel.css",
+              "src/css/comunidad.css",
+              "node_modules/@fontsource-variable/archivo/wdth.css",
+              "node_modules/@fontsource/instrument-serif/latin-400-italic.css"
+            ]
           },
           "configurations": {
             "production": {
@@ -38,8 +44,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "32kB",
+                  "maximumError": "48kB"
                 }
               ],
               "outputHashing": "all",

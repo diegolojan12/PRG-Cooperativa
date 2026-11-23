@@ -21,8 +21,8 @@ describe('App', () => {
 
   it('conserva la portada SUMA en la ruta pública', async () => {
     const harness = await RouterTestingHarness.create('/');
-    expect(harness.routeNativeElement?.querySelector('.logotipo')?.textContent).toContain('SUMA');
-    expect(harness.routeNativeElement?.querySelector('.linkLogin')?.getAttribute('href')).toBe(
+    expect(harness.routeNativeElement?.querySelector('.ld-logo')?.textContent).toContain('SUMA');
+    expect(harness.routeNativeElement?.querySelector('.ld-header .ld-link')?.getAttribute('href')).toBe(
       '/iniciar-sesion',
     );
   });
