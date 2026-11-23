@@ -138,13 +138,33 @@ const web = http.createServer((req, res) => {
     )[0];
     await page.locator("#codigo").fill(code);
     await page.getByRole("button", { name: "Verificar y entrar" }).click();
-    await expect(
-      page.getByRole("heading", { name: "Así vamos creciendo" }),
-    ).toBeVisible();
+    await expect(page.getByRole("heading", { name: /^Hola/ })).toBeVisible();
+    const indicadores = await (await context.request.get(base + "/api/indicadores")).json();
+    const tarjetas = page.getByRole("region", { name: "Indicadores del sistema" });
+    for (const [nombre, valor] of [
+      ["Usuarios registrados", indicadores.usuariosRegistrados],
+      ["Referidos aprobados", indicadores.estados.APROBADO],
+      ["Campañas activas", 0],
+      ["Contenidos publicados", 0],
+    ]) {
+      const tarjeta = tarjetas.getByRole("article").filter({ has: page.getByRole("heading", { name: nombre, exact: true }) });
+      await expect(tarjeta.locator("strong")).toHaveText(String(valor));
+    }
+    await expect(page.getByRole("heading", { name: "Pendientes por atender" })).toBeVisible();
+    await page.getByText("Ver datos de la gráfica", { exact: true }).press("Enter");
+    await expect(page.getByRole("table", { name: "Actividad de ejemplo por fecha" })).toBeVisible();
+    await page.getByText("Ver datos de la gráfica", { exact: true }).press("Enter");
     await page.screenshot({
       path: path.join(output, "SUMA-panel-administrador.png"),
       fullPage: true,
     });
+    await page.setViewportSize({ width: 360, height: 800 });
+    await expect(page.getByRole("button", { name: "Abrir menú" })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
+    await page.screenshot({ path: path.join(output, "SUMA-panel-administrador-movil.png"), fullPage: true });
+    await page.setViewportSize({ width: 1440, height: 1080 });
+    await page.getByRole("link", { name: "Ver tablero completo" }).click();
+    await expect(page.getByRole("heading", { name: "Así vamos creciendo" })).toBeVisible();
     console.log("PASS: portada, acceso administrador con 2FA y tablero");
     for (const [route, title] of [
       ["referidos", "Referidos"],

@@ -1,4 +1,4 @@
-<div class="suma-app" [class.s-editor]="vistaContenidos()">
+<div class="suma-app" [class.s-editor]="vistaContenidos()" [class.s-admin]="session.esAdmin()">
   <a class="s-skip" href="#content" (click)="saltarAlContenido($event)">Saltar al contenido</a>
   @if (menuAbierto()) {
     <button
@@ -23,7 +23,9 @@
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
             [routerLinkActiveOptions]="{ exact: item.id === 'panel' }"
-            ><app-icon [name]="item.icono" />{{ item.etiqueta }}
+            ><app-icon [name]="item.icono" />{{
+              session.esAdmin() && item.id === 'panel' ? 'Resumen' : item.etiqueta
+            }}
             @if (item.id === 'notificaciones' && notificaciones.sinLeer()) {
               <span class="s-count">{{ notificaciones.sinLeer() }}</span>
             }
@@ -44,11 +46,13 @@
       }
     </nav>
     <div class="s-sidebar-bottom">
-      <div class="s-community">
-        <span class="s-tiny">CRECEMOS JUNTOS</span
-        ><strong>Cada conexión<br />es un nuevo comienzo.</strong
-        ><span class="s-community-art" aria-hidden="true">↗</span>
-      </div>
+      @if (!session.esAdmin()) {
+        <div class="s-community">
+          <span class="s-tiny">CRECEMOS JUNTOS</span
+          ><strong>Cada conexión<br />es un nuevo comienzo.</strong
+          ><span class="s-community-art" aria-hidden="true">↗</span>
+        </div>
+      }
       <button type="button" class="s-logout" (click)="confirmarSalida.set(true)">
         <app-icon name="logout" />Cerrar sesión</button
       ><span class="s-version">SUMA · Tu comunidad, más cerca</span>
@@ -66,11 +70,18 @@
         <app-icon name="menu" />
       </button>
       <div class="s-breadcrumb">
-        {{ vistaContenidos() ? 'Gestión de contenidos' : 'Mi comunidad' }} <span>/</span>
+        {{
+          session.esAdmin()
+            ? 'Administración'
+            : vistaContenidos()
+              ? 'Gestión de contenidos'
+              : 'Mi comunidad'
+        }}
+        <span>/</span>
         <strong>{{ titulo() }}</strong>
       </div>
       <div class="s-top-right">
-        @if (rolNombre()) {
+        @if (rolNombre() && !session.esAdmin()) {
           <span class="s-role"><span class="s-online"></span>{{ rolNombre() }}</span>
         }
         @if (session.puede('notificaciones')) {

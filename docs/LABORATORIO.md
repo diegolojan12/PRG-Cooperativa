@@ -25,7 +25,20 @@ npm start                    # desarrollo con recarga: http://localhost:4200
 `backend/.env` (copia de `.env.example`) trae `DATABASE_URL=postgresql://suma:suma_dev@localhost:5432/suma`.
 En PowerShell usa `$env:PGADMIN_URL="..."` en lugar de `set`.
 
-Atajo: `scripts\iniciar.ps1` (o doble clic en `INICIAR-SUMA.cmd`) hace todo lo anterior y abre el navegador.
+Atajo: `INICIAR-SUMA.cmd` prepara PostgreSQL, verifica el correo real y abre el navegador. Si falta SMTP,
+pide una cuenta remitente de Gmail y su contraseña de aplicación en un campo oculto. Las credenciales
+quedan en el `backend/.env` local. Luego pide el correo que recibe el código del administrador de prueba
+si todavía no está configurado. El remitente y el destinatario pueden ser cuentas distintas.
+
+Para usar otro correo con el administrador de prueba, añade `SUMA_ADMIN_DEMO_EMAIL=correo-admin@ejemplo.ec`
+a tu `backend/.env`, deja `SEED_DEMO=true` y ejecuta el atajo. SUMA prepara el PostgreSQL indicado por
+`DATABASE_URL` y actualiza el correo de `admin@suma.ec`, conservando su contraseña. Si ya está configurado,
+el siguiente arranque continúa sin volver a modificarlo. La opción solo se aplica en laboratorio.
+
+Al iniciar con `INICIAR-SUMA.cmd`, el backend oculta los códigos de prueba. Para demostrar la entrega,
+inicia sesión con el administrador y comprueba que el código de SUMA aparece en su bandeja. La verificación
+SMTP del arranque solo comprueba conexión y autenticación. Si varias instalaciones usan el mismo correo de
+administrador, todos los códigos se dirigen a esa bandeja. Ver [Correo transaccional](CORREO-TRANSACCIONAL.md).
 
 ## 2. Laboratorio con 3 computadoras
 

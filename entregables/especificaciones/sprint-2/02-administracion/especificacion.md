@@ -117,6 +117,10 @@ La publicación de términos y aviso desde Configuración es implementación ade
 | 2026-11-14 | HU-006 y HU-007 identificadas. Sprint 2: la revisión de cuentas se documenta en `sprint-2/06-cuenta-cooperativa` (HU-016) | Equipo |
 | 2026-11-16 | Pasa del Sprint 1 al 2 (HU-005 a HU-007 son del Sprint 2 según el backlog). CA-05 con prueba; CA-16 respaldo y CA-17 usuarios activos nuevos; casos de uso CU-15, CU-17, CU-19 y CU-20 | Equipo |
 
+## Resumen del administrador · 2026-11-22
+
+El resumen muestra el total de cuentas registradas y de referidos aprobados vigentes. Las tarjetas de campañas activas y contenidos publicados muestran 0 y «Próximamente» en el Sprint 2. La gráfica, la actividad reciente y los pendientes se identifican como ejemplos. El tablero operativo de HU-005 se abre desde «Ver tablero completo», con acceso protegido por el rol y permiso de panel.
+
 <!-- TRAZABILIDAD-VIGENTE -->
 ## Trazabilidad vigente al 22 de noviembre de 2026
 

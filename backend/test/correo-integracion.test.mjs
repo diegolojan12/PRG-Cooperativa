@@ -71,6 +71,7 @@ void test('HU-003 / HU-004 / HU-014 / CA-05 a CA-08: SMTP real local y administr
     await assert.rejects(actualizarCorreoAdmin(db, 'socio@suma.ec', 'incorrecto@gmail.com'), /administradora/);
     await assert.rejects(actualizarCorreoAdmin(db, 'admin@suma.ec', 'gestor@suma.ec'), /otra cuenta/);
     await actualizarCorreoAdmin(db, 'admin@suma.ec', 'administrador@gmail.com');
+    assert.equal(await actualizarCorreoAdmin(db, 'admin@suma.ec', 'administrador@gmail.com', { aceptarDestinoExistente: true }), false);
     const [guardado] = await db.queryRaw('SELECT correo FROM "Usuario" WHERE "correoIndice"=$1', [db.datos.correoIndice('administrador@gmail.com')]);
     assert.match(guardado.correo, /^aes:v1:/);
     const app = express();

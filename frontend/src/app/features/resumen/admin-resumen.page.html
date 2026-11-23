@@ -1,0 +1,132 @@
+<section class="portada" aria-labelledby="saludo-admin">
+  <div>
+    <h1 id="saludo-admin">
+      Hola{{ nombre() ? ', ' : '' }}<span>{{ nombre() }}</span>
+    </h1>
+    <p>Supervisa la plataforma, gestiona sus componentes y analiza la participación.</p>
+  </div>
+  <div class="ilustracion" aria-hidden="true">
+    <div class="pantalla"><i></i><i></i><i></i></div>
+    <app-icon name="configuracion" />
+  </div>
+</section>
+
+<div class="contexto">
+  <p><strong>Indicadores del sistema</strong></p>
+  <a routerLink="/panel/indicadores">Ver tablero completo</a>
+</div>
+
+@if (cargando()) {
+  <p role="status">Cargando indicadores…</p>
+}
+@if (error()) {
+  <div class="contexto">
+    <p role="alert">No pudimos cargar los indicadores.</p>
+    <button type="button" class="s-secondary" (click)="cargarIndicadores()">
+      Volver a intentar
+    </button>
+  </div>
+}
+<section class="tarjetas" aria-label="Indicadores del sistema" [attr.aria-busy]="cargando()">
+  @for (tarjeta of tarjetas(); track tarjeta.etiqueta) {
+    <article class="indicador" [class]="'tono-' + tarjeta.tono">
+      <div class="indicador-cabecera">
+        <app-icon [name]="tarjeta.icono" />
+        @if (tarjeta.futuro) {
+          <span class="variacion">Próximamente</span>
+        }
+      </div>
+      <h2>{{ tarjeta.etiqueta }}</h2>
+      <strong>{{ (tarjeta.valor | number) ?? '—' }}</strong>
+    </article>
+  }
+</section>
+
+<p>La gráfica, la actividad y los pendientes son datos de ejemplo.</p>
+<div class="paneles">
+  <section class="panel panel-grafica" aria-labelledby="comunidad-admin">
+    <div class="panel-cabecera">
+      <h2 id="comunidad-admin">Actividad de la comunidad</h2>
+      <span class="periodo">30 días de ejemplo</span>
+    </div>
+    <div class="leyenda">
+      <span><i class="referidos"></i>Referidos registrados</span
+      ><span><i class="activos"></i>Usuarios activos</span>
+    </div>
+    <div class="grafico" aria-hidden="true">
+      <div class="escala">
+        @for (valor of [50, 40, 30, 20, 10, 0]; track valor) {
+          <span>{{ valor }}</span>
+        }
+      </div>
+      <div class="lienzo">
+        @for (trazo of trazos; track trazo.campo) {
+          <div class="trazo" [class]="trazo.campo">
+            <div class="area" [style.clip-path]="trazo.area"></div>
+            <div class="linea" [style.clip-path]="trazo.linea"></div>
+            @for (punto of trazo.puntos; track punto.x) {
+              <i class="punto" [style.left.%]="punto.x" [style.top.%]="punto.y"></i>
+            }
+          </div>
+        }
+      </div>
+      <div class="fechas">
+        @for (fila of serie; track fila.fecha) {
+          <span>{{ fila.fecha }}</span>
+        }
+      </div>
+    </div>
+    <details class="detalle-grafico">
+      <summary>Ver datos de la gráfica</summary>
+      <table>
+        <caption>
+          Actividad de ejemplo por fecha
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Fecha</th>
+            <th scope="col">Referidos</th>
+            <th scope="col">Usuarios activos</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (fila of serie; track fila.fecha) {
+            <tr>
+              <th scope="row">{{ fila.fecha }}</th>
+              <td>{{ fila.referidos }}</td>
+              <td>{{ fila.activos }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </details>
+  </section>
+  <section class="panel" aria-labelledby="actividad-admin">
+    <div class="panel-cabecera">
+      <h2 id="actividad-admin">Actividad reciente</h2>
+      @if (session.puede('actividad')) {
+        <a routerLink="/panel/actividad">Ver bitácora</a>
+      }
+    </div>
+    <ul class="lista">
+      @for (evento of actividad; track evento.texto) {
+        <li>
+          <span class="fila-icono"><app-icon [name]="evento.icono" /></span
+          ><strong>{{ evento.texto }}</strong
+          ><span class="hora">{{ evento.hora }}</span>
+        </li>
+      }
+    </ul>
+  </section>
+  <section class="panel" aria-labelledby="pendientes-admin">
+    <div class="panel-cabecera"><h2 id="pendientes-admin">Pendientes por atender</h2></div>
+    <ul class="lista pendientes">
+      @for (pendiente of pendientes; track pendiente.texto) {
+        <li>
+          <app-icon [name]="pendiente.icono" /><strong>{{ pendiente.texto }}</strong
+          ><span class="cantidad">{{ pendiente.cantidad }}</span>
+        </li>
+      }
+    </ul>
+  </section>
+</div>

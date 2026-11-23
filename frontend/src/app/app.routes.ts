@@ -121,9 +121,18 @@ export const routes: Routes = [
         path: '',
         pathMatch: 'full',
         canMatch: [esAdminMatch(true)],
-        data: { titulo: 'Tablero' },
-        title: 'Tablero · SUMA',
-        loadComponent: () => import('./features/resumen/tablero.page').then((m) => m.TableroPage),
+        data: { titulo: 'Resumen', modulo: 'panel' },
+        canActivate: [moduloGuard],
+        title: 'Resumen de administración · SUMA',
+        loadComponent: () =>
+          import('./features/resumen/admin-resumen.page').then((m) => m.AdminResumenPage),
+      },
+      {
+        ...modulo('indicadores', 'Indicadores reales', () =>
+          import('./features/resumen/tablero.page').then((m) => m.TableroPage),
+        ),
+        canMatch: [esAdminMatch(true)],
+        data: { titulo: 'Indicadores reales', modulo: 'panel' },
       },
       {
         path: '',

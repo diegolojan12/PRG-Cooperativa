@@ -10,11 +10,10 @@
     <a href="#comunidad" (click)="menuOpen.set(false)">Comunidad</a>
     <a href="#aprende" (click)="menuOpen.set(false)">Aprende</a>
     <a href="#bienestar" (click)="menuOpen.set(false)">Bienestar</a>
-    <a class="mobileLogin" routerLink="/iniciar-sesion">Iniciar sesión</a>
+    <a routerLink="/iniciar-sesion" (click)="menuOpen.set(false)">Iniciar sesión</a>
   </nav>
   <div class="headerAcciones">
-    <a routerLink="/iniciar-sesion" class="linkLogin">Iniciar sesión</a>
-    <a routerLink="/registro" class="btnPrimario">Crear cuenta <span>→</span></a>
+    <a routerLink="/registro" class="btnPrimario">Crear cuenta</a>
     <button
       type="button"
       class="mobileMenu"

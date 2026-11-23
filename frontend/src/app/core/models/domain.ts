@@ -125,6 +125,7 @@ export interface Indicador {
 }
 export interface Tablero {
   generadoEn: string;
+  usuariosRegistrados: number;
   sociosActivos: number;
   pendientesAtrasados: number;
   estados: Record<EstadoReferido, number>;
