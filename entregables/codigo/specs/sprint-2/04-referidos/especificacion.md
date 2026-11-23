@@ -2,14 +2,15 @@
 
 | Campo | Valor |
 | ----- | ----- |
+| Épicas | EPI-05 |
 | Sprint | 2 |
 | Historias | HU-011 · HU-012 |
 | Requisitos de usuario | UR-13 · UR-16 · UR-17 · UR-54 |
 | Requisitos funcionales | RF-11 · RF-11-3 · RF-11-4 · RF-11-5 · RF-11-6 |
 | Casos de uso (EAPX) | CU-06 Consultar referidos · CU-06.1 Filtrar (extend) · CU-06.2 Aprobar o rechazar (extend) · CU-06.5 Gestionar los datos de un referido (extend) · CU-06.6 Asociar manualmente (extend) |
 | No funcionales | RNF-12 · RNF-13 |
-| Estado | Implementada · Verificada |
-| Fuente previa | [`docs/CORRECCIONES-AUDITORIA-SPRINT1.md`](../../../docs/CORRECCIONES-AUDITORIA-SPRINT1.md) · auditoría G01, G06, G08, G11, G12 |
+| Estado | Base funcional implementada; HU-011 pendiente de edición del socio desde interfaz. La API permite editar referidos propios Pendientes. |
+| Fuente previa | [`docs/CORRECCIONES-AUDITORIA-SPRINT1.md`](../../../../../docs/CORRECCIONES-AUDITORIA-SPRINT1.md) · auditoría G01, G06, G08, G11, G12 |
 
 ## 1. Problema y objetivo
 
@@ -28,8 +29,7 @@ sin perder el historial y sin duplicados.
 ## 3. Historias de usuario
 
 - **HU-011 · Gestión de referidos** — Como Socio / Cliente o Administrador, quiero registrar, modificar o dar de baja
-  referidos para dar seguimiento a las personas invitadas. (Texto corregido en el backlog el 2026-11-16: ya no dice
-  «usuario general» ni «independientemente del rol»; requisito de usuario nuevo UR-54.)
+  referidos para dar seguimiento a las personas invitadas. En el backlog se usa «Usuario General» como categoría de usuario. Esta especificación detalla los permisos y la propiedad de los registros; UR-54 cubre el alta manual.
 - **HU-012 · Administración de referidos** — Como administrador, quiero administrar el listado completo de todos los
   referidos para tener control total del seguimiento: tabla global de 20 por página con filtros. El socio solo ve los suyos.
 - Como administrador, quiero revisar y dictaminar los referidos pendientes para acreditar al socio que recomendó
@@ -87,7 +87,7 @@ sin perder el historial y sin duplicados.
 
 | # | Pregunta | Para | Estado |
 | - | -------- | ---- | ------ |
-| P-01 | ¿El socio puede dar de baja sus referidos *Pendientes* o solo la administración? | PO | Propuesta aplicada: sí puede (HU-011 reescrita y UR-54). Falta confirmación del PO |
+| P-01 | ¿El socio puede dar de baja sus referidos *Pendientes* o solo la administración? | PO | Confirmado: sí puede (HU-011 reescrita y UR-54). Confirmada por el usuario al autorizar la corrección de HU-011/HU-012 (2026-11-19) |
 | P-02 | ¿Qué número de HU corresponde a cada criterio? | PO | Resuelta: CA-01 a CA-05, CA-09, CA-14 a CA-16 → HU-011; CA-06 a CA-08 → HU-012 |
 
 ## 9. Historial
@@ -99,3 +99,22 @@ sin perder el historial y sin duplicados.
 | 2026-11-14 | Documentado como spec SDD a partir del código y las pruebas | Equipo |
 | 2026-11-14 | HU-011 y HU-012 identificadas en el backlog. Sprint 2: el socio necesita cuenta Aprobada para referir (RF-06-1) y ve 10 por página con nombre de pila (HU-020) | Equipo |
 | 2026-11-16 | Pasa del Sprint 1 al 2 (HU-011 y HU-012 son del Sprint 2). HU-011 y HU-012 reescritas; UR-54; CA-18 con prueba de 30 días; CA-19 (provincia) y CA-20 (roles participantes) nuevos; casos de uso CU-06.5 y CU-06.6 | Equipo |
+
+<!-- TRAZABILIDAD-VIGENTE -->
+## Trazabilidad vigente al 22 de noviembre de 2026
+
+| Referencia | Valor |
+| --- | --- |
+| Sprint planificado | 2 |
+| Historias | HU-011 · HU-012 |
+| Épicas de BKL-G1 | EPI-05 |
+| Requisitos de usuario | UR-13 · UR-16 · UR-17 · UR-54 |
+| Requisitos funcionales | RF-11 · RF-11-3 · RF-11-4 · RF-11-5 · RF-11-6 |
+| Requisitos no funcionales | RNF-12 · RNF-13 |
+| Casos de uso | CU-06 Consultar referidos · CU-06.1 Filtrar (extend) · CU-06.2 Aprobar o rechazar (extend) · CU-06.5 Gestionar los datos de un referido (extend) · CU-06.6 Asociar manualmente (extend) |
+| Diagram_ID de comportamiento | 45 Sequence; 46 Activity; 47 Sequence; 48 Activity |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
+
+La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.
+<!-- /TRAZABILIDAD-VIGENTE -->

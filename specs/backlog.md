@@ -87,3 +87,7 @@ Estos requisitos de usuario no tenían historia. Sus casos de uso ya están en e
 | `sprint-2/05` | RF-47-4: gestión del aviso y aprobación de textos | Sprint 5 · HU-057; código adelantado existente |
 | `sprint-3/02` | Puntos del referido distintos de los del socio (campañas, RF-13-3) | Sprint 3 · 05-campanias |
 | `sprint-3/01` | Pruebas de QR en dispositivo (RNF-19) y de compartir en 15 s (RNF-21) | Antes del despliegue (Sprint 5) |
+
+## Referencias vigentes
+
+Actualización documental del 22 de noviembre de 2026. Consultar [la matriz de trazabilidad](TRAZABILIDAD.md) para identificadores, épicas, sprints y modelo UML. HU-055 es duplicada de HU-023/S3; HU-056 y HU-057 se mantienen en S5. Los registros históricos conservan su fecha y las verificaciones pendientes conservan su estado.

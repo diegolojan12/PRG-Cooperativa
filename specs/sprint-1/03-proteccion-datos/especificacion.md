@@ -62,3 +62,22 @@ buscar por correo y evitar duplicados.
 | 2026-11 | AES-256-GCM con índice HMAC (G09) | Equipo |
 | 2026-11-14 | Documentado como spec SDD a partir del código y las pruebas | Equipo |
 | 2026-11-16 | CA-07 con prueba automatizada; carpeta renumerada a `03-proteccion-datos` al reorganizar el Sprint 1 | Equipo |
+
+<!-- TRAZABILIDAD-VIGENTE -->
+## Trazabilidad vigente al 22 de noviembre de 2026
+
+| Referencia | Valor |
+| --- | --- |
+| Sprint planificado | 1 |
+| Historias | Sin HU propia; RNF-05 transversal |
+| Épicas de BKL-G1 | Transversal, sin épica propia |
+| Requisitos de usuario | Transversal; véase requisito aplicable |
+| Requisitos funcionales | Sin RF exclusivo; protección transversal |
+| Requisitos no funcionales | RNF-05 |
+| Casos de uso | Transversal; no requiere CU independiente |
+| Diagram_ID de comportamiento | Sin diagrama de comportamiento propio; requisito transversal |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../entregables/SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
+
+La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.
+<!-- /TRAZABILIDAD-VIGENTE -->

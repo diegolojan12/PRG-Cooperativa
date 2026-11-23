@@ -2,6 +2,7 @@
 
 | Campo | Valor |
 | ----- | ----- |
+| Épicas | EPI-02 |
 | Sprint | 2 |
 | Historias | HU-004 |
 | Requisitos de usuario | UR-05 |
@@ -68,3 +69,22 @@ usar ese camino para apoderarse de la cuenta.
 | ----- | ------ | ----- |
 | 2026-11-14 | Criterios escritos dentro de la spec de sesión del Sprint 1 | Equipo |
 | 2026-11-16 | Spec propia del Sprint 2 (HU-004 es del Sprint 2 según el backlog); casos de uso CU-02.3 y CU-02.5 | Equipo |
+
+<!-- TRAZABILIDAD-VIGENTE -->
+## Trazabilidad vigente al 22 de noviembre de 2026
+
+| Referencia | Valor |
+| --- | --- |
+| Sprint planificado | 2 |
+| Historias | HU-004 |
+| Épicas de BKL-G1 | EPI-02 |
+| Requisitos de usuario | UR-05 |
+| Requisitos funcionales | RF-07 · RF-07-1 · RF-07-2 |
+| Requisitos no funcionales | RNF-03 · RNF-04 · RNF-12 · RNF-14 · RNF-22 |
+| Casos de uso | CU-02.3 Solicitar recuperación de acceso (extend de CU-02) · CU-02.5 Restablecer la contraseña (extend de CU-02.3) |
+| Diagram_ID de comportamiento | 39 Sequence; 40 Activity |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../entregables/SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
+
+La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.
+<!-- /TRAZABILIDAD-VIGENTE -->

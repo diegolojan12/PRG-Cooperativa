@@ -11,13 +11,13 @@ Cuando se planifica un sprint, cada HU de su bloque pasa a `specs/sprint-N/NN-fu
 | 2 | HU-004 a HU-016 | [`sprint-2/`](sprint-2/README.md) |
 | 3 | HU-017 a HU-029 | HU-017 a HU-022 en [`sprint-3/`](sprint-3/README.md) (implementadas por adelantado); HU-023 a HU-029 abajo |
 | 4 | HU-030 a HU-043 | Abajo |
-| 5 | HU-044 a HU-054 | Abajo |
+| 5 | HU-044 a HU-054, HU-056 y HU-057 | [Sprint 5](sprint-5/README.md) y abajo |
 
 ## Sprint 3 · Perfil, campañas y puntos (lo que falta especificar)
 
 | HU | Título | Agrupación sugerida |
 | -- | ------ | ------------------- |
-| HU-023 | Perfil y baja | 03-perfil |
+| HU-023 | Perfil y baja | Historia principal; HU-055 está vinculada como duplicada. [Spec](sprint-3/03-configuracion-perfil/especificacion.md) |
 | HU-024 | Lista comercial | 04-lista-comercial · **endpoint CSV ya implementado** |
 | HU-025 | Crear campañas | 05-campanias |
 | HU-026 | Estado de campaña | 05-campanias |
@@ -56,9 +56,14 @@ Cuando se planifica un sprint, cada HU de su bloque pasa a `specs/sprint-N/NN-fu
 | HU-049 | Contenido oficial | 02-comunidad |
 | HU-050 | Moderación | 02-comunidad |
 | HU-051 | Salud y bienestar | 03-bienestar |
-| HU-052 | Privacidad del perfil | 04-privacidad |
+| HU-052 | Privacidad del perfil | Solapamiento con HU-056; revisar con la cooperativa en Sprint 5 |
 | HU-053 | Soporte | 05-soporte |
 | HU-054 | Indicadores y reportes | 06-reportes |
+
+| HU-056 | Visibilidad del perfil | [Privacidad y acuerdos](sprint-5/04-privacidad-y-acuerdos/especificacion.md) · aceptación pendiente |
+| HU-057 | Gestionar acuerdos de privacidad | [Privacidad y acuerdos](sprint-5/04-privacidad-y-acuerdos/especificacion.md) · textos pendientes de la cooperativa |
+
+HU-055 se conserva como duplicada de HU-023, sin contar una entrega adicional.
 
 ## HU nuevas por planificar (revisión de trazabilidad 2026-11-16)
 
@@ -66,10 +71,10 @@ Estos requisitos de usuario no tenían historia. Sus casos de uso ya están en e
 
 | HU | Título | UR · RF · CU |
 | -- | ------ | ------------ |
-| HU-055 | Favoritos y meta de canje | UR-42 · RF-34, RF-35 · CU-34 |
-| HU-056 | Búsqueda global | UR-43 · RF-36 · CU-35 |
-| HU-057 | Ajuste manual de puntos | UR-47 · RF-15 · CU-37 |
-| HU-058 | Encuestas de satisfacción | UR-50 · RF-44 · CU-38 |
+| HU-058 | Favoritos y meta de canje | UR-42 · RF-34, RF-35 · CU-34 |
+| HU-059 | Búsqueda global | UR-43 · RF-36 · CU-35 |
+| HU-060 | Ajuste manual de puntos | UR-47 · RF-15 · CU-37 |
+| HU-061 | Encuestas de satisfacción | UR-50 · RF-44 · CU-38 |
 
 ## Pendientes heredados
 
@@ -79,6 +84,10 @@ Estos requisitos de usuario no tenían historia. Sus casos de uso ya están en e
 | Sesión · P-02 | ~~`AvisoPrivacidad` / `AceptacionTerminos` en el registro~~ | Hecho en `sprint-2/05-registro-y-confirmacion` (HU-013) |
 | `sprint-1/01` · P-01 | Permisos por persona (`UsuarioPermiso`) | Solo si el PO lo pide (RF-08-1 propone permisos por rol) |
 | `sprint-2/02` | Indicador de premios canjeados | Sprint 5 · 01-recompensas |
-| `sprint-2/05` | ~~RF-47-4: publicar nueva versión del aviso desde el panel~~ | Hecho 2026-11-16 |
+| `sprint-2/05` | RF-47-4: gestión del aviso y aprobación de textos | Sprint 5 · HU-057; código adelantado existente |
 | `sprint-3/02` | Puntos del referido distintos de los del socio (campañas, RF-13-3) | Sprint 3 · 05-campanias |
 | `sprint-3/01` | Pruebas de QR en dispositivo (RNF-19) y de compartir en 15 s (RNF-21) | Antes del despliegue (Sprint 5) |
+
+## Referencias vigentes
+
+Actualización documental del 22 de noviembre de 2026. Consultar [la matriz de trazabilidad](TRAZABILIDAD.md) para identificadores, épicas, sprints y modelo UML. HU-055 es duplicada de HU-023/S3; HU-056 y HU-057 se mantienen en S5. Los registros históricos conservan su fecha y las verificaciones pendientes conservan su estado.

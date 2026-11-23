@@ -90,3 +90,22 @@ En desarrollo (`ENABLE_DEV_RESET_LINK=true`) las respuestas traen `devCodigo`; e
 ## Cambio de planificación
 
 La publicación administrativa y los textos oficiales pasan al Sprint 5. Se conserva el código adelantado y el consumo de la versión vigente en registro. No se retiran migraciones ni datos de aceptación.
+
+<!-- TRAZABILIDAD-VIGENTE -->
+## Trazabilidad vigente al 22 de noviembre de 2026
+
+| Referencia | Valor |
+| --- | --- |
+| Sprint planificado | 2 |
+| Historias | HU-013 · HU-014 |
+| Épicas de BKL-G1 | EPI-06 |
+| Requisitos de usuario | UR-01 · UR-02 · UR-13 · UR-14 · UR-52 |
+| Requisitos funcionales | RF-01 (RF-01-1 a RF-01-6, con provincia) · RF-02 (RF-02-1 a RF-02-3) · RF-47 (RF-47-1, RF-47-2) · RF-08-2 · RF-14 |
+| Requisitos no funcionales | RNF-04 · RNF-05 · RNF-10 · RNF-12 · RNF-14 · RNF-16 |
+| Casos de uso | CU-01 Registrar y activar una cuenta · CU-01.1 Aceptar términos y aviso de privacidad (include) · CU-01.2 Confirmar el correo con un código (include) · CU-01.3 Vincular el registro a un referido (extend) · CU-01.4 Validar que el correo y el celular no estén registrados (include) |
+| Diagram_ID de comportamiento | 31 Sequence; 32 Activity; 37 Sequence; 38 Activity |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../entregables/SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
+
+La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.
+<!-- /TRAZABILIDAD-VIGENTE -->

@@ -57,3 +57,22 @@ Plan: [`plan.md`](plan.md) · Estado: Completado
 | CA-10 | `RF-08-1 / RF-08-4` · `features.spec.ts` | Sí |
 | CA-11 | `RF-08-1 / RF-08-4` | Sí |
 | CA-12 | `RF-14 / RF-14-2 / RF-42` | Sí |
+
+<!-- TRAZABILIDAD-VIGENTE -->
+## Trazabilidad vigente al 22 de noviembre de 2026
+
+| Referencia | Valor |
+| --- | --- |
+| Sprint planificado | 1 |
+| Historias | HU-001 · HU-002 |
+| Épicas de BKL-G1 | EPI-01 |
+| Requisitos de usuario | UR-04 |
+| Requisitos funcionales | RF-08 · RF-08-1 · RF-08-2 · RF-08-3 · RF-08-4 · RF-08-5 |
+| Requisitos no funcionales | RNF-13 · RNF-15 · RNF-18 |
+| Casos de uso | CU-16 Gestionar roles y permisos · CU-17 Gestionar usuarios de la plataforma · CU-02.4 Cargar el menú y los permisos del rol (include de CU-02) |
+| Diagram_ID de comportamiento | 63 Sequence; 64 Activity; 65 Sequence; 66 Activity; 67 Sequence; 68 Activity |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
+
+La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.
+<!-- /TRAZABILIDAD-VIGENTE -->

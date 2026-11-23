@@ -44,3 +44,22 @@ Plan: [`plan.md`](plan.md) · Estado: Completado
 | CA-08 | `RF-42: el dictamen deja en la bitácora el estado anterior y el nuevo` | Sí |
 | CA-09, CA-11 | `HU-022` | Sí |
 | CA-10, CA-12, CA-13 | `RF-11: vinculación…` | Sí |
+
+<!-- TRAZABILIDAD-VIGENTE -->
+## Trazabilidad vigente al 22 de noviembre de 2026
+
+| Referencia | Valor |
+| --- | --- |
+| Sprint planificado | 3 |
+| Historias | HU-020 · HU-021 · HU-022 |
+| Épicas de BKL-G1 | EPI-07 · EPI-08 · EPI-10 |
+| Requisitos de usuario | UR-15 · UR-16 · UR-19 · UR-24 · UR-44 |
+| Requisitos funcionales | RF-11-2 · RF-11-4 · RF-12 (RF-12-1, RF-12-2) · RF-14-3 · RF-14-4 · RF-38 (RF-38-1) · RF-39 (RF-39-1, RF-39-2) · RF-42 |
+| Requisitos no funcionales | RNF-01 · RNF-13 · RNF-20 |
+| Casos de uso | CU-06 Consultar referidos · CU-06.2 Aprobar o rechazar un referido (extend) · CU-06.4 Acreditar los puntos al socio y al referido (extend de CU-06.2) · CU-36 Consultar notificaciones |
+| Diagram_ID de comportamiento | 45 Sequence; 46 Activity; 47 Sequence; 48 Activity |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
+
+La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.
+<!-- /TRAZABILIDAD-VIGENTE -->

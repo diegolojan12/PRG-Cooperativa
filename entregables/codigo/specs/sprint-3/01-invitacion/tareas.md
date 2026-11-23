@@ -37,3 +37,22 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (pruebas en dispositivo pendien
 | CA-10, CA-12 | `RF-11: vinculación…` | Sí |
 | CA-11 | — | No aplica en el alta (ver T02) |
 | CA-13 | `HU-019 / CA-13: el registro con código enlaza el referido cargado a mano` | Sí |
+
+<!-- TRAZABILIDAD-VIGENTE -->
+## Trazabilidad vigente al 22 de noviembre de 2026
+
+| Referencia | Valor |
+| --- | --- |
+| Sprint planificado | 3 |
+| Historias | HU-017 · HU-018 · HU-019 |
+| Épicas de BKL-G1 | EPI-07 |
+| Requisitos de usuario | UR-10 · UR-11 · UR-12 · UR-13 |
+| Requisitos funcionales | RF-09 (RF-09-1 a RF-09-3) · RF-10 (RF-10-1 a RF-10-3) · RF-01-5 · RF-11 · RF-11-1 |
+| Requisitos no funcionales | RNF-17 · RNF-18 · RNF-19 · RNF-21 |
+| Casos de uso | CU-05 Invitar nuevos socios · CU-05.1 Obtener el enlace de referido · CU-05.2 Descargar el código QR de invitación (extend) · CU-05.3 Compartir el enlace por WhatsApp o redes sociales (extend, actor secundario Redes sociales) · CU-05.4 Comprobar que la cuenta vinculada esté aprobada (include) · CU-01.3 Vincular el registro a un referido (extend) |
+| Diagram_ID de comportamiento | 31 Sequence; 32 Activity; 101 Sequence; 102 Activity |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
+
+La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.
+<!-- /TRAZABILIDAD-VIGENTE -->

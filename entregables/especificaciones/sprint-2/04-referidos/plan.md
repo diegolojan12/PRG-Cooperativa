@@ -83,3 +83,22 @@ solo dictamina *Pendientes* y exige `CuentaCooperativa.estaAprobada`.
 | Baja lógica con `eliminadoEn` | Borrado físico | Conservar el historial (auditoría) |
 | Unicidad del correo solo entre activos | `UNIQUE` en la columna | Permite volver a referir tras una baja |
 | Feriados fijos en código | Tabla de feriados | Suficiente para el Sprint 1; los feriados móviles quedan fuera (riesgo aceptado) |
+
+<!-- TRAZABILIDAD-VIGENTE -->
+## Trazabilidad vigente al 22 de noviembre de 2026
+
+| Referencia | Valor |
+| --- | --- |
+| Sprint planificado | 2 |
+| Historias | HU-011 · HU-012 |
+| Épicas de BKL-G1 | EPI-05 |
+| Requisitos de usuario | UR-13 · UR-16 · UR-17 · UR-54 |
+| Requisitos funcionales | RF-11 · RF-11-3 · RF-11-4 · RF-11-5 · RF-11-6 |
+| Requisitos no funcionales | RNF-12 · RNF-13 |
+| Casos de uso | CU-06 Consultar referidos · CU-06.1 Filtrar (extend) · CU-06.2 Aprobar o rechazar (extend) · CU-06.5 Gestionar los datos de un referido (extend) · CU-06.6 Asociar manualmente (extend) |
+| Diagram_ID de comportamiento | 45 Sequence; 46 Activity; 47 Sequence; 48 Activity |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
+
+La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.
+<!-- /TRAZABILIDAD-VIGENTE -->

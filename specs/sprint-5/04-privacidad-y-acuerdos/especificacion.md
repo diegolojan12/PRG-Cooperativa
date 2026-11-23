@@ -2,6 +2,7 @@
 
 | Campo | Valor |
 | --- | --- |
+| Épicas | EPI-20 |
 | Sprint | 5 · G2 Sprint 5 (56) |
 | Historias | HU-056 (G2-76) · HU-057 (G2-77) |
 | Requisitos | UR-51, UR-52 · RF-46, RF-47-4 |
@@ -49,3 +50,22 @@ Criterios trasladados desde registro, conservando sus identificadores de origen:
 | Fecha | Cambio |
 | --- | --- |
 | 2026-11-19 | HU-056 y HU-057 pasan del Sprint 2 al Sprint 5 por decisión del usuario; se conserva código y pruebas existentes. |
+
+<!-- TRAZABILIDAD-VIGENTE -->
+## Trazabilidad vigente al 22 de noviembre de 2026
+
+| Referencia | Valor |
+| --- | --- |
+| Sprint planificado | 5 |
+| Historias | HU-056 · HU-057 |
+| Épicas de BKL-G1 | EPI-20 |
+| Requisitos de usuario | UR-51, UR-52 |
+| Requisitos funcionales | RF-46, RF-47-4 |
+| Requisitos no funcionales | Véase criterios y requisitos aplicables |
+| Casos de uso | CU-03.2 · CU-19.2 |
+| Diagram_ID de comportamiento | 41 Sequence; 42 Activity; 71 Sequence; 72 Activity |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../entregables/SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
+
+La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.
+<!-- /TRAZABILIDAD-VIGENTE -->

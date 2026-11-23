@@ -55,10 +55,14 @@ Las demás brechas (G01, G06–G08, G10–G13, G15–G17, G20, G21, G24) están 
 | `cd frontend && npx ng lint && npx ng build` | 0 errores; build con carga diferida |
 | `cd e2e && node smoke.cjs` | Pasa: 2FA del administrador, menú por rol y móvil a 390 px |
 
-Único criterio sin prueba automatizada: 02 · CA-18 (reintentos de correo en memoria), por decisión documentada en su plan.
+CA-18 de sesión cuenta con prueba automatizada en `backend/test/correo.test.mjs` desde el 2026-11-19. La cola sigue en memoria y la medición de entrega externa RNF-14 permanece pendiente.
 
 ## Documentos previos (evidencia histórica)
 
 - [`docs/SPRINT1-HU-001-002-003.md`](../../docs/SPRINT1-HU-001-002-003.md) — análisis de HU-001 a HU-003 y del diagrama de clases.
 - [`docs/CORRECCIONES-AUDITORIA-SPRINT1.md`](../../docs/CORRECCIONES-AUDITORIA-SPRINT1.md) — estado de las brechas G01–G24.
 - [`docs/LABORATORIO.md`](../../docs/LABORATORIO.md) — cómo ejecutar la plataforma y montar el laboratorio de 3 PC.
+
+## Referencias vigentes
+
+Actualización documental del 22 de noviembre de 2026. Consultar [la matriz de trazabilidad](../TRAZABILIDAD.md) para identificadores, épicas, sprints y modelo UML. HU-055 es duplicada de HU-023/S3; HU-056 y HU-057 se mantienen en S5. Los registros históricos conservan su fecha y las verificaciones pendientes conservan su estado.

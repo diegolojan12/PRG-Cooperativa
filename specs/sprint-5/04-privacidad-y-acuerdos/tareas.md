@@ -8,3 +8,22 @@
 - [ ] T06 — Verificar API e interfaz de privacidad y acuerdos; conciliar los estados en Jira.
 
 La implementación ya existe en parte; estas tareas pendientes representan validación, contenido y aceptación del Sprint 5.
+
+<!-- TRAZABILIDAD-VIGENTE -->
+## Trazabilidad vigente al 22 de noviembre de 2026
+
+| Referencia | Valor |
+| --- | --- |
+| Sprint planificado | 5 |
+| Historias | HU-056 · HU-057 |
+| Épicas de BKL-G1 | EPI-20 |
+| Requisitos de usuario | UR-51, UR-52 |
+| Requisitos funcionales | RF-46, RF-47-4 |
+| Requisitos no funcionales | Véase criterios y requisitos aplicables |
+| Casos de uso | CU-03.2 · CU-19.2 |
+| Diagram_ID de comportamiento | 41 Sequence; 42 Activity; 71 Sequence; 72 Activity |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../entregables/SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
+
+La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.
+<!-- /TRAZABILIDAD-VIGENTE -->

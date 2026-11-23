@@ -85,3 +85,22 @@ Claves internas de `Configuracion` que no se exponen: `verificadorCifrado`, `dem
 | Inmutabilidad con trigger en PostgreSQL | Solo no exponer endpoints de edición | Protege incluso ante acceso directo a la base |
 | Indicadores futuros con `disponibleDesde` | Ocultarlos | El tablero ya tiene su forma final y dice cuándo llega cada dato |
 | Activación por enlace de 24 h | Contraseña temporal enviada por correo | Nadie más conoce la contraseña |
+
+<!-- TRAZABILIDAD-VIGENTE -->
+## Trazabilidad vigente al 22 de noviembre de 2026
+
+| Referencia | Valor |
+| --- | --- |
+| Sprint planificado | 2 |
+| Historias | HU-005 · HU-006 · HU-007 |
+| Épicas de BKL-G1 | EPI-03 |
+| Requisitos de usuario | UR-04 · UR-46 · UR-48 · UR-49 |
+| Requisitos funcionales | RF-08-2 · RF-14 · RF-14-1 · RF-14-2 · RF-14-3 · RF-14-4 · RF-42 · RF-42-1 · RF-42-2 · RF-45-1 |
+| Requisitos no funcionales | RNF-08 · RNF-09 · RNF-13 · RNF-15 |
+| Casos de uso | CU-17 Gestionar usuarios de la plataforma · CU-19 Configurar los parámetros (CU-19.1 puntos por acción, CU-19.2 versión de los términos) · CU-20 Consultar la bitácora (CU-20.1 filtrar) · CU-15 Consultar indicadores |
+| Diagram_ID de comportamiento | 71 Sequence; 72 Activity; CU-15 (tablero) y CU-20 (bitácora) tienen vistas Use Case 18 y 29, sin pareja de comportamiento propia |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../entregables/SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
+
+La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.
+<!-- /TRAZABILIDAD-VIGENTE -->

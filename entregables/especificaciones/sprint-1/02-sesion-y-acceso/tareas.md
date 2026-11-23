@@ -1,6 +1,6 @@
 # Tareas · Sesión y acceso
 
-Plan: [`plan.md`](plan.md) · Estado: Completado (CA-18 sin prueba automatizada, por decisión)
+Plan: [`plan.md`](plan.md) · Estado: Base funcional verificada; recepción real y tiempos con usuarios pendientes
 
 ## Fase 1 · Datos
 
@@ -10,7 +10,7 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (CA-18 sin prueba automatizada,
 ## Fase 2 · Pruebas
 
 - [x] T03 — Pruebas `RF-04-1 / RNF-06`, `RF-04-2`, `RF-04-3`, `RF-04-4`, `producción nunca expone…`
-- [x] T04 — CA-18: se decide no automatizar (la cola es en memoria a propósito); se documenta en el plan §8
+- [x] T04 — CA-18: prueba automatizada de reintentos y vigencia en `backend/test/correo.test.mjs` (añadida 2026-11-19; reemplaza la excepción anterior)
 
 ## Fase 3 · Backend
 
@@ -42,4 +42,23 @@ T10 (recuperación) pasó a `sprint-2/01-recuperacion-de-acceso`; T11 y T12 (reg
 | CA-07, CA-08 | `RF-04-3` · `auth.spec.ts` | Sí |
 | CA-09, CA-10 | `RF-04-4` | Sí |
 | CA-17 | `producción nunca expone enlaces ni códigos` | Sí |
-| CA-18 | — | Sin prueba automatizada (decisión) |
+| CA-18 | `backend/test/correo.test.mjs` | Sí (2026-11-19); entrega real pendiente |
+
+<!-- TRAZABILIDAD-VIGENTE -->
+## Trazabilidad vigente al 22 de noviembre de 2026
+
+| Referencia | Valor |
+| --- | --- |
+| Sprint planificado | 1 |
+| Historias | HU-003 |
+| Épicas de BKL-G1 | EPI-02 |
+| Requisitos de usuario | UR-03 |
+| Requisitos funcionales | RF-04 · RF-04-1 · RF-04-2 · RF-04-3 · RF-04-4 |
+| Requisitos no funcionales | RNF-04 · RNF-06 · RNF-12 · RNF-14 · RNF-22 |
+| Casos de uso | CU-02 Iniciar sesión · CU-02.1 Validar las credenciales (include) · CU-02.2 Confirmar el segundo factor (extend) · CU-02.6 Cerrar sesión (extend) |
+| Diagram_ID de comportamiento | 33 Activity; 34 Sequence; 99 Sequence; 100 Activity |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
+
+La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.
+<!-- /TRAZABILIDAD-VIGENTE -->

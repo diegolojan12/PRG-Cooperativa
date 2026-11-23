@@ -2,14 +2,15 @@
 
 | Campo | Valor |
 | ----- | ----- |
+| Épicas | EPI-03 |
 | Sprint | 2 |
 | Historias | HU-005 (tablero) · HU-006 (configuración) · HU-007 (bitácora) · revisión de cuentas (detallada en `06-cuenta-cooperativa`, HU-016) |
 | Requisitos de usuario | UR-04 · UR-46 · UR-48 · UR-49 |
 | Requisitos funcionales | RF-08-2 · RF-14 · RF-14-1 · RF-14-2 · RF-14-3 · RF-14-4 · RF-42 · RF-42-1 · RF-42-2 · RF-45-1 |
 | Casos de uso (EAPX) | CU-17 Gestionar usuarios de la plataforma · CU-19 Configurar los parámetros (CU-19.1 puntos por acción, CU-19.2 versión de los términos) · CU-20 Consultar la bitácora (CU-20.1 filtrar) · CU-15 Consultar indicadores |
 | No funcionales | RNF-08 · RNF-09 · RNF-13 · RNF-15 |
-| Estado | Implementada · Verificada |
-| Fuente previa | [`docs/CORRECCIONES-AUDITORIA-SPRINT1.md`](../../../docs/CORRECCIONES-AUDITORIA-SPRINT1.md) · auditoría G07, G10, G11, G13, G15 |
+| Estado | Base funcional implementada; HU-006 pendiente de aplicar mensajeBienvenida en los inicios actuales. Verificación de API disponible; respaldo programado y aceptación integral pendientes. |
+| Fuente previa | [`docs/CORRECCIONES-AUDITORIA-SPRINT1.md`](../../../../../docs/CORRECCIONES-AUDITORIA-SPRINT1.md) · auditoría G07, G10, G11, G13, G15 |
 
 ## 1. Problema y objetivo
 
@@ -84,8 +85,7 @@ y poder auditar quién hizo qué.
 1. Parámetros configurables: `contacto` (correo), `registroAbierto` (sí/no), `mensajeBienvenida` (1 a 500 caracteres),
    `puntosReferido` (entero de 0 a 10000; valor inicial 100) y, adelantados de HU-029, los puntos por acción y el valor
    del punto. Los límites de trivia, talleres y retos se agregan con esos módulos (Sprint 4).
-5. La versión de los términos y el aviso de privacidad se publica en la misma pantalla de Configuración (RF-47-4, ver
-   `05-registro-y-confirmacion` CA-17 a CA-19).
+La publicación de términos y aviso desde Configuración es implementación adelantada: su aceptación se traslada a HU-057, Sprint 5, junto con los textos oficiales. Ver [spec de privacidad y acuerdos](../../sprint-5/04-privacidad-y-acuerdos/especificacion.md).
 2. Un parámetro sin cambios no genera fila en la bitácora.
 3. La bitácora es de solo lectura para todos, incluido el administrador.
 4. Las cuentas creadas por el administrador no tienen contraseña hasta que la persona usa su enlace.
@@ -116,3 +116,22 @@ y poder auditar quién hizo qué.
 | 2026-11-14 | Documentado como spec SDD a partir del código y las pruebas | Equipo |
 | 2026-11-14 | HU-006 y HU-007 identificadas. Sprint 2: la revisión de cuentas se documenta en `sprint-2/06-cuenta-cooperativa` (HU-016) | Equipo |
 | 2026-11-16 | Pasa del Sprint 1 al 2 (HU-005 a HU-007 son del Sprint 2 según el backlog). CA-05 con prueba; CA-16 respaldo y CA-17 usuarios activos nuevos; casos de uso CU-15, CU-17, CU-19 y CU-20 | Equipo |
+
+<!-- TRAZABILIDAD-VIGENTE -->
+## Trazabilidad vigente al 22 de noviembre de 2026
+
+| Referencia | Valor |
+| --- | --- |
+| Sprint planificado | 2 |
+| Historias | HU-005 · HU-006 · HU-007 |
+| Épicas de BKL-G1 | EPI-03 |
+| Requisitos de usuario | UR-04 · UR-46 · UR-48 · UR-49 |
+| Requisitos funcionales | RF-08-2 · RF-14 · RF-14-1 · RF-14-2 · RF-14-3 · RF-14-4 · RF-42 · RF-42-1 · RF-42-2 · RF-45-1 |
+| Requisitos no funcionales | RNF-08 · RNF-09 · RNF-13 · RNF-15 |
+| Casos de uso | CU-17 Gestionar usuarios de la plataforma · CU-19 Configurar los parámetros (CU-19.1 puntos por acción, CU-19.2 versión de los términos) · CU-20 Consultar la bitácora (CU-20.1 filtrar) · CU-15 Consultar indicadores |
+| Diagram_ID de comportamiento | 71 Sequence; 72 Activity; CU-15 (tablero) y CU-20 (bitácora) tienen vistas Use Case 18 y 29, sin pareja de comportamiento propia |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
+
+La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.
+<!-- /TRAZABILIDAD-VIGENTE -->

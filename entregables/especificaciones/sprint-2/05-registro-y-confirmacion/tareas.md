@@ -1,6 +1,6 @@
 # Tareas · Registro en 3 pasos y confirmación del correo
 
-Plan: [`plan.md`](plan.md) · Estado: Completado (2 pendientes externas: textos oficiales y SMTP)
+Plan: [`plan.md`](plan.md) · Estado: Base funcional implementada; gestión de acuerdos trasladada al Sprint 5, mediciones RNF diferidas
 
 ## Fase 1 · Datos
 
@@ -27,14 +27,12 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (2 pendientes externas: textos 
 - [x] T12 — `ConfirmarCorreoPage` con reenvío (CA-10 a CA-12)
 - [x] T13 — Login redirige a confirmar correo (CA-13)
 - [x] T17 — Provincia en el paso 1, `GET /auth/provincias` y migración `sprint2-correcciones.sql` (CA-16 · 2026-11-16)
-- [x] T18 — Publicar versiones del aviso: `GET/POST /configuracion/aviso` y `AvisoPrivacidadAdminComponent` (CA-17 a CA-19 · 2026-11-16)
-- [x] T19 — Pruebas `T-01`, `RF-47-4` y `HU-014 / CA-15` (2026-11-16)
+- [x] T19 — Pruebas `T-01` y `HU-014 / CA-15` (la prueba adelantada `RF-47-4` se acepta en Sprint 5) (2026-11-16)
 
 ## Fase 5 · Cierre
 
 - [x] T14 — Spec, plan y matriz del sprint
-- [ ] T15 — Publicar desde Configuración los textos oficiales del aviso, versión 1.0 (P-01)
-- [ ] T16 — Configurar SMTP de producción y medir la entrega en menos de 60 s (P-02, RNF-14)
+- [ ] T16 — Medición RNF-14 y configuración definitiva de producción, diferidas. Gmail de desarrollo configurado; recepción de 2FA confirmada por el usuario.
 
 ## Verificación
 
@@ -55,6 +53,26 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (2 pendientes externas: textos 
 | CA-14 | `RF-11: vinculación…` | Sí |
 | CA-15 | `HU-014 / CA-15` · `producción nunca expone enlaces ni códigos` | Sí |
 | CA-16 | `T-01` | Sí |
-| CA-17 a CA-19 | `RF-47-4` | Sí |
 | CA-20 | `RF-14 / RF-14-2 / RF-42` | Sí |
 | CA-21 | `RF-11-4` (cuenta de 8 dígitos) | Sí |
+
+T15 (obtener/publicar textos oficiales) y T18 (publicación de versiones, CA-17 a CA-19) pasan a Sprint 5 · HU-057. Se conservan sus números como antecedente; no se marcan como completadas ni se exige su aprobación para el alcance funcional del Sprint 2.
+
+<!-- TRAZABILIDAD-VIGENTE -->
+## Trazabilidad vigente al 22 de noviembre de 2026
+
+| Referencia | Valor |
+| --- | --- |
+| Sprint planificado | 2 |
+| Historias | HU-013 · HU-014 |
+| Épicas de BKL-G1 | EPI-06 |
+| Requisitos de usuario | UR-01 · UR-02 · UR-13 · UR-14 · UR-52 |
+| Requisitos funcionales | RF-01 (RF-01-1 a RF-01-6, con provincia) · RF-02 (RF-02-1 a RF-02-3) · RF-47 (RF-47-1, RF-47-2) · RF-08-2 · RF-14 |
+| Requisitos no funcionales | RNF-04 · RNF-05 · RNF-10 · RNF-12 · RNF-14 · RNF-16 |
+| Casos de uso | CU-01 Registrar y activar una cuenta · CU-01.1 Aceptar términos y aviso de privacidad (include) · CU-01.2 Confirmar el correo con un código (include) · CU-01.3 Vincular el registro a un referido (extend) · CU-01.4 Validar que el correo y el celular no estén registrados (include) |
+| Diagram_ID de comportamiento | 31 Sequence; 32 Activity; 37 Sequence; 38 Activity |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
+
+La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.
+<!-- /TRAZABILIDAD-VIGENTE -->

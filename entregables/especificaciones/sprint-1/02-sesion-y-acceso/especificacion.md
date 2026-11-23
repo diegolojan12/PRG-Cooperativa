@@ -2,6 +2,7 @@
 
 | Campo | Valor |
 | ----- | ----- |
+| Épicas | EPI-02 |
 | Sprint | 1 |
 | Historias | HU-003 |
 | Requisitos de usuario | UR-03 |
@@ -9,7 +10,7 @@
 | No funcionales | RNF-04 · RNF-06 · RNF-12 · RNF-14 · RNF-22 |
 | Casos de uso (EAPX) | CU-02 Iniciar sesión · CU-02.1 Validar las credenciales (include) · CU-02.2 Confirmar el segundo factor (extend) · CU-02.6 Cerrar sesión (extend) |
 | Estado | Implementada · Verificada |
-| Fuente previa | [`docs/SPRINT1-HU-001-002-003.md`](../../../docs/SPRINT1-HU-001-002-003.md) · auditoría G03, G04, G05, G18 |
+| Fuente previa | [`docs/SPRINT1-HU-001-002-003.md`](../../../../docs/SPRINT1-HU-001-002-003.md) · auditoría G03, G04, G05, G18 |
 
 ## 1. Problema y objetivo
 
@@ -68,7 +69,7 @@ Los criterios conservan su número original. CA-11 a CA-16 se trasladaron a otra
 - RNF-06 — Segundo factor para administradores.
 - RNF-12 — Validación y saneamiento de entradas.
 - RNF-14 — Reintentos de correo.
-- RNF-22 — Inicio de sesión en 30 segundos o menos (medición con usuarios: [`docs/PROTOCOLO-PRUEBAS-USUARIOS.md`](../../../docs/PROTOCOLO-PRUEBAS-USUARIOS.md)).
+- RNF-22 — Inicio de sesión en 30 segundos o menos (medición con usuarios: [`docs/PROTOCOLO-PRUEBAS-USUARIOS.md`](../../../../docs/PROTOCOLO-PRUEBAS-USUARIOS.md)).
 
 ## 8. Preguntas abiertas
 
@@ -83,3 +84,23 @@ Los criterios conservan su número original. CA-11 a CA-16 se trasladaron a otra
 | 2026-11 | Auditoría G03 (inactividad), G04 (bloqueo), G05 (2FA), G18 (reintentos) | Equipo |
 | 2026-11-14 | Documentado como spec SDD a partir del código y las pruebas | Equipo |
 | 2026-11-16 | Alcance reducido a HU-003, según la columna *Sprint* del backlog (Sprint 1 = HU-001 a HU-003). Recuperación y registro pasan al Sprint 2. Casos de uso del EAPX agregados | Equipo |
+| 2026-11-19 | CA-18 con prueba automatizada; transporte y vigencia de mensajes precisados en `sprint-2/08-correo-transaccional`. No se declara medida la recepción real | Revisión G2 |
+
+<!-- TRAZABILIDAD-VIGENTE -->
+## Trazabilidad vigente al 22 de noviembre de 2026
+
+| Referencia | Valor |
+| --- | --- |
+| Sprint planificado | 1 |
+| Historias | HU-003 |
+| Épicas de BKL-G1 | EPI-02 |
+| Requisitos de usuario | UR-03 |
+| Requisitos funcionales | RF-04 · RF-04-1 · RF-04-2 · RF-04-3 · RF-04-4 |
+| Requisitos no funcionales | RNF-04 · RNF-06 · RNF-12 · RNF-14 · RNF-22 |
+| Casos de uso | CU-02 Iniciar sesión · CU-02.1 Validar las credenciales (include) · CU-02.2 Confirmar el segundo factor (extend) · CU-02.6 Cerrar sesión (extend) |
+| Diagram_ID de comportamiento | 33 Activity; 34 Sequence; 99 Sequence; 100 Activity |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
+
+La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.
+<!-- /TRAZABILIDAD-VIGENTE -->

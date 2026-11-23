@@ -1,0 +1,15 @@
+SUMA Actualización completa de especificaciones
+22 de noviembre de 2026
+
+Se aplicó directamente en el proyecto:
+- 52 documentos existentes revisados.
+- 2 índices nuevos: specs/TRAZABILIDAD.md y specs/sprint-4/README.md.
+- 54 documentos en specs y 54 en cada una de las dos copias de Entregables.
+- 2 ZIP del proyecto regenerados sin la ruta antigua sprint-2/07-configuracion-perfil.
+
+Se mantuvieron los CA existentes y sus identificadores. Se comprobaron enlaces e IDs HU/UR/RF/RNF/CU/épicas.
+La matriz general relaciona las 61 historias. Los nombres históricos de pruebas se explican sin cambiar el código.
+Se conservan los estados y verificaciones pendientes: el trabajo documental no implementa ni acepta funcionalidades futuras.
+
+El paquete también incluye los Excel y el EAPX corregidos anteriormente, y la guía actualizada.
+Los archivos originales del proyecto ya están actualizados; el paquete es una copia de entrega.

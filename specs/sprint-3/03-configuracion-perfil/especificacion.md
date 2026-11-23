@@ -4,7 +4,7 @@
 | ----- | ----- |
 | Sprint | 3 · HU-023; implementación adelantada, aceptación pendiente |
 | Historias | HU-023 Actualizar mis datos o dar de baja mi cuenta · HU-055 vinculada como duplicada de HU-023 |
-| Épicas | EPI-20 Cuidar mis datos y pedir ayuda (etiqueta en Jira) |
+| Épicas | EPI-06 Crear mi cuenta y vincularla con la Cooperativa (HU-023, BKL-G1!B29). HU-055 se conserva como duplicada histórica, sin entrega adicional. |
 | Requisitos de usuario | UR-06 Mantener los datos al día |
 | Requisitos funcionales | RF-03 (RF-03-1 a RF-03-3) · RF-42 |
 | No funcionales | RNF-04 · RNF-05 · RNF-12 · RNF-16 |
@@ -65,3 +65,22 @@ HU-055 duplica HU-023, según la vinculación autorizada en Jira. La privacidad 
 | 2026-11-17 | Historias movidas al Sprint 2; implementación, pruebas y caso de uso CU-03 con sus sub-casos | Equipo |
 
 | 2026-11-19 | Reubicada desde Sprint 2 para seguir HU-023; privacidad y acuerdos separados al Sprint 5 por decisión del usuario. | Equipo |
+
+<!-- TRAZABILIDAD-VIGENTE -->
+## Trazabilidad vigente al 22 de noviembre de 2026
+
+| Referencia | Valor |
+| --- | --- |
+| Sprint planificado | 3 |
+| Historias | HU-023 · HU-055 duplicada histórica, sin entrega adicional |
+| Épicas de BKL-G1 | EPI-06 |
+| Requisitos de usuario | UR-06 Mantener los datos al día |
+| Requisitos funcionales | RF-03 (RF-03-1 a RF-03-3) · RF-42 |
+| Requisitos no funcionales | RNF-04 · RNF-05 · RNF-12 · RNF-16 |
+| Casos de uso | CU-03, CU-03.1, CU-03.3 y CU-03.4 |
+| Diagram_ID de comportamiento | 35 Sequence; 36 Activity; 41 Sequence; 42 Activity |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../entregables/SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
+
+La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.
+<!-- /TRAZABILIDAD-VIGENTE -->

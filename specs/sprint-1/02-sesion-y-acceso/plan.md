@@ -82,3 +82,22 @@ Correo: cola en memoria con 3 reintentos cada 5 min; no guarda códigos en texto
 | Sesión opaca en cookie + tabla `Sesion` | JWT en `localStorage` | Se revoca al instante (logout, desactivación, recuperación) y no queda expuesta a XSS |
 | Vencimiento deslizante en servidor + aviso en cliente | Solo temporizador en cliente | El servidor es la autoridad; el cliente solo redirige a tiempo |
 | Cola de correo en memoria | Cola persistente (BullMQ/Redis) | Los códigos de un solo uso no se guardan en claro; los reintentos se pierden si el proceso se reinicia (riesgo aceptado, P-13 de la revisión del 2026-11-16) |
+
+<!-- TRAZABILIDAD-VIGENTE -->
+## Trazabilidad vigente al 22 de noviembre de 2026
+
+| Referencia | Valor |
+| --- | --- |
+| Sprint planificado | 1 |
+| Historias | HU-003 |
+| Épicas de BKL-G1 | EPI-02 |
+| Requisitos de usuario | UR-03 |
+| Requisitos funcionales | RF-04 · RF-04-1 · RF-04-2 · RF-04-3 · RF-04-4 |
+| Requisitos no funcionales | RNF-04 · RNF-06 · RNF-12 · RNF-14 · RNF-22 |
+| Casos de uso | CU-02 Iniciar sesión · CU-02.1 Validar las credenciales (include) · CU-02.2 Confirmar el segundo factor (extend) · CU-02.6 Cerrar sesión (extend) |
+| Diagram_ID de comportamiento | 33 Activity; 34 Sequence; 99 Sequence; 100 Activity |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../entregables/SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
+
+La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.
+<!-- /TRAZABILIDAD-VIGENTE -->

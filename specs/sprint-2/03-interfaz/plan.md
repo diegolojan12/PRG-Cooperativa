@@ -33,3 +33,22 @@ Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementad
 ## Dashboard del gestor · 2026-11-19
 
 Componente independiente cargado en la entrada no administrativa del panel. Datos ilustrativos locales etiquetados, enlaces derivados del menú autorizado, estilos encapsulados y ajustes del shell limitados a esta experiencia. Verificar compilación, lint, pruebas y capturas en escritorio y móvil.
+
+<!-- TRAZABILIDAD-VIGENTE -->
+## Trazabilidad vigente al 22 de noviembre de 2026
+
+| Referencia | Valor |
+| --- | --- |
+| Sprint planificado | 2 |
+| Historias | HU-008 · HU-009 · HU-010 |
+| Épicas de BKL-G1 | EPI-04 |
+| Requisitos de usuario | UR-04 · UR-53 |
+| Requisitos funcionales | RF-49 · RF-49-1 · RF-49-2 · RF-49-3 · RF-49-4 |
+| Requisitos no funcionales | RNF-15 · RNF-16 · RNF-17 · RNF-18 |
+| Casos de uso | Transversal: UR-53 no requiere caso de uso propio; el menú adaptable es parte de CU-02.4 Cargar el menú y los permisos del rol |
+| Diagram_ID de comportamiento | 33 Activity; 34 Sequence |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../entregables/SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
+
+La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.
+<!-- /TRAZABILIDAD-VIGENTE -->

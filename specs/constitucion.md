@@ -46,7 +46,7 @@ Producto: plataforma de referidos y fidelización de la Cooperativa de Ahorro y 
 
 ## VI. Accesibilidad y experiencia
 
-1. WCAG 2.1 AA (RNF-15): contraste de 4.5:1 en texto y 3:1 en elementos gráficos.
+1. WCAG 2.2 AA (RNF-15): contraste de 4.5:1 en texto y 3:1 en elementos gráficos.
 2. Funciona de 360 a 1920 px (RNF-18), con menú desplegable por debajo de 768 px (RF-49-4).
 3. Todo campo tiene ayuda y mensaje de error (`CampoComponent`). Los avisos de éxito y de error se distinguen
    por color, icono y rol ARIA (`AvisoService`).
@@ -70,3 +70,7 @@ Producto: plataforma de referidos y fidelización de la Cooperativa de Ahorro y 
 ---
 
 *Versión 1.0 · adoptada al cerrar el Sprint 1 (noviembre de 2026).*
+
+## Referencias vigentes
+
+Actualización documental del 22 de noviembre de 2026. Consultar [la matriz de trazabilidad](TRAZABILIDAD.md) para identificadores, épicas, sprints y modelo UML. HU-055 es duplicada de HU-023/S3; HU-056 y HU-057 se mantienen en S5. Los registros históricos conservan su fecha y las verificaciones pendientes conservan su estado.
