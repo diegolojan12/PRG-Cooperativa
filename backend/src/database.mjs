@@ -76,7 +76,7 @@ export class Database {
       for (const nombre of MIGRACIONES) {
         const [hecha] = await this.query('SELECT nombre FROM "SumaMigracion" WHERE nombre=$1', [nombre], client);
         if (hecha) continue;
-        await client.query(readFileSync(new URL(`../prisma/${nombre}.sql`, import.meta.url), 'utf8'));
+        await client.query(readFileSync(new URL(`../migraciones/${nombre}.sql`, import.meta.url), 'utf8'));
         await this.query('INSERT INTO "SumaMigracion" (nombre) VALUES ($1)', [nombre], client);
       }
     });

@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
-import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
 import { AppModule } from './app.module.js';
 import { createApi } from './api.mjs';
@@ -20,8 +19,7 @@ async function bootstrap() {
     process.once(event, () => {
       void db.close();
     });
-  app.setGlobalPrefix('api');
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+  // La validación de entrada la hace cada ruta de api.mjs (campos, formatos y código incrustado).
 
   await app.listen(process.env.PORT ?? 3000);
 }

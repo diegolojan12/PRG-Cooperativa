@@ -13,7 +13,7 @@ Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementad
 | VI. Accesibilidad | Sí | Barra de progreso con porcentaje, ayuda y error por campo, foco en el primer error |
 | VII. Arquitectura | Sí | `ConfirmacionCorreo` en `dominio/confirmacion-correo.mjs`; `AvisoPrivacidad`/`AceptacionTerminos` en `dominio/acceso.mjs` |
 
-## 2. Modelo de datos · `backend/prisma/sprint2.sql`
+## 2. Modelo de datos · `backend/migraciones/sprint2.sql`
 
 | Cambio | Para qué |
 | ------ | -------- |

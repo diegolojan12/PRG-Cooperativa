@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { createObserveModule } from '@nestjs/observe';
-import { AppController } from './app.controller.js';
-import { AppService } from './app.service.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
+/**
+ * Módulo raíz de Nest. Por ahora solo activa la observabilidad (si hay claves);
+ * las rutas de la API viven en src/api.mjs y se montan en main.ts.
+ */
 @Module({
   imports:
     process.env.OBSERVE_APP_KEY && process.env.OBSERVE_APP_SECRET
@@ -16,7 +18,5 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
           }),
         ]
       : [],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

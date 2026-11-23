@@ -12,7 +12,7 @@ Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementad
 | V. Prueba por criterio | Sí | Ver §7 |
 | VII. Arquitectura | Sí | `AcreditacionPuntos` y `MovimientoPuntos` en `dominio/administracion.mjs`; `Referido.consultaSocio()` en `dominio/referidos.mjs` |
 
-## 2. Modelo de datos · `backend/prisma/sprint2.sql`
+## 2. Modelo de datos · `backend/migraciones/sprint2.sql`
 
 | Cambio | Para qué |
 | ------ | -------- |

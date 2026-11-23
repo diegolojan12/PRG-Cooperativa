@@ -52,7 +52,7 @@ specs/
 - **Estados de una spec:** `Borrador` → `Aprobada` → `En construcción` → `Implementada` → `Verificada`.
 - **Decisiones abiertas** se anotan en la sección *Preguntas abiertas* de la spec y en el README del sprint.
 - **Una funcionalidad puede agrupar varias HU** si comparten el modelo de datos.
-- **Migraciones** por sprint en `backend/prisma/sprintN-<tema>.sql`, idempotentes.
+- **Migraciones** por sprint en `backend/migraciones/sprintN-<tema>.sql`, idempotentes.
 
 ## Índice
 

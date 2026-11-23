@@ -15,7 +15,7 @@ Especificación: [`especificacion.md`](especificacion.md) · Estado: Borrador
 
 ## 2. Modelo de datos
 
-Tablas o columnas nuevas, migración `backend/prisma/sprintN-<tema>.sql`, índices y restricciones.
+Tablas o columnas nuevas, migración `backend/migraciones/sprintN-<tema>.sql`, índices y restricciones.
 
 ## 3. API
 

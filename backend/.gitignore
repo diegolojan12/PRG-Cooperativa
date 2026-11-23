@@ -2,7 +2,6 @@
 # NestJS Observe key pair
 .env
 
-/src/generated/prisma
 
 # Respaldos de la base (RNF-08)
 /respaldos

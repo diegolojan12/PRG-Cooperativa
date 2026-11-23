@@ -57,7 +57,7 @@ Producto: plataforma de referidos y fidelización de la Cooperativa de Ahorro y 
 1. Stack: Angular (PWA) · Node.js + Express sobre NestJS · PostgreSQL 14+ como único motor. Sin Docker.
 2. El frontend se organiza en `core/`, `shared/`, `layout/` y `features/`, con carga diferida (`loadComponent`) y guards.
 3. Las reglas de negocio van en `backend/src/dominio/`, sin depender de la infraestructura; `api.mjs` solo orquesta.
-4. Los cambios de esquema son migraciones SQL por sprint (`backend/prisma/sprintN*.sql`), idempotentes,
+4. Los cambios de esquema son migraciones SQL por sprint (`backend/migraciones/sprintN*.sql`), idempotentes,
    aplicadas una sola vez por `Database.init()` o `npm run db:init`.
 5. No se agrega ninguna dependencia sin justificarla en el `plan.md`.
 

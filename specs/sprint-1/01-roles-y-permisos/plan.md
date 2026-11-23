@@ -15,7 +15,7 @@ Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementad
 
 ## 2. Modelo de datos
 
-Migración `backend/prisma/sprint1-roles.sql` (+ `RolPermiso` en `sprint1.sql`):
+Migración `backend/migraciones/sprint1-roles.sql` (+ `RolPermiso` en `sprint1.sql`):
 
 | Tabla | Columnas clave |
 | ----- | -------------- |

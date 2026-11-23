@@ -92,7 +92,7 @@ Problemas típicos:
 ## 3. Para quien continúa el proyecto (otra PC, Sprint 2 en adelante)
 
 **¿Qué pasa con la base de datos?** Cada persona tiene la suya, en su propio PostgreSQL. La base **no viaja en git**:
-viaja el *esquema* (las migraciones `backend/prisma/*.sql`) y los datos de prueba se generan solos. Es decir:
+viaja el *esquema* (las migraciones `backend/migraciones/*.sql`) y los datos de prueba se generan solos. Es decir:
 quien clona el repositorio solo necesita crear una base vacía; el resto lo hace el proyecto.
 
 ```bash
@@ -120,7 +120,7 @@ Cuentas de prueba: ver la sección 4.
 
 **Cómo agregar tablas o columnas en el Sprint 2** (para que las migraciones lleguen a todos):
 
-1. Crear un archivo nuevo en `backend/prisma/`, por ejemplo `sprint2-campanias.sql`, con sentencias idempotentes
+1. Crear un archivo nuevo en `backend/migraciones/`, por ejemplo `sprint2-campanias.sql`, con sentencias idempotentes
    (`CREATE TABLE IF NOT EXISTS ...`, `ALTER TABLE ... ADD COLUMN IF NOT EXISTS ...`).
 2. Agregar su nombre (sin `.sql`) al final de la lista `MIGRACIONES` en `backend/src/database.mjs`.
 3. Al iniciar el backend (o con `npm run db:init`) se aplica una sola vez en cada PC. **No editar migraciones ya publicadas.**

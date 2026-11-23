@@ -12,7 +12,7 @@ Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementad
 | V. Prueba por criterio | Sí | Ver §5 |
 | VII. Arquitectura | Sí | El cambio de correo vive en `ConfirmacionCorreo` |
 
-## 2. Modelo de datos (migración `backend/prisma/sprint2-perfil.sql`)
+## 2. Modelo de datos (migración `backend/migraciones/sprint2-perfil.sql`)
 
 | Cambio | Para qué |
 | ------ | -------- |
