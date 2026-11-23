@@ -22,6 +22,21 @@ function Instalar-Y-Compilar([string]$parte) {
     if ($LASTEXITCODE -ne 0) { throw "La compilacion de $parte fallo. Revisa el mensaje anterior." }
 }
 
+# Reutiliza SUMA si ya esta activa; nunca detiene un proceso ajeno.
+function Test-SumaActiva([int]$puerto) {
+    $cliente = New-Object System.Net.Sockets.TcpClient
+    try {
+        $conexion = $cliente.ConnectAsync('127.0.0.1', $puerto)
+        try { $conectado = $conexion.Wait(2000) -and $cliente.Connected } catch { $conectado = $false }
+        if (-not $conectado) { return $false }
+    } finally { $cliente.Dispose() }
+    try {
+        $salud = Invoke-RestMethod -Uri "http://127.0.0.1:$puerto/api/health" -TimeoutSec 5
+        if ($salud.status -eq 'ok' -and $salud.app -eq 'SUMA' -and $salud.database -eq 'PostgreSQL') { return $true }
+    } catch {}
+    throw "El puerto $puerto esta ocupado, pero no responde como SUMA saludable. Revisa la aplicacion que usa ese puerto antes de volver a iniciar."
+}
+
 $procesos = @()
 try {
     $node = (Get-Command node -ErrorAction Stop).Source
@@ -29,7 +44,14 @@ try {
     $logs = Join-Path $raiz '.local'
     New-Item -ItemType Directory -Path $logs -Force | Out-Null
 
-    if ($Modo -in 'Todo', 'Backend') {
+    $backendActivo = $false
+    $frontendActivo = $false
+    if ($Modo -in 'Todo', 'Backend') { $backendActivo = Test-SumaActiva 3000 }
+    if ($Modo -in 'Todo', 'Frontend') { $frontendActivo = Test-SumaActiva $PuertoWeb }
+    if ($backendActivo) { Write-Host 'El backend SUMA ya esta activo en el puerto 3000; se reutiliza.' }
+    if ($frontendActivo) { Write-Host "La web SUMA ya esta activa en el puerto $PuertoWeb; se reutiliza." }
+
+    if (($Modo -in 'Todo', 'Backend') -and -not $backendActivo) {
         if (-not (Test-Path -LiteralPath 'backend/.env')) {
             Copy-Item -LiteralPath 'backend/.env.example' -Destination 'backend/.env'
             Write-Host 'Se creo backend/.env. Revisa DATABASE_URL (PostgreSQL) y vuelve a ejecutar.'
@@ -41,7 +63,7 @@ try {
         $procesos += Start-Process -FilePath $node -ArgumentList '--env-file=.env', 'dist/main.js' -WorkingDirectory (Join-Path $raiz 'backend') `
             -RedirectStandardOutput (Join-Path $logs 'api.log') -RedirectStandardError (Join-Path $logs 'api-error.log') -WindowStyle Hidden -PassThru
     }
-    if ($Modo -in 'Todo', 'Frontend') {
+    if (($Modo -in 'Todo', 'Frontend') -and -not $frontendActivo) {
         Instalar-Y-Compilar 'frontend'
         $env:PORT = "$PuertoWeb"; $env:BACKEND_URL = $BackendUrl
         $procesos += Start-Process -FilePath $node -ArgumentList 'servidor.mjs' -WorkingDirectory (Join-Path $raiz 'frontend') `
@@ -63,7 +85,7 @@ try {
     Write-Host "SUMA esta lista ($Modo)."
     if ($Modo -ne 'Backend') { Write-Host "Web: http://localhost:$PuertoWeb" }
     Write-Host 'Cuentas de prueba (clave Suma2026!): admin@suma.ec | gestor@suma.ec | socio@suma.ec'
-    Read-Host 'Pulsa Enter para detener los servidores de esta sesion'
+    Read-Host 'Pulsa Enter para cerrar (solo se detienen los servidores iniciados por esta ventana)'
 } finally {
     foreach ($p in $procesos) { if ($p -and -not $p.HasExited) { Stop-Process -Id $p.Id -ErrorAction SilentlyContinue } }
 }
