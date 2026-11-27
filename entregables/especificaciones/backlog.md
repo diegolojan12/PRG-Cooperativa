@@ -1,5 +1,7 @@
 # Backlog · HU todavía sin especificar
 
+> Revisión de auditoría 2026-11-26: la validación de cuentas y referidos es automática contra la base institucional autorizada. El administrador solo consulta. La implementación y las pruebas de esta revisión están pendientes; la evidencia del flujo manual es histórica. Véase [validación automática](validacion-automatica.md).
+
 Cuando se planifica un sprint, cada HU de su bloque pasa a `specs/sprint-N/NN-funcionalidad/` con su
 `especificacion.md` en estado *Borrador*. Una HU no entra al sprint hasta que su spec esté *Aprobada*.
 

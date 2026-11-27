@@ -1,5 +1,7 @@
 # Constitución de SUMA
 
+> Revisión de auditoría 2026-11-26: la validación de cuentas y referidos es automática contra la base institucional autorizada. El administrador solo consulta. La implementación y las pruebas de esta revisión están pendientes; la evidencia del flujo manual es histórica. Véase [validación automática](validacion-automatica.md).
+
 Son los principios que toda especificación, plan y cambio de código debe respetar. Si una funcionalidad
 necesita romper alguno, primero se discute con el equipo y se modifica este documento, y **después** se construye.
 
@@ -33,7 +35,7 @@ Producto: plataforma de referidos y fidelización de la Cooperativa de Ahorro y 
 ## IV. Trazabilidad y auditoría
 
 1. Toda acción administrativa queda en la bitácora `Actividad`: autor, objetivo, IP y datos anterior/nuevo.
-2. La bitácora es inmutable: hay triggers que impiden `UPDATE` y `DELETE`.
+2. Las validaciones automáticas también se auditan con origen Sistema, resultado, causa y referencia y vigencia de la fuente institucional. La bitácora es inmutable: hay triggers que impiden `UPDATE` y `DELETE`.
 3. Las bajas son lógicas y conservan el historial (`eliminadoEn`, `motivoBaja`).
 4. Cada HU se puede seguir hasta sus RF/RNF, su spec, su código y su prueba (matriz en el README del sprint).
 

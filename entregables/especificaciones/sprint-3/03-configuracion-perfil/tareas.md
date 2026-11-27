@@ -42,7 +42,7 @@ El nombre literal `HU-055 / HU-056 / RF-03 / RF-46: configuración del perfil` s
 | Requisitos no funcionales | RNF-04 · RNF-05 · RNF-12 · RNF-16 |
 | Casos de uso | CU-03, CU-03.1, CU-03.3 y CU-03.4 |
 | Diagram_ID de comportamiento | 35 Sequence; 36 Activity; 41 Sequence; 42 Activity |
-| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas.eapx](../../../SUMA-Diagramas_Vistas.eapx) |
 | Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
 
 La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.

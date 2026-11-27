@@ -64,7 +64,7 @@ Criterios trasladados desde registro, conservando sus identificadores de origen:
 | Requisitos no funcionales | Véase criterios y requisitos aplicables |
 | Casos de uso | CU-03.2 · CU-19.2 |
 | Diagram_ID de comportamiento | 41 Sequence; 42 Activity; 71 Sequence; 72 Activity |
-| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas.eapx](../../../../SUMA-Diagramas_Vistas.eapx) |
 | Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
 
 La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.

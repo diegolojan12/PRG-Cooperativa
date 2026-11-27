@@ -1,12 +1,14 @@
 # Sprint 2 · Recuperación, administración, interfaz, referidos, registro y cuenta de la Cooperativa
 
+> Revisión de auditoría 2026-11-26: la validación de cuentas y referidos es automática contra la base institucional autorizada. El administrador solo consulta. La implementación y las pruebas de esta revisión están pendientes; la evidencia del flujo manual es histórica. Véase [validación automática](../validacion-automatica.md).
+
 | Campo | Valor |
 | ----- | ----- |
-| Estado | Base funcional HU-004 a HU-016 implementada; integraciones de bienvenida HU-006 y edición del socio HU-011 pendientes. Verificaciones no funcionales y operativas diferidas. Perfil, privacidad y acuerdos conservan sus sprints planificados. |
+| Estado | Base del flujo anterior HU-004 a HU-016 implementada; validación automática revisada pendiente; integraciones de bienvenida HU-006 y edición del socio HU-011 pendientes. Verificaciones no funcionales y operativas diferidas. Perfil, privacidad y acuerdos conservan sus sprints planificados. |
 | Semanas | 11–12 |
 | Historias | **HU-004 a HU-016**. Privacidad y acuerdos se reprogramaron al Sprint 5 el 2026-11-19; el perfil se traza a HU-023 del Sprint 3. |
 | Objetivo | Que el usuario recupere su acceso, que la administración opere la plataforma sola, que toda pantalla se entienda sin ayuda, y que cualquier persona cree y active su cuenta, vincule su cuenta de la Cooperativa y que los referidos se gestionen con trazabilidad |
-| Fuentes | `Backlog_del_producto.xlsx` · `DocumentacionResumenRequisitos (1).xlsx` (UR, RF, RNF, hoja *Trazabilidad*) · `Anexo_02_-_Documento_Vision_Proyecto_PRG` v1.2.0 · `Anexo_01_-_Acta_de_Constitucion_Proyecto` · `SUMA-Diagramas_Vistas_Textos_Centrados.eapx` (CU-01 a CU-38) |
+| Fuentes | `Backlog_del_producto (3).xlsx` · `DocumentacionResumenRequisitos (1) (1).xlsx` (UR, RF, RNF, hoja *Trazabilidad*) · `Anexo_02_-_Documento_Vision_Proyecto_PRG` v1.2.0 · `Anexo_01_-_Acta_de_Constitucion_Proyecto` · `SUMA-Diagramas_Vistas.eapx` (CU-01 a CU-38) |
 | Reorganización | El 2026-11-16 se alineó con el backlog. Entraron HU-004 a HU-012 (antes documentadas en `sprint-1/`). HU-017 a HU-022, que se construyeron en este sprint, son del Sprint 3 y sus specs están en [`sprint-3/`](../sprint-3/README.md) |
 
 ## Funcionalidades
@@ -18,7 +20,7 @@
 | 03 | Interfaz clara, avisos y ayuda en formularios | HU-008, HU-009, HU-010 | Transversal (CU-02.4) | [spec](03-interfaz/especificacion.md) | [plan](03-interfaz/plan.md) | [tareas](03-interfaz/tareas.md) | Verificada · revisión WCAG pendiente |
 | 04 | Gestión de referidos | HU-011, HU-012 | CU-06, CU-06.1, CU-06.2, CU-06.5, CU-06.6 | [spec](04-referidos/especificacion.md) | [plan](04-referidos/plan.md) | [tareas](04-referidos/tareas.md) | Base implementada; edición del socio en interfaz pendiente |
 | 05 | Registro en 3 pasos y confirmación del correo | HU-013, HU-014 | CU-01, CU-01.1 a CU-01.4 | [spec](05-registro-y-confirmacion/especificacion.md) | [plan](05-registro-y-confirmacion/plan.md) | [tareas](05-registro-y-confirmacion/tareas.md) | Verificada |
-| 06 | Vinculación y verificación de la cuenta de la Cooperativa | HU-015, HU-016 | CU-04, CU-04.1, CU-04.2, CU-05.4, CU-18, CU-18.1 | [spec](06-cuenta-cooperativa/especificacion.md) | [plan](06-cuenta-cooperativa/plan.md) | [tareas](06-cuenta-cooperativa/tareas.md) | Verificada |
+| 06 | Vinculación y validación automática de cuenta | HU-015, HU-016 | CU-04, CU-04.1, CU-04.2, CU-05.4, CU-18, CU-18.1 | [spec](06-cuenta-cooperativa/especificacion.md) | [plan](06-cuenta-cooperativa/plan.md) | [tareas](06-cuenta-cooperativa/tareas.md) | Automatización por implementar y verificar |
 
 ## Matriz de trazabilidad
 
@@ -40,16 +42,16 @@ Evidencia y brechas actuales: [auditoría G2](../../../../docs/AUDITORIA-G2-SPRI
 | HU-013 Registro | EPI-06 | UR-01, UR-13, UR-14, UR-52 | RF-01-1 a RF-01-6, RF-47-1, RF-47-2, RF-08-2 · RNF-04, RNF-05, RNF-10, RNF-16 | CU-01, CU-01.1, CU-01.4 | 05 · CA-01 a CA-08, CA-15, CA-16, CA-20, CA-21 | `HU-013 / HU-014` · `T-01` · `HU-014 / CA-15` |
 | HU-014 Confirmar correo | EPI-06 | UR-02 | RF-02-1 a RF-02-3 · RNF-14 | CU-01.2 | 05 · CA-09 a CA-13 | `HU-013 / HU-014` |
 | HU-015 Vincular cuenta | EPI-06 | UR-07, UR-09, UR-14 | RF-05-1, RF-05-2, RF-05-5, RF-05-6, RF-06 · RNF-05, RNF-23 | CU-04, CU-04.1, CU-04.2, CU-05.4 | 06 | `HU-015 / HU-016 / RF-06` · `RF-11: vinculación…` |
-| HU-016 Verificar cuentas | EPI-08 | UR-08, UR-44 | RF-05-3, RF-05-4, RF-39, RF-42 · RNF-24 | CU-18, CU-18.1, CU-36 | 06 | `HU-015 / HU-016 / RF-06` |
+| HU-016 Validar cuentas automáticamente | EPI-08 | UR-08, UR-44 | RF-05-3, RF-05-4, RF-50, RF-39, RF-42 · RNF-24 | CU-18, CU-18.1, CU-36 | 06 | `HU-015 / HU-016 / RF-06` |
 
 ## Correcciones de trazabilidad (2026-11-16)
 
 | Qué | Dónde |
 | --- | ----- |
 | Specs reorganizadas por el sprint real de cada HU; spec de sesión separada en sesión (Sprint 1) y recuperación (Sprint 2); spec nueva de interfaz | `specs/` |
-| Tabla *Sprint Backlog* alineada con la columna *Sprint* (la columna no se tocó); HU-005, HU-006, HU-011, HU-012, HU-013, HU-021 y HU-022 corregidas; HU-058 a HU-061 nuevas (antes numeradas HU-055 a HU-058; Jira ya usaba esos números) | `Backlog_del_producto.xlsx` |
-| UR-54, provincia en RF-01 y RF-01-1, RF-08-1, RF-12-2, RF-45-1, RF-47-4; hojas *Trazabilidad* y *MODULOS* | `DocumentacionResumenRequisitos (1).xlsx` |
-| CU-16 a CU-38 y 15 sub-casos, 16 relaciones corregidas, valores etiquetados UR, HU, RF y Sprint | `SUMA-Diagramas_Vistas_Textos_Centrados.eapx` · [`docs/CASOS-USO-FALTANTES-SPRINT1-2.md`](../../../../docs/CASOS-USO-FALTANTES-SPRINT1-2.md) |
+| Tabla *Sprint Backlog* alineada con la columna *Sprint* (la columna no se tocó); HU-005, HU-006, HU-011, HU-012, HU-013, HU-021 y HU-022 corregidas; HU-058 a HU-061 nuevas (antes numeradas HU-055 a HU-058; Jira ya usaba esos números) | `Backlog_del_producto (3).xlsx` |
+| UR-54, provincia en RF-01 y RF-01-1, RF-08-1, RF-12-2, RF-45-1, RF-47-4; hojas *Trazabilidad* y *MODULOS* | `DocumentacionResumenRequisitos (1) (1).xlsx` |
+| CU-16 a CU-38 y 15 sub-casos, 16 relaciones corregidas, valores etiquetados UR, HU, RF y Sprint | `SUMA-Diagramas_Vistas.eapx` · [`docs/CASOS-USO-FALTANTES-SPRINT1-2.md`](../../../../docs/CASOS-USO-FALTANTES-SPRINT1-2.md) |
 | Provincia obligatoria, publicación de versiones del aviso, roles por experiencia, usuario activo, respaldo diario, lint, `schema.prisma`, prueba de navegador sobre PostgreSQL | Código (ver specs 02, 04 y 05) |
 
 ## Decisiones abiertas con el Product Owner
@@ -58,7 +60,7 @@ Evidencia y brechas actuales: [auditoría G2](../../../../docs/AUDITORIA-G2-SPRI
 | - | -------- | ---- | ------ |
 | 1 | Textos oficiales y gestión de acuerdos | Sprint 5 · HU-057 | Reprogramada; no bloquea el alcance funcional del Sprint 2 |
 | 2 | Remitente de correo | 05 · P-02 · 01 · P-01 | Gmail configurado en desarrollo; remitente definitivo de producción pendiente |
-| 3 | Cómo se comprueba la titularidad de la cuenta | 06 · P-01 | Abierta |
+| 3 | Contrato institucional de identidad, cuenta, condición habilitada y vigencia | 06 · P-01 | Abierta |
 | 4 | Provincia obligatoria en el registro | 05 · P-03 | Aplicada, falta confirmación |
 | 5 | El socio puede dar de baja sus referidos *Pendientes* (UR-54) | 04 · P-01 | Confirmada por el usuario al autorizar la corrección de HU-011/HU-012 |
 | 6 | ¿Se mantiene «SUMA» como nombre del producto? | 02 · P-02 | Abierta |

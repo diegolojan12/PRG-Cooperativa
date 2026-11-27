@@ -1,5 +1,7 @@
 # Tareas · Registro en 3 pasos y confirmación del correo
 
+> Revisión de auditoría 2026-11-26: la validación de cuentas y referidos es automática contra la base institucional autorizada. El administrador solo consulta. La implementación y las pruebas de esta revisión están pendientes; la evidencia del flujo manual es histórica. Véase [validación automática](../../validacion-automatica.md).
+
 Plan: [`plan.md`](plan.md) · Estado: Base funcional implementada; gestión de acuerdos trasladada al Sprint 5, mediciones RNF diferidas
 
 ## Fase 1 · Datos
@@ -59,7 +61,7 @@ Plan: [`plan.md`](plan.md) · Estado: Base funcional implementada; gestión de a
 T15 (obtener/publicar textos oficiales) y T18 (publicación de versiones, CA-17 a CA-19) pasan a Sprint 5 · HU-057. Se conservan sus números como antecedente; no se marcan como completadas ni se exige su aprobación para el alcance funcional del Sprint 2.
 
 <!-- TRAZABILIDAD-VIGENTE -->
-## Trazabilidad vigente al 22 de noviembre de 2026
+## Trazabilidad revisada al 26 de noviembre de 2026
 
 | Referencia | Valor |
 | --- | --- |
@@ -71,7 +73,7 @@ T15 (obtener/publicar textos oficiales) y T18 (publicación de versiones, CA-17 
 | Requisitos no funcionales | RNF-04 · RNF-05 · RNF-10 · RNF-12 · RNF-14 · RNF-16 |
 | Casos de uso | CU-01 Registrar y activar una cuenta · CU-01.1 Aceptar términos y aviso de privacidad (include) · CU-01.2 Confirmar el correo con un código (include) · CU-01.3 Vincular el registro a un referido (extend) · CU-01.4 Validar que el correo y el celular no estén registrados (include) |
 | Diagram_ID de comportamiento | 31 Sequence; 32 Activity; 37 Sequence; 38 Activity |
-| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Modelo UML revisado: casos de uso y clases | [SUMA-Diagramas_Vistas.eapx](../../../../SUMA-Diagramas_Vistas.eapx) |
 | Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
 
 La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.

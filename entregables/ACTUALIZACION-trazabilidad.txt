@@ -13,3 +13,12 @@ Se conservan los estados y verificaciones pendientes: el trabajo documental no i
 
 El paquete también incluye los Excel y el EAPX corregidos anteriormente, y la guía actualizada.
 Los archivos originales del proyecto ya están actualizados; el paquete es una copia de entrega.
+
+Revisión 26 de noviembre de 2026 tras primera auditoría
+
+- Requisitos de usuario, funcionales y no funcionales asociados a validación revisados en la matriz Excel. RF-50 pasa a Debe tener.
+- HU-016 y HU-021 pasan a validación automática, con actualización de criterios, backlog y trazabilidad.
+- La base institucional autorizada determina titularidad y condición habilitada; las fallas técnicas quedan Pendientes con reintento automático.
+- Se mantienen códigos de requisitos, controles de unicidad, bitácora, privacidad y puntos idempotentes para ambas partes.
+- Copias y paquetes de especificaciones sincronizados. Los resultados de pruebas anteriores se conservan como históricos.
+- Implementación, acceso institucional y actualización de modelos y diagramas pendientes. La revisión specs/validacion-automatica.md sustituye las exclusiones previas del acta y visión sobre verificación automática.

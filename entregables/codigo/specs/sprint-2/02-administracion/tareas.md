@@ -1,5 +1,7 @@
 # Tareas · Administración: usuarios, configuración, bitácora y tablero
 
+> Revisión de auditoría 2026-11-26: la validación de cuentas y referidos es automática contra la base institucional autorizada. El administrador solo consulta. La implementación y las pruebas de esta revisión están pendientes; la evidencia del flujo manual es histórica. Véase [validación automática](../../validacion-automatica.md).
+
 Plan: [`plan.md`](plan.md) · Estado: Base implementada; bienvenida de HU-006 y programación del respaldo pendientes
 
 ## Fase 1 · Datos
@@ -54,7 +56,7 @@ Plan: [`plan.md`](plan.md) · Estado: Base implementada; bienvenida de HU-006 y 
 - [ ] T20 — Aplicar `mensajeBienvenida` en los inicios actuales previstos y verificar guardar configuración → abrir inicio → mostrar el valor (CA-08, RF-14). La persistencia de API está probada; esa prueba no cubre el consumo visual.
 
 <!-- TRAZABILIDAD-VIGENTE -->
-## Trazabilidad vigente al 22 de noviembre de 2026
+## Trazabilidad revisada al 26 de noviembre de 2026
 
 | Referencia | Valor |
 | --- | --- |
@@ -66,7 +68,7 @@ Plan: [`plan.md`](plan.md) · Estado: Base implementada; bienvenida de HU-006 y 
 | Requisitos no funcionales | RNF-08 · RNF-09 · RNF-13 · RNF-15 |
 | Casos de uso | CU-17 Gestionar usuarios de la plataforma · CU-19 Configurar los parámetros (CU-19.1 puntos por acción, CU-19.2 versión de los términos) · CU-20 Consultar la bitácora (CU-20.1 filtrar) · CU-15 Consultar indicadores |
 | Diagram_ID de comportamiento | 71 Sequence; 72 Activity; CU-15 (tablero) y CU-20 (bitácora) tienen vistas Use Case 18 y 29, sin pareja de comportamiento propia |
-| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Modelo UML revisado: casos de uso y clases | [SUMA-Diagramas_Vistas.eapx](../../../../SUMA-Diagramas_Vistas.eapx) |
 | Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
 
 La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.

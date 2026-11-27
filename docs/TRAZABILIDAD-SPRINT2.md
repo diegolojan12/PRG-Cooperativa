@@ -1,5 +1,7 @@
 # Trazabilidad del Sprint 2 de SUMA
 
+> Revisión 2026-11-26: este documento describe el código y las pruebas del flujo manual anterior. Los requisitos vigentes exigen [validación automática institucional](../specs/validacion-automatica.md); su implementación y verificación están pendientes.
+
 La línea base de historias es la hoja `BKL-G1` del Backlog del producto, filas 19 a 28. Los códigos RF y RNF corresponden a las hojas `Req. Funcionales` y `Req. No Funcionales` de la matriz de requisitos. Los nombres de entidades se conservan del diagrama de clases. Este documento complementa [la auditoría del Sprint 1](CORRECCIONES-AUDITORIA-SPRINT1.md).
 
 > **Fuente de verdad:** las especificaciones SDD en [`specs/`](../specs/README.md). Esta tabla es el resumen de evidencias.

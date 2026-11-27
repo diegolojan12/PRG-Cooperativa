@@ -1,5 +1,7 @@
 # Especificación · Administración: usuarios, configuración, bitácora y tablero
 
+> Revisión de auditoría 2026-11-26: la validación de cuentas y referidos es automática contra la base institucional autorizada. El administrador solo consulta. La implementación y las pruebas de esta revisión están pendientes; la evidencia del flujo manual es histórica. Véase [validación automática](../../validacion-automatica.md).
+
 | Campo | Valor |
 | ----- | ----- |
 | Épicas | EPI-03 |
@@ -9,13 +11,13 @@
 | Requisitos funcionales | RF-08-2 · RF-14 · RF-14-1 · RF-14-2 · RF-14-3 · RF-14-4 · RF-42 · RF-42-1 · RF-42-2 · RF-45-1 |
 | Casos de uso (EAPX) | CU-17 Gestionar usuarios de la plataforma · CU-19 Configurar los parámetros (CU-19.1 puntos por acción, CU-19.2 versión de los términos) · CU-20 Consultar la bitácora (CU-20.1 filtrar) · CU-15 Consultar indicadores |
 | No funcionales | RNF-08 · RNF-09 · RNF-13 · RNF-15 |
-| Estado | Base funcional implementada; HU-006 pendiente de aplicar mensajeBienvenida en los inicios actuales. Verificación de API disponible; respaldo programado y aceptación integral pendientes. |
+| Estado | Base anterior implementada en el alcance indicado; integración automática revisada pendiente de implementación y verificación |
 | Fuente previa | [`docs/CORRECCIONES-AUDITORIA-SPRINT1.md`](../../../../docs/CORRECCIONES-AUDITORIA-SPRINT1.md) · auditoría G07, G10, G11, G13, G15 |
 
 ## 1. Problema y objetivo
 
 La cooperativa necesita operar la plataforma sin depender de los programadores: crear cuentas internas,
-revisar las cuentas vinculadas de los socios, ajustar parámetros, ver de un vistazo cómo va el programa
+consultar los resultados automáticos de las cuentas de los socios, ajustar parámetros, ver de un vistazo cómo va el programa
 y poder auditar quién hizo qué.
 
 ## 2. Actores
@@ -28,7 +30,7 @@ y poder auditar quién hizo qué.
 ## 3. Historias de usuario
 
 - Como administrador, quiero crear cuentas de Gestor o Administrador para sumar personal sin compartir contraseñas.
-- Como administrador, quiero revisar las cuentas de la cooperativa que vinculan los socios para habilitar sus dictámenes.
+- Como administrador, quiero consultar resultados e incidencias de la validación automática de cuentas, sin aprobarlas ni rechazarlas.
 - **HU-006 · Configuración general** — Como administrador, deseo configurar las opciones generales de la plataforma para ajustar
   el funcionamiento básico; criterio: se pueden cambiar textos, límites y variables globales.
 - **HU-007 · Bitácora** — Como administrador, deseo consultar el registro de actividades para revisar qué acciones han realizado
@@ -46,7 +48,7 @@ y poder auditar quién hizo qué.
 | CA-02 | RF-08-2 | alguien que no es administrador | intenta crear una cuenta | se le niega |
 | CA-03 | RF-08-2 | un rol que no existe | se usa al crear una cuenta | se rechaza |
 | CA-04 | RF-08 | un administrador | cambia el rol o desactiva a un usuario | el cambio rige al instante (ver specs `sprint-1/01` y `sprint-1/02`) |
-| CA-05 | G11 | una cuenta de la cooperativa *Pendiente* | el administrador la aprueba o la rechaza | cambia de estado y queda en la bitácora; un número ya aprobado en otra cuenta no se puede aprobar otra vez |
+| CA-05 | HU-016 · RF-05-3 · RF-50 | una cuenta Pendiente | el administrador consulta | ve causa y reintento automático, sin aprobar ni rechazar; el sistema valida titularidad y unicidad y deja evidencia en bitácora |
 
 ### Configuración
 
@@ -112,6 +114,7 @@ La publicación de términos y aviso desde Configuración es implementación ade
 
 | Fecha | Cambio | Autor |
 | ----- | ------ | ----- |
+| 2026-11-26 | Primera auditoría: validación automática institucional; criterios revisados y verificación pendiente | Equipo |
 | 2026-11 | Bitácora con IP, inmutable y filtros (G07); tablero de 6 indicadores (G10); revisión de cuentas (G11); una fila por parámetro (G13); alta de Gestor/Admin (G15) | Equipo |
 | 2026-11-14 | Documentado como spec SDD a partir del código y las pruebas | Equipo |
 | 2026-11-14 | HU-006 y HU-007 identificadas. Sprint 2: la revisión de cuentas se documenta en `sprint-2/06-cuenta-cooperativa` (HU-016) | Equipo |
@@ -122,7 +125,7 @@ La publicación de términos y aviso desde Configuración es implementación ade
 El resumen muestra el total de cuentas registradas y de referidos aprobados vigentes. Las tarjetas de campañas activas y contenidos publicados muestran 0 y «Próximamente» en el Sprint 2. La gráfica, la actividad reciente y los pendientes se identifican como ejemplos. El tablero operativo de HU-005 se abre desde «Ver tablero completo», con acceso protegido por el rol y permiso de panel.
 
 <!-- TRAZABILIDAD-VIGENTE -->
-## Trazabilidad vigente al 22 de noviembre de 2026
+## Trazabilidad revisada al 26 de noviembre de 2026
 
 | Referencia | Valor |
 | --- | --- |
@@ -134,7 +137,7 @@ El resumen muestra el total de cuentas registradas y de referidos aprobados vige
 | Requisitos no funcionales | RNF-08 · RNF-09 · RNF-13 · RNF-15 |
 | Casos de uso | CU-17 Gestionar usuarios de la plataforma · CU-19 Configurar los parámetros (CU-19.1 puntos por acción, CU-19.2 versión de los términos) · CU-20 Consultar la bitácora (CU-20.1 filtrar) · CU-15 Consultar indicadores |
 | Diagram_ID de comportamiento | 71 Sequence; 72 Activity; CU-15 (tablero) y CU-20 (bitácora) tienen vistas Use Case 18 y 29, sin pareja de comportamiento propia |
-| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Modelo UML revisado: casos de uso y clases | [SUMA-Diagramas_Vistas.eapx](../../../SUMA-Diagramas_Vistas.eapx) |
 | Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
 
 La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.

@@ -1,5 +1,7 @@
 # Especificación · Enlace, QR, compartir y alta por enlace
 
+> Revisión de auditoría 2026-11-26: la validación de cuentas y referidos es automática contra la base institucional autorizada. El administrador solo consulta. La implementación y las pruebas de esta revisión están pendientes; la evidencia del flujo manual es histórica. Véase [validación automática](../../validacion-automatica.md).
+
 | Campo | Valor |
 | ----- | ----- |
 | Sprint | 3 (HU-017 a HU-019; implementada por adelantado durante el Sprint 2) |
@@ -9,8 +11,8 @@
 | Requisitos funcionales | RF-09 (RF-09-1 a RF-09-3) · RF-10 (RF-10-1 a RF-10-3) · RF-01-5 · RF-11 · RF-11-1 |
 | No funcionales | RNF-17 · RNF-18 · RNF-19 · RNF-21 |
 | Casos de uso (EAPX) | CU-05 Invitar nuevos socios · CU-05.1 Obtener el enlace de referido · CU-05.2 Descargar el código QR de invitación (extend) · CU-05.3 Compartir el enlace por WhatsApp o redes sociales (extend, actor secundario Redes sociales) · CU-05.4 Comprobar que la cuenta vinculada esté aprobada (include) · CU-01.3 Vincular el registro a un referido (extend) |
-| Clases (EAPX) | `CodigoReferido` (`codigo`; `generar()`, `enlace()`) · `Usuario 1 — 0..1 CodigoReferido` · `Referido 0..1 — 0..1 Usuario` («se registra como») |
-| Estado | Implementada · Verificada |
+| Clases de la implementación anterior | `CodigoReferido` (`codigo`; `generar()`, `enlace()`) · `Usuario 1 — 0..1 CodigoReferido` · `Referido 0..1 — 0..1 Usuario` («se registra como») |
+| Estado | Base anterior implementada en el alcance indicado; integración automática revisada pendiente de implementación y verificación |
 
 ## 1. Problema y objetivo
 
@@ -35,7 +37,7 @@ quede automáticamente como su referido.
 
 | ID | Requisito | Dado | Cuando | Entonces |
 | -- | --------- | ---- | ------ | -------- |
-| CA-01 | HU-017 · RF-09-1 | la cuenta vinculada de un socio | pasa a Aprobada | se le asigna un código alfanumérico de 8 caracteres en mayúsculas, único entre socios |
+| CA-01 | HU-017 · RF-09-1 · RF-50 | la cuenta vinculada de un socio | se aprueba automáticamente contra la base institucional | se genera en máximo 3 s un código único alfanumérico de 8 caracteres en mayúsculas, con enlace y QR |
 | CA-02 | HU-017 · RF-09 | un socio con código | pide su invitación varias veces | recibe siempre el mismo código y su enlace oficial (`/registro?ref=CODIGO`) |
 | CA-03 | HU-017 · RF-09-2 · RF-09-3 | la invitación | se muestra | incluye un QR PNG de al menos 256 x 256 px que se descarga con 1 acción |
 | CA-04 | HU-017 · RF-06-2 | un socio sin cuenta Aprobada | abre su invitación | ve el aviso «Vincular mi cuenta» y no obtiene enlace |
@@ -72,12 +74,13 @@ quede automáticamente como su referido.
 
 | Fecha | Cambio | Autor |
 | ----- | ------ | ----- |
+| 2026-11-26 | Primera auditoría: validación automática institucional; criterios revisados y verificación pendiente | Equipo |
 | 2026-11-10 | Primera implementación en la rama `sprint-2` | Equipo |
 | 2026-11-14 | Integrada en `main`; bloque «Invita y gana» en el inicio del socio y QR visible en *Mi cuenta* | Equipo |
 | 2026-11-16 | Pasa a `sprint-3/` (HU-017 a HU-019 son del Sprint 3 según la columna *Sprint* del backlog). El referido hereda la provincia de quien se registra; casos de uso CU-05.3 y CU-05.4 | Equipo |
 
 <!-- TRAZABILIDAD-VIGENTE -->
-## Trazabilidad vigente al 22 de noviembre de 2026
+## Trazabilidad revisada al 26 de noviembre de 2026
 
 | Referencia | Valor |
 | --- | --- |
@@ -89,7 +92,7 @@ quede automáticamente como su referido.
 | Requisitos no funcionales | RNF-17 · RNF-18 · RNF-19 · RNF-21 |
 | Casos de uso | CU-05 Invitar nuevos socios · CU-05.1 Obtener el enlace de referido · CU-05.2 Descargar el código QR de invitación (extend) · CU-05.3 Compartir el enlace por WhatsApp o redes sociales (extend, actor secundario Redes sociales) · CU-05.4 Comprobar que la cuenta vinculada esté aprobada (include) · CU-01.3 Vincular el registro a un referido (extend) |
 | Diagram_ID de comportamiento | 31 Sequence; 32 Activity; 101 Sequence; 102 Activity |
-| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Modelo UML revisado: casos de uso y clases | [SUMA-Diagramas_Vistas.eapx](../../../SUMA-Diagramas_Vistas.eapx) |
 | Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
 
 La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.

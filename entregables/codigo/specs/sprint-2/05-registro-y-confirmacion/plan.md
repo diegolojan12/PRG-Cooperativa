@@ -1,5 +1,7 @@
 # Plan técnico · Registro en 3 pasos y confirmación del correo
 
+> Revisión de auditoría 2026-11-26: la validación de cuentas y referidos es automática contra la base institucional autorizada. El administrador solo consulta. La implementación y las pruebas de esta revisión están pendientes; la evidencia del flujo manual es histórica. Véase [validación automática](../../validacion-automatica.md).
+
 Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementado
 
 ## 1. Chequeo contra la constitución
@@ -13,7 +15,7 @@ Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementad
 | VI. Accesibilidad | Sí | Barra de progreso con porcentaje, ayuda y error por campo, foco en el primer error |
 | VII. Arquitectura | Sí | `ConfirmacionCorreo` en `dominio/confirmacion-correo.mjs`; `AvisoPrivacidad`/`AceptacionTerminos` en `dominio/acceso.mjs` |
 
-## 2. Modelo de datos · `backend/prisma/sprint2.sql`
+## 2. Modelo de datos · `backend/migraciones/sprint2.sql`
 
 | Cambio | Para qué |
 | ------ | -------- |
@@ -92,7 +94,7 @@ En desarrollo (`ENABLE_DEV_RESET_LINK=true`) las respuestas traen `devCodigo`; e
 La publicación administrativa y los textos oficiales pasan al Sprint 5. Se conserva el código adelantado y el consumo de la versión vigente en registro. No se retiran migraciones ni datos de aceptación.
 
 <!-- TRAZABILIDAD-VIGENTE -->
-## Trazabilidad vigente al 22 de noviembre de 2026
+## Trazabilidad revisada al 26 de noviembre de 2026
 
 | Referencia | Valor |
 | --- | --- |
@@ -104,7 +106,7 @@ La publicación administrativa y los textos oficiales pasan al Sprint 5. Se cons
 | Requisitos no funcionales | RNF-04 · RNF-05 · RNF-10 · RNF-12 · RNF-14 · RNF-16 |
 | Casos de uso | CU-01 Registrar y activar una cuenta · CU-01.1 Aceptar términos y aviso de privacidad (include) · CU-01.2 Confirmar el correo con un código (include) · CU-01.3 Vincular el registro a un referido (extend) · CU-01.4 Validar que el correo y el celular no estén registrados (include) |
 | Diagram_ID de comportamiento | 31 Sequence; 32 Activity; 37 Sequence; 38 Activity |
-| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Modelo UML revisado: casos de uso y clases | [SUMA-Diagramas_Vistas.eapx](../../../../SUMA-Diagramas_Vistas.eapx) |
 | Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
 
 La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.

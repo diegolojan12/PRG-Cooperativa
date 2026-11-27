@@ -1,6 +1,25 @@
 # Tareas · Estado de referidos, dictamen y puntos automáticos
 
-Plan: [`plan.md`](plan.md) · Estado: Completado
+> Revisión de auditoría 2026-11-26: la validación de cuentas y referidos es automática contra la base institucional autorizada. El administrador solo consulta. La implementación y las pruebas de esta revisión están pendientes; la evidencia del flujo manual es histórica. Véase [validación automática](../../validacion-automatica.md).
+
+## Revisión de auditoría · trabajo pendiente
+
+- [ ] A01 — Concretar fuente institucional y contrato de identidad, vigencia y condición habilitada (RF-50, RNF-23, RNF-24).
+- [ ] A02 — Validación automática, persistencia de evidencia y reintentos cada 5 minutos; no decidir ante falla técnica (RF-05-4, RF-50-2).
+- [ ] A03 — Disparar reevaluación por registro activo, cuenta validada y asociación corregida (RF-11-4).
+- [ ] A04 — Integridad, unicidad y transacción de estado, créditos de ambas partes y avisos idempotentes (RF-12-2, RNF-20).
+- [ ] A05 — Retirar dictamen manual de API y pantallas; conservar consulta y seguimiento (UR-08, UR-16, RF-05-3, RF-11-3).
+- [ ] A06 — Probar titularidad correcta e incorrecta, fuente caída o desactualizada, concurrencia, reinicio, rollback y autorización; medir plazos y carga.
+- [x] A07a — Casos de uso y clases revisados en `SUMA-Diagramas_Vistas.eapx`, PDF y SVG (2026-11-26).
+- [ ] A07b — Adaptar secuencias y actividades afectadas e ilustraciones antiguas de Word; el código sigue pendiente.
+
+Estos ítems no están implementados ni verificados. Véase [la revisión general](../../validacion-automatica.md).
+
+## Tareas y verificación históricas · flujo manual sustituido
+
+Las casillas completadas y resultados siguientes se refieren a la versión anterior de los criterios y no acreditan la automatización.
+
+Plan: [`plan.md`](plan.md) · Estado: Revisión de automatización pendiente
 
 ## Fase 1 · Datos
 
@@ -46,7 +65,7 @@ Plan: [`plan.md`](plan.md) · Estado: Completado
 | CA-10, CA-12, CA-13 | `RF-11: vinculación…` | Sí |
 
 <!-- TRAZABILIDAD-VIGENTE -->
-## Trazabilidad vigente al 22 de noviembre de 2026
+## Trazabilidad revisada al 26 de noviembre de 2026
 
 | Referencia | Valor |
 | --- | --- |
@@ -56,9 +75,9 @@ Plan: [`plan.md`](plan.md) · Estado: Completado
 | Requisitos de usuario | UR-15 · UR-16 · UR-19 · UR-24 · UR-44 |
 | Requisitos funcionales | RF-11-2 · RF-11-4 · RF-12 (RF-12-1, RF-12-2) · RF-14-3 · RF-14-4 · RF-38 (RF-38-1) · RF-39 (RF-39-1, RF-39-2) · RF-42 |
 | Requisitos no funcionales | RNF-01 · RNF-13 · RNF-20 |
-| Casos de uso | CU-06 Consultar referidos · CU-06.2 Aprobar o rechazar un referido (extend) · CU-06.4 Acreditar los puntos al socio y al referido (extend de CU-06.2) · CU-36 Consultar notificaciones |
+| Casos de uso | CU-06 Consultar referidos · CU-06.2 Validar automáticamente un referido (revisado en auditoría 1) (extend) · CU-06.4 Acreditar los puntos al socio y al referido (extend de CU-06.2) · CU-36 Consultar notificaciones |
 | Diagram_ID de comportamiento | 45 Sequence; 46 Activity; 47 Sequence; 48 Activity |
-| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Modelo UML revisado: casos de uso y clases | [SUMA-Diagramas_Vistas.eapx](../../../SUMA-Diagramas_Vistas.eapx) |
 | Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
 
 La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.

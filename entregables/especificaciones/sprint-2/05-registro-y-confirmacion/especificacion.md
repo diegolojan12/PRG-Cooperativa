@@ -1,5 +1,7 @@
 # Especificación · Registro en 3 pasos y confirmación del correo
 
+> Revisión de auditoría 2026-11-26: la validación de cuentas y referidos es automática contra la base institucional autorizada. El administrador solo consulta. La implementación y las pruebas de esta revisión están pendientes; la evidencia del flujo manual es histórica. Véase [validación automática](../../validacion-automatica.md).
+
 | Campo | Valor |
 | ----- | ----- |
 | Sprint | 2 |
@@ -9,8 +11,8 @@
 | Requisitos funcionales | RF-01 (RF-01-1 a RF-01-6, con provincia) · RF-02 (RF-02-1 a RF-02-3) · RF-47 (RF-47-1, RF-47-2) · RF-08-2 · RF-14 |
 | No funcionales | RNF-04 · RNF-05 · RNF-10 · RNF-12 · RNF-14 · RNF-16 |
 | Casos de uso (EAPX) | CU-01 Registrar y activar una cuenta · CU-01.1 Aceptar términos y aviso de privacidad (include) · CU-01.2 Confirmar el correo con un código (include) · CU-01.3 Vincular el registro a un referido (extend) · CU-01.4 Validar que el correo y el celular no estén registrados (include) |
-| Clases (EAPX) | `Usuario` · `AvisoPrivacidad` · `AceptacionTerminos` · `ConfirmacionCorreo` · `CodigoVerificacion` |
-| Estado | Implementada · Verificada |
+| Clases de la implementación anterior | `Usuario` · `AvisoPrivacidad` · `AceptacionTerminos` · `ConfirmacionCorreo` · `CodigoVerificacion` |
+| Estado | Base anterior implementada en el alcance indicado; integración automática revisada pendiente de implementación y verificación |
 
 ## 1. Problema y objetivo
 
@@ -56,6 +58,9 @@ expresa del tratamiento de sus datos (UR-52).
 
 ## 5. Reglas de negocio
 
+Al declarar una cuenta se inicia RF-50. La creación del registro y la confirmación del correo se conservan; confirmar correo no acredita titularidad institucional. La activación del registro y el resultado automático de cuenta disparan la reevaluación del referido. Nunca se requiere aprobación administrativa.
+
+
 1. Datos del paso 1: nombres y apellidos (3–100 caracteres, al menos 2 palabras), correo, celular `09XXXXXXXX` y
    provincia. La misma regla del nombre vale para las cuentas que crea el administrador.
 2. El celular y el correo son únicos entre todas las cuentas (se comparan por su índice HMAC, RNF-05).
@@ -91,7 +96,7 @@ expresa del tratamiento de sus datos (UR-52).
 CA-17 a CA-19 se trasladan a [HU-057 · Sprint 5](../../sprint-5/04-privacidad-y-acuerdos/especificacion.md); no se renumeran los criterios restantes. La aceptación del aviso vigente durante el registro (RF-47-1 y RF-47-2) permanece en Sprint 2. No se publican nuevos textos ni se consideran oficiales los ejemplos existentes.
 
 <!-- TRAZABILIDAD-VIGENTE -->
-## Trazabilidad vigente al 22 de noviembre de 2026
+## Trazabilidad revisada al 26 de noviembre de 2026
 
 | Referencia | Valor |
 | --- | --- |
@@ -103,7 +108,7 @@ CA-17 a CA-19 se trasladan a [HU-057 · Sprint 5](../../sprint-5/04-privacidad-y
 | Requisitos no funcionales | RNF-04 · RNF-05 · RNF-10 · RNF-12 · RNF-14 · RNF-16 |
 | Casos de uso | CU-01 Registrar y activar una cuenta · CU-01.1 Aceptar términos y aviso de privacidad (include) · CU-01.2 Confirmar el correo con un código (include) · CU-01.3 Vincular el registro a un referido (extend) · CU-01.4 Validar que el correo y el celular no estén registrados (include) |
 | Diagram_ID de comportamiento | 31 Sequence; 32 Activity; 37 Sequence; 38 Activity |
-| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Modelo UML revisado: casos de uso y clases | [SUMA-Diagramas_Vistas.eapx](../../../SUMA-Diagramas_Vistas.eapx) |
 | Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
 
 La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.

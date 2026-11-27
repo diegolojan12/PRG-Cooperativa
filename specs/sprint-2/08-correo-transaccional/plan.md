@@ -24,7 +24,7 @@ Especificación: [especificacion.md](especificacion.md).
 | Requisitos no funcionales | RNF-06, RNF-12, RNF-14 |
 | Casos de uso | CU-17.2/17.3 · CU-02.2/02.3/02.5 · CU-01.2 · CU-03.4 (reutilización) |
 | Diagram_ID de comportamiento | 34 Sequence; 37 Sequence; 39 Sequence; 67 Sequence |
-| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../entregables/SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas.eapx](../../../entregables/SUMA-Diagramas_Vistas.eapx) |
 | Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
 
 La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.

@@ -1,5 +1,7 @@
 # Tareas · Enlace, QR, compartir y alta por enlace
 
+> Revisión de auditoría 2026-11-26: la validación de cuentas y referidos es automática contra la base institucional autorizada. El administrador solo consulta. La implementación y las pruebas de esta revisión están pendientes; la evidencia del flujo manual es histórica. Véase [validación automática](../../validacion-automatica.md).
+
 Plan: [`plan.md`](plan.md) · Estado: Completado (pruebas en dispositivo pendientes)
 
 ## Fase 1 · Pruebas
@@ -39,7 +41,7 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (pruebas en dispositivo pendien
 | CA-13 | `HU-019 / CA-13: el registro con código enlaza el referido cargado a mano` | Sí |
 
 <!-- TRAZABILIDAD-VIGENTE -->
-## Trazabilidad vigente al 22 de noviembre de 2026
+## Trazabilidad revisada al 26 de noviembre de 2026
 
 | Referencia | Valor |
 | --- | --- |
@@ -51,7 +53,7 @@ Plan: [`plan.md`](plan.md) · Estado: Completado (pruebas en dispositivo pendien
 | Requisitos no funcionales | RNF-17 · RNF-18 · RNF-19 · RNF-21 |
 | Casos de uso | CU-05 Invitar nuevos socios · CU-05.1 Obtener el enlace de referido · CU-05.2 Descargar el código QR de invitación (extend) · CU-05.3 Compartir el enlace por WhatsApp o redes sociales (extend, actor secundario Redes sociales) · CU-05.4 Comprobar que la cuenta vinculada esté aprobada (include) · CU-01.3 Vincular el registro a un referido (extend) |
 | Diagram_ID de comportamiento | 31 Sequence; 32 Activity; 101 Sequence; 102 Activity |
-| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Modelo UML revisado: casos de uso y clases | [SUMA-Diagramas_Vistas.eapx](../../../SUMA-Diagramas_Vistas.eapx) |
 | Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
 
 La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.

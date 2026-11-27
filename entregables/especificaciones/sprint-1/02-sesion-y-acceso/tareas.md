@@ -57,7 +57,7 @@ T10 (recuperación) pasó a `sprint-2/01-recuperacion-de-acceso`; T11 y T12 (reg
 | Requisitos no funcionales | RNF-04 · RNF-06 · RNF-12 · RNF-14 · RNF-22 |
 | Casos de uso | CU-02 Iniciar sesión · CU-02.1 Validar las credenciales (include) · CU-02.2 Confirmar el segundo factor (extend) · CU-02.6 Cerrar sesión (extend) |
 | Diagram_ID de comportamiento | 33 Activity; 34 Sequence; 99 Sequence; 100 Activity |
-| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas.eapx](../../../SUMA-Diagramas_Vistas.eapx) |
 | Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
 
 La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.

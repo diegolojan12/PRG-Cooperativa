@@ -1,5 +1,7 @@
 # Especificaciones de SUMA · Spec-Driven Development (SDD)
 
+> Revisión de auditoría 2026-11-26: la validación de cuentas y referidos es automática contra la base institucional autorizada. El administrador solo consulta. La implementación y las pruebas de esta revisión están pendientes; la evidencia del flujo manual es histórica. Véase [validación automática](validacion-automatica.md).
+
 **Revisión 2026-11-19:** implementación funcional verificada no equivale a cierre integral al 100 %.
 Gmail está configurado y se confirmó una recepción real de 2FA. Quedan mediciones, operación y pruebas con usuarios diferidas; el Sprint 3 sigue parcial. Privacidad y acuerdos se planifican en el Sprint 5.
 Ver [auditoría G2 de los sprints 1 a 3](../../../docs/AUDITORIA-G2-SPRINTS-1-3-2026-11-19.md) y la
@@ -44,7 +46,7 @@ specs/
 ## Convenciones
 
 - **Identificadores.** Se reutilizan los de la documentación de requisitos: `HU-###` y `EPI-##` (hoja `BKL-G1` del backlog),
-  `UR-##`, `RF-##-#`, `RNF-##` (matriz de requisitos) y `CU-##` (casos de uso de `SUMA-Diagramas_Vistas_Textos_Centrados.eapx`, CU-01 a CU-38).
+  `UR-##`, `RF-##-#`, `RNF-##` (matriz de requisitos) y `CU-##` (casos de uso de `SUMA-Diagramas_Vistas.eapx`, CU-01 a CU-38).
   Dentro de una spec, los criterios se numeran `CA-01`, `CA-02`… y cada uno cita el RF que cubre.
 - **Criterios de aceptación** en formato *Dado / Cuando / Entonces*, verificables.
 - **Todo criterio tiene una prueba**, y el nombre de la prueba cita el RF o la HU
@@ -52,7 +54,7 @@ specs/
 - **Estados de una spec:** `Borrador` → `Aprobada` → `En construcción` → `Implementada` → `Verificada`.
 - **Decisiones abiertas** se anotan en la sección *Preguntas abiertas* de la spec y en el README del sprint.
 - **Una funcionalidad puede agrupar varias HU** si comparten el modelo de datos.
-- **Migraciones** por sprint en `backend/prisma/sprintN-<tema>.sql`, idempotentes.
+- **Migraciones** por sprint en `backend/migraciones/sprintN-<tema>.sql`, idempotentes.
 
 ## Índice
 

@@ -40,7 +40,7 @@ Verificación del refinamiento (2026-11-19): compilación y lint correctos; 18 p
 | Requisitos no funcionales | RNF-15 · RNF-16 · RNF-17 · RNF-18 |
 | Casos de uso | Transversal: UR-53 no requiere caso de uso propio; el menú adaptable es parte de CU-02.4 Cargar el menú y los permisos del rol |
 | Diagram_ID de comportamiento | 33 Activity; 34 Sequence |
-| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas.eapx](../../../SUMA-Diagramas_Vistas.eapx) |
 | Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
 
 La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.

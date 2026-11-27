@@ -1,6 +1,8 @@
 # Matriz de trazabilidad de las especificaciones de SUMA
 
-Revisión 22 de noviembre de 2026. Fuente de planificación: `entregables/Backlog_del_producto.xlsx`, hoja BKL-G1. Fuente de requisitos: `entregables/DocumentacionResumenRequisitos (1).xlsx`. Modelo: `entregables/SUMA-Diagramas_Vistas_Textos_Centrados.eapx`. Las rutas anteriores son relativas a la raíz del proyecto.
+> Revisión de auditoría 2026-11-26: la validación de cuentas y referidos es automática contra la base institucional autorizada. El administrador solo consulta. La implementación y las pruebas de esta revisión están pendientes; la evidencia del flujo manual es histórica. Véase [validación automática](validacion-automatica.md).
+
+Revisión 26 de noviembre de 2026. Fuente de planificación: `entregables/Backlog_del_producto (3).xlsx`, hoja BKL-G1. Fuente de requisitos: `entregables/DocumentacionResumenRequisitos (1) (1).xlsx`. Modelo: `entregables/SUMA-Diagramas_Vistas.eapx`. Las rutas anteriores son relativas a la raíz del proyecto.
 
 HU-055 se conserva como duplicada de HU-023; el perfil se planifica en Sprint 3 y EPI-06. HU-056 y HU-057 se planifican en Sprint 5 y EPI-20. Los cuatro IDs nuevos corresponden a HU-058 (favoritos/meta), HU-059 (búsqueda), HU-060 (ajuste) y HU-061 (encuestas). «Usuario General» es una categoría que agrupa usuarios; las reglas de acceso de cada función se documentan por capacidad y propiedad.
 
@@ -24,13 +26,13 @@ Las HU del Sprint 1 y 2 usan los RF y UR delimitados en sus especificaciones y e
 | HU-012 | EPI-05 | 2 | UR-16, UR-17 | RF-11-3, RF-11-4 | CU-06, CU-06.1, CU-06.6 | [sprint-2/04-referidos](sprint-2/04-referidos/especificacion.md) |
 | HU-013 | EPI-06 | 2 | UR-01, UR-13, UR-14, UR-52 | RF-01, RF-01-1, RF-01-2, RF-01-3, RF-01-4, RF-01-5, RF-01-6, RF-47-1, RF-47-2, RF-08-2 | CU-01, CU-01.1, CU-01.4 | [sprint-2/05-registro-y-confirmacion](sprint-2/05-registro-y-confirmacion/especificacion.md) |
 | HU-014 | EPI-06 | 2 | UR-02 | RF-02, RF-02-1, RF-02-2, RF-02-3 | CU-01.2 | [sprint-2/05-registro-y-confirmacion](sprint-2/05-registro-y-confirmacion/especificacion.md); [sprint-2/08-correo-transaccional](sprint-2/08-correo-transaccional/especificacion.md) |
-| HU-015 | EPI-06 | 2 | UR-07, UR-09, UR-14 | RF-05-1, RF-05-2, RF-05-5, RF-05-6, RF-06, RF-06-1, RF-06-2, RF-06-3 | CU-04, CU-04.1, CU-04.2, CU-05.4 | [sprint-2/06-cuenta-cooperativa](sprint-2/06-cuenta-cooperativa/especificacion.md) |
-| HU-016 | EPI-08 | 2 | UR-08, UR-44 | RF-05-3, RF-05-4, RF-39, RF-39-1, RF-39-2, RF-42 | CU-18 | [sprint-2/06-cuenta-cooperativa](sprint-2/06-cuenta-cooperativa/especificacion.md) |
+| HU-015 | EPI-06 | 2 | UR-07, UR-09, UR-14 | RF-05-1, RF-05-2, RF-05-5, RF-05-6, RF-06, RF-06-1, RF-06-2, RF-06-3, RF-50 | CU-04, CU-04.1, CU-04.2, CU-05.4 | [sprint-2/06-cuenta-cooperativa](sprint-2/06-cuenta-cooperativa/especificacion.md) |
+| HU-016 | EPI-08 | 2 | UR-08, UR-44 | RF-05-3, RF-05-4, RF-50, RF-39, RF-39-1, RF-39-2, RF-42 | CU-18 | [sprint-2/06-cuenta-cooperativa](sprint-2/06-cuenta-cooperativa/especificacion.md) |
 | HU-017 | EPI-07 | 3 | UR-09, UR-10, UR-11 | RF-06, RF-09 | CU-05, CU-05.1, CU-05.2, CU-05.4, CU-18.1 | [sprint-3/01-invitacion](sprint-3/01-invitacion/especificacion.md) |
 | HU-018 | EPI-07 | 3 | UR-12 | RF-10, RF-48 | CU-05, CU-05.3 | [sprint-3/01-invitacion](sprint-3/01-invitacion/especificacion.md) |
 | HU-019 | EPI-07 | 3 | UR-13 | RF-01, RF-11 | CU-01, CU-01.3 | [sprint-3/01-invitacion](sprint-3/01-invitacion/especificacion.md) |
 | HU-020 | EPI-07 | 3 | UR-15, UR-44 | RF-11, RF-39, RF-37, RF-38, RF-40 | CU-06, CU-36 | [sprint-3/02-seguimiento-y-puntos](sprint-3/02-seguimiento-y-puntos/especificacion.md) |
-| HU-021 | EPI-08 | 3 | UR-16, UR-19 | RF-11, RF-12 | CU-06.2, CU-06.4 | [sprint-3/02-seguimiento-y-puntos](sprint-3/02-seguimiento-y-puntos/especificacion.md) |
+| HU-021 | EPI-08 | 3 | UR-16, UR-19 | RF-11, RF-50, RF-12 | CU-06.2, CU-06.4 | [sprint-3/02-seguimiento-y-puntos](sprint-3/02-seguimiento-y-puntos/especificacion.md) |
 | HU-022 | EPI-10 | 3 | UR-24, UR-44 | RF-12, RF-20, RF-22, RF-25, RF-38, RF-48, RF-37, RF-39, RF-40 | CU-36, CU-06.4 | [sprint-3/02-seguimiento-y-puntos](sprint-3/02-seguimiento-y-puntos/especificacion.md) |
 | HU-023 | EPI-06 | 3 | UR-06 | RF-03 | CU-03, CU-03.1, CU-03.3, CU-03.4 | [sprint-2/08-correo-transaccional](sprint-2/08-correo-transaccional/especificacion.md); [sprint-3/03-configuracion-perfil](sprint-3/03-configuracion-perfil/especificacion.md) |
 | HU-024 | EPI-08 | 3 | UR-18 | RF-11 | CU-06.3 | [Backlog](backlog.md) |

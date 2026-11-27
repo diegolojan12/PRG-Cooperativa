@@ -1,5 +1,7 @@
 # Plan técnico · Administración: usuarios, configuración, bitácora y tablero
 
+> Revisión de auditoría 2026-11-26: la validación de cuentas y referidos es automática contra la base institucional autorizada. El administrador solo consulta. La implementación y las pruebas de esta revisión están pendientes; la evidencia del flujo manual es histórica. Véase [validación automática](../../validacion-automatica.md).
+
 Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementado
 
 ## 1. Chequeo contra la constitución
@@ -87,7 +89,7 @@ Claves internas de `Configuracion` que no se exponen: `verificadorCifrado`, `dem
 | Activación por enlace de 24 h | Contraseña temporal enviada por correo | Nadie más conoce la contraseña |
 
 <!-- TRAZABILIDAD-VIGENTE -->
-## Trazabilidad vigente al 22 de noviembre de 2026
+## Trazabilidad revisada al 26 de noviembre de 2026
 
 | Referencia | Valor |
 | --- | --- |
@@ -99,7 +101,7 @@ Claves internas de `Configuracion` que no se exponen: `verificadorCifrado`, `dem
 | Requisitos no funcionales | RNF-08 · RNF-09 · RNF-13 · RNF-15 |
 | Casos de uso | CU-17 Gestionar usuarios de la plataforma · CU-19 Configurar los parámetros (CU-19.1 puntos por acción, CU-19.2 versión de los términos) · CU-20 Consultar la bitácora (CU-20.1 filtrar) · CU-15 Consultar indicadores |
 | Diagram_ID de comportamiento | 71 Sequence; 72 Activity; CU-15 (tablero) y CU-20 (bitácora) tienen vistas Use Case 18 y 29, sin pareja de comportamiento propia |
-| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../entregables/SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Modelo UML revisado: casos de uso y clases | [SUMA-Diagramas_Vistas.eapx](../../../entregables/SUMA-Diagramas_Vistas.eapx) |
 | Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
 
 La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.

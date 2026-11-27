@@ -1,6 +1,26 @@
 # Plan técnico · Gestión de referidos
 
-Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementado
+> Revisión de auditoría 2026-11-26: la validación de cuentas y referidos es automática contra la base institucional autorizada. El administrador solo consulta. La implementación y las pruebas de esta revisión están pendientes; la evidencia del flujo manual es histórica. Véase [validación automática](../../validacion-automatica.md).
+
+## Diseño vigente tras auditoría · 2026-11-26
+
+Aplicar [la revisión de validación automática](../../validacion-automatica.md). El código y las API descritos en el antecedente todavía implementan decisiones manuales y no acreditan este diseño.
+
+1. Implementar un servicio interno de validación con acceso institucional de solo lectura o réplica autorizada y vigente. Comprobar identidad institucional, cuenta, condición habilitada y unicidad; no usar datos autodeclarados como prueba.
+2. Persistir solicitud, intentos, causa, resultado, fuente, versión de regla y próximo reintento. Las fallas técnicas conservan Pendiente y se reintentan cada 5 minutos; requisitos no completados disparan reevaluación al cambiar.
+3. Ejecutar reevaluación tras registro activo, vinculación aprobada y asociación corregida. Conservar alta manual, filtros y exportación comercial; no equivalen a aprobar.
+4. Sustituir los contratos de dictamen manual `PATCH /api/usuarios/:id/cuenta` y `PATCH /api/referidos/:id/dictamen`: ningún usuario, incluido administrador, puede decidir estados. El servicio interno persiste el resultado. Las rutas de vinculación y consulta siguen autorizadas por sesión, capacidad y propiedad.
+5. Usar restricciones únicas e integridad referencial para cuentas y relaciones. Confirmar aprobación de referido, créditos a ambas partes y eventos de aviso en una transacción; deduplicar por evento y destinatario, con recuperación después de reinicio.
+6. Retirar botones de aprobar/rechazar y la cola de revisión humana. Mostrar resultado, requisito faltante o incidencia y reintento. La administración conserva consulta de resultados, configuración, reportes y bitácora.
+7. Verificar tiempos de RF-50 (5 s total), RF-11-4 (2 s), RF-12-2 (2 s), RF-39 (5 s), concurrencia, recuperación e imposibilidad de forzar aprobación desde cliente o administración. Los límites y sus puntos de medición figuran en la revisión general.
+
+Dependencias: acceso autorizado, diccionario de datos, vínculo de identidad verificable, condición habilitada y vigencia de la fuente. Migraciones y contrato concreto se definirán al implementar; no se acreditan tablas, rutas nuevas ni pruebas inexistentes.
+
+## Antecedente técnico del flujo manual · sustituido
+
+El contenido siguiente conserva las decisiones y pruebas del código anterior. Sus rutas de aprobación, colas de revisión y decisiones manuales quedan sustituidas por el diseño vigente anterior.
+
+Especificación: [`especificacion.md`](especificacion.md) · Estado: Diseño revisado; implementación pendiente
 
 ## 1. Chequeo contra la constitución
 
@@ -85,7 +105,7 @@ solo dictamina *Pendientes* y exige `CuentaCooperativa.estaAprobada`.
 | Feriados fijos en código | Tabla de feriados | Suficiente para el Sprint 1; los feriados móviles quedan fuera (riesgo aceptado) |
 
 <!-- TRAZABILIDAD-VIGENTE -->
-## Trazabilidad vigente al 22 de noviembre de 2026
+## Trazabilidad revisada al 26 de noviembre de 2026
 
 | Referencia | Valor |
 | --- | --- |
@@ -95,9 +115,9 @@ solo dictamina *Pendientes* y exige `CuentaCooperativa.estaAprobada`.
 | Requisitos de usuario | UR-13 · UR-16 · UR-17 · UR-54 |
 | Requisitos funcionales | RF-11 · RF-11-3 · RF-11-4 · RF-11-5 · RF-11-6 |
 | Requisitos no funcionales | RNF-12 · RNF-13 |
-| Casos de uso | CU-06 Consultar referidos · CU-06.1 Filtrar (extend) · CU-06.2 Aprobar o rechazar (extend) · CU-06.5 Gestionar los datos de un referido (extend) · CU-06.6 Asociar manualmente (extend) |
+| Casos de uso | CU-06 Consultar referidos · CU-06.1 Filtrar (extend) · CU-06.2 Validar automáticamente (extend; revisado en auditoría 1) · CU-06.5 Gestionar los datos de un referido (extend) · CU-06.6 Asociar manualmente (extend) |
 | Diagram_ID de comportamiento | 45 Sequence; 46 Activity; 47 Sequence; 48 Activity |
-| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Modelo UML revisado: casos de uso y clases | [SUMA-Diagramas_Vistas.eapx](../../../../SUMA-Diagramas_Vistas.eapx) |
 | Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
 
 La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.

@@ -1,0 +1,7388 @@
+{
+  "classes": [
+    {
+      "name": "Usuario",
+      "oid": 101,
+      "crc": "CRC-01",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Código confirmado",
+      "kind": "Class",
+      "source": {
+        "file": "backend/src/dominio/acceso.mjs",
+        "line": 112,
+        "methods": [
+          {
+            "name": "constructor",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          }
+        ]
+      },
+      "attrs": [
+        {
+          "name": "id",
+          "type": "number",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "nombre",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "correo",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "rol",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "activo",
+          "type": "boolean",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "celular",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "creadoEn",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "provincia",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "perfilPublico",
+          "type": "boolean",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "cuentaVerificada",
+          "type": "boolean",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "cuentaEstado",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Representar los datos del usuario y normalizar la privacidad y el estado de su cuenta. Consultar si la cuenta está aprobada al construir la representación.",
+      "rf": "RF-01, RF-03, RF-46, RF-48",
+      "justification": "",
+      "collaborators": [
+        "CuentaCooperativa",
+        "Rol"
+      ],
+      "x": 2200,
+      "y": 2400,
+      "w": 460,
+      "attr_lines": [
+        "+ id: number",
+        "+ nombre: string",
+        "+ correo: string",
+        "+ rol: string",
+        "+ activo: boolean",
+        "+ celular: string",
+        "+ creadoEn: string",
+        "+ provincia: string",
+        "+ perfilPublico: boolean",
+        "+ cuentaVerificada: boolean",
+        "+ cuentaEstado: string"
+      ],
+      "op_lines": [
+        "+ constructor()"
+      ],
+      "h": 340,
+      "fill": "#E7F0FB"
+    },
+    {
+      "name": "Rol",
+      "oid": 102,
+      "crc": "CRC-02",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Código confirmado",
+      "kind": "Class",
+      "source": {
+        "file": "backend/src/dominio/acceso.mjs",
+        "line": 26,
+        "methods": [
+          {
+            "name": "constructor",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "crear",
+            "private": false,
+            "static": true,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "validarPermisos",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "asignarA",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          }
+        ]
+      },
+      "attrs": [
+        {
+          "name": "clave",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "nombre",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "descripcion",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "sistema",
+          "type": "boolean",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "requiereSegundoFactor",
+          "type": "boolean",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "alcanceGlobal",
+          "type": "boolean",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "interfaz",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "disponibles",
+          "type": "string[]",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "obligatorios",
+          "type": "string[]",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "crear",
+          "type": "Rol",
+          "scope": "Public",
+          "static": true
+        },
+        {
+          "name": "validarPermisos",
+          "type": "string[]",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "asignarA",
+          "type": "void",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Crear roles configurables y validar los módulos que pueden recibir. Asignar la clave del rol a un usuario sin fijar una lista cerrada de roles.",
+      "rf": "RF-08",
+      "justification": "",
+      "collaborators": [
+        "Modulo",
+        "Usuario"
+      ],
+      "x": 100,
+      "y": 2380,
+      "w": 460,
+      "attr_lines": [
+        "+ clave: string",
+        "+ nombre: string",
+        "+ descripcion: string",
+        "+ sistema: boolean",
+        "+ requiereSegundoFactor: boolean",
+        "+ alcanceGlobal: boolean",
+        "+ interfaz: string",
+        "+ disponibles: string[]",
+        "+ obligatorios: string[]"
+      ],
+      "op_lines": [
+        "+ constructor()",
+        "+ crear(): Rol",
+        "+ validarPermisos(): string[]",
+        "+ asignarA(): void"
+      ],
+      "h": 360,
+      "fill": "#E7F0FB"
+    },
+    {
+      "name": "CodigoVerificacion",
+      "oid": 103,
+      "crc": "CRC-03",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Código confirmado",
+      "kind": "Class",
+      "source": {
+        "file": "backend/src/dominio/acceso.mjs",
+        "line": 147,
+        "methods": [
+          {
+            "name": "huella",
+            "private": false,
+            "static": true,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "segundoFactor",
+            "private": false,
+            "static": true,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "token",
+            "private": false,
+            "static": true,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "constructor",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "esValido",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          }
+        ]
+      },
+      "attrs": [
+        {
+          "name": "huella",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "expira",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "usado",
+          "type": "boolean",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "huella",
+          "type": "string",
+          "scope": "Public",
+          "static": true
+        },
+        {
+          "name": "segundoFactor",
+          "type": "string",
+          "scope": "Public",
+          "static": true
+        },
+        {
+          "name": "token",
+          "type": "string",
+          "scope": "Public",
+          "static": true
+        },
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "esValido",
+          "type": "boolean",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Generar tokens, códigos de segundo factor y huellas. Comprobar coincidencia, vigencia y uso del código.",
+      "rf": "RF-02, RF-04, RF-07",
+      "justification": "",
+      "collaborators": [
+        "ConfirmacionCorreo",
+        "Usuario"
+      ],
+      "x": 3600,
+      "y": 1740,
+      "w": 460,
+      "attr_lines": [
+        "+ huella: string",
+        "+ expira: string",
+        "+ usado: boolean"
+      ],
+      "op_lines": [
+        "+ huella(): string",
+        "+ segundoFactor(): string",
+        "+ token(): string",
+        "+ constructor()",
+        "+ esValido(): boolean"
+      ],
+      "h": 280,
+      "fill": "#E7F0FB"
+    },
+    {
+      "name": "ConfirmacionCorreo",
+      "oid": 104,
+      "crc": "CRC-04",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Código confirmado",
+      "kind": "Class",
+      "source": {
+        "file": "backend/src/dominio/confirmacion-correo.mjs",
+        "line": 8,
+        "methods": [
+          {
+            "name": "constructor",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "firmar",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "emitir",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "iniciar",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": true
+          },
+          {
+            "name": "reanudar",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": true
+          },
+          {
+            "name": "leerVigente",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": true
+          },
+          {
+            "name": "confirmar",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": true
+          },
+          {
+            "name": "iniciarCambio",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": true
+          },
+          {
+            "name": "confirmarCambio",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": true
+          },
+          {
+            "name": "pendiente",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": true
+          },
+          {
+            "name": "reenviar",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": true
+          }
+        ]
+      },
+      "attrs": [
+        {
+          "name": "db",
+          "type": "Database",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "firmar",
+          "type": "string",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "emitir",
+          "type": "object",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "iniciar",
+          "type": "Promise<object>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "reanudar",
+          "type": "Promise<string>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "leerVigente",
+          "type": "Promise<object>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "confirmar",
+          "type": "Promise<object>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "iniciarCambio",
+          "type": "Promise<object>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "confirmarCambio",
+          "type": "Promise<object>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "pendiente",
+          "type": "Promise<boolean>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "reenviar",
+          "type": "Promise<object>",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Emitir y verificar códigos de correo, limitar intentos y reenvíos y activar la confirmación. Gestionar también el cambio de correo confirmado.",
+      "rf": "RF-02, RF-03",
+      "justification": "",
+      "collaborators": [
+        "CodigoVerificacion",
+        "Database"
+      ],
+      "x": 5000,
+      "y": 1720,
+      "w": 460,
+      "attr_lines": [
+        "+ db: Database"
+      ],
+      "op_lines": [
+        "+ constructor()",
+        "+ firmar(): string",
+        "+ emitir(): object",
+        "+ iniciar(): Promise<object>",
+        "+ reanudar(): Promise<string>",
+        "+ leerVigente(): Promise<object>",
+        "+ confirmar(): Promise<object>",
+        "+ iniciarCambio(): Promise<object>",
+        "+ confirmarCambio(): Promise<object>",
+        "+ pendiente(): Promise<boolean>",
+        "+ reenviar(): Promise<object>"
+      ],
+      "h": 340,
+      "fill": "#E7F0FB"
+    },
+    {
+      "name": "CuentaCooperativa",
+      "oid": 105,
+      "crc": "CRC-05",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Código confirmado",
+      "kind": "Class",
+      "source": {
+        "file": "backend/src/dominio/acceso.mjs",
+        "line": 172,
+        "methods": [
+          {
+            "name": "constructor",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "estaAprobada",
+            "private": false,
+            "static": true,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "aprobar",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "rechazar",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "dictaminar",
+            "private": true,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "numeroEnmascarado",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          }
+        ]
+      },
+      "attrs": [
+        {
+          "name": "numeroCuenta",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "tipoCuenta",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "estado",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "motivo",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "fechaRevision",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "estaAprobada",
+          "type": "boolean",
+          "scope": "Public",
+          "static": true
+        },
+        {
+          "name": "aprobar",
+          "type": "void",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "rechazar",
+          "type": "void",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "dictaminar",
+          "type": "void",
+          "scope": "Private",
+          "static": false
+        },
+        {
+          "name": "numeroEnmascarado",
+          "type": "string",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Validar formato y tipo de cuenta, normalizar estados y enmascarar el número. Aplicar transiciones de aprobación o rechazo; su invocación automática está pendiente.",
+      "rf": "RF-05, RF-06, RF-50",
+      "justification": "",
+      "collaborators": [
+        "Referido",
+        "SolicitudValidacion",
+        "Usuario",
+        "ValidadorCuenta",
+        "ValidadorReferido"
+      ],
+      "x": 3600,
+      "y": 3760,
+      "w": 460,
+      "attr_lines": [
+        "+ numeroCuenta: string",
+        "+ tipoCuenta: string",
+        "+ estado: string",
+        "+ motivo: string",
+        "+ fechaRevision: string"
+      ],
+      "op_lines": [
+        "+ constructor()",
+        "+ estaAprobada(): boolean",
+        "+ aprobar(): void",
+        "+ rechazar(): void",
+        "- dictaminar(): void",
+        "+ numeroEnmascarado(): string"
+      ],
+      "h": 320,
+      "fill": "#E7F0FB"
+    },
+    {
+      "name": "AceptacionTerminos",
+      "oid": 106,
+      "crc": "CRC-06",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Código confirmado",
+      "kind": "Class",
+      "source": {
+        "file": "backend/src/dominio/acceso.mjs",
+        "line": 242,
+        "methods": [
+          {
+            "name": "constructor",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          }
+        ]
+      },
+      "attrs": [
+        {
+          "name": "version",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "fecha",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Exigir aceptación expresa de la versión vigente. Conservar versión y fecha como evidencia.",
+      "rf": "RF-47",
+      "justification": "",
+      "collaborators": [
+        "AvisoPrivacidad",
+        "Usuario"
+      ],
+      "x": 1500,
+      "y": 1800,
+      "w": 460,
+      "attr_lines": [
+        "+ version: string",
+        "+ fecha: string"
+      ],
+      "op_lines": [
+        "+ constructor()"
+      ],
+      "h": 180,
+      "fill": "#E7F0FB"
+    },
+    {
+      "name": "AvisoPrivacidad",
+      "oid": 107,
+      "crc": "CRC-07",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Código confirmado",
+      "kind": "Class",
+      "source": {
+        "file": "backend/src/dominio/acceso.mjs",
+        "line": 207,
+        "methods": [
+          {
+            "name": "vigente",
+            "private": false,
+            "static": true,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "constructor",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          }
+        ]
+      },
+      "attrs": [
+        {
+          "name": "version",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "terminos",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "privacidad",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "vigente",
+          "type": "AvisoPrivacidad",
+          "scope": "Public",
+          "static": true
+        },
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Representar la versión de términos y privacidad. Obtener los textos vigentes de la configuración y detener el registro si faltan en producción.",
+      "rf": "RF-47",
+      "justification": "",
+      "collaborators": [
+        "AceptacionTerminos"
+      ],
+      "x": 800,
+      "y": 1780,
+      "w": 460,
+      "attr_lines": [
+        "+ version: string",
+        "+ terminos: string",
+        "+ privacidad: string"
+      ],
+      "op_lines": [
+        "+ vigente(): AvisoPrivacidad",
+        "+ constructor()"
+      ],
+      "h": 220,
+      "fill": "#E7F0FB"
+    },
+    {
+      "name": "CodigoReferido",
+      "oid": 108,
+      "crc": "CRC-08",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Código confirmado",
+      "kind": "Class",
+      "source": {
+        "file": "backend/src/dominio/referidos.mjs",
+        "line": 4,
+        "methods": [
+          {
+            "name": "constructor",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "generar",
+            "private": false,
+            "static": true,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "enlace",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          }
+        ]
+      },
+      "attrs": [
+        {
+          "name": "codigo",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "generar",
+          "type": "CodigoReferido",
+          "scope": "Public",
+          "static": true
+        },
+        {
+          "name": "enlace",
+          "type": "string",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Validar y generar códigos de ocho caracteres. Construir un enlace de invitación con un origen válido.",
+      "rf": "RF-09, RF-10",
+      "justification": "",
+      "collaborators": [
+        "Usuario"
+      ],
+      "x": 2900,
+      "y": 3140,
+      "w": 460,
+      "attr_lines": [
+        "+ codigo: string"
+      ],
+      "op_lines": [
+        "+ constructor()",
+        "+ generar(): CodigoReferido",
+        "+ enlace(): string"
+      ],
+      "h": 200,
+      "fill": "#E7F0FB"
+    },
+    {
+      "name": "Referido",
+      "oid": 109,
+      "crc": "CRC-09",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Código confirmado",
+      "kind": "Class",
+      "source": {
+        "file": "backend/src/dominio/referidos.mjs",
+        "line": 41,
+        "methods": [
+          {
+            "name": "constructor",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "nombreDePila",
+            "private": false,
+            "static": false,
+            "getter": true,
+            "async_": false
+          },
+          {
+            "name": "aprobar",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "rechazar",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "dictaminar",
+            "private": true,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "consultaSocio",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          }
+        ]
+      },
+      "attrs": [
+        {
+          "name": "estados",
+          "type": "string[]",
+          "scope": "Public",
+          "static": true,
+          "derived": false
+        },
+        {
+          "name": "id",
+          "type": "number",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "nombre",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "correo",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "correoIndice",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "celular",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "estado",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "socioId",
+          "type": "number",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "creadoEn",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "notas",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "eliminadoEn",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "usuarioId",
+          "type": "number",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "fechaDecision",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "campania",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "provincia",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "nombreDePila",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": true
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "aprobar",
+          "type": "void",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "rechazar",
+          "type": "void",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "dictaminar",
+          "type": "void",
+          "scope": "Private",
+          "static": false
+        },
+        {
+          "name": "consultaSocio",
+          "type": "object",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Representar la fila del referido y producir su consulta reducida para el socio. Controlar las transiciones de estado y exigir cuenta aprobada para aprobarlo.",
+      "rf": "RF-11",
+      "justification": "",
+      "collaborators": [
+        "Campania",
+        "CuentaCooperativa",
+        "Database",
+        "MovimientoPuntos",
+        "ReportePrograma",
+        "Usuario",
+        "ValidadorReferido"
+      ],
+      "x": 3600,
+      "y": 2300,
+      "w": 460,
+      "attr_lines": [
+        "+ estados: string[]",
+        "+ id: number",
+        "+ nombre: string",
+        "+ correo: string",
+        "+ correoIndice: string",
+        "+ celular: string",
+        "+ estado: string",
+        "+ socioId: number",
+        "+ creadoEn: string",
+        "+ notas: string",
+        "+ eliminadoEn: string",
+        "+ usuarioId: number",
+        "+ fechaDecision: string",
+        "+ campania: string",
+        "+ provincia: string",
+        "+ /nombreDePila: string"
+      ],
+      "op_lines": [
+        "+ constructor()",
+        "+ aprobar(): void",
+        "+ rechazar(): void",
+        "- dictaminar(): void",
+        "+ consultaSocio(): object"
+      ],
+      "h": 520,
+      "fill": "#E7F0FB"
+    },
+    {
+      "name": "Campania",
+      "oid": 110,
+      "crc": "CRC-10",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "titulo",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "inicio",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "fin",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "puntosSocio",
+          "type": "Integer",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "puntosReferido",
+          "type": "Integer",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "provincias",
+          "type": "String[]",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "validarCambio",
+          "type": "void",
+          "scope": "Public",
+          "static": true
+        },
+        {
+          "name": "vigente",
+          "type": "boolean",
+          "scope": "Public",
+          "static": true
+        }
+      ],
+      "responsibility": "Vigencia, cobertura y puntos para cada destinatario. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-13",
+      "justification": "",
+      "collaborators": [
+        "Campanias",
+        "Referido"
+      ],
+      "x": 3600,
+      "y": 1060,
+      "w": 460,
+      "attr_lines": [
+        "- titulo: String",
+        "- inicio: DateTime",
+        "- fin: DateTime",
+        "- puntosSocio: Integer",
+        "- puntosReferido: Integer",
+        "- provincias: String[]"
+      ],
+      "op_lines": [
+        "+ constructor()",
+        "+ validarCambio(): void",
+        "+ vigente(): boolean"
+      ],
+      "h": 300,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "Campanias",
+      "oid": 111,
+      "crc": "CRC-11",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "serializar",
+          "type": "Promise<void>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "listar",
+          "type": "Promise<object[]>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "guardar",
+          "type": "Promise<void>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "validarCobertura",
+          "type": "Promise<void>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "cambiarEstado",
+          "type": "Promise<void>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "vincular",
+          "type": "Promise<void>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "premio",
+          "type": "Promise<object>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "rutas",
+          "type": "void",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Servicio de campañas y control de superposición. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-13",
+      "justification": "",
+      "collaborators": [
+        "Campania",
+        "Database"
+      ],
+      "x": 4300,
+      "y": 1060,
+      "w": 460,
+      "attr_lines": [],
+      "op_lines": [
+        "+ constructor()",
+        "+ serializar(): Promise<void>",
+        "+ listar(): Promise<object[]>",
+        "+ guardar(): Promise<void>",
+        "+ validarCobertura(): Promise<void>",
+        "+ cambiarEstado(): Promise<void>",
+        "+ vincular(): Promise<void>",
+        "+ premio(): Promise<object>",
+        "+ rutas(): void"
+      ],
+      "h": 300,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "Nivel",
+      "oid": 112,
+      "crc": "CRC-12",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "nombre",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "puntosMinimos",
+          "type": "Integer",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "validar",
+          "type": "object[]",
+          "scope": "Public",
+          "static": true
+        },
+        {
+          "name": "calcular",
+          "type": "object",
+          "scope": "Public",
+          "static": true
+        }
+      ],
+      "responsibility": "Umbrales configurables de progreso. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-16",
+      "justification": "",
+      "collaborators": [
+        "Gamificacion",
+        "PerfilPublico",
+        "Usuario"
+      ],
+      "x": 2900,
+      "y": 1100,
+      "w": 460,
+      "attr_lines": [
+        "- nombre: String",
+        "- puntosMinimos: Integer"
+      ],
+      "op_lines": [
+        "+ validar(): object[]",
+        "+ calcular(): object"
+      ],
+      "h": 200,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "Gamificacion",
+      "oid": 113,
+      "crc": "CRC-13",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "niveles",
+          "type": "Promise<object[]>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "saldo",
+          "type": "Promise<object>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "resumen",
+          "type": "Promise<object>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "obtenidas",
+          "type": "Promise<object[]>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "otorgar",
+          "type": "Promise<void>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "registrar",
+          "type": "Promise<void>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "rutas",
+          "type": "void",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Aplicar reglas de logros y retos. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-16, RF-17, RF-18",
+      "justification": "",
+      "collaborators": [
+        "Database",
+        "Insignia",
+        "Nivel"
+      ],
+      "x": 2900,
+      "y": 1740,
+      "w": 460,
+      "attr_lines": [],
+      "op_lines": [
+        "+ constructor()",
+        "+ niveles(): Promise<object[]>",
+        "+ saldo(): Promise<object>",
+        "+ resumen(): Promise<object>",
+        "+ obtenidas(): Promise<object[]>",
+        "+ otorgar(): Promise<void>",
+        "+ registrar(): Promise<void>",
+        "+ rutas(): void"
+      ],
+      "h": 300,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "Insignia",
+      "oid": 114,
+      "crc": "CRC-14",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "id",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "nombre",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "tipoLogro",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "meta",
+          "type": "Integer",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Definición de reconocimiento. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-17",
+      "justification": "",
+      "collaborators": [
+        "Gamificacion",
+        "PerfilPublico",
+        "Usuario"
+      ],
+      "x": 2200,
+      "y": 1780,
+      "w": 460,
+      "attr_lines": [
+        "- id: String",
+        "- nombre: String",
+        "- tipoLogro: String",
+        "- meta: Integer"
+      ],
+      "op_lines": [
+        "+ constructor()"
+      ],
+      "h": 220,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "MovimientoPuntos",
+      "oid": 115,
+      "crc": "CRC-15",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Código confirmado",
+      "kind": "Class",
+      "source": {
+        "file": "backend/src/dominio/administracion.mjs",
+        "line": 84,
+        "methods": [
+          {
+            "name": "constructor",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          }
+        ]
+      },
+      "attrs": [
+        {
+          "name": "clave",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "usuarioId",
+          "type": "number",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "actividad",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "cantidad",
+          "type": "number",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "fecha",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "referidoId",
+          "type": "number",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Validar el importe de un crédito y construir su clave única por actividad, evento y usuario. Identificar el referido de origen cuando corresponda.",
+      "rf": "RF-12, RF-15",
+      "justification": "",
+      "collaborators": [
+        "AcreditacionPuntos",
+        "Canje",
+        "Referido",
+        "ReportePrograma",
+        "Usuario"
+      ],
+      "x": 2900,
+      "y": 2440,
+      "w": 460,
+      "attr_lines": [
+        "+ clave: string",
+        "+ usuarioId: number",
+        "+ actividad: string",
+        "+ cantidad: number",
+        "+ fecha: string",
+        "+ referidoId: number"
+      ],
+      "op_lines": [
+        "+ constructor()"
+      ],
+      "h": 260,
+      "fill": "#E7F0FB"
+    },
+    {
+      "name": "AcreditacionPuntos",
+      "oid": 116,
+      "crc": "CRC-16",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Código confirmado",
+      "kind": "Class",
+      "source": {
+        "file": "backend/src/dominio/administracion.mjs",
+        "line": 101,
+        "methods": [
+          {
+            "name": "constructor",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "registrar",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": true
+          }
+        ]
+      },
+      "attrs": [
+        {
+          "name": "db",
+          "type": "Database",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "notificar",
+          "type": "Function",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "registrar",
+          "type": "Promise<void>",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Registrar créditos dentro de una transacción proporcionada. Evitar duplicados y notificar solo los créditos insertados.",
+      "rf": "RF-12",
+      "justification": "",
+      "collaborators": [
+        "Database",
+        "MovimientoPuntos",
+        "ValidadorReferido"
+      ],
+      "x": 4300,
+      "y": 2460,
+      "w": 460,
+      "attr_lines": [
+        "+ db: Database",
+        "+ notificar: Function"
+      ],
+      "op_lines": [
+        "+ constructor()",
+        "+ registrar(): Promise<void>"
+      ],
+      "h": 200,
+      "fill": "#E7F0FB"
+    },
+    {
+      "name": "Canje",
+      "oid": 117,
+      "crc": "CRC-17",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "codigo",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "fecha",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "estado",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "costo",
+          "type": "Integer",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "siguiente",
+          "type": "string",
+          "scope": "Public",
+          "static": true
+        },
+        {
+          "name": "etiqueta",
+          "type": "string",
+          "scope": "Public",
+          "static": true
+        }
+      ],
+      "responsibility": "Validar cuenta, saldo y stock; conservar trazabilidad. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-33",
+      "justification": "",
+      "collaborators": [
+        "MovimientoPuntos",
+        "Premio",
+        "Usuario"
+      ],
+      "x": 2200,
+      "y": 3120,
+      "w": 460,
+      "attr_lines": [
+        "- codigo: String",
+        "- fecha: DateTime",
+        "- estado: String",
+        "- costo: Integer"
+      ],
+      "op_lines": [
+        "+ siguiente(): string",
+        "+ etiqueta(): string"
+      ],
+      "h": 240,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "Premio",
+      "oid": 118,
+      "crc": "CRC-18",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "nombre",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "descripcion",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "costo",
+          "type": "Integer",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "stock",
+          "type": "Integer",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "activo",
+          "type": "Boolean",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "disponible",
+          "type": "boolean",
+          "scope": "Public",
+          "static": true
+        }
+      ],
+      "responsibility": "Catálogo de recompensas. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-32, RF-33",
+      "justification": "",
+      "collaborators": [
+        "Canje",
+        "Favorito",
+        "MetaCanje"
+      ],
+      "x": 1500,
+      "y": 3120,
+      "w": 460,
+      "attr_lines": [
+        "- nombre: String",
+        "- descripcion: String",
+        "- costo: Integer",
+        "- stock: Integer",
+        "- activo: Boolean"
+      ],
+      "op_lines": [
+        "+ constructor()",
+        "+ disponible(): boolean"
+      ],
+      "h": 260,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "ProgresoReto",
+      "oid": 119,
+      "crc": "CRC-19",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "avance",
+          "type": "Integer",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "completado",
+          "type": "Boolean",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "porcentaje",
+          "type": "number",
+          "scope": "Public",
+          "static": true
+        }
+      ],
+      "responsibility": "Avance único del participante en un reto. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-18",
+      "justification": "",
+      "collaborators": [
+        "Reto",
+        "Usuario"
+      ],
+      "x": 1500,
+      "y": 440,
+      "w": 460,
+      "attr_lines": [
+        "- avance: Integer",
+        "- completado: Boolean"
+      ],
+      "op_lines": [
+        "+ porcentaje(): number"
+      ],
+      "h": 180,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "Reto",
+      "oid": 120,
+      "crc": "CRC-20",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "titulo",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "inicio",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "fin",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "meta",
+          "type": "Integer",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "puntos",
+          "type": "Integer",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Objetivos y reglas de participación. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-18",
+      "justification": "",
+      "collaborators": [
+        "ProgresoReto"
+      ],
+      "x": 800,
+      "y": 400,
+      "w": 460,
+      "attr_lines": [
+        "- titulo: String",
+        "- inicio: DateTime",
+        "- fin: DateTime",
+        "- meta: Integer",
+        "- puntos: Integer"
+      ],
+      "op_lines": [
+        "+ constructor()"
+      ],
+      "h": 240,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "Inscripcion",
+      "oid": 121,
+      "crc": "CRC-21",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "fecha",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "estado",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "asistencia",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "puedeAnular",
+          "type": "boolean",
+          "scope": "Public",
+          "static": true
+        },
+        {
+          "name": "asistencia",
+          "type": "string",
+          "scope": "Public",
+          "static": true
+        }
+      ],
+      "responsibility": "Una inscripción por usuario y taller. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-24, RF-25",
+      "justification": "",
+      "collaborators": [
+        "Taller",
+        "Usuario"
+      ],
+      "x": 800,
+      "y": 4500,
+      "w": 460,
+      "attr_lines": [
+        "- fecha: DateTime",
+        "- estado: String",
+        "- asistencia: String"
+      ],
+      "op_lines": [
+        "+ puedeAnular(): boolean",
+        "+ asistencia(): string"
+      ],
+      "h": 220,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "Taller",
+      "oid": 122,
+      "crc": "CRC-22",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "titulo",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "lugar",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "inicio",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "cupos",
+          "type": "Integer",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "estado",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Oferta de talleres y disponibilidad. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-23, RF-24",
+      "justification": "",
+      "collaborators": [
+        "Inscripcion"
+      ],
+      "x": 100,
+      "y": 4480,
+      "w": 460,
+      "attr_lines": [
+        "- titulo: String",
+        "- lugar: String",
+        "- inicio: DateTime",
+        "- cupos: Integer",
+        "- estado: String"
+      ],
+      "op_lines": [
+        "+ constructor()"
+      ],
+      "h": 240,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "ResultadoCapacitacion",
+      "oid": 123,
+      "crc": "CRC-23",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "aciertos",
+          "type": "Integer",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "total",
+          "type": "Integer",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "aprobado",
+          "type": "Boolean",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "certificado",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "fecha",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "pdf",
+          "type": "Promise<Buffer>",
+          "scope": "Public",
+          "static": true
+        }
+      ],
+      "responsibility": "Resultado de evaluación y acreditación. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-22",
+      "justification": "",
+      "collaborators": [
+        "Capacitacion",
+        "Usuario"
+      ],
+      "x": 100,
+      "y": 1760,
+      "w": 460,
+      "attr_lines": [
+        "- aciertos: Integer",
+        "- total: Integer",
+        "- aprobado: Boolean",
+        "- certificado: String",
+        "- fecha: DateTime"
+      ],
+      "op_lines": [
+        "+ constructor()",
+        "+ pdf(): Promise<Buffer>"
+      ],
+      "h": 260,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "Capacitacion",
+      "oid": 124,
+      "crc": "CRC-24",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "titulo",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "descripcion",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "material",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "activa",
+          "type": "Boolean",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Material de formación y cuestionario. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-21, RF-22",
+      "justification": "",
+      "collaborators": [
+        "PreguntaEvaluacion",
+        "ResultadoCapacitacion"
+      ],
+      "x": 100,
+      "y": 420,
+      "w": 460,
+      "attr_lines": [
+        "- titulo: String",
+        "- descripcion: String",
+        "- material: String",
+        "- activa: Boolean"
+      ],
+      "op_lines": [
+        "+ constructor()"
+      ],
+      "h": 220,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "PreguntaEvaluacion",
+      "oid": 125,
+      "crc": "CRC-25",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "enunciado",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "opciones",
+          "type": "String[]",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "correcta",
+          "type": "Integer",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "publica",
+          "type": "object",
+          "scope": "Public",
+          "static": true
+        }
+      ],
+      "responsibility": "Pregunta de evaluación con respuesta protegida. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-22",
+      "justification": "",
+      "collaborators": [
+        "Capacitacion",
+        "PreguntaTrivia"
+      ],
+      "x": 100,
+      "y": 1100,
+      "w": 460,
+      "attr_lines": [
+        "- enunciado: String",
+        "- opciones: String[]",
+        "- correcta: Integer"
+      ],
+      "op_lines": [
+        "+ constructor()",
+        "+ publica(): object"
+      ],
+      "h": 220,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "PartidaTrivia",
+      "oid": 126,
+      "crc": "CRC-26",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "fecha",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "puntaje",
+          "type": "Integer",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "finalizada",
+          "type": "Boolean",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "consulta",
+          "type": "object",
+          "scope": "Public",
+          "static": true
+        }
+      ],
+      "responsibility": "Partidas con límite diario y tiempo por pregunta. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-20",
+      "justification": "",
+      "collaborators": [
+        "PreguntaTrivia",
+        "Usuario"
+      ],
+      "x": 1500,
+      "y": 1100,
+      "w": 460,
+      "attr_lines": [
+        "- fecha: DateTime",
+        "- puntaje: Integer",
+        "- finalizada: Boolean"
+      ],
+      "op_lines": [
+        "+ consulta(): object"
+      ],
+      "h": 200,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "PreguntaTrivia",
+      "oid": 127,
+      "crc": "CRC-27",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "tema",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "dificultad",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Especializa una pregunta con tema y dificultad. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-19, RF-20",
+      "justification": "",
+      "collaborators": [
+        "PartidaTrivia",
+        "PreguntaEvaluacion"
+      ],
+      "x": 800,
+      "y": 1120,
+      "w": 460,
+      "attr_lines": [
+        "- tema: String",
+        "- dificultad: String"
+      ],
+      "op_lines": [
+        "+ constructor()"
+      ],
+      "h": 180,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "Reaccion",
+      "oid": 128,
+      "crc": "CRC-28",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "fecha",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "cambio",
+          "type": "boolean",
+          "scope": "Public",
+          "static": true
+        }
+      ],
+      "responsibility": "Una reacción por usuario y publicación. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-28",
+      "justification": "",
+      "collaborators": [
+        "Publicacion",
+        "Usuario"
+      ],
+      "x": 2900,
+      "y": 3840,
+      "w": 460,
+      "attr_lines": [
+        "- fecha: DateTime"
+      ],
+      "op_lines": [
+        "+ cambio(): boolean"
+      ],
+      "h": 160,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "Publicacion",
+      "oid": 129,
+      "crc": "CRC-29",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "oficial",
+          "type": "Boolean",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "fijadaHasta",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "fechaFin",
+          "type": "string",
+          "scope": "Public",
+          "static": true
+        }
+      ],
+      "responsibility": "Publicación de comunidad y contenido oficial. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-26, RF-29",
+      "justification": "",
+      "collaborators": [
+        "Comentario",
+        "ContenidoComunidad",
+        "Reaccion"
+      ],
+      "x": 2900,
+      "y": 4520,
+      "w": 460,
+      "attr_lines": [
+        "- oficial: Boolean",
+        "- fijadaHasta: DateTime"
+      ],
+      "op_lines": [
+        "+ fechaFin(): string"
+      ],
+      "h": 180,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "Comentario",
+      "oid": 130,
+      "crc": "CRC-30",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [],
+      "ops": [
+        {
+          "name": "comentar",
+          "type": "Void",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "darDeBaja",
+          "type": "Void",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Comentario vinculado a una publicación. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-27",
+      "justification": "",
+      "collaborators": [
+        "ContenidoComunidad",
+        "Publicacion"
+      ],
+      "x": 1500,
+      "y": 4520,
+      "w": 460,
+      "attr_lines": [],
+      "op_lines": [
+        "+ comentar(): Void",
+        "+ darDeBaja(): Void"
+      ],
+      "h": 180,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "Reporte",
+      "oid": 131,
+      "crc": "CRC-31",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "motivo",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "estado",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "fecha",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "validar",
+          "type": "void",
+          "scope": "Public",
+          "static": true
+        }
+      ],
+      "responsibility": "Reporte de moderación; no es un informe de indicadores. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-30",
+      "justification": "",
+      "collaborators": [
+        "ContenidoComunidad",
+        "Usuario"
+      ],
+      "x": 2200,
+      "y": 3820,
+      "w": 460,
+      "attr_lines": [
+        "- motivo: String",
+        "- estado: String",
+        "- fecha: DateTime"
+      ],
+      "op_lines": [
+        "+ validar(): void"
+      ],
+      "h": 200,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "ContenidoComunidad",
+      "oid": 132,
+      "crc": "CRC-32",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "texto",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "creadoEn",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "visible",
+          "type": "Boolean",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "texto",
+          "type": "string",
+          "scope": "Public",
+          "static": true
+        }
+      ],
+      "responsibility": "Datos comunes a publicaciones y comentarios. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-26, RF-27, RF-30",
+      "justification": "",
+      "collaborators": [
+        "Comentario",
+        "Publicacion",
+        "Reporte",
+        "Usuario"
+      ],
+      "x": 2200,
+      "y": 4500,
+      "w": 460,
+      "attr_lines": [
+        "- texto: String",
+        "- creadoEn: DateTime",
+        "- visible: Boolean"
+      ],
+      "op_lines": [
+        "+ texto(): string"
+      ],
+      "h": 200,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "ContenidoSalud",
+      "oid": 133,
+      "crc": "CRC-33",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "titulo",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "descripcion",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "tipo",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "categoria",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Artículos y servicios de salud y bienestar. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-31",
+      "justification": "",
+      "collaborators": [
+        "Usuario"
+      ],
+      "x": 800,
+      "y": 3140,
+      "w": 460,
+      "attr_lines": [
+        "- titulo: String",
+        "- descripcion: String",
+        "- tipo: String",
+        "- categoria: String"
+      ],
+      "op_lines": [
+        "+ constructor()"
+      ],
+      "h": 220,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "Notificacion",
+      "oid": 134,
+      "crc": "CRC-34",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Código confirmado",
+      "kind": "Class",
+      "source": {
+        "file": "backend/src/dominio/administracion.mjs",
+        "line": 61,
+        "methods": [
+          {
+            "name": "constructor",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "marcarLeida",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          }
+        ]
+      },
+      "attrs": [
+        {
+          "name": "usuarioId",
+          "type": "number",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "titulo",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "mensaje",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "fecha",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "leida",
+          "type": "boolean",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "marcarLeida",
+          "type": "void",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Representar el aviso dirigido a un usuario. Permitir marcarlo como leído.",
+      "rf": "RF-37, RF-38, RF-39, RF-40",
+      "justification": "",
+      "collaborators": [
+        "EventoNotificacion",
+        "Usuario"
+      ],
+      "x": 5000,
+      "y": 2440,
+      "w": 460,
+      "attr_lines": [
+        "+ usuarioId: number",
+        "+ titulo: string",
+        "+ mensaje: string",
+        "+ fecha: string",
+        "+ leida: boolean"
+      ],
+      "op_lines": [
+        "+ constructor()",
+        "+ marcarLeida(): void"
+      ],
+      "h": 260,
+      "fill": "#E7F0FB"
+    },
+    {
+      "name": "SolicitudSoporte",
+      "oid": 135,
+      "crc": "CRC-35",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Modelada pendiente",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "codigo",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "asunto",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "mensaje",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "estado",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "respuesta",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "codigo",
+          "type": "string",
+          "scope": "Public",
+          "static": true
+        },
+        {
+          "name": "siguiente",
+          "type": "string",
+          "scope": "Public",
+          "static": true
+        }
+      ],
+      "responsibility": "Atención de solicitudes con historial. Completar esta responsabilidad corresponde al diseño pendiente de implementación.",
+      "rf": "RF-41",
+      "justification": "",
+      "collaborators": [
+        "Usuario"
+      ],
+      "x": 2900,
+      "y": 400,
+      "w": 460,
+      "attr_lines": [
+        "- codigo: String",
+        "- asunto: String",
+        "- mensaje: String",
+        "- estado: String",
+        "- respuesta: String"
+      ],
+      "op_lines": [
+        "+ codigo(): string",
+        "+ siguiente(): string"
+      ],
+      "h": 260,
+      "fill": "#FFF1DA"
+    },
+    {
+      "name": "RegistroAuditoria",
+      "oid": 136,
+      "crc": "CRC-36",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Código confirmado",
+      "kind": "Class",
+      "source": {
+        "file": "backend/src/dominio/administracion.mjs",
+        "line": 45,
+        "methods": [
+          {
+            "name": "constructor",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          }
+        ]
+      },
+      "attrs": [
+        {
+          "name": "usuarioId",
+          "type": "number",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "actor",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "accion",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "detalle",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "ip",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "objetivoId",
+          "type": "number",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "datos",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "fecha",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Construir un registro inmutable de la acción, actor, objetivo, IP y fecha. Identificar como Sistema las acciones sin usuario.",
+      "rf": "RF-42",
+      "justification": "",
+      "collaborators": [
+        "IntentoValidacion",
+        "Usuario",
+        "ValidadorCuenta"
+      ],
+      "x": 3600,
+      "y": 4460,
+      "w": 460,
+      "attr_lines": [
+        "+ usuarioId: number",
+        "+ actor: string",
+        "+ accion: string",
+        "+ detalle: string",
+        "+ ip: string",
+        "+ objetivoId: number",
+        "+ datos: string",
+        "+ fecha: string"
+      ],
+      "op_lines": [
+        "+ constructor()"
+      ],
+      "h": 300,
+      "fill": "#E7F0FB"
+    },
+    {
+      "name": "ParametroGlobal",
+      "oid": 137,
+      "crc": "CRC-37",
+      "base": true,
+      "origin": "Base original de 37",
+      "status": "Código confirmado",
+      "kind": "Class",
+      "source": {
+        "file": "backend/src/dominio/administracion.mjs",
+        "line": 10,
+        "methods": [
+          {
+            "name": "constructor",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "actualizar",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          }
+        ]
+      },
+      "attrs": [
+        {
+          "name": "nombre",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "valor",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "actualizar",
+          "type": "string",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Validar y normalizar el valor monetario del punto y los puntos por actividad. Rechazar valores fuera de sus límites.",
+      "rf": "RF-14",
+      "justification": "",
+      "collaborators": [
+        "Usuario"
+      ],
+      "x": 2200,
+      "y": 420,
+      "w": 460,
+      "attr_lines": [
+        "+ nombre: string",
+        "+ valor: string"
+      ],
+      "op_lines": [
+        "+ constructor()",
+        "+ actualizar(): string"
+      ],
+      "h": 200,
+      "fill": "#E7F0FB"
+    },
+    {
+      "name": "Modulo",
+      "oid": 190,
+      "crc": "CRC-38",
+      "base": false,
+      "origin": "Clase adicional del código",
+      "status": "Código confirmado",
+      "kind": "Class",
+      "source": {
+        "file": "backend/src/dominio/acceso.mjs",
+        "line": 88,
+        "methods": [
+          {
+            "name": "constructor",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "esDeAdministracion",
+            "private": false,
+            "static": false,
+            "getter": true,
+            "async_": false
+          }
+        ]
+      },
+      "attrs": [
+        {
+          "name": "id",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "etiqueta",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "grupo",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "icono",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "ambito",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "disponible",
+          "type": "boolean",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "esDeAdministracion",
+          "type": "boolean",
+          "scope": "Public",
+          "static": false,
+          "derived": true
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Describir cada opción del catálogo de módulos. Indicar su disponibilidad y si pertenece al ámbito de administración.",
+      "rf": "RF-08, RF-49",
+      "justification": "",
+      "collaborators": [
+        "Rol"
+      ],
+      "x": 100,
+      "y": 3100,
+      "w": 460,
+      "attr_lines": [
+        "+ id: string",
+        "+ etiqueta: string",
+        "+ grupo: string",
+        "+ icono: string",
+        "+ ambito: string",
+        "+ disponible: boolean",
+        "+ /esDeAdministracion: boolean"
+      ],
+      "op_lines": [
+        "+ constructor()"
+      ],
+      "h": 280,
+      "fill": "#E7F0FB"
+    },
+    {
+      "name": "Sesion",
+      "oid": 191,
+      "crc": "CRC-39",
+      "base": false,
+      "origin": "Clase adicional del código",
+      "status": "Código confirmado",
+      "kind": "Class",
+      "source": {
+        "file": "backend/src/dominio/acceso.mjs",
+        "line": 98,
+        "methods": [
+          {
+            "name": "vencimiento",
+            "private": false,
+            "static": true,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "constructor",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "estaVigente",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          }
+        ]
+      },
+      "attrs": [
+        {
+          "name": "INACTIVIDAD_MS",
+          "type": "number",
+          "scope": "Public",
+          "static": true,
+          "derived": false
+        },
+        {
+          "name": "huella",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "usuarioId",
+          "type": "number",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "expira",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "vencimiento",
+          "type": "string",
+          "scope": "Public",
+          "static": true
+        },
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "estaVigente",
+          "type": "boolean",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Calcular el vencimiento por 15 minutos de inactividad. Conservar huella y usuario y comprobar si la sesión sigue vigente.",
+      "rf": "RF-04",
+      "justification": "",
+      "collaborators": [
+        "Usuario"
+      ],
+      "x": 800,
+      "y": 2440,
+      "w": 460,
+      "attr_lines": [
+        "+ INACTIVIDAD_MS: number",
+        "+ huella: string",
+        "+ usuarioId: number",
+        "+ expira: string"
+      ],
+      "op_lines": [
+        "+ vencimiento(): string",
+        "+ constructor()",
+        "+ estaVigente(): boolean"
+      ],
+      "h": 260,
+      "fill": "#E7F0FB"
+    },
+    {
+      "name": "ProteccionDatos",
+      "oid": 192,
+      "crc": "CRC-40",
+      "base": false,
+      "origin": "Clase adicional del código",
+      "status": "Código confirmado",
+      "kind": "Class",
+      "source": {
+        "file": "backend/src/dominio/proteccion-datos.mjs",
+        "line": 11,
+        "methods": [
+          {
+            "name": "constructor",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "huella",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "correoIndice",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "cifrar",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "descifrar",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "abrirFila",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          }
+        ]
+      },
+      "attrs": [
+        {
+          "name": "cifrado",
+          "type": "Binary",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "indice",
+          "type": "Binary",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "huella",
+          "type": "string",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "correoIndice",
+          "type": "string",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "cifrar",
+          "type": "string",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "descifrar",
+          "type": "string",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "abrirFila",
+          "type": "object",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Cifrar y descifrar datos de contacto y cuenta. Generar índices de búsqueda y abrir filas protegidas sin exponer sus índices.",
+      "rf": "RNF-05",
+      "justification": "",
+      "collaborators": [
+        "Database"
+      ],
+      "x": 5000,
+      "y": 1060,
+      "w": 460,
+      "attr_lines": [
+        "+ cifrado: Binary",
+        "+ indice: Binary"
+      ],
+      "op_lines": [
+        "+ constructor()",
+        "+ huella(): string",
+        "+ correoIndice(): string",
+        "+ cifrar(): string",
+        "+ descifrar(): string",
+        "+ abrirFila(): object"
+      ],
+      "h": 280,
+      "fill": "#E7F0FB"
+    },
+    {
+      "name": "PerfilPublico",
+      "oid": 1550,
+      "crc": "CRC-41",
+      "base": false,
+      "origin": "Clase adicional del código",
+      "status": "Código confirmado",
+      "kind": "Class",
+      "source": {
+        "file": "backend/src/dominio/perfil.mjs",
+        "line": 10,
+        "methods": [
+          {
+            "name": "desde",
+            "private": false,
+            "static": true,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "constructor",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          }
+        ]
+      },
+      "attrs": [
+        {
+          "name": "id",
+          "type": "number",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "nombre",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "nivel",
+          "type": "unknown",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "insignias",
+          "type": "Array",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "desde",
+          "type": "PerfilPublico",
+          "scope": "Public",
+          "static": true
+        },
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Producir un perfil solo cuando el usuario esté activo y haya elegido hacerlo público. Exponer nombre de pila, nivel e insignias; estos dos últimos aún salen vacíos.",
+      "rf": "RF-46",
+      "justification": "",
+      "collaborators": [
+        "Insignia",
+        "Nivel",
+        "Usuario"
+      ],
+      "x": 2200,
+      "y": 1080,
+      "w": 460,
+      "attr_lines": [
+        "+ id: number",
+        "+ nombre: string",
+        "+ nivel: unknown",
+        "+ insignias: Array"
+      ],
+      "op_lines": [
+        "+ desde(): PerfilPublico",
+        "+ constructor()"
+      ],
+      "h": 240,
+      "fill": "#E7F0FB"
+    },
+    {
+      "name": "Database",
+      "oid": 1551,
+      "crc": "CRC-42",
+      "base": false,
+      "origin": "Clase adicional del código",
+      "status": "Código confirmado",
+      "kind": "Class",
+      "source": {
+        "file": "backend/src/database.mjs",
+        "line": 29,
+        "methods": [
+          {
+            "name": "constructor",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": false
+          },
+          {
+            "name": "query",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": true
+          },
+          {
+            "name": "queryRaw",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": true
+          },
+          {
+            "name": "transaction",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": true
+          },
+          {
+            "name": "migrar",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": true
+          },
+          {
+            "name": "init",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": true
+          },
+          {
+            "name": "sembrarAcceso",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": true
+          },
+          {
+            "name": "protegerDatosExistentes",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": true
+          },
+          {
+            "name": "seed",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": true
+          },
+          {
+            "name": "close",
+            "private": false,
+            "static": false,
+            "getter": false,
+            "async_": true
+          }
+        ]
+      },
+      "attrs": [
+        {
+          "name": "datos",
+          "type": "ProteccionDatos",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "esquema",
+          "type": "string",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "pool",
+          "type": "Pool",
+          "scope": "Public",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "constructor",
+          "type": "",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "query",
+          "type": "Promise<any>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "queryRaw",
+          "type": "Promise<any>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "transaction",
+          "type": "Promise<any>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "migrar",
+          "type": "Promise<any>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "init",
+          "type": "Promise<any>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "sembrarAcceso",
+          "type": "Promise<any>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "protegerDatosExistentes",
+          "type": "Promise<any>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "seed",
+          "type": "Promise<any>",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "close",
+          "type": "Promise<any>",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Gestionar consultas y transacciones de PostgreSQL y aplicar migraciones. Proteger filas personales y preparar catálogos y datos iniciales.",
+      "rf": "RF-01, RF-11, RF-12, RF-42",
+      "justification": "",
+      "collaborators": [
+        "AcreditacionPuntos",
+        "Campanias",
+        "ConfirmacionCorreo",
+        "Gamificacion",
+        "ProteccionDatos",
+        "Referido",
+        "ValidadorCuenta",
+        "ValidadorReferido"
+      ],
+      "x": 4300,
+      "y": 1700,
+      "w": 460,
+      "attr_lines": [
+        "+ datos: ProteccionDatos",
+        "+ esquema: string",
+        "+ pool: Pool"
+      ],
+      "op_lines": [
+        "+ constructor()",
+        "+ query(): Promise<any>",
+        "+ queryRaw(): Promise<any>",
+        "+ transaction(): Promise<any>",
+        "+ migrar(): Promise<any>",
+        "+ init(): Promise<any>",
+        "+ sembrarAcceso(): Promise<any>",
+        "+ protegerDatosExistentes(): Promise<any>",
+        "+ seed(): Promise<any>",
+        "+ close(): Promise<any>"
+      ],
+      "h": 360,
+      "fill": "#E7F0FB"
+    },
+    {
+      "name": "ValidadorCuenta",
+      "oid": 1169,
+      "crc": "CRC-43",
+      "base": false,
+      "origin": "Derivada del CRC",
+      "status": "Propuesta del CRC",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "versionRegla",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "validarCuenta",
+          "type": "ResultadoValidacion",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "programarReintento",
+          "type": "Void",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Consultar fuente autorizada; no aprobar ni rechazar ante falla técnica.",
+      "rf": "RF-05-4, RF-50",
+      "justification": "Falta una clase que coordine el cotejo institucional sin dictamen administrativo. Reúne consulta, aplicación del resultado y registro de evidencia.",
+      "collaborators": [
+        "CuentaCooperativa",
+        "Database",
+        "FuenteInstitucional",
+        "RegistroAuditoria",
+        "ResultadoValidacion",
+        "SolicitudValidacion"
+      ],
+      "x": 4300,
+      "y": 3840,
+      "w": 460,
+      "attr_lines": [
+        "- versionRegla: String"
+      ],
+      "op_lines": [
+        "+ validarCuenta(): ResultadoValidacion",
+        "+ programarReintento(): Void"
+      ],
+      "h": 180,
+      "fill": "#E7F4EA"
+    },
+    {
+      "name": "ValidadorReferido",
+      "oid": 1170,
+      "crc": "CRC-44",
+      "base": false,
+      "origin": "Derivada del CRC",
+      "status": "Propuesta del CRC",
+      "kind": "Class",
+      "source": null,
+      "attrs": [],
+      "ops": [
+        {
+          "name": "evaluarRequisitos",
+          "type": "ResultadoValidacion",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "confirmarConversion",
+          "type": "Void",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Registro activo, cuenta validada, referidor habilitado y relación única; confirmar estado y créditos juntos.",
+      "rf": "RF-11-4, RF-12-2",
+      "justification": "Las transiciones actuales no comprueban por sí solas registro activo, referidor habilitado y relación única ni coordinan todo el flujo automático.",
+      "collaborators": [
+        "AcreditacionPuntos",
+        "CuentaCooperativa",
+        "Database",
+        "EventoNotificacion",
+        "Referido",
+        "ResultadoValidacion"
+      ],
+      "x": 4300,
+      "y": 3160,
+      "w": 460,
+      "attr_lines": [],
+      "op_lines": [
+        "+ evaluarRequisitos(): ResultadoValidacion",
+        "+ confirmarConversion(): Void"
+      ],
+      "h": 180,
+      "fill": "#E7F4EA"
+    },
+    {
+      "name": "SolicitudValidacion",
+      "oid": 1171,
+      "crc": "CRC-45",
+      "base": false,
+      "origin": "Derivada del CRC",
+      "status": "Propuesta del CRC",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "id",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "estado",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "creadaEn",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "proximoIntento",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "registrarIntento",
+          "type": "Void",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "reprogramar",
+          "type": "Void",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "resolver",
+          "type": "Void",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Solicitud persistida y recuperable después de reinicios.",
+      "rf": "RF-05, RF-50-2",
+      "justification": "Se necesita conservar una validación Pendiente y su siguiente reintento aunque el proceso se reinicie.",
+      "collaborators": [
+        "CuentaCooperativa",
+        "IntentoValidacion",
+        "ValidadorCuenta"
+      ],
+      "x": 5000,
+      "y": 3800,
+      "w": 460,
+      "attr_lines": [
+        "- id: String",
+        "- estado: String",
+        "- creadaEn: DateTime",
+        "- proximoIntento: DateTime"
+      ],
+      "op_lines": [
+        "+ registrarIntento(): Void",
+        "+ reprogramar(): Void",
+        "+ resolver(): Void"
+      ],
+      "h": 260,
+      "fill": "#E7F4EA"
+    },
+    {
+      "name": "IntentoValidacion",
+      "oid": 1172,
+      "crc": "CRC-46",
+      "base": false,
+      "origin": "Derivada del CRC",
+      "status": "Propuesta del CRC",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "fecha",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "resultado",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "causa",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "referenciaFuente",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "vigenciaFuente",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "versionRegla",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "registrarEvidencia",
+          "type": "Void",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Evidencia inmutable de cada consulta institucional.",
+      "rf": "RF-42, RF-50-2",
+      "justification": "Cada consulta debe conservar su propio resultado, origen y vigencia; no basta sobrescribir el estado de la cuenta.",
+      "collaborators": [
+        "RegistroAuditoria",
+        "SolicitudValidacion"
+      ],
+      "x": 5000,
+      "y": 4480,
+      "w": 460,
+      "attr_lines": [
+        "- fecha: DateTime",
+        "- resultado: String",
+        "- causa: String",
+        "- referenciaFuente: String",
+        "- vigenciaFuente: DateTime",
+        "- versionRegla: String"
+      ],
+      "op_lines": [
+        "+ registrarEvidencia(): Void"
+      ],
+      "h": 260,
+      "fill": "#E7F4EA"
+    },
+    {
+      "name": "FuenteInstitucional",
+      "oid": 1173,
+      "crc": "CRC-47",
+      "base": false,
+      "origin": "Derivada del CRC",
+      "status": "Propuesta del CRC",
+      "kind": "Interface",
+      "source": null,
+      "attrs": [],
+      "ops": [
+        {
+          "name": "consultarTitularidad",
+          "type": "RegistroTitularidad",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "comprobarVigencia",
+          "type": "Boolean",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Contrato de solo lectura hacia una fuente autorizada o réplica vigente.",
+      "rf": "RF-50-1",
+      "justification": "El validador requiere un contrato de solo lectura independiente del mecanismo de acceso institucional. Se representa como interfaz.",
+      "collaborators": [
+        "AdaptadorInstitucional",
+        "RegistroTitularidad",
+        "ValidadorCuenta"
+      ],
+      "x": 4300,
+      "y": 440,
+      "w": 460,
+      "attr_lines": [],
+      "op_lines": [
+        "+ consultarTitularidad(): RegistroTitularidad",
+        "+ comprobarVigencia(): Boolean"
+      ],
+      "h": 180,
+      "fill": "#E7F4EA"
+    },
+    {
+      "name": "AdaptadorInstitucional",
+      "oid": 1174,
+      "crc": "CRC-48",
+      "base": false,
+      "origin": "Derivada del CRC",
+      "status": "Propuesta del CRC",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "origen",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "vigenciaMaxima",
+          "type": "Duration",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "consultarTitularidad",
+          "type": "RegistroTitularidad",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "comprobarVigencia",
+          "type": "Boolean",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Implementa el contrato institucional sin exponer saldos ni movimientos financieros.",
+      "rf": "RF-50-1",
+      "justification": "Separa el acceso concreto a la fuente autorizada de las reglas de titularidad. Implementa FuenteInstitucional.",
+      "collaborators": [
+        "FuenteInstitucional"
+      ],
+      "x": 5000,
+      "y": 420,
+      "w": 460,
+      "attr_lines": [
+        "- origen: String",
+        "- vigenciaMaxima: Duration"
+      ],
+      "op_lines": [
+        "+ consultarTitularidad(): RegistroTitularidad",
+        "+ comprobarVigencia(): Boolean"
+      ],
+      "h": 200,
+      "fill": "#E7F4EA"
+    },
+    {
+      "name": "RegistroTitularidad",
+      "oid": 1175,
+      "crc": "CRC-49",
+      "base": false,
+      "origin": "Derivada del CRC",
+      "status": "Propuesta del CRC",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "identificadorProtegido",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "tipoCuenta",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "numeroProtegido",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "habilitada",
+          "type": "Boolean",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "actualizadoEn",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "coincideConTitular",
+          "type": "Boolean",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Datos mínimos recibidos de la fuente institucional; no son una cuenta autodeclarada.",
+      "rf": "RF-50-1",
+      "justification": "Agrupa los datos mínimos de existencia, titular y condición recibidos; evita utilizar la cuenta declarada como evidencia institucional.",
+      "collaborators": [
+        "FuenteInstitucional"
+      ],
+      "x": 3600,
+      "y": 400,
+      "w": 460,
+      "attr_lines": [
+        "- identificadorProtegido: String",
+        "- tipoCuenta: String",
+        "- numeroProtegido: String",
+        "- habilitada: Boolean",
+        "- actualizadoEn: DateTime"
+      ],
+      "op_lines": [
+        "+ coincideConTitular(): Boolean"
+      ],
+      "h": 240,
+      "fill": "#E7F4EA"
+    },
+    {
+      "name": "ResultadoValidacion",
+      "oid": 1182,
+      "crc": "CRC-50",
+      "base": false,
+      "origin": "Derivada del CRC",
+      "status": "Propuesta del CRC",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "estado",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "causa",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "referenciaFuente",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "versionRegla",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "fecha",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "estaAprobado",
+          "type": "Boolean",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "estaPendiente",
+          "type": "Boolean",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Valor de resultado automático: Pendiente, Aprobado o Rechazado, con causa y referencia de evidencia.",
+      "rf": "RF-05-4, RF-11-4, RF-50-2",
+      "justification": "Comparte un resultado con estado, causa y evidencia entre validadores, sin confundir falta de respuesta con rechazo.",
+      "collaborators": [
+        "ValidadorCuenta",
+        "ValidadorReferido"
+      ],
+      "x": 4300,
+      "y": 4480,
+      "w": 460,
+      "attr_lines": [
+        "- estado: String",
+        "- causa: String",
+        "- referenciaFuente: String",
+        "- versionRegla: String",
+        "- fecha: DateTime"
+      ],
+      "op_lines": [
+        "+ estaAprobado(): Boolean",
+        "+ estaPendiente(): Boolean"
+      ],
+      "h": 260,
+      "fill": "#E7F4EA"
+    },
+    {
+      "name": "EventoNotificacion",
+      "oid": 1176,
+      "crc": "CRC-51",
+      "base": false,
+      "origin": "Derivada del CRC",
+      "status": "Propuesta del CRC",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "claveEvento",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "tipo",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "creadoEn",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "entregado",
+          "type": "Boolean",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "publicarUnaVez",
+          "type": "Void",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "reintentarEntrega",
+          "type": "Void",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Evento persistido en la misma transacción del cambio; deduplicación por destinatario.",
+      "rf": "RF-12-2, RF-39, RF-50-2",
+      "justification": "Conserva el evento de aviso en la misma transacción del cambio y permite reintentar su entrega sin duplicarla.",
+      "collaborators": [
+        "Notificacion",
+        "ValidadorReferido"
+      ],
+      "x": 5000,
+      "y": 3120,
+      "w": 460,
+      "attr_lines": [
+        "- claveEvento: String",
+        "- tipo: String",
+        "- creadoEn: DateTime",
+        "- entregado: Boolean"
+      ],
+      "op_lines": [
+        "+ publicarUnaVez(): Void",
+        "+ reintentarEntrega(): Void"
+      ],
+      "h": 240,
+      "fill": "#E7F4EA"
+    },
+    {
+      "name": "Favorito",
+      "oid": 1177,
+      "crc": "CRC-52",
+      "base": false,
+      "origin": "Derivada del CRC",
+      "status": "Propuesta del CRC",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "creadoEn",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "guardar",
+          "type": "Void",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "quitar",
+          "type": "Void",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Preferencia única por usuario y premio.",
+      "rf": "RF-34",
+      "justification": "Registra la relación única entre usuario y premio y su fecha, necesaria para administrar la lista de favoritos.",
+      "collaborators": [
+        "Premio",
+        "Usuario"
+      ],
+      "x": 1500,
+      "y": 2480,
+      "w": 460,
+      "attr_lines": [
+        "- creadoEn: DateTime"
+      ],
+      "op_lines": [
+        "+ guardar(): Void",
+        "+ quitar(): Void"
+      ],
+      "h": 180,
+      "fill": "#E7F4EA"
+    },
+    {
+      "name": "MetaCanje",
+      "oid": 1178,
+      "crc": "CRC-53",
+      "base": false,
+      "origin": "Derivada del CRC",
+      "status": "Propuesta del CRC",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "puntosFaltantes",
+          "type": "Integer",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "alcanzada",
+          "type": "Boolean",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "definir",
+          "type": "Void",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "recalcular",
+          "type": "Void",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Premio meta y aviso al alcanzarlo.",
+      "rf": "RF-35",
+      "justification": "Representa el premio elegido como meta y el avance hacia su costo, separado del canje ya solicitado.",
+      "collaborators": [
+        "Premio",
+        "Usuario"
+      ],
+      "x": 1500,
+      "y": 3820,
+      "w": 460,
+      "attr_lines": [
+        "- puntosFaltantes: Integer",
+        "- alcanzada: Boolean"
+      ],
+      "op_lines": [
+        "+ definir(): Void",
+        "+ recalcular(): Void"
+      ],
+      "h": 200,
+      "fill": "#E7F4EA"
+    },
+    {
+      "name": "Encuesta",
+      "oid": 1179,
+      "crc": "CRC-54",
+      "base": false,
+      "origin": "Derivada del CRC",
+      "status": "Propuesta del CRC",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "titulo",
+          "type": "String",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "preguntas",
+          "type": "String[]",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "activa",
+          "type": "Boolean",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "publicar",
+          "type": "Void",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "calcularPromedio",
+          "type": "Real",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Encuesta de hasta 5 preguntas con escala de 1 a 5.",
+      "rf": "RF-44",
+      "justification": "Define el instrumento, sus preguntas y su disponibilidad; no equivale a una respuesta individual.",
+      "collaborators": [
+        "RespuestaEncuesta"
+      ],
+      "x": 100,
+      "y": 3820,
+      "w": 460,
+      "attr_lines": [
+        "- titulo: String",
+        "- preguntas: String[]",
+        "- activa: Boolean"
+      ],
+      "op_lines": [
+        "+ publicar(): Void",
+        "+ calcularPromedio(): Real"
+      ],
+      "h": 220,
+      "fill": "#E7F4EA"
+    },
+    {
+      "name": "RespuestaEncuesta",
+      "oid": 1180,
+      "crc": "CRC-55",
+      "base": false,
+      "origin": "Derivada del CRC",
+      "status": "Propuesta del CRC",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "fecha",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "valores",
+          "type": "Integer[]",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "validarEscala",
+          "type": "Boolean",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "registrarUnaVez",
+          "type": "Void",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Una respuesta por usuario y evento participado.",
+      "rf": "RF-44-1",
+      "justification": "Vincula respuestas con el usuario y la encuesta y permite garantizar una respuesta por participación.",
+      "collaborators": [
+        "Encuesta",
+        "Usuario"
+      ],
+      "x": 800,
+      "y": 3820,
+      "w": 460,
+      "attr_lines": [
+        "- fecha: DateTime",
+        "- valores: Integer[]"
+      ],
+      "op_lines": [
+        "+ validarEscala(): Boolean",
+        "+ registrarUnaVez(): Void"
+      ],
+      "h": 200,
+      "fill": "#E7F4EA"
+    },
+    {
+      "name": "ReportePrograma",
+      "oid": 1181,
+      "crc": "CRC-56",
+      "base": false,
+      "origin": "Derivada del CRC",
+      "status": "Propuesta del CRC",
+      "kind": "Class",
+      "source": null,
+      "attrs": [
+        {
+          "name": "desde",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        },
+        {
+          "name": "hasta",
+          "type": "DateTime",
+          "scope": "Private",
+          "static": false,
+          "derived": false
+        }
+      ],
+      "ops": [
+        {
+          "name": "calcularConversion",
+          "type": "Real",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "calcularCostoCaptacion",
+          "type": "Real",
+          "scope": "Public",
+          "static": false
+        },
+        {
+          "name": "exportar",
+          "type": "Documento",
+          "scope": "Public",
+          "static": false
+        }
+      ],
+      "responsibility": "Indicadores y reporte del programa de referidos.",
+      "rf": "RF-43, RF-45",
+      "justification": "Calcula indicadores de conversión y captación. Reporte ya es el reporte de moderación de contenidos y tiene otra responsabilidad.",
+      "collaborators": [
+        "MovimientoPuntos",
+        "Referido"
+      ],
+      "x": 3600,
+      "y": 3140,
+      "w": 460,
+      "attr_lines": [
+        "- desde: DateTime",
+        "- hasta: DateTime"
+      ],
+      "op_lines": [
+        "+ calcularConversion(): Real",
+        "+ calcularCostoCaptacion(): Real",
+        "+ exportar(): Documento"
+      ],
+      "h": 220,
+      "fill": "#E7F4EA"
+    }
+  ],
+  "edges": [
+    {
+      "cid": 69,
+      "a": "Usuario",
+      "b": "Rol",
+      "kind": "Association",
+      "name": "tiene",
+      "sc": "0..*",
+      "dc": "1",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2200,
+          2560
+        ],
+        [
+          2000,
+          2560
+        ],
+        [
+          2000,
+          2400
+        ],
+        [
+          600,
+          2400
+        ],
+        [
+          600,
+          2560
+        ],
+        [
+          560,
+          2560
+        ]
+      ]
+    },
+    {
+      "cid": 70,
+      "a": "Usuario",
+      "b": "CodigoVerificacion",
+      "kind": "Association",
+      "name": "recibe",
+      "sc": "1",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2660,
+          2560
+        ],
+        [
+          2700,
+          2560
+        ],
+        [
+          2700,
+          2080
+        ],
+        [
+          3560,
+          2080
+        ],
+        [
+          3560,
+          1880
+        ],
+        [
+          3600,
+          1880
+        ]
+      ]
+    },
+    {
+      "cid": 71,
+      "a": "ConfirmacionCorreo",
+      "b": "CodigoVerificacion",
+      "kind": "Dependency",
+      "name": "genera",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          5000,
+          1880
+        ],
+        [
+          4800,
+          1880
+        ],
+        [
+          4800,
+          1660
+        ],
+        [
+          4120,
+          1660
+        ],
+        [
+          4120,
+          1880
+        ],
+        [
+          4060,
+          1880
+        ]
+      ]
+    },
+    {
+      "cid": 72,
+      "a": "Usuario",
+      "b": "CuentaCooperativa",
+      "kind": "Association",
+      "name": "vincula",
+      "sc": "1",
+      "dc": "0..1",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2660,
+          2600
+        ],
+        [
+          2700,
+          2600
+        ],
+        [
+          2700,
+          3800
+        ],
+        [
+          3560,
+          3800
+        ],
+        [
+          3560,
+          3920
+        ],
+        [
+          3600,
+          3920
+        ]
+      ]
+    },
+    {
+      "cid": 73,
+      "a": "Usuario",
+      "b": "AceptacionTerminos",
+      "kind": "Association",
+      "name": "acepta",
+      "sc": "1",
+      "dc": "1..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2200,
+          2600
+        ],
+        [
+          2020,
+          2600
+        ],
+        [
+          2020,
+          1880
+        ],
+        [
+          1960,
+          1880
+        ]
+      ]
+    },
+    {
+      "cid": 74,
+      "a": "AceptacionTerminos",
+      "b": "AvisoPrivacidad",
+      "kind": "Association",
+      "name": "corresponde",
+      "sc": "0..*",
+      "dc": "1",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          1500,
+          1880
+        ],
+        [
+          1260,
+          1880
+        ]
+      ]
+    },
+    {
+      "cid": 75,
+      "a": "Usuario",
+      "b": "CodigoReferido",
+      "kind": "Association",
+      "name": "posee",
+      "sc": "1",
+      "dc": "0..1",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2660,
+          2560
+        ],
+        [
+          2860,
+          2560
+        ],
+        [
+          2860,
+          3240
+        ],
+        [
+          2900,
+          3240
+        ]
+      ]
+    },
+    {
+      "cid": 76,
+      "a": "Usuario",
+      "b": "Referido",
+      "kind": "Association",
+      "name": "referidor",
+      "sc": "1",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2660,
+          2600
+        ],
+        [
+          2840,
+          2600
+        ],
+        [
+          2840,
+          2740
+        ],
+        [
+          3560,
+          2740
+        ],
+        [
+          3560,
+          2560
+        ],
+        [
+          3600,
+          2560
+        ]
+      ]
+    },
+    {
+      "cid": 77,
+      "a": "Referido",
+      "b": "Usuario",
+      "kind": "Association",
+      "name": "persona referida",
+      "sc": "0..1",
+      "dc": "0..1",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          3600,
+          2580
+        ],
+        [
+          3400,
+          2580
+        ],
+        [
+          3400,
+          2400
+        ],
+        [
+          2720,
+          2400
+        ],
+        [
+          2720,
+          2520
+        ],
+        [
+          2660,
+          2520
+        ]
+      ]
+    },
+    {
+      "cid": 78,
+      "a": "Referido",
+      "b": "Campania",
+      "kind": "Association",
+      "name": "campaña",
+      "sc": "0..*",
+      "dc": "0..1",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          3840,
+          2300
+        ],
+        [
+          3840,
+          2060
+        ],
+        [
+          4100,
+          2060
+        ],
+        [
+          4100,
+          1400
+        ],
+        [
+          3840,
+          1400
+        ],
+        [
+          3840,
+          1360
+        ]
+      ]
+    },
+    {
+      "cid": 79,
+      "a": "Campanias",
+      "b": "Campania",
+      "kind": "Association",
+      "name": "gestiona",
+      "sc": "1",
+      "dc": "*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          4300,
+          1200
+        ],
+        [
+          4060,
+          1200
+        ]
+      ]
+    },
+    {
+      "cid": 80,
+      "a": "Referido",
+      "b": "CuentaCooperativa",
+      "kind": "Dependency",
+      "name": "consulta estado",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          3840,
+          2820
+        ],
+        [
+          3840,
+          3100
+        ],
+        [
+          4100,
+          3100
+        ],
+        [
+          4100,
+          3720
+        ],
+        [
+          3840,
+          3720
+        ],
+        [
+          3840,
+          3760
+        ]
+      ]
+    },
+    {
+      "cid": 81,
+      "a": "Usuario",
+      "b": "Nivel",
+      "kind": "Association",
+      "name": "nivel",
+      "sc": "0..*",
+      "dc": "1",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2440,
+          2400
+        ],
+        [
+          2440,
+          2040
+        ],
+        [
+          2860,
+          2040
+        ],
+        [
+          2860,
+          1200
+        ],
+        [
+          2900,
+          1200
+        ]
+      ]
+    },
+    {
+      "cid": 82,
+      "a": "Gamificacion",
+      "b": "Nivel",
+      "kind": "Association",
+      "name": "calcula",
+      "sc": "1",
+      "dc": "1..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          3120,
+          1740
+        ],
+        [
+          3120,
+          1300
+        ]
+      ]
+    },
+    {
+      "cid": 83,
+      "a": "Gamificacion",
+      "b": "Insignia",
+      "kind": "Association",
+      "name": "otorga",
+      "sc": "1",
+      "dc": "*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2900,
+          1880
+        ],
+        [
+          2660,
+          1880
+        ]
+      ]
+    },
+    {
+      "cid": 84,
+      "a": "Usuario",
+      "b": "Insignia",
+      "kind": "Association",
+      "name": "obtiene",
+      "sc": "0..*",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2440,
+          2400
+        ],
+        [
+          2440,
+          2360
+        ],
+        [
+          2420,
+          2360
+        ],
+        [
+          2420,
+          2040
+        ],
+        [
+          2440,
+          2040
+        ],
+        [
+          2440,
+          2000
+        ]
+      ]
+    },
+    {
+      "cid": 85,
+      "a": "Usuario",
+      "b": "MovimientoPuntos",
+      "kind": "Association",
+      "name": "titular",
+      "sc": "1",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2660,
+          2640
+        ],
+        [
+          2820,
+          2640
+        ],
+        [
+          2820,
+          2580
+        ],
+        [
+          2860,
+          2580
+        ],
+        [
+          2860,
+          2560
+        ],
+        [
+          2900,
+          2560
+        ]
+      ]
+    },
+    {
+      "cid": 86,
+      "a": "AcreditacionPuntos",
+      "b": "MovimientoPuntos",
+      "kind": "Association",
+      "name": "registra",
+      "sc": "1",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          4300,
+          2560
+        ],
+        [
+          4100,
+          2560
+        ],
+        [
+          4100,
+          2260
+        ],
+        [
+          3420,
+          2260
+        ],
+        [
+          3420,
+          2560
+        ],
+        [
+          3360,
+          2560
+        ]
+      ]
+    },
+    {
+      "cid": 87,
+      "a": "MovimientoPuntos",
+      "b": "Referido",
+      "kind": "Association",
+      "name": "origen",
+      "sc": "0..*",
+      "dc": "0..1",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          3360,
+          2600
+        ],
+        [
+          3540,
+          2600
+        ],
+        [
+          3540,
+          2540
+        ],
+        [
+          3600,
+          2540
+        ]
+      ]
+    },
+    {
+      "cid": 88,
+      "a": "Usuario",
+      "b": "Canje",
+      "kind": "Association",
+      "name": "solicita",
+      "sc": "1",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2440,
+          2740
+        ],
+        [
+          2440,
+          3120
+        ]
+      ]
+    },
+    {
+      "cid": 89,
+      "a": "Canje",
+      "b": "Premio",
+      "kind": "Association",
+      "name": "premio",
+      "sc": "0..*",
+      "dc": "1",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2200,
+          3240
+        ],
+        [
+          1960,
+          3240
+        ]
+      ]
+    },
+    {
+      "cid": 90,
+      "a": "Canje",
+      "b": "MovimientoPuntos",
+      "kind": "Association",
+      "name": "débito",
+      "sc": "0..1",
+      "dc": "1",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2660,
+          3240
+        ],
+        [
+          2820,
+          3240
+        ],
+        [
+          2820,
+          2620
+        ],
+        [
+          2860,
+          2620
+        ],
+        [
+          2860,
+          2600
+        ],
+        [
+          2900,
+          2600
+        ]
+      ]
+    },
+    {
+      "cid": 91,
+      "a": "Usuario",
+      "b": "ProgresoReto",
+      "kind": "Association",
+      "name": "progreso",
+      "sc": "1",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2200,
+          2560
+        ],
+        [
+          2160,
+          2560
+        ],
+        [
+          2160,
+          520
+        ],
+        [
+          1960,
+          520
+        ]
+      ]
+    },
+    {
+      "cid": 92,
+      "a": "ProgresoReto",
+      "b": "Reto",
+      "kind": "Association",
+      "name": "reto",
+      "sc": "0..*",
+      "dc": "1",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          1500,
+          520
+        ],
+        [
+          1260,
+          520
+        ]
+      ]
+    },
+    {
+      "cid": 93,
+      "a": "Usuario",
+      "b": "Inscripcion",
+      "kind": "Association",
+      "name": "inscripción",
+      "sc": "1",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2200,
+          2600
+        ],
+        [
+          2160,
+          2600
+        ],
+        [
+          2160,
+          3080
+        ],
+        [
+          1300,
+          3080
+        ],
+        [
+          1300,
+          4600
+        ],
+        [
+          1260,
+          4600
+        ]
+      ]
+    },
+    {
+      "cid": 94,
+      "a": "Inscripcion",
+      "b": "Taller",
+      "kind": "Association",
+      "name": "taller",
+      "sc": "0..*",
+      "dc": "1",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          800,
+          4600
+        ],
+        [
+          560,
+          4600
+        ]
+      ]
+    },
+    {
+      "cid": 95,
+      "a": "Usuario",
+      "b": "ResultadoCapacitacion",
+      "kind": "Association",
+      "name": "rinde",
+      "sc": "1",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2200,
+          2520
+        ],
+        [
+          2040,
+          2520
+        ],
+        [
+          2040,
+          2040
+        ],
+        [
+          600,
+          2040
+        ],
+        [
+          600,
+          1880
+        ],
+        [
+          560,
+          1880
+        ]
+      ]
+    },
+    {
+      "cid": 96,
+      "a": "ResultadoCapacitacion",
+      "b": "Capacitacion",
+      "kind": "Association",
+      "name": "curso",
+      "sc": "0..*",
+      "dc": "1",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          320,
+          1760
+        ],
+        [
+          320,
+          1360
+        ],
+        [
+          60,
+          1360
+        ],
+        [
+          60,
+          680
+        ],
+        [
+          320,
+          680
+        ],
+        [
+          320,
+          640
+        ]
+      ]
+    },
+    {
+      "cid": 97,
+      "a": "Capacitacion",
+      "b": "PreguntaEvaluacion",
+      "kind": "Aggregation",
+      "name": "cuestionario",
+      "sc": "1",
+      "dc": "1..30",
+      "aggregate": 2,
+      "proposed": false,
+      "path": [
+        [
+          360,
+          640
+        ],
+        [
+          360,
+          1060
+        ],
+        [
+          320,
+          1060
+        ],
+        [
+          320,
+          1100
+        ]
+      ]
+    },
+    {
+      "cid": 98,
+      "a": "Usuario",
+      "b": "PartidaTrivia",
+      "kind": "Association",
+      "name": "juega",
+      "sc": "1",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2400,
+          2400
+        ],
+        [
+          2400,
+          2360
+        ],
+        [
+          2060,
+          2360
+        ],
+        [
+          2060,
+          1200
+        ],
+        [
+          1960,
+          1200
+        ]
+      ]
+    },
+    {
+      "cid": 99,
+      "a": "PartidaTrivia",
+      "b": "PreguntaTrivia",
+      "kind": "Association",
+      "name": "preguntas",
+      "sc": "0..*",
+      "dc": "10",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          1500,
+          1200
+        ],
+        [
+          1260,
+          1200
+        ]
+      ]
+    },
+    {
+      "cid": 100,
+      "a": "PreguntaTrivia",
+      "b": "PreguntaEvaluacion",
+      "kind": "Generalization",
+      "name": null,
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          800,
+          1200
+        ],
+        [
+          560,
+          1200
+        ]
+      ]
+    },
+    {
+      "cid": 101,
+      "a": "Usuario",
+      "b": "ContenidoComunidad",
+      "kind": "Association",
+      "name": "autor",
+      "sc": "1",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2440,
+          2740
+        ],
+        [
+          2440,
+          2780
+        ],
+        [
+          2180,
+          2780
+        ],
+        [
+          2180,
+          3080
+        ],
+        [
+          2160,
+          3080
+        ],
+        [
+          2160,
+          4460
+        ],
+        [
+          2440,
+          4460
+        ],
+        [
+          2440,
+          4500
+        ]
+      ]
+    },
+    {
+      "cid": 102,
+      "a": "Publicacion",
+      "b": "ContenidoComunidad",
+      "kind": "Generalization",
+      "name": null,
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2900,
+          4600
+        ],
+        [
+          2660,
+          4600
+        ]
+      ]
+    },
+    {
+      "cid": 103,
+      "a": "Comentario",
+      "b": "ContenidoComunidad",
+      "kind": "Generalization",
+      "name": null,
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          1960,
+          4600
+        ],
+        [
+          2200,
+          4600
+        ]
+      ]
+    },
+    {
+      "cid": 104,
+      "a": "Publicacion",
+      "b": "Comentario",
+      "kind": "Aggregation",
+      "name": "comentarios",
+      "sc": "1",
+      "dc": "0..*",
+      "aggregate": 2,
+      "proposed": false,
+      "path": [
+        [
+          2900,
+          4640
+        ],
+        [
+          2700,
+          4640
+        ],
+        [
+          2700,
+          4740
+        ],
+        [
+          2000,
+          4740
+        ],
+        [
+          2000,
+          4640
+        ],
+        [
+          1960,
+          4640
+        ]
+      ]
+    },
+    {
+      "cid": 105,
+      "a": "Usuario",
+      "b": "Reaccion",
+      "kind": "Association",
+      "name": "reacciona",
+      "sc": "1",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2660,
+          2520
+        ],
+        [
+          2800,
+          2520
+        ],
+        [
+          2800,
+          3920
+        ],
+        [
+          2900,
+          3920
+        ]
+      ]
+    },
+    {
+      "cid": 106,
+      "a": "Reaccion",
+      "b": "Publicacion",
+      "kind": "Association",
+      "name": "publicación",
+      "sc": "0..*",
+      "dc": "1",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          3120,
+          4000
+        ],
+        [
+          3120,
+          4520
+        ]
+      ]
+    },
+    {
+      "cid": 107,
+      "a": "Usuario",
+      "b": "Reporte",
+      "kind": "Association",
+      "name": "reporta",
+      "sc": "1",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2400,
+          2740
+        ],
+        [
+          2400,
+          3060
+        ],
+        [
+          2140,
+          3060
+        ],
+        [
+          2140,
+          3780
+        ],
+        [
+          2440,
+          3780
+        ],
+        [
+          2440,
+          3820
+        ]
+      ]
+    },
+    {
+      "cid": 108,
+      "a": "Reporte",
+      "b": "ContenidoComunidad",
+      "kind": "Association",
+      "name": "contenido",
+      "sc": "0..*",
+      "dc": "1",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2440,
+          4020
+        ],
+        [
+          2440,
+          4500
+        ]
+      ]
+    },
+    {
+      "cid": 109,
+      "a": "Usuario",
+      "b": "ContenidoSalud",
+      "kind": "Association",
+      "name": "publica",
+      "sc": "1",
+      "dc": "*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2200,
+          2640
+        ],
+        [
+          2000,
+          2640
+        ],
+        [
+          2000,
+          3060
+        ],
+        [
+          1320,
+          3060
+        ],
+        [
+          1320,
+          3240
+        ],
+        [
+          1260,
+          3240
+        ]
+      ]
+    },
+    {
+      "cid": 110,
+      "a": "Usuario",
+      "b": "Notificacion",
+      "kind": "Association",
+      "name": "destinatario",
+      "sc": "1",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2660,
+          2640
+        ],
+        [
+          2720,
+          2640
+        ],
+        [
+          2720,
+          2860
+        ],
+        [
+          4960,
+          2860
+        ],
+        [
+          4960,
+          2560
+        ],
+        [
+          5000,
+          2560
+        ]
+      ]
+    },
+    {
+      "cid": 111,
+      "a": "Usuario",
+      "b": "SolicitudSoporte",
+      "kind": "Association",
+      "name": "solicita",
+      "sc": "1",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2660,
+          2480
+        ],
+        [
+          2840,
+          2480
+        ],
+        [
+          2840,
+          520
+        ],
+        [
+          2900,
+          520
+        ]
+      ]
+    },
+    {
+      "cid": 112,
+      "a": "Usuario",
+      "b": "RegistroAuditoria",
+      "kind": "Association",
+      "name": "actor humano",
+      "sc": "0..1",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2660,
+          2560
+        ],
+        [
+          2700,
+          2560
+        ],
+        [
+          2700,
+          2580
+        ],
+        [
+          2780,
+          2580
+        ],
+        [
+          2780,
+          4480
+        ],
+        [
+          3560,
+          4480
+        ],
+        [
+          3560,
+          4600
+        ],
+        [
+          3600,
+          4600
+        ]
+      ]
+    },
+    {
+      "cid": 113,
+      "a": "Usuario",
+      "b": "ParametroGlobal",
+      "kind": "Association",
+      "name": "modifica",
+      "sc": "1",
+      "dc": "*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2480,
+          2400
+        ],
+        [
+          2480,
+          2060
+        ],
+        [
+          2700,
+          2060
+        ],
+        [
+          2700,
+          660
+        ],
+        [
+          2440,
+          660
+        ],
+        [
+          2440,
+          620
+        ]
+      ]
+    },
+    {
+      "cid": 171,
+      "a": "Rol",
+      "b": "Modulo",
+      "kind": "Association",
+      "name": "habilita",
+      "sc": "0..*",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          320,
+          2740
+        ],
+        [
+          320,
+          3100
+        ]
+      ]
+    },
+    {
+      "cid": 172,
+      "a": "Usuario",
+      "b": "Sesion",
+      "kind": "Association",
+      "name": "abre",
+      "sc": "1",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2200,
+          2520
+        ],
+        [
+          2140,
+          2520
+        ],
+        [
+          2140,
+          2440
+        ],
+        [
+          1300,
+          2440
+        ],
+        [
+          1300,
+          2560
+        ],
+        [
+          1260,
+          2560
+        ]
+      ]
+    },
+    {
+      "cid": 1383,
+      "a": "CuentaCooperativa",
+      "b": "SolicitudValidacion",
+      "kind": "Association",
+      "name": "solicitudes",
+      "sc": "1",
+      "dc": "1..*",
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          4060,
+          3920
+        ],
+        [
+          4260,
+          3920
+        ],
+        [
+          4260,
+          3800
+        ],
+        [
+          4960,
+          3800
+        ],
+        [
+          4960,
+          3920
+        ],
+        [
+          5000,
+          3920
+        ]
+      ]
+    },
+    {
+      "cid": 1384,
+      "a": "SolicitudValidacion",
+      "b": "IntentoValidacion",
+      "kind": "Association",
+      "name": "intentos",
+      "sc": "1",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          5240,
+          4060
+        ],
+        [
+          5240,
+          4480
+        ]
+      ]
+    },
+    {
+      "cid": 1385,
+      "a": "ValidadorCuenta",
+      "b": "SolicitudValidacion",
+      "kind": "Association",
+      "name": "procesa",
+      "sc": "1",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          4760,
+          3920
+        ],
+        [
+          4800,
+          3920
+        ],
+        [
+          4800,
+          3960
+        ],
+        [
+          5000,
+          3960
+        ]
+      ]
+    },
+    {
+      "cid": 1386,
+      "a": "ValidadorCuenta",
+      "b": "FuenteInstitucional",
+      "kind": "Dependency",
+      "name": "consulta",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          4520,
+          3840
+        ],
+        [
+          4520,
+          3380
+        ],
+        [
+          4260,
+          3380
+        ],
+        [
+          4260,
+          660
+        ],
+        [
+          4520,
+          660
+        ],
+        [
+          4520,
+          620
+        ]
+      ]
+    },
+    {
+      "cid": 1387,
+      "a": "AdaptadorInstitucional",
+      "b": "FuenteInstitucional",
+      "kind": "Realisation",
+      "name": null,
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          5000,
+          520
+        ],
+        [
+          4760,
+          520
+        ]
+      ]
+    },
+    {
+      "cid": 1388,
+      "a": "FuenteInstitucional",
+      "b": "RegistroTitularidad",
+      "kind": "Dependency",
+      "name": "devuelve",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          4300,
+          520
+        ],
+        [
+          4060,
+          520
+        ]
+      ]
+    },
+    {
+      "cid": 1389,
+      "a": "ValidadorCuenta",
+      "b": "CuentaCooperativa",
+      "kind": "Dependency",
+      "name": "aplica resultado",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          4300,
+          3920
+        ],
+        [
+          4260,
+          3920
+        ],
+        [
+          4260,
+          3940
+        ],
+        [
+          4060,
+          3940
+        ]
+      ]
+    },
+    {
+      "cid": 1390,
+      "a": "ValidadorReferido",
+      "b": "Referido",
+      "kind": "Dependency",
+      "name": "evalúa",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          4300,
+          3240
+        ],
+        [
+          4120,
+          3240
+        ],
+        [
+          4120,
+          2880
+        ],
+        [
+          3840,
+          2880
+        ],
+        [
+          3840,
+          2820
+        ]
+      ]
+    },
+    {
+      "cid": 1391,
+      "a": "ValidadorReferido",
+      "b": "CuentaCooperativa",
+      "kind": "Dependency",
+      "name": "consulta estado",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          4300,
+          3280
+        ],
+        [
+          4120,
+          3280
+        ],
+        [
+          4120,
+          3900
+        ],
+        [
+          4060,
+          3900
+        ]
+      ]
+    },
+    {
+      "cid": 1392,
+      "a": "ValidadorReferido",
+      "b": "AcreditacionPuntos",
+      "kind": "Dependency",
+      "name": "confirma en transacción",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          4520,
+          3160
+        ],
+        [
+          4520,
+          2660
+        ]
+      ]
+    },
+    {
+      "cid": 1393,
+      "a": "ValidadorCuenta",
+      "b": "RegistroAuditoria",
+      "kind": "Dependency",
+      "name": "audita",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          4300,
+          3960
+        ],
+        [
+          4100,
+          3960
+        ],
+        [
+          4100,
+          4600
+        ],
+        [
+          4060,
+          4600
+        ]
+      ]
+    },
+    {
+      "cid": 1394,
+      "a": "IntentoValidacion",
+      "b": "RegistroAuditoria",
+      "kind": "Dependency",
+      "name": "evidencia",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          5000,
+          4600
+        ],
+        [
+          4800,
+          4600
+        ],
+        [
+          4800,
+          4780
+        ],
+        [
+          4100,
+          4780
+        ],
+        [
+          4100,
+          4640
+        ],
+        [
+          4060,
+          4640
+        ]
+      ]
+    },
+    {
+      "cid": 1395,
+      "a": "ValidadorReferido",
+      "b": "EventoNotificacion",
+      "kind": "Dependency",
+      "name": "publica",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          4760,
+          3240
+        ],
+        [
+          5000,
+          3240
+        ]
+      ]
+    },
+    {
+      "cid": 1396,
+      "a": "EventoNotificacion",
+      "b": "Notificacion",
+      "kind": "Association",
+      "name": "entrega una vez",
+      "sc": "1",
+      "dc": "1..*",
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          5240,
+          3120
+        ],
+        [
+          5240,
+          2700
+        ]
+      ]
+    },
+    {
+      "cid": 1397,
+      "a": "Usuario",
+      "b": "Favorito",
+      "kind": "Association",
+      "name": "favoritos",
+      "sc": "1",
+      "dc": "0..50",
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          2200,
+          2640
+        ],
+        [
+          2140,
+          2640
+        ],
+        [
+          2140,
+          2620
+        ],
+        [
+          2000,
+          2620
+        ],
+        [
+          2000,
+          2560
+        ],
+        [
+          1960,
+          2560
+        ]
+      ]
+    },
+    {
+      "cid": 1398,
+      "a": "Favorito",
+      "b": "Premio",
+      "kind": "Association",
+      "name": "premio",
+      "sc": "0..*",
+      "dc": "1",
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          1720,
+          2660
+        ],
+        [
+          1720,
+          3120
+        ]
+      ]
+    },
+    {
+      "cid": 1399,
+      "a": "Usuario",
+      "b": "MetaCanje",
+      "kind": "Association",
+      "name": "meta",
+      "sc": "1",
+      "dc": "0..1",
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          2200,
+          2480
+        ],
+        [
+          2060,
+          2480
+        ],
+        [
+          2060,
+          3920
+        ],
+        [
+          1960,
+          3920
+        ]
+      ]
+    },
+    {
+      "cid": 1400,
+      "a": "MetaCanje",
+      "b": "Premio",
+      "kind": "Association",
+      "name": "objetivo",
+      "sc": "0..*",
+      "dc": "1",
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          1720,
+          3820
+        ],
+        [
+          1720,
+          3380
+        ]
+      ]
+    },
+    {
+      "cid": 1401,
+      "a": "Usuario",
+      "b": "RespuestaEncuesta",
+      "kind": "Association",
+      "name": "responde",
+      "sc": "1",
+      "dc": "0..*",
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          2200,
+          2560
+        ],
+        [
+          2160,
+          2560
+        ],
+        [
+          2160,
+          2580
+        ],
+        [
+          2040,
+          2580
+        ],
+        [
+          2040,
+          3780
+        ],
+        [
+          1320,
+          3780
+        ],
+        [
+          1320,
+          3920
+        ],
+        [
+          1260,
+          3920
+        ]
+      ]
+    },
+    {
+      "cid": 1402,
+      "a": "RespuestaEncuesta",
+      "b": "Encuesta",
+      "kind": "Association",
+      "name": "encuesta",
+      "sc": "0..*",
+      "dc": "1",
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          800,
+          3920
+        ],
+        [
+          560,
+          3920
+        ]
+      ]
+    },
+    {
+      "cid": 1403,
+      "a": "ReportePrograma",
+      "b": "Referido",
+      "kind": "Dependency",
+      "name": "consulta",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          3840,
+          3140
+        ],
+        [
+          3840,
+          3100
+        ],
+        [
+          3800,
+          3100
+        ],
+        [
+          3800,
+          2820
+        ]
+      ]
+    },
+    {
+      "cid": 1404,
+      "a": "ReportePrograma",
+      "b": "MovimientoPuntos",
+      "kind": "Dependency",
+      "name": "calcula costos",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          3600,
+          3240
+        ],
+        [
+          3400,
+          3240
+        ],
+        [
+          3400,
+          2560
+        ],
+        [
+          3360,
+          2560
+        ]
+      ]
+    },
+    {
+      "cid": 1405,
+      "a": "ValidadorCuenta",
+      "b": "ResultadoValidacion",
+      "kind": "Dependency",
+      "name": "produce",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          4520,
+          4020
+        ],
+        [
+          4520,
+          4480
+        ]
+      ]
+    },
+    {
+      "cid": 1406,
+      "a": "ValidadorReferido",
+      "b": "ResultadoValidacion",
+      "kind": "Dependency",
+      "name": "produce",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          4520,
+          3340
+        ],
+        [
+          4520,
+          3380
+        ],
+        [
+          4800,
+          3380
+        ],
+        [
+          4800,
+          4440
+        ],
+        [
+          4560,
+          4440
+        ],
+        [
+          4560,
+          4480
+        ]
+      ]
+    },
+    {
+      "cid": 1657,
+      "a": "ConfirmacionCorreo",
+      "b": "Database",
+      "kind": "Dependency",
+      "name": "consulta y actualiza",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          5000,
+          1920
+        ],
+        [
+          4800,
+          1920
+        ],
+        [
+          4800,
+          1880
+        ],
+        [
+          4760,
+          1880
+        ]
+      ]
+    },
+    {
+      "cid": 1658,
+      "a": "AcreditacionPuntos",
+      "b": "Database",
+      "kind": "Dependency",
+      "name": "transacción",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          4520,
+          2460
+        ],
+        [
+          4520,
+          2060
+        ]
+      ]
+    },
+    {
+      "cid": 1659,
+      "a": "Database",
+      "b": "ProteccionDatos",
+      "kind": "Dependency",
+      "name": "protege filas",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          4760,
+          1900
+        ],
+        [
+          4960,
+          1900
+        ],
+        [
+          4960,
+          1200
+        ],
+        [
+          5000,
+          1200
+        ]
+      ]
+    },
+    {
+      "cid": 1660,
+      "a": "Database",
+      "b": "Referido",
+      "kind": "Dependency",
+      "name": "usa estados",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          4300,
+          1880
+        ],
+        [
+          4140,
+          1880
+        ],
+        [
+          4140,
+          2240
+        ],
+        [
+          3840,
+          2240
+        ],
+        [
+          3840,
+          2300
+        ]
+      ]
+    },
+    {
+      "cid": 1661,
+      "a": "PerfilPublico",
+      "b": "Usuario",
+      "kind": "Dependency",
+      "name": "proyecta datos",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": false,
+      "path": [
+        [
+          2440,
+          1320
+        ],
+        [
+          2440,
+          1360
+        ],
+        [
+          2140,
+          1360
+        ],
+        [
+          2140,
+          2340
+        ],
+        [
+          2400,
+          2340
+        ],
+        [
+          2400,
+          2400
+        ]
+      ]
+    },
+    {
+      "cid": 1662,
+      "a": "PerfilPublico",
+      "b": "Nivel",
+      "kind": "Dependency",
+      "name": "previsto en RF-46",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          2660,
+          1200
+        ],
+        [
+          2820,
+          1200
+        ],
+        [
+          2820,
+          1220
+        ],
+        [
+          2900,
+          1220
+        ]
+      ]
+    },
+    {
+      "cid": 1663,
+      "a": "PerfilPublico",
+      "b": "Insignia",
+      "kind": "Dependency",
+      "name": "previsto en RF-46",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          2440,
+          1320
+        ],
+        [
+          2440,
+          1780
+        ]
+      ]
+    },
+    {
+      "cid": 1664,
+      "a": "Campanias",
+      "b": "Database",
+      "kind": "Dependency",
+      "name": "persistencia prevista",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          4520,
+          1360
+        ],
+        [
+          4520,
+          1700
+        ]
+      ]
+    },
+    {
+      "cid": 1665,
+      "a": "Gamificacion",
+      "b": "Database",
+      "kind": "Dependency",
+      "name": "persistencia prevista",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          3360,
+          1880
+        ],
+        [
+          3540,
+          1880
+        ],
+        [
+          3540,
+          1700
+        ],
+        [
+          4240,
+          1700
+        ],
+        [
+          4240,
+          1900
+        ],
+        [
+          4300,
+          1900
+        ]
+      ]
+    },
+    {
+      "cid": 1666,
+      "a": "ValidadorCuenta",
+      "b": "Database",
+      "kind": "Dependency",
+      "name": "persiste validación",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          4560,
+          3840
+        ],
+        [
+          4560,
+          3400
+        ],
+        [
+          4800,
+          3400
+        ],
+        [
+          4800,
+          2100
+        ],
+        [
+          4560,
+          2100
+        ],
+        [
+          4560,
+          2060
+        ]
+      ]
+    },
+    {
+      "cid": 1667,
+      "a": "ValidadorReferido",
+      "b": "Database",
+      "kind": "Dependency",
+      "name": "confirmación atómica",
+      "sc": null,
+      "dc": null,
+      "aggregate": 0,
+      "proposed": true,
+      "path": [
+        [
+          4560,
+          3160
+        ],
+        [
+          4560,
+          2700
+        ],
+        [
+          4820,
+          2700
+        ],
+        [
+          4820,
+          2120
+        ],
+        [
+          4540,
+          2120
+        ],
+        [
+          4540,
+          2100
+        ],
+        [
+          4520,
+          2100
+        ],
+        [
+          4520,
+          2060
+        ]
+      ]
+    }
+  ],
+  "counts": {
+    "base": 37,
+    "support": 5,
+    "proposed": 14,
+    "code": 19,
+    "modeled": 23,
+    "total": 56,
+    "interfaces": 1
+  },
+  "source_note": "Base original: Object_ID 101 a 137 del EAPX anterior a auditoría. Código: clases exportadas del backend actual. Propuestas: responsabilidades derivadas del CRC y requisitos corregidos.",
+  "width": 5800,
+  "height": 5100
+}

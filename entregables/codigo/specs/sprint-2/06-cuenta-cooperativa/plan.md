@@ -1,6 +1,26 @@
 # Plan técnico · Vinculación y verificación de la cuenta de la Cooperativa
 
-Especificación: [`especificacion.md`](especificacion.md) · Estado: Implementado
+> Revisión de auditoría 2026-11-26: la validación de cuentas y referidos es automática contra la base institucional autorizada. El administrador solo consulta. La implementación y las pruebas de esta revisión están pendientes; la evidencia del flujo manual es histórica. Véase [validación automática](../../validacion-automatica.md).
+
+## Diseño vigente tras auditoría · 2026-11-26
+
+Aplicar [la revisión de validación automática](../../validacion-automatica.md). El código y las API descritos en el antecedente todavía implementan decisiones manuales y no acreditan este diseño.
+
+1. Implementar un servicio interno de validación con acceso institucional de solo lectura o réplica autorizada y vigente. Comprobar identidad institucional, cuenta, condición habilitada y unicidad; no usar datos autodeclarados como prueba.
+2. Persistir solicitud, intentos, causa, resultado, fuente, versión de regla y próximo reintento. Las fallas técnicas conservan Pendiente y se reintentan cada 5 minutos; requisitos no completados disparan reevaluación al cambiar.
+3. Ejecutar reevaluación tras registro activo, vinculación aprobada y asociación corregida. Conservar alta manual, filtros y exportación comercial; no equivalen a aprobar.
+4. Sustituir los contratos de dictamen manual `PATCH /api/usuarios/:id/cuenta` y `PATCH /api/referidos/:id/dictamen`: ningún usuario, incluido administrador, puede decidir estados. El servicio interno persiste el resultado. Las rutas de vinculación y consulta siguen autorizadas por sesión, capacidad y propiedad.
+5. Usar restricciones únicas e integridad referencial para cuentas y relaciones. Confirmar aprobación de referido, créditos a ambas partes y eventos de aviso en una transacción; deduplicar por evento y destinatario, con recuperación después de reinicio.
+6. Retirar botones de aprobar/rechazar y la cola de revisión humana. Mostrar resultado, requisito faltante o incidencia y reintento. La administración conserva consulta de resultados, configuración, reportes y bitácora.
+7. Verificar tiempos de RF-50 (5 s total), RF-11-4 (2 s), RF-12-2 (2 s), RF-39 (5 s), concurrencia, recuperación e imposibilidad de forzar aprobación desde cliente o administración. Los límites y sus puntos de medición figuran en la revisión general.
+
+Dependencias: acceso autorizado, diccionario de datos, vínculo de identidad verificable, condición habilitada y vigencia de la fuente. Migraciones y contrato concreto se definirán al implementar; no se acreditan tablas, rutas nuevas ni pruebas inexistentes.
+
+## Antecedente técnico del flujo manual · sustituido
+
+El contenido siguiente conserva las decisiones y pruebas del código anterior. Sus rutas de aprobación, colas de revisión y decisiones manuales quedan sustituidas por el diseño vigente anterior.
+
+Especificación: [`especificacion.md`](especificacion.md) · Estado: Diseño revisado; implementación pendiente
 
 ## 1. Chequeo contra la constitución
 
@@ -70,7 +90,7 @@ Helpers en `api.mjs`: `esParticipante(rol)`, `participa(clave)`, `ROLES_PARTICIP
 | Sondeo de 3 s | WebSocket | Cumple el máximo de 5 s sin infraestructura extra; la consulta no renueva la sesión |
 
 <!-- TRAZABILIDAD-VIGENTE -->
-## Trazabilidad vigente al 22 de noviembre de 2026
+## Trazabilidad revisada al 26 de noviembre de 2026
 
 | Referencia | Valor |
 | --- | --- |
@@ -80,9 +100,9 @@ Helpers en `api.mjs`: `esParticipante(rol)`, `participa(clave)`, `ROLES_PARTICIP
 | Requisitos de usuario | UR-07 · UR-08 · UR-09 · UR-14 · UR-44 |
 | Requisitos funcionales | RF-05 (RF-05-1 a RF-05-6) · RF-06 (RF-06-1 a RF-06-3) · RF-39 · RF-42 |
 | Requisitos no funcionales | RNF-05 · RNF-12 · RNF-16 · RNF-23 · RNF-24 |
-| Casos de uso | CU-04 Solicitar vinculación de cuenta cooperativa · CU-04.1 Validar los datos y la unicidad de la cuenta (include) · CU-04.2 Registrar la solicitud pendiente (include) · CU-05.4 Comprobar que la cuenta vinculada esté aprobada (include de CU-05 y CU-12) · CU-18 Verificar una cuenta vinculada · CU-18.1 Generar el código y el enlace de referido (extend) |
+| Casos de uso | CU-04 Solicitar vinculación de cuenta cooperativa · CU-04.1 Validar los datos y la unicidad de la cuenta (include) · CU-04.2 Registrar solicitud para validación automática (revisado en auditoría 1) (include) · CU-05.4 Comprobar que la cuenta vinculada esté aprobada (include de CU-05 y CU-12) · CU-18 Validar automáticamente una cuenta vinculada (revisado en auditoría 1) · CU-18.1 Generar el código y el enlace de referido (extend) |
 | Diagram_ID de comportamiento | 43 Sequence; 44 Activity; 69 Sequence; 70 Activity; 101 Sequence; 102 Activity |
-| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Modelo UML revisado: casos de uso y clases | [SUMA-Diagramas_Vistas.eapx](../../../../SUMA-Diagramas_Vistas.eapx) |
 | Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
 
 La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.

@@ -32,7 +32,7 @@ Plan: [`plan.md`](plan.md) · Estado: Completado
 | Requisitos no funcionales | RNF-03 · RNF-04 · RNF-12 · RNF-14 · RNF-22 |
 | Casos de uso | CU-02.3 Solicitar recuperación de acceso (extend de CU-02) · CU-02.5 Restablecer la contraseña (extend de CU-02.3) |
 | Diagram_ID de comportamiento | 39 Sequence; 40 Activity |
-| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../entregables/SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas.eapx](../../../entregables/SUMA-Diagramas_Vistas.eapx) |
 | Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
 
 La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.

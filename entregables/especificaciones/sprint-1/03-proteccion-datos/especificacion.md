@@ -76,7 +76,7 @@ buscar por correo y evitar duplicados.
 | Requisitos no funcionales | RNF-05 |
 | Casos de uso | Transversal; no requiere CU independiente |
 | Diagram_ID de comportamiento | Sin diagrama de comportamiento propio; requisito transversal |
-| Modelo UML vigente | [SUMA-Diagramas_Vistas_Textos_Centrados.eapx](../../../SUMA-Diagramas_Vistas_Textos_Centrados.eapx) |
+| Modelo UML vigente | [SUMA-Diagramas_Vistas.eapx](../../../SUMA-Diagramas_Vistas.eapx) |
 | Registro general | [Matriz completa de las 61 historias](../../TRAZABILIDAD.md) |
 
 La construcción adelantada no cambia el sprint planificado. Los CA conservan sus identificadores y se interpretan junto con la ruta de esta especificación. Las pruebas y tareas conservan su evidencia; esta actualización documental no acredita verificaciones nuevas.
