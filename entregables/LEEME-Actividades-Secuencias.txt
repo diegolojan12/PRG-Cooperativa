@@ -1,16 +1,18 @@
 SUMA - Actividades y secuencias
-Entrega: SUMA-Diagramas_Vistas_Actividad_Secuencia.eapx
+Modelo: SUMA-Diagramas_Vistas_Actividad_Secuencia.eapx
 
-Abrir en Enterprise Architect:
-SUMA > Vista de Procesos > Diagramas de actividades / Diagramas de secuencia
-Elegir la carpeta del tipo de diagrama, luego módulo y RF. Actividades: ACT-RF-nn. Secuencias: SEQ-RF-nn.
+SUMA > Vista de Procesos > Diagramas de actividades / Diagramas de secuencia > módulo > RF
+50 diagramas ACT-RF-nn y 109 diagramas SEQ-RF-nn-ss - Nombre del escenario.
+Cobertura: 50 RF y 179 subrequisitos. Casos de uso y actividades conservados.
+Cada secuencia tiene su propia interacción y trazas UML a los requisitos que desarrolla. Se mantienen las 458 trazas previas de los comportamientos RF.
 
-Cobertura: 50 RF, 179 subrequisitos, 50 actividades, 50 secuencias y 109 operaciones alternativas.
-Trazabilidad: 458 dependencias UML «trace» desde Activity/Interaction a los casos de uso; las acciones tienen trazas adicionales a sus subrequisitos. Las notas de los elementos conservan los requisitos. Los nombres y descripciones se contrastaron con el Excel.
-Referencia de formato: Evaluacion_AUTOSYS_Bim1_completada.pdf, actividad de la página 9. Las instrucciones del ejercicio se trataron como referencia, no como una ampliación del encargo.
+Orden: actor/evento, UI SUMA, Sistema SUMA, BD SUMA, servicio externo cuando corresponde.
+Los eventos automáticos entran al sistema sin inventar una intervención del usuario. La interfaz aparece en la segunda posición, aunque no participa si el proceso no presenta datos.
+La base de datos consulta y persiste; las reglas se modelan en Sistema SUMA. Los contratos de análisis del paquete de cada RF declaran las operaciones empleadas. No son una certificación de implementación en código.
+Se usan alt, opt, loop, par y ref según el escenario. Los argumentos y retornos se muestran, y los ref enlazan otras interacciones.
+Referencia de secuencias: Semana 6-7 – Diagramas de interacción y actividades_vfinal.pdf, diapositivas 9 a 20.
+Referencia previa de actividades: Evaluacion_AUTOSYS_Bim1_completada.pdf.
 
-Consulta visual y correspondencia con filas Excel:
-diagramas/Procesos-RF-2026-11-27/index.html
-
-Se conservaron los casos de uso, clases y actores originales. El archivo original SUMA-Diagramas_Vistas.eapx no fue reemplazado. En la copia actualizada se eliminaron las carpetas históricas de actividades y secuencias. Se rotularon 164 decisiones, se identificaron 21 uniones y se retiraron 16 rombos redundantes.
-Las secuencias son modelos de análisis: sus mensajes expresan responsabilidades, no certifican que esas operaciones estén implementadas en el código.
+Índice visual: diagramas/Procesos-RF-2026-11-27/index.html
+Imágenes de secuencia: diagramas/Procesos-RF-2026-11-27/secuencias/
+Las carpetas históricas se eliminaron del modelo entregado. Se mantiene el archivo fuente original y respaldos fuera de sus vistas.

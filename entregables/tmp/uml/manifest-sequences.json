@@ -1,0 +1,4374 @@
+[
+  {
+    "code": "RF-01",
+    "name": "Registro de cuenta en 3 pasos",
+    "module": "Gestión de usuarios",
+    "package": 1003,
+    "activity": 1001,
+    "sequence": 1002,
+    "activityElement": 10004,
+    "sequenceElement": 10022,
+    "requirements": [
+      "RF-01",
+      "RF-01-1",
+      "RF-01-2",
+      "RF-01-3",
+      "RF-01-4",
+      "RF-01-5",
+      "RF-01-6"
+    ],
+    "activityPackage": 1003,
+    "sequencePackage": 1070,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-01",
+        "scenario": 1,
+        "name": "SEQ-RF-01-01 - Registrar cuenta",
+        "title": "Registrar cuenta",
+        "diagram": 1002,
+        "interaction": 11996,
+        "refs": [
+          "RF-01",
+          "RF-01-1",
+          "RF-01-2",
+          "RF-01-3",
+          "RF-01-5",
+          "RF-01-4",
+          "RF-01-6"
+        ],
+        "file": "secuencias/RF-01-01-sequence.png",
+        "actor": "Prospecto",
+        "automatic": false,
+        "lifelines": {
+          "A": 12108,
+          "U": 12109,
+          "C": 12110,
+          "D": 12111
+        },
+        "classifiers": {
+          "U": 12105,
+          "C": 12106,
+          "D": 12107
+        },
+        "external": null,
+        "height": 2105,
+        "messageCount": 17
+      }
+    ]
+  },
+  {
+    "code": "RF-02",
+    "name": "Confirmación de correo",
+    "module": "Gestión de usuarios",
+    "package": 1004,
+    "activity": 1003,
+    "sequence": 1004,
+    "activityElement": 10032,
+    "sequenceElement": 10053,
+    "requirements": [
+      "RF-02",
+      "RF-02-1",
+      "RF-02-2",
+      "RF-02-3"
+    ],
+    "activityPackage": 1004,
+    "sequencePackage": 1071,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-02",
+        "scenario": 1,
+        "name": "SEQ-RF-02-01 - Emitir o reenviar código",
+        "title": "Emitir o reenviar código",
+        "diagram": 1004,
+        "interaction": 11997,
+        "refs": [
+          "RF-02",
+          "RF-02-1",
+          "RF-02-2"
+        ],
+        "file": "secuencias/RF-02-01-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12123,
+          "U": 12124,
+          "C": 12125,
+          "D": 12126,
+          "E": 12127
+        },
+        "classifiers": {
+          "U": 12119,
+          "C": 12120,
+          "D": 12121,
+          "E": 12122
+        },
+        "external": "Servicio de correo",
+        "height": 1045,
+        "messageCount": 10
+      },
+      {
+        "code": "RF-02",
+        "scenario": 2,
+        "name": "SEQ-RF-02-02 - Confirmar correo",
+        "title": "Confirmar correo",
+        "diagram": 1101,
+        "interaction": 11998,
+        "refs": [
+          "RF-02",
+          "RF-02-3"
+        ],
+        "file": "secuencias/RF-02-02-sequence.png",
+        "actor": "Prospecto",
+        "automatic": false,
+        "lifelines": {
+          "A": 12129,
+          "U": 12130,
+          "C": 12131,
+          "D": 12132
+        },
+        "classifiers": {
+          "U": 12119,
+          "C": 12120,
+          "D": 12121,
+          "E": 12122
+        },
+        "external": null,
+        "height": 1325,
+        "messageCount": 14
+      }
+    ]
+  },
+  {
+    "code": "RF-03",
+    "name": "Consulta, actualización y baja del perfil",
+    "module": "Gestión de usuarios",
+    "package": 1005,
+    "activity": 1005,
+    "sequence": 1006,
+    "activityElement": 10067,
+    "sequenceElement": 10097,
+    "requirements": [
+      "RF-03-2",
+      "RF-03-3",
+      "RF-03",
+      "RF-03-1"
+    ],
+    "activityPackage": 1005,
+    "sequencePackage": 1072,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-03",
+        "scenario": 1,
+        "name": "SEQ-RF-03-01 - Consultar perfil",
+        "title": "Consultar perfil",
+        "diagram": 1006,
+        "interaction": 11999,
+        "refs": [
+          "RF-03",
+          "RF-03-1"
+        ],
+        "file": "secuencias/RF-03-01-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12137,
+          "U": 12138,
+          "C": 12139,
+          "D": 12140
+        },
+        "classifiers": {
+          "U": 12134,
+          "C": 12135,
+          "D": 12136
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      },
+      {
+        "code": "RF-03",
+        "scenario": 2,
+        "name": "SEQ-RF-03-02 - Actualizar perfil",
+        "title": "Actualizar perfil",
+        "diagram": 1102,
+        "interaction": 12000,
+        "refs": [
+          "RF-03",
+          "RF-03-2"
+        ],
+        "file": "secuencias/RF-03-02-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12142,
+          "U": 12143,
+          "C": 12144,
+          "D": 12145
+        },
+        "classifiers": {
+          "U": 12134,
+          "C": 12135,
+          "D": 12136
+        },
+        "external": null,
+        "height": 1325,
+        "messageCount": 14
+      },
+      {
+        "code": "RF-03",
+        "scenario": 3,
+        "name": "SEQ-RF-03-03 - Dar de baja perfil",
+        "title": "Dar de baja perfil",
+        "diagram": 1103,
+        "interaction": 12001,
+        "refs": [
+          "RF-03",
+          "RF-03-3"
+        ],
+        "file": "secuencias/RF-03-03-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12147,
+          "U": 12148,
+          "C": 12149,
+          "D": 12150
+        },
+        "classifiers": {
+          "U": 12134,
+          "C": 12135,
+          "D": 12136
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-04",
+    "name": "Autenticación y cierre de sesión",
+    "module": "Validación de usuarios",
+    "package": 1007,
+    "activity": 1007,
+    "sequence": 1008,
+    "activityElement": 10113,
+    "sequenceElement": 10143,
+    "requirements": [
+      "RF-04",
+      "RF-04-1",
+      "RF-04-2",
+      "RF-04-3",
+      "RF-04-4"
+    ],
+    "activityPackage": 1007,
+    "sequencePackage": 1074,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-04",
+        "scenario": 1,
+        "name": "SEQ-RF-04-01 - Iniciar sesión",
+        "title": "Iniciar sesión",
+        "diagram": 1008,
+        "interaction": 12002,
+        "refs": [
+          "RF-04",
+          "RF-04-1",
+          "RF-04-2"
+        ],
+        "file": "secuencias/RF-04-01-sequence.png",
+        "actor": "Usuario de la plataforma",
+        "automatic": false,
+        "lifelines": {
+          "A": 12155,
+          "U": 12156,
+          "C": 12157,
+          "D": 12158
+        },
+        "classifiers": {
+          "U": 12152,
+          "C": 12153,
+          "D": 12154
+        },
+        "external": null,
+        "height": 1395,
+        "messageCount": 15
+      },
+      {
+        "code": "RF-04",
+        "scenario": 2,
+        "name": "SEQ-RF-04-02 - Expirar sesión",
+        "title": "Expirar sesión",
+        "diagram": 1104,
+        "interaction": 12003,
+        "refs": [
+          "RF-04",
+          "RF-04-3"
+        ],
+        "file": "secuencias/RF-04-02-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12160,
+          "U": 12161,
+          "C": 12162,
+          "D": 12163
+        },
+        "classifiers": {
+          "U": 12152,
+          "C": 12153,
+          "D": 12154
+        },
+        "external": null,
+        "height": 905,
+        "messageCount": 8
+      },
+      {
+        "code": "RF-04",
+        "scenario": 3,
+        "name": "SEQ-RF-04-03 - Cerrar sesión",
+        "title": "Cerrar sesión",
+        "diagram": 1105,
+        "interaction": 12004,
+        "refs": [
+          "RF-04",
+          "RF-04-4"
+        ],
+        "file": "secuencias/RF-04-03-sequence.png",
+        "actor": "Usuario de la plataforma",
+        "automatic": false,
+        "lifelines": {
+          "A": 12165,
+          "U": 12166,
+          "C": 12167,
+          "D": 12168
+        },
+        "classifiers": {
+          "U": 12152,
+          "C": 12153,
+          "D": 12154
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-05",
+    "name": "Vinculación y validación automática de cuenta",
+    "module": "Gestión de usuarios",
+    "package": 1008,
+    "activity": 1009,
+    "sequence": 1010,
+    "activityElement": 10159,
+    "sequenceElement": 10199,
+    "requirements": [
+      "RF-05",
+      "RF-05-1",
+      "RF-05-2",
+      "RF-05-3",
+      "RF-05-4",
+      "RF-05-5",
+      "RF-05-6"
+    ],
+    "activityPackage": 1008,
+    "sequencePackage": 1075,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-05",
+        "scenario": 1,
+        "name": "SEQ-RF-05-01 - Solicitar vinculación",
+        "title": "Solicitar vinculación",
+        "diagram": 1010,
+        "interaction": 12005,
+        "refs": [
+          "RF-05",
+          "RF-05-1",
+          "RF-05-2",
+          "RF-05-4"
+        ],
+        "file": "secuencias/RF-05-01-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12173,
+          "U": 12174,
+          "C": 12175,
+          "D": 12176
+        },
+        "classifiers": {
+          "U": 12170,
+          "C": 12171,
+          "D": 12172
+        },
+        "external": null,
+        "height": 1365,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-05",
+        "scenario": 2,
+        "name": "SEQ-RF-05-02 - Consultar seguimiento",
+        "title": "Consultar seguimiento",
+        "diagram": 1106,
+        "interaction": 12006,
+        "refs": [
+          "RF-05",
+          "RF-05-3"
+        ],
+        "file": "secuencias/RF-05-02-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12179,
+          "U": 12180,
+          "C": 12181,
+          "D": 12182
+        },
+        "classifiers": {
+          "U": 12170,
+          "C": 12171,
+          "D": 12172
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      },
+      {
+        "code": "RF-05",
+        "scenario": 3,
+        "name": "SEQ-RF-05-03 - Consultar cuenta",
+        "title": "Consultar cuenta",
+        "diagram": 1107,
+        "interaction": 12007,
+        "refs": [
+          "RF-05",
+          "RF-05-5"
+        ],
+        "file": "secuencias/RF-05-03-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12184,
+          "U": 12185,
+          "C": 12186,
+          "D": 12187
+        },
+        "classifiers": {
+          "U": 12170,
+          "C": 12171,
+          "D": 12172
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      },
+      {
+        "code": "RF-05",
+        "scenario": 4,
+        "name": "SEQ-RF-05-04 - Corregir cuenta rechazada",
+        "title": "Corregir cuenta rechazada",
+        "diagram": 1108,
+        "interaction": 12008,
+        "refs": [
+          "RF-05",
+          "RF-05-6"
+        ],
+        "file": "secuencias/RF-05-04-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12189,
+          "U": 12190,
+          "C": 12191,
+          "D": 12192
+        },
+        "classifiers": {
+          "U": 12170,
+          "C": 12171,
+          "D": 12172
+        },
+        "external": null,
+        "height": 1295,
+        "messageCount": 12
+      }
+    ]
+  },
+  {
+    "code": "RF-06",
+    "name": "Acceso según la verificación de la cuenta",
+    "module": "Gestión de usuarios",
+    "package": 1009,
+    "activity": 1011,
+    "sequence": 1012,
+    "activityElement": 10218,
+    "sequenceElement": 10231,
+    "requirements": [
+      "RF-06",
+      "RF-06-1",
+      "RF-06-2",
+      "RF-06-3"
+    ],
+    "activityPackage": 1009,
+    "sequencePackage": 1076,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-06",
+        "scenario": 1,
+        "name": "SEQ-RF-06-01 - Solicitar función",
+        "title": "Solicitar función",
+        "diagram": 1012,
+        "interaction": 12009,
+        "refs": [
+          "RF-06",
+          "RF-06-1",
+          "RF-06-2",
+          "RF-06-3"
+        ],
+        "file": "secuencias/RF-06-01-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12198,
+          "U": 12199,
+          "C": 12200,
+          "D": 12201
+        },
+        "classifiers": {
+          "U": 12195,
+          "C": 12196,
+          "D": 12197
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-07",
+    "name": "Recuperación de acceso",
+    "module": "Validación de usuarios",
+    "package": 1010,
+    "activity": 1013,
+    "sequence": 1014,
+    "activityElement": 10240,
+    "sequenceElement": 10261,
+    "requirements": [
+      "RF-07",
+      "RF-07-1",
+      "RF-07-2"
+    ],
+    "activityPackage": 1010,
+    "sequencePackage": 1077,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-07",
+        "scenario": 1,
+        "name": "SEQ-RF-07-01 - Solicitar recuperación",
+        "title": "Solicitar recuperación",
+        "diagram": 1014,
+        "interaction": 12010,
+        "refs": [
+          "RF-07",
+          "RF-07-1"
+        ],
+        "file": "secuencias/RF-07-01-sequence.png",
+        "actor": "Usuario de la plataforma",
+        "automatic": false,
+        "lifelines": {
+          "A": 12207,
+          "U": 12208,
+          "C": 12209,
+          "D": 12210,
+          "E": 12211
+        },
+        "classifiers": {
+          "U": 12203,
+          "C": 12204,
+          "D": 12205,
+          "E": 12206
+        },
+        "external": "Servicio de correo",
+        "height": 1465,
+        "messageCount": 16
+      },
+      {
+        "code": "RF-07",
+        "scenario": 2,
+        "name": "SEQ-RF-07-02 - Restablecer contraseña",
+        "title": "Restablecer contraseña",
+        "diagram": 1109,
+        "interaction": 12011,
+        "refs": [
+          "RF-07",
+          "RF-07-2"
+        ],
+        "file": "secuencias/RF-07-02-sequence.png",
+        "actor": "Usuario de la plataforma",
+        "automatic": false,
+        "lifelines": {
+          "A": 12213,
+          "U": 12214,
+          "C": 12215,
+          "D": 12216
+        },
+        "classifiers": {
+          "U": 12203,
+          "C": 12204,
+          "D": 12205,
+          "E": 12206
+        },
+        "external": null,
+        "height": 1325,
+        "messageCount": 14
+      }
+    ]
+  },
+  {
+    "code": "RF-08",
+    "name": "Roles y permisos",
+    "module": "Administración",
+    "package": 1012,
+    "activity": 1015,
+    "sequence": 1016,
+    "activityElement": 10275,
+    "sequenceElement": 10306,
+    "requirements": [
+      "RF-08",
+      "RF-08-1",
+      "RF-08-2",
+      "RF-08-3",
+      "RF-08-4",
+      "RF-08-5"
+    ],
+    "activityPackage": 1012,
+    "sequencePackage": 1079,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-08",
+        "scenario": 1,
+        "name": "SEQ-RF-08-01 - Gestionar roles",
+        "title": "Gestionar roles",
+        "diagram": 1016,
+        "interaction": 12012,
+        "refs": [
+          "RF-08",
+          "RF-08-1",
+          "RF-08-5"
+        ],
+        "file": "secuencias/RF-08-01-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12221,
+          "U": 12222,
+          "C": 12223,
+          "D": 12224
+        },
+        "classifiers": {
+          "U": 12218,
+          "C": 12219,
+          "D": 12220
+        },
+        "external": null,
+        "height": 1395,
+        "messageCount": 15
+      },
+      {
+        "code": "RF-08",
+        "scenario": 2,
+        "name": "SEQ-RF-08-02 - Asignar rol inicial",
+        "title": "Asignar rol inicial",
+        "diagram": 1110,
+        "interaction": 12013,
+        "refs": [
+          "RF-08",
+          "RF-08-2"
+        ],
+        "file": "secuencias/RF-08-02-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12226,
+          "U": 12227,
+          "C": 12228,
+          "D": 12229
+        },
+        "classifiers": {
+          "U": 12218,
+          "C": 12219,
+          "D": 12220
+        },
+        "external": null,
+        "height": 905,
+        "messageCount": 8
+      },
+      {
+        "code": "RF-08",
+        "scenario": 3,
+        "name": "SEQ-RF-08-03 - Acceder a función",
+        "title": "Acceder a función",
+        "diagram": 1111,
+        "interaction": 12014,
+        "refs": [
+          "RF-08",
+          "RF-08-3",
+          "RF-08-4"
+        ],
+        "file": "secuencias/RF-08-03-sequence.png",
+        "actor": "Usuario de la plataforma",
+        "automatic": false,
+        "lifelines": {
+          "A": 12231,
+          "U": 12232,
+          "C": 12233,
+          "D": 12234
+        },
+        "classifiers": {
+          "U": 12218,
+          "C": 12219,
+          "D": 12220
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-09",
+    "name": "Enlace de referido y código QR",
+    "module": "Referidos",
+    "package": 1014,
+    "activity": 1017,
+    "sequence": 1018,
+    "activityElement": 10324,
+    "sequenceElement": 10346,
+    "requirements": [
+      "RF-09",
+      "RF-09-1",
+      "RF-09-2",
+      "RF-09-3"
+    ],
+    "activityPackage": 1014,
+    "sequencePackage": 1081,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-09",
+        "scenario": 1,
+        "name": "SEQ-RF-09-01 - Generar identidad de referido",
+        "title": "Generar identidad de referido",
+        "diagram": 1018,
+        "interaction": 12015,
+        "refs": [
+          "RF-09",
+          "RF-09-1",
+          "RF-09-2"
+        ],
+        "file": "secuencias/RF-09-01-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12239,
+          "U": 12240,
+          "C": 12241,
+          "D": 12242
+        },
+        "classifiers": {
+          "U": 12236,
+          "C": 12237,
+          "D": 12238
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      },
+      {
+        "code": "RF-09",
+        "scenario": 2,
+        "name": "SEQ-RF-09-02 - Descargar QR",
+        "title": "Descargar QR",
+        "diagram": 1112,
+        "interaction": 12016,
+        "refs": [
+          "RF-09",
+          "RF-09-3"
+        ],
+        "file": "secuencias/RF-09-02-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12244,
+          "U": 12245,
+          "C": 12246,
+          "D": 12247
+        },
+        "classifiers": {
+          "U": 12236,
+          "C": 12237,
+          "D": 12238
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      }
+    ]
+  },
+  {
+    "code": "RF-10",
+    "name": "Compartir el enlace de referido",
+    "module": "Referidos",
+    "package": 1015,
+    "activity": 1019,
+    "sequence": 1020,
+    "activityElement": 10359,
+    "sequenceElement": 10376,
+    "requirements": [
+      "RF-10",
+      "RF-10-1",
+      "RF-10-2",
+      "RF-10-3"
+    ],
+    "activityPackage": 1015,
+    "sequencePackage": 1082,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-10",
+        "scenario": 1,
+        "name": "SEQ-RF-10-01 - Compartir enlace",
+        "title": "Compartir enlace",
+        "diagram": 1020,
+        "interaction": 12017,
+        "refs": [
+          "RF-10",
+          "RF-10-1",
+          "RF-10-2",
+          "RF-10-3"
+        ],
+        "file": "secuencias/RF-10-01-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12253,
+          "U": 12254,
+          "C": 12255,
+          "D": 12256,
+          "E": 12257
+        },
+        "classifiers": {
+          "U": 12249,
+          "C": 12250,
+          "D": 12251,
+          "E": 12252
+        },
+        "external": "Canal externo",
+        "height": 1575,
+        "messageCount": 15
+      }
+    ]
+  },
+  {
+    "code": "RF-11",
+    "name": "Registro y gestión de referidos",
+    "module": "Referidos",
+    "package": 1016,
+    "activity": 1021,
+    "sequence": 1022,
+    "activityElement": 10388,
+    "sequenceElement": 10443,
+    "requirements": [
+      "RF-11",
+      "RF-11-1",
+      "RF-11-2",
+      "RF-11-3",
+      "RF-11-4",
+      "RF-11-5",
+      "RF-11-6",
+      "RF-11-7"
+    ],
+    "activityPackage": 1016,
+    "sequencePackage": 1083,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-11",
+        "scenario": 1,
+        "name": "SEQ-RF-11-01 - Registrar o reevaluar relación",
+        "title": "Registrar o reevaluar relación",
+        "diagram": 1022,
+        "interaction": 12018,
+        "refs": [
+          "RF-11",
+          "RF-11-1",
+          "RF-11-4"
+        ],
+        "file": "secuencias/RF-11-01-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12264,
+          "U": 12265,
+          "C": 12266,
+          "D": 12267
+        },
+        "classifiers": {
+          "U": 12261,
+          "C": 12262,
+          "D": 12263
+        },
+        "external": null,
+        "height": 1410,
+        "messageCount": 11
+      },
+      {
+        "code": "RF-11",
+        "scenario": 2,
+        "name": "SEQ-RF-11-02 - Consultar referidos",
+        "title": "Consultar referidos",
+        "diagram": 1113,
+        "interaction": 12019,
+        "refs": [
+          "RF-11",
+          "RF-11-2"
+        ],
+        "file": "secuencias/RF-11-02-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12272,
+          "U": 12273,
+          "C": 12274,
+          "D": 12275
+        },
+        "classifiers": {
+          "U": 12261,
+          "C": 12262,
+          "D": 12263
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      },
+      {
+        "code": "RF-11",
+        "scenario": 3,
+        "name": "SEQ-RF-11-03 - Consultar y exportar global",
+        "title": "Consultar y exportar global",
+        "diagram": 1114,
+        "interaction": 12020,
+        "refs": [
+          "RF-11",
+          "RF-11-3",
+          "RF-11-7"
+        ],
+        "file": "secuencias/RF-11-03-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12277,
+          "U": 12278,
+          "C": 12279,
+          "D": 12280
+        },
+        "classifiers": {
+          "U": 12261,
+          "C": 12262,
+          "D": 12263
+        },
+        "external": null,
+        "height": 1415,
+        "messageCount": 14
+      },
+      {
+        "code": "RF-11",
+        "scenario": 4,
+        "name": "SEQ-RF-11-04 - Asociar usuario sin código",
+        "title": "Asociar usuario sin código",
+        "diagram": 1115,
+        "interaction": 12021,
+        "refs": [
+          "RF-11",
+          "RF-11-5"
+        ],
+        "file": "secuencias/RF-11-04-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12283,
+          "U": 12284,
+          "C": 12285,
+          "D": 12286
+        },
+        "classifiers": {
+          "U": 12261,
+          "C": 12262,
+          "D": 12263
+        },
+        "external": null,
+        "height": 1385,
+        "messageCount": 12
+      },
+      {
+        "code": "RF-11",
+        "scenario": 5,
+        "name": "SEQ-RF-11-05 - Ocultar referido",
+        "title": "Ocultar referido",
+        "diagram": 1116,
+        "interaction": 12022,
+        "refs": [
+          "RF-11",
+          "RF-11-6"
+        ],
+        "file": "secuencias/RF-11-05-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12290,
+          "U": 12291,
+          "C": 12292,
+          "D": 12293
+        },
+        "classifiers": {
+          "U": 12261,
+          "C": 12262,
+          "D": 12263
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-12",
+    "name": "Asignación automática de puntos",
+    "module": "Puntos y recompensas",
+    "package": 1018,
+    "activity": 1023,
+    "sequence": 1024,
+    "activityElement": 10469,
+    "sequenceElement": 10495,
+    "requirements": [
+      "RF-12",
+      "RF-12-1",
+      "RF-12-2",
+      "RF-12-3",
+      "RF-12-4"
+    ],
+    "activityPackage": 1018,
+    "sequencePackage": 1085,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-12",
+        "scenario": 1,
+        "name": "SEQ-RF-12-01 - Acreditar actividad o referido",
+        "title": "Acreditar actividad o referido",
+        "diagram": 1024,
+        "interaction": 12023,
+        "refs": [
+          "RF-12",
+          "RF-12-1",
+          "RF-12-2"
+        ],
+        "file": "secuencias/RF-12-01-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12298,
+          "U": 12299,
+          "C": 12300,
+          "D": 12301
+        },
+        "classifiers": {
+          "U": 12295,
+          "C": 12296,
+          "D": 12297
+        },
+        "external": null,
+        "height": 1350,
+        "messageCount": 12
+      },
+      {
+        "code": "RF-12",
+        "scenario": 2,
+        "name": "SEQ-RF-12-02 - Consultar puntos",
+        "title": "Consultar puntos",
+        "diagram": 1117,
+        "interaction": 12024,
+        "refs": [
+          "RF-12",
+          "RF-12-3",
+          "RF-12-4"
+        ],
+        "file": "secuencias/RF-12-02-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12305,
+          "U": 12306,
+          "C": 12307,
+          "D": 12308
+        },
+        "classifiers": {
+          "U": 12295,
+          "C": 12296,
+          "D": 12297
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-13",
+    "name": "Campañas de referidos",
+    "module": "Administración",
+    "package": 1019,
+    "activity": 1025,
+    "sequence": 1026,
+    "activityElement": 10509,
+    "sequenceElement": 10539,
+    "requirements": [
+      "RF-13",
+      "RF-13-1",
+      "RF-13-2",
+      "RF-13-3",
+      "RF-13-4",
+      "RF-13-5",
+      "RF-13-6",
+      "RF-13-7",
+      "RF-13-8"
+    ],
+    "activityPackage": 1019,
+    "sequencePackage": 1086,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-13",
+        "scenario": 1,
+        "name": "SEQ-RF-13-01 - Crear o editar campaña",
+        "title": "Crear o editar campaña",
+        "diagram": 1026,
+        "interaction": 12025,
+        "refs": [
+          "RF-13",
+          "RF-13-1",
+          "RF-13-2",
+          "RF-13-3",
+          "RF-13-4",
+          "RF-13-7"
+        ],
+        "file": "secuencias/RF-13-01-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12313,
+          "U": 12314,
+          "C": 12315,
+          "D": 12316
+        },
+        "classifiers": {
+          "U": 12310,
+          "C": 12311,
+          "D": 12312
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-13",
+        "scenario": 2,
+        "name": "SEQ-RF-13-02 - Cambiar estado o cerrar",
+        "title": "Cambiar estado o cerrar",
+        "diagram": 1118,
+        "interaction": 12026,
+        "refs": [
+          "RF-13",
+          "RF-13-5",
+          "RF-13-6"
+        ],
+        "file": "secuencias/RF-13-02-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12318,
+          "U": 12319,
+          "C": 12320,
+          "D": 12321
+        },
+        "classifiers": {
+          "U": 12310,
+          "C": 12311,
+          "D": 12312
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-13",
+        "scenario": 3,
+        "name": "SEQ-RF-13-03 - Consultar campañas vigentes",
+        "title": "Consultar campañas vigentes",
+        "diagram": 1119,
+        "interaction": 12027,
+        "refs": [
+          "RF-13",
+          "RF-13-8"
+        ],
+        "file": "secuencias/RF-13-03-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12323,
+          "U": 12324,
+          "C": 12325,
+          "D": 12326
+        },
+        "classifiers": {
+          "U": 12310,
+          "C": 12311,
+          "D": 12312
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      }
+    ]
+  },
+  {
+    "code": "RF-14",
+    "name": "Parámetros globales",
+    "module": "Administración",
+    "package": 1020,
+    "activity": 1027,
+    "sequence": 1028,
+    "activityElement": 10555,
+    "sequenceElement": 10568,
+    "requirements": [
+      "RF-14",
+      "RF-14-1",
+      "RF-14-2",
+      "RF-14-3",
+      "RF-14-4"
+    ],
+    "activityPackage": 1020,
+    "sequencePackage": 1087,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-14",
+        "scenario": 1,
+        "name": "SEQ-RF-14-01 - Actualizar parámetro",
+        "title": "Actualizar parámetro",
+        "diagram": 1028,
+        "interaction": 12028,
+        "refs": [
+          "RF-14",
+          "RF-14-1",
+          "RF-14-3",
+          "RF-14-4",
+          "RF-14-2"
+        ],
+        "file": "secuencias/RF-14-01-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12331,
+          "U": 12332,
+          "C": 12333,
+          "D": 12334
+        },
+        "classifiers": {
+          "U": 12328,
+          "C": 12329,
+          "D": 12330
+        },
+        "external": null,
+        "height": 1395,
+        "messageCount": 15
+      }
+    ]
+  },
+  {
+    "code": "RF-15",
+    "name": "Ajuste manual de puntos",
+    "module": "Puntos y recompensas",
+    "package": 1021,
+    "activity": 1029,
+    "sequence": 1030,
+    "activityElement": 10577,
+    "sequenceElement": 10590,
+    "requirements": [
+      "RF-15",
+      "RF-15-1",
+      "RF-15-2",
+      "RF-15-3"
+    ],
+    "activityPackage": 1021,
+    "sequencePackage": 1088,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-15",
+        "scenario": 1,
+        "name": "SEQ-RF-15-01 - Ajustar saldo",
+        "title": "Ajustar saldo",
+        "diagram": 1030,
+        "interaction": 12029,
+        "refs": [
+          "RF-15",
+          "RF-15-1",
+          "RF-15-3",
+          "RF-15-2"
+        ],
+        "file": "secuencias/RF-15-01-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12339,
+          "U": 12340,
+          "C": 12341,
+          "D": 12342
+        },
+        "classifiers": {
+          "U": 12336,
+          "C": 12337,
+          "D": 12338
+        },
+        "external": null,
+        "height": 1325,
+        "messageCount": 14
+      }
+    ]
+  },
+  {
+    "code": "RF-16",
+    "name": "Niveles y ranking",
+    "module": "Gamificación",
+    "package": 1023,
+    "activity": 1031,
+    "sequence": 1032,
+    "activityElement": 10600,
+    "sequenceElement": 10631,
+    "requirements": [
+      "RF-16",
+      "RF-16-1",
+      "RF-16-2",
+      "RF-16-3",
+      "RF-16-4"
+    ],
+    "activityPackage": 1023,
+    "sequencePackage": 1090,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-16",
+        "scenario": 1,
+        "name": "SEQ-RF-16-01 - Recalcular nivel",
+        "title": "Recalcular nivel",
+        "diagram": 1032,
+        "interaction": 12030,
+        "refs": [
+          "RF-16",
+          "RF-16-1"
+        ],
+        "file": "secuencias/RF-16-01-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12347,
+          "U": 12348,
+          "C": 12349,
+          "D": 12350
+        },
+        "classifiers": {
+          "U": 12344,
+          "C": 12345,
+          "D": 12346
+        },
+        "external": null,
+        "height": 975,
+        "messageCount": 9
+      },
+      {
+        "code": "RF-16",
+        "scenario": 2,
+        "name": "SEQ-RF-16-02 - Consultar avance y ranking",
+        "title": "Consultar avance y ranking",
+        "diagram": 1120,
+        "interaction": 12031,
+        "refs": [
+          "RF-16",
+          "RF-16-2",
+          "RF-16-3"
+        ],
+        "file": "secuencias/RF-16-02-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12352,
+          "U": 12353,
+          "C": 12354,
+          "D": 12355
+        },
+        "classifiers": {
+          "U": 12344,
+          "C": 12345,
+          "D": 12346
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-16",
+        "scenario": 3,
+        "name": "SEQ-RF-16-03 - Configurar niveles",
+        "title": "Configurar niveles",
+        "diagram": 1121,
+        "interaction": 12032,
+        "refs": [
+          "RF-16",
+          "RF-16-4"
+        ],
+        "file": "secuencias/RF-16-03-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12357,
+          "U": 12358,
+          "C": 12359,
+          "D": 12360
+        },
+        "classifiers": {
+          "U": 12344,
+          "C": 12345,
+          "D": 12346
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-17",
+    "name": "Insignias",
+    "module": "Gamificación",
+    "package": 1024,
+    "activity": 1033,
+    "sequence": 1034,
+    "activityElement": 10648,
+    "sequenceElement": 10683,
+    "requirements": [
+      "RF-17",
+      "RF-17-1",
+      "RF-17-2",
+      "RF-17-3",
+      "RF-17-4"
+    ],
+    "activityPackage": 1024,
+    "sequencePackage": 1091,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-17",
+        "scenario": 1,
+        "name": "SEQ-RF-17-01 - Crear o inactivar insignia",
+        "title": "Crear o inactivar insignia",
+        "diagram": 1034,
+        "interaction": 12033,
+        "refs": [
+          "RF-17",
+          "RF-17-1",
+          "RF-17-4"
+        ],
+        "file": "secuencias/RF-17-01-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12365,
+          "U": 12366,
+          "C": 12367,
+          "D": 12368
+        },
+        "classifiers": {
+          "U": 12362,
+          "C": 12363,
+          "D": 12364
+        },
+        "external": null,
+        "height": 1575,
+        "messageCount": 15
+      },
+      {
+        "code": "RF-17",
+        "scenario": 2,
+        "name": "SEQ-RF-17-02 - Otorgar insignia",
+        "title": "Otorgar insignia",
+        "diagram": 1122,
+        "interaction": 12034,
+        "refs": [
+          "RF-17",
+          "RF-17-2"
+        ],
+        "file": "secuencias/RF-17-02-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12372,
+          "U": 12373,
+          "C": 12374,
+          "D": 12375
+        },
+        "classifiers": {
+          "U": 12362,
+          "C": 12363,
+          "D": 12364
+        },
+        "external": null,
+        "height": 905,
+        "messageCount": 8
+      },
+      {
+        "code": "RF-17",
+        "scenario": 3,
+        "name": "SEQ-RF-17-03 - Consultar insignias",
+        "title": "Consultar insignias",
+        "diagram": 1123,
+        "interaction": 12035,
+        "refs": [
+          "RF-17",
+          "RF-17-3"
+        ],
+        "file": "secuencias/RF-17-03-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12377,
+          "U": 12378,
+          "C": 12379,
+          "D": 12380
+        },
+        "classifiers": {
+          "U": 12362,
+          "C": 12363,
+          "D": 12364
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      }
+    ]
+  },
+  {
+    "code": "RF-18",
+    "name": "Retos",
+    "module": "Gamificación",
+    "package": 1025,
+    "activity": 1035,
+    "sequence": 1036,
+    "activityElement": 10702,
+    "sequenceElement": 10731,
+    "requirements": [
+      "RF-18",
+      "RF-18-1",
+      "RF-18-2",
+      "RF-18-3",
+      "RF-18-4",
+      "RF-18-5"
+    ],
+    "activityPackage": 1025,
+    "sequencePackage": 1092,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-18",
+        "scenario": 1,
+        "name": "SEQ-RF-18-01 - Crear o finalizar reto",
+        "title": "Crear o finalizar reto",
+        "diagram": 1036,
+        "interaction": 12036,
+        "refs": [
+          "RF-18",
+          "RF-18-1",
+          "RF-18-2",
+          "RF-18-5"
+        ],
+        "file": "secuencias/RF-18-01-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12385,
+          "U": 12386,
+          "C": 12387,
+          "D": 12388
+        },
+        "classifiers": {
+          "U": 12382,
+          "C": 12383,
+          "D": 12384
+        },
+        "external": null,
+        "height": 1575,
+        "messageCount": 15
+      },
+      {
+        "code": "RF-18",
+        "scenario": 2,
+        "name": "SEQ-RF-18-02 - Actualizar avance",
+        "title": "Actualizar avance",
+        "diagram": 1124,
+        "interaction": 12037,
+        "refs": [
+          "RF-18",
+          "RF-18-3",
+          "RF-18-4"
+        ],
+        "file": "secuencias/RF-18-02-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12392,
+          "U": 12393,
+          "C": 12394,
+          "D": 12395
+        },
+        "classifiers": {
+          "U": 12382,
+          "C": 12383,
+          "D": 12384
+        },
+        "external": null,
+        "height": 1105,
+        "messageCount": 8
+      }
+    ]
+  },
+  {
+    "code": "RF-19",
+    "name": "Banco de preguntas de educación financiera",
+    "module": "Juegos",
+    "package": 1027,
+    "activity": 1037,
+    "sequence": 1038,
+    "activityElement": 10748,
+    "sequenceElement": 10778,
+    "requirements": [
+      "RF-19",
+      "RF-19-1",
+      "RF-19-2",
+      "RF-19-3",
+      "RF-19-4"
+    ],
+    "activityPackage": 1027,
+    "sequencePackage": 1094,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-19",
+        "scenario": 1,
+        "name": "SEQ-RF-19-01 - Crear pregunta",
+        "title": "Crear pregunta",
+        "diagram": 1038,
+        "interaction": 12038,
+        "refs": [
+          "RF-19",
+          "RF-19-1",
+          "RF-19-2"
+        ],
+        "file": "secuencias/RF-19-01-sequence.png",
+        "actor": "Gestor de contenidos",
+        "automatic": false,
+        "lifelines": {
+          "A": 12402,
+          "U": 12403,
+          "C": 12404,
+          "D": 12405
+        },
+        "classifiers": {
+          "U": 12399,
+          "C": 12400,
+          "D": 12401
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-19",
+        "scenario": 2,
+        "name": "SEQ-RF-19-02 - Filtrar preguntas",
+        "title": "Filtrar preguntas",
+        "diagram": 1125,
+        "interaction": 12039,
+        "refs": [
+          "RF-19",
+          "RF-19-3"
+        ],
+        "file": "secuencias/RF-19-02-sequence.png",
+        "actor": "Gestor de contenidos",
+        "automatic": false,
+        "lifelines": {
+          "A": 12407,
+          "U": 12408,
+          "C": 12409,
+          "D": 12410
+        },
+        "classifiers": {
+          "U": 12399,
+          "C": 12400,
+          "D": 12401
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      },
+      {
+        "code": "RF-19",
+        "scenario": 3,
+        "name": "SEQ-RF-19-03 - Desactivar pregunta",
+        "title": "Desactivar pregunta",
+        "diagram": 1126,
+        "interaction": 12040,
+        "refs": [
+          "RF-19",
+          "RF-19-4"
+        ],
+        "file": "secuencias/RF-19-03-sequence.png",
+        "actor": "Gestor de contenidos",
+        "automatic": false,
+        "lifelines": {
+          "A": 12412,
+          "U": 12413,
+          "C": 12414,
+          "D": 12415
+        },
+        "classifiers": {
+          "U": 12399,
+          "C": 12400,
+          "D": 12401
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-20",
+    "name": "Partida de trivia",
+    "module": "Juegos",
+    "package": 1028,
+    "activity": 1039,
+    "sequence": 1040,
+    "activityElement": 10793,
+    "sequenceElement": 10810,
+    "requirements": [
+      "RF-20",
+      "RF-20-1",
+      "RF-20-2",
+      "RF-20-3",
+      "RF-20-4"
+    ],
+    "activityPackage": 1028,
+    "sequencePackage": 1095,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-20",
+        "scenario": 1,
+        "name": "SEQ-RF-20-01 - Jugar partida",
+        "title": "Jugar partida",
+        "diagram": 1040,
+        "interaction": 12041,
+        "refs": [
+          "RF-20",
+          "RF-20-1",
+          "RF-20-2",
+          "RF-20-3",
+          "RF-20-4"
+        ],
+        "file": "secuencias/RF-20-01-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12420,
+          "U": 12421,
+          "C": 12422,
+          "D": 12423
+        },
+        "classifiers": {
+          "U": 12417,
+          "C": 12418,
+          "D": 12419
+        },
+        "external": null,
+        "height": 2125,
+        "messageCount": 21
+      }
+    ]
+  },
+  {
+    "code": "RF-21",
+    "name": "Gestión de capacitaciones",
+    "module": "Capacitaciones",
+    "package": 1030,
+    "activity": 1041,
+    "sequence": 1042,
+    "activityElement": 10821,
+    "sequenceElement": 10851,
+    "requirements": [
+      "RF-21",
+      "RF-21-1",
+      "RF-21-2",
+      "RF-21-3",
+      "RF-21-4"
+    ],
+    "activityPackage": 1030,
+    "sequencePackage": 1097,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-21",
+        "scenario": 1,
+        "name": "SEQ-RF-21-01 - Cargar y publicar",
+        "title": "Cargar y publicar",
+        "diagram": 1042,
+        "interaction": 12042,
+        "refs": [
+          "RF-21",
+          "RF-21-1",
+          "RF-21-2"
+        ],
+        "file": "secuencias/RF-21-01-sequence.png",
+        "actor": "Gestor de contenidos",
+        "automatic": false,
+        "lifelines": {
+          "A": 12431,
+          "U": 12432,
+          "C": 12433,
+          "D": 12434
+        },
+        "classifiers": {
+          "U": 12428,
+          "C": 12429,
+          "D": 12430
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-21",
+        "scenario": 2,
+        "name": "SEQ-RF-21-02 - Consultar catálogo",
+        "title": "Consultar catálogo",
+        "diagram": 1127,
+        "interaction": 12043,
+        "refs": [
+          "RF-21",
+          "RF-21-3"
+        ],
+        "file": "secuencias/RF-21-02-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12436,
+          "U": 12437,
+          "C": 12438,
+          "D": 12439
+        },
+        "classifiers": {
+          "U": 12428,
+          "C": 12429,
+          "D": 12430
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      },
+      {
+        "code": "RF-21",
+        "scenario": 3,
+        "name": "SEQ-RF-21-03 - Desactivar capacitación",
+        "title": "Desactivar capacitación",
+        "diagram": 1128,
+        "interaction": 12044,
+        "refs": [
+          "RF-21",
+          "RF-21-4"
+        ],
+        "file": "secuencias/RF-21-03-sequence.png",
+        "actor": "Gestor de contenidos",
+        "automatic": false,
+        "lifelines": {
+          "A": 12441,
+          "U": 12442,
+          "C": 12443,
+          "D": 12444
+        },
+        "classifiers": {
+          "U": 12428,
+          "C": 12429,
+          "D": 12430
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-22",
+    "name": "Evaluación y certificado",
+    "module": "Capacitaciones",
+    "package": 1031,
+    "activity": 1043,
+    "sequence": 1044,
+    "activityElement": 10867,
+    "sequenceElement": 10889,
+    "requirements": [
+      "RF-22",
+      "RF-22-1",
+      "RF-22-2",
+      "RF-22-3",
+      "RF-22-4"
+    ],
+    "activityPackage": 1031,
+    "sequencePackage": 1098,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-22",
+        "scenario": 1,
+        "name": "SEQ-RF-22-01 - Rendir evaluación",
+        "title": "Rendir evaluación",
+        "diagram": 1044,
+        "interaction": 12045,
+        "refs": [
+          "RF-22",
+          "RF-22-4",
+          "RF-22-1",
+          "RF-22-2",
+          "RF-22-3"
+        ],
+        "file": "secuencias/RF-22-01-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12449,
+          "U": 12450,
+          "C": 12451,
+          "D": 12452
+        },
+        "classifiers": {
+          "U": 12446,
+          "C": 12447,
+          "D": 12448
+        },
+        "external": null,
+        "height": 2040,
+        "messageCount": 18
+      }
+    ]
+  },
+  {
+    "code": "RF-23",
+    "name": "Gestión de talleres",
+    "module": "Talleres",
+    "package": 1033,
+    "activity": 1045,
+    "sequence": 1046,
+    "activityElement": 10903,
+    "sequenceElement": 10942,
+    "requirements": [
+      "RF-23",
+      "RF-23-1",
+      "RF-23-2",
+      "RF-23-3",
+      "RF-23-4"
+    ],
+    "activityPackage": 1033,
+    "sequencePackage": 1100,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-23",
+        "scenario": 1,
+        "name": "SEQ-RF-23-01 - Crear taller",
+        "title": "Crear taller",
+        "diagram": 1046,
+        "interaction": 12046,
+        "refs": [
+          "RF-23",
+          "RF-23-1"
+        ],
+        "file": "secuencias/RF-23-01-sequence.png",
+        "actor": "Gestor de contenidos",
+        "automatic": false,
+        "lifelines": {
+          "A": 12461,
+          "U": 12462,
+          "C": 12463,
+          "D": 12464
+        },
+        "classifiers": {
+          "U": 12458,
+          "C": 12459,
+          "D": 12460
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-23",
+        "scenario": 2,
+        "name": "SEQ-RF-23-02 - Consultar calendario",
+        "title": "Consultar calendario",
+        "diagram": 1129,
+        "interaction": 12047,
+        "refs": [
+          "RF-23",
+          "RF-23-2"
+        ],
+        "file": "secuencias/RF-23-02-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12466,
+          "U": 12467,
+          "C": 12468,
+          "D": 12469
+        },
+        "classifiers": {
+          "U": 12458,
+          "C": 12459,
+          "D": 12460
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      },
+      {
+        "code": "RF-23",
+        "scenario": 3,
+        "name": "SEQ-RF-23-03 - Cambiar cupos",
+        "title": "Cambiar cupos",
+        "diagram": 1130,
+        "interaction": 12048,
+        "refs": [
+          "RF-23",
+          "RF-23-3"
+        ],
+        "file": "secuencias/RF-23-03-sequence.png",
+        "actor": "Gestor de contenidos",
+        "automatic": false,
+        "lifelines": {
+          "A": 12471,
+          "U": 12472,
+          "C": 12473,
+          "D": 12474
+        },
+        "classifiers": {
+          "U": 12458,
+          "C": 12459,
+          "D": 12460
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-23",
+        "scenario": 4,
+        "name": "SEQ-RF-23-04 - Cancelar taller",
+        "title": "Cancelar taller",
+        "diagram": 1131,
+        "interaction": 12049,
+        "refs": [
+          "RF-23",
+          "RF-23-4"
+        ],
+        "file": "secuencias/RF-23-04-sequence.png",
+        "actor": "Gestor de contenidos",
+        "automatic": false,
+        "lifelines": {
+          "A": 12476,
+          "U": 12477,
+          "C": 12478,
+          "D": 12479
+        },
+        "classifiers": {
+          "U": 12458,
+          "C": 12459,
+          "D": 12460
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-24",
+    "name": "Inscripción a talleres",
+    "module": "Talleres",
+    "package": 1034,
+    "activity": 1047,
+    "sequence": 1048,
+    "activityElement": 10961,
+    "sequenceElement": 10982,
+    "requirements": [
+      "RF-24",
+      "RF-24-1",
+      "RF-24-2",
+      "RF-24-3"
+    ],
+    "activityPackage": 1034,
+    "sequencePackage": 1101,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-24",
+        "scenario": 1,
+        "name": "SEQ-RF-24-01 - Inscribirse",
+        "title": "Inscribirse",
+        "diagram": 1048,
+        "interaction": 12050,
+        "refs": [
+          "RF-24",
+          "RF-24-1",
+          "RF-24-2"
+        ],
+        "file": "secuencias/RF-24-01-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12484,
+          "U": 12485,
+          "C": 12486,
+          "D": 12487
+        },
+        "classifiers": {
+          "U": 12481,
+          "C": 12482,
+          "D": 12483
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-24",
+        "scenario": 2,
+        "name": "SEQ-RF-24-02 - Anular inscripción",
+        "title": "Anular inscripción",
+        "diagram": 1132,
+        "interaction": 12051,
+        "refs": [
+          "RF-24",
+          "RF-24-3"
+        ],
+        "file": "secuencias/RF-24-02-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12489,
+          "U": 12490,
+          "C": 12491,
+          "D": 12492
+        },
+        "classifiers": {
+          "U": 12481,
+          "C": 12482,
+          "D": 12483
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-25",
+    "name": "Registro de asistencia",
+    "module": "Talleres",
+    "package": 1035,
+    "activity": 1049,
+    "sequence": 1050,
+    "activityElement": 10994,
+    "sequenceElement": 11009,
+    "requirements": [
+      "RF-25",
+      "RF-25-1",
+      "RF-25-2",
+      "RF-25-3"
+    ],
+    "activityPackage": 1035,
+    "sequencePackage": 1102,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-25",
+        "scenario": 1,
+        "name": "SEQ-RF-25-01 - Marcar asistencia",
+        "title": "Marcar asistencia",
+        "diagram": 1050,
+        "interaction": 12052,
+        "refs": [
+          "RF-25",
+          "RF-25-1",
+          "RF-25-3",
+          "RF-25-2"
+        ],
+        "file": "secuencias/RF-25-01-sequence.png",
+        "actor": "Gestor de contenidos",
+        "automatic": false,
+        "lifelines": {
+          "A": 12497,
+          "U": 12498,
+          "C": 12499,
+          "D": 12500
+        },
+        "classifiers": {
+          "U": 12494,
+          "C": 12495,
+          "D": 12496
+        },
+        "external": null,
+        "height": 1455,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-26",
+    "name": "Publicaciones en el muro",
+    "module": "Comunidad",
+    "package": 1037,
+    "activity": 1051,
+    "sequence": 1052,
+    "activityElement": 11020,
+    "sequenceElement": 11053,
+    "requirements": [
+      "RF-26",
+      "RF-26-1",
+      "RF-26-2",
+      "RF-26-3",
+      "RF-26-4",
+      "RF-26-5"
+    ],
+    "activityPackage": 1037,
+    "sequencePackage": 1104,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-26",
+        "scenario": 1,
+        "name": "SEQ-RF-26-01 - Publicar o editar",
+        "title": "Publicar o editar",
+        "diagram": 1052,
+        "interaction": 12053,
+        "refs": [
+          "RF-26",
+          "RF-26-1",
+          "RF-26-2",
+          "RF-26-5",
+          "RF-26-4"
+        ],
+        "file": "secuencias/RF-26-01-sequence.png",
+        "actor": "Usuario de la plataforma",
+        "automatic": false,
+        "lifelines": {
+          "A": 12507,
+          "U": 12508,
+          "C": 12509,
+          "D": 12510
+        },
+        "classifiers": {
+          "U": 12504,
+          "C": 12505,
+          "D": 12506
+        },
+        "external": null,
+        "height": 1415,
+        "messageCount": 14
+      },
+      {
+        "code": "RF-26",
+        "scenario": 2,
+        "name": "SEQ-RF-26-02 - Consultar muro",
+        "title": "Consultar muro",
+        "diagram": 1133,
+        "interaction": 12054,
+        "refs": [
+          "RF-26",
+          "RF-26-3"
+        ],
+        "file": "secuencias/RF-26-02-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12513,
+          "U": 12514,
+          "C": 12515,
+          "D": 12516
+        },
+        "classifiers": {
+          "U": 12504,
+          "C": 12505,
+          "D": 12506
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      },
+      {
+        "code": "RF-26",
+        "scenario": 3,
+        "name": "SEQ-RF-26-03 - Eliminar publicación",
+        "title": "Eliminar publicación",
+        "diagram": 1134,
+        "interaction": 12055,
+        "refs": [
+          "RF-26",
+          "RF-26-5"
+        ],
+        "file": "secuencias/RF-26-03-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12518,
+          "U": 12519,
+          "C": 12520,
+          "D": 12521
+        },
+        "classifiers": {
+          "U": 12504,
+          "C": 12505,
+          "D": 12506
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-27",
+    "name": "Comentarios",
+    "module": "Comunidad",
+    "package": 1038,
+    "activity": 1053,
+    "sequence": 1054,
+    "activityElement": 11070,
+    "sequenceElement": 11100,
+    "requirements": [
+      "RF-27",
+      "RF-27-1",
+      "RF-27-2",
+      "RF-27-3"
+    ],
+    "activityPackage": 1038,
+    "sequencePackage": 1105,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-27",
+        "scenario": 1,
+        "name": "SEQ-RF-27-01 - Comentar",
+        "title": "Comentar",
+        "diagram": 1054,
+        "interaction": 12056,
+        "refs": [
+          "RF-27",
+          "RF-27-1"
+        ],
+        "file": "secuencias/RF-27-01-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12526,
+          "U": 12527,
+          "C": 12528,
+          "D": 12529
+        },
+        "classifiers": {
+          "U": 12523,
+          "C": 12524,
+          "D": 12525
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-27",
+        "scenario": 2,
+        "name": "SEQ-RF-27-02 - Consultar comentarios",
+        "title": "Consultar comentarios",
+        "diagram": 1135,
+        "interaction": 12057,
+        "refs": [
+          "RF-27",
+          "RF-27-2"
+        ],
+        "file": "secuencias/RF-27-02-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12531,
+          "U": 12532,
+          "C": 12533,
+          "D": 12534
+        },
+        "classifiers": {
+          "U": 12523,
+          "C": 12524,
+          "D": 12525
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      },
+      {
+        "code": "RF-27",
+        "scenario": 3,
+        "name": "SEQ-RF-27-03 - Eliminar comentario propio",
+        "title": "Eliminar comentario propio",
+        "diagram": 1136,
+        "interaction": 12058,
+        "refs": [
+          "RF-27",
+          "RF-27-3"
+        ],
+        "file": "secuencias/RF-27-03-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12536,
+          "U": 12537,
+          "C": 12538,
+          "D": 12539
+        },
+        "classifiers": {
+          "U": 12523,
+          "C": 12524,
+          "D": 12525
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-28",
+    "name": "Reacciones",
+    "module": "Comunidad",
+    "package": 1039,
+    "activity": 1055,
+    "sequence": 1056,
+    "activityElement": 11115,
+    "sequenceElement": 11128,
+    "requirements": [
+      "RF-28",
+      "RF-28-1",
+      "RF-28-2"
+    ],
+    "activityPackage": 1039,
+    "sequencePackage": 1106,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-28",
+        "scenario": 1,
+        "name": "SEQ-RF-28-01 - Reaccionar o retirar reacción",
+        "title": "Reaccionar o retirar reacción",
+        "diagram": 1056,
+        "interaction": 12059,
+        "refs": [
+          "RF-28",
+          "RF-28-1",
+          "RF-28-2"
+        ],
+        "file": "secuencias/RF-28-01-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12544,
+          "U": 12545,
+          "C": 12546,
+          "D": 12547
+        },
+        "classifiers": {
+          "U": 12541,
+          "C": 12542,
+          "D": 12543
+        },
+        "external": null,
+        "height": 1325,
+        "messageCount": 14
+      }
+    ]
+  },
+  {
+    "code": "RF-29",
+    "name": "Publicaciones fijadas",
+    "module": "Comunidad",
+    "package": 1040,
+    "activity": 1057,
+    "sequence": 1058,
+    "activityElement": 11137,
+    "sequenceElement": 11158,
+    "requirements": [
+      "RF-29",
+      "RF-29-1",
+      "RF-29-2"
+    ],
+    "activityPackage": 1040,
+    "sequencePackage": 1107,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-29",
+        "scenario": 1,
+        "name": "SEQ-RF-29-01 - Fijar publicación oficial",
+        "title": "Fijar publicación oficial",
+        "diagram": 1058,
+        "interaction": 12060,
+        "refs": [
+          "RF-29",
+          "RF-29-1",
+          "RF-29-2"
+        ],
+        "file": "secuencias/RF-29-01-sequence.png",
+        "actor": "Gestor de contenidos",
+        "automatic": false,
+        "lifelines": {
+          "A": 12552,
+          "U": 12553,
+          "C": 12554,
+          "D": 12555
+        },
+        "classifiers": {
+          "U": 12549,
+          "C": 12550,
+          "D": 12551
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-29",
+        "scenario": 2,
+        "name": "SEQ-RF-29-02 - Retirar fijación vencida",
+        "title": "Retirar fijación vencida",
+        "diagram": 1137,
+        "interaction": 12061,
+        "refs": [
+          "RF-29",
+          "RF-29-2"
+        ],
+        "file": "secuencias/RF-29-02-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12557,
+          "U": 12558,
+          "C": 12559,
+          "D": 12560
+        },
+        "classifiers": {
+          "U": 12549,
+          "C": 12550,
+          "D": 12551
+        },
+        "external": null,
+        "height": 905,
+        "messageCount": 8
+      }
+    ]
+  },
+  {
+    "code": "RF-30",
+    "name": "Moderación de contenidos",
+    "module": "Comunidad",
+    "package": 1041,
+    "activity": 1059,
+    "sequence": 1060,
+    "activityElement": 11171,
+    "sequenceElement": 11195,
+    "requirements": [
+      "RF-30",
+      "RF-30-1",
+      "RF-30-2",
+      "RF-30-3"
+    ],
+    "activityPackage": 1041,
+    "sequencePackage": 1108,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-30",
+        "scenario": 1,
+        "name": "SEQ-RF-30-01 - Reportar contenido",
+        "title": "Reportar contenido",
+        "diagram": 1060,
+        "interaction": 12062,
+        "refs": [
+          "RF-30",
+          "RF-30-1"
+        ],
+        "file": "secuencias/RF-30-01-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12565,
+          "U": 12566,
+          "C": 12567,
+          "D": 12568
+        },
+        "classifiers": {
+          "U": 12562,
+          "C": 12563,
+          "D": 12564
+        },
+        "external": null,
+        "height": 1415,
+        "messageCount": 14
+      },
+      {
+        "code": "RF-30",
+        "scenario": 2,
+        "name": "SEQ-RF-30-02 - Resolver moderación",
+        "title": "Resolver moderación",
+        "diagram": 1138,
+        "interaction": 12063,
+        "refs": [
+          "RF-30",
+          "RF-30-2",
+          "RF-30-3"
+        ],
+        "file": "secuencias/RF-30-02-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12571,
+          "U": 12572,
+          "C": 12573,
+          "D": 12574
+        },
+        "classifiers": {
+          "U": 12562,
+          "C": 12563,
+          "D": 12564
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-31",
+    "name": "Contenidos y servicios de salud",
+    "module": "Salud y bienestar",
+    "package": 1043,
+    "activity": 1061,
+    "sequence": 1062,
+    "activityElement": 11210,
+    "sequenceElement": 11240,
+    "requirements": [
+      "RF-31",
+      "RF-31-1",
+      "RF-31-2",
+      "RF-31-3"
+    ],
+    "activityPackage": 1043,
+    "sequencePackage": 1110,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-31",
+        "scenario": 1,
+        "name": "SEQ-RF-31-01 - Publicar contenido de salud",
+        "title": "Publicar contenido de salud",
+        "diagram": 1062,
+        "interaction": 12064,
+        "refs": [
+          "RF-31",
+          "RF-31-1"
+        ],
+        "file": "secuencias/RF-31-01-sequence.png",
+        "actor": "Gestor de contenidos",
+        "automatic": false,
+        "lifelines": {
+          "A": 12579,
+          "U": 12580,
+          "C": 12581,
+          "D": 12582
+        },
+        "classifiers": {
+          "U": 12576,
+          "C": 12577,
+          "D": 12578
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-31",
+        "scenario": 2,
+        "name": "SEQ-RF-31-02 - Consultar salud",
+        "title": "Consultar salud",
+        "diagram": 1139,
+        "interaction": 12065,
+        "refs": [
+          "RF-31",
+          "RF-31-2"
+        ],
+        "file": "secuencias/RF-31-02-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12584,
+          "U": 12585,
+          "C": 12586,
+          "D": 12587
+        },
+        "classifiers": {
+          "U": 12576,
+          "C": 12577,
+          "D": 12578
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      },
+      {
+        "code": "RF-31",
+        "scenario": 3,
+        "name": "SEQ-RF-31-03 - Despublicar",
+        "title": "Despublicar",
+        "diagram": 1140,
+        "interaction": 12066,
+        "refs": [
+          "RF-31",
+          "RF-31-3"
+        ],
+        "file": "secuencias/RF-31-03-sequence.png",
+        "actor": "Gestor de contenidos",
+        "automatic": false,
+        "lifelines": {
+          "A": 12589,
+          "U": 12590,
+          "C": 12591,
+          "D": 12592
+        },
+        "classifiers": {
+          "U": 12576,
+          "C": 12577,
+          "D": 12578
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-32",
+    "name": "Catálogo de premios",
+    "module": "Puntos y recompensas",
+    "package": 1044,
+    "activity": 1063,
+    "sequence": 1064,
+    "activityElement": 11256,
+    "sequenceElement": 11295,
+    "requirements": [
+      "RF-32",
+      "RF-32-1",
+      "RF-32-2",
+      "RF-32-3",
+      "RF-32-4",
+      "RF-32-5"
+    ],
+    "activityPackage": 1044,
+    "sequencePackage": 1111,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-32",
+        "scenario": 1,
+        "name": "SEQ-RF-32-01 - Crear premio",
+        "title": "Crear premio",
+        "diagram": 1064,
+        "interaction": 12067,
+        "refs": [
+          "RF-32",
+          "RF-32-1",
+          "RF-32-2"
+        ],
+        "file": "secuencias/RF-32-01-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12597,
+          "U": 12598,
+          "C": 12599,
+          "D": 12600
+        },
+        "classifiers": {
+          "U": 12594,
+          "C": 12595,
+          "D": 12596
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-32",
+        "scenario": 2,
+        "name": "SEQ-RF-32-02 - Consultar catálogo",
+        "title": "Consultar catálogo",
+        "diagram": 1141,
+        "interaction": 12068,
+        "refs": [
+          "RF-32",
+          "RF-32-3"
+        ],
+        "file": "secuencias/RF-32-02-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12602,
+          "U": 12603,
+          "C": 12604,
+          "D": 12605
+        },
+        "classifiers": {
+          "U": 12594,
+          "C": 12595,
+          "D": 12596
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      },
+      {
+        "code": "RF-32",
+        "scenario": 3,
+        "name": "SEQ-RF-32-03 - Descontar inventario",
+        "title": "Descontar inventario",
+        "diagram": 1142,
+        "interaction": 12069,
+        "refs": [
+          "RF-32",
+          "RF-32-4"
+        ],
+        "file": "secuencias/RF-32-03-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12607,
+          "U": 12608,
+          "C": 12609,
+          "D": 12610
+        },
+        "classifiers": {
+          "U": 12594,
+          "C": 12595,
+          "D": 12596
+        },
+        "external": null,
+        "height": 905,
+        "messageCount": 8
+      },
+      {
+        "code": "RF-32",
+        "scenario": 4,
+        "name": "SEQ-RF-32-04 - Inactivar premio",
+        "title": "Inactivar premio",
+        "diagram": 1143,
+        "interaction": 12070,
+        "refs": [
+          "RF-32",
+          "RF-32-5"
+        ],
+        "file": "secuencias/RF-32-04-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12612,
+          "U": 12613,
+          "C": 12614,
+          "D": 12615
+        },
+        "classifiers": {
+          "U": 12594,
+          "C": 12595,
+          "D": 12596
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-33",
+    "name": "Canje de premios",
+    "module": "Puntos y recompensas",
+    "package": 1045,
+    "activity": 1065,
+    "sequence": 1066,
+    "activityElement": 11315,
+    "sequenceElement": 11355,
+    "requirements": [
+      "RF-33",
+      "RF-33-1",
+      "RF-33-2",
+      "RF-33-3",
+      "RF-33-4",
+      "RF-33-5"
+    ],
+    "activityPackage": 1045,
+    "sequencePackage": 1112,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-33",
+        "scenario": 1,
+        "name": "SEQ-RF-33-01 - Canjear premio",
+        "title": "Canjear premio",
+        "diagram": 1066,
+        "interaction": 12071,
+        "refs": [
+          "RF-33",
+          "RF-33-1",
+          "RF-33-2"
+        ],
+        "file": "secuencias/RF-33-01-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12620,
+          "U": 12621,
+          "C": 12622,
+          "D": 12623
+        },
+        "classifiers": {
+          "U": 12617,
+          "C": 12618,
+          "D": 12619
+        },
+        "external": null,
+        "height": 1325,
+        "messageCount": 14
+      },
+      {
+        "code": "RF-33",
+        "scenario": 2,
+        "name": "SEQ-RF-33-02 - Consultar mis canjes",
+        "title": "Consultar mis canjes",
+        "diagram": 1144,
+        "interaction": 12072,
+        "refs": [
+          "RF-33",
+          "RF-33-3"
+        ],
+        "file": "secuencias/RF-33-02-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12625,
+          "U": 12626,
+          "C": 12627,
+          "D": 12628
+        },
+        "classifiers": {
+          "U": 12617,
+          "C": 12618,
+          "D": 12619
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      },
+      {
+        "code": "RF-33",
+        "scenario": 3,
+        "name": "SEQ-RF-33-03 - Actualizar entrega",
+        "title": "Actualizar entrega",
+        "diagram": 1145,
+        "interaction": 12073,
+        "refs": [
+          "RF-33",
+          "RF-33-4"
+        ],
+        "file": "secuencias/RF-33-03-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12630,
+          "U": 12631,
+          "C": 12632,
+          "D": 12633
+        },
+        "classifiers": {
+          "U": 12617,
+          "C": 12618,
+          "D": 12619
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-33",
+        "scenario": 4,
+        "name": "SEQ-RF-33-04 - Consultar historial global",
+        "title": "Consultar historial global",
+        "diagram": 1146,
+        "interaction": 12074,
+        "refs": [
+          "RF-33",
+          "RF-33-5"
+        ],
+        "file": "secuencias/RF-33-04-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12635,
+          "U": 12636,
+          "C": 12637,
+          "D": 12638
+        },
+        "classifiers": {
+          "U": 12617,
+          "C": 12618,
+          "D": 12619
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      }
+    ]
+  },
+  {
+    "code": "RF-34",
+    "name": "Favoritos",
+    "module": "Puntos y recompensas",
+    "package": 1046,
+    "activity": 1067,
+    "sequence": 1068,
+    "activityElement": 11374,
+    "sequenceElement": 11404,
+    "requirements": [
+      "RF-34",
+      "RF-34-1",
+      "RF-34-2",
+      "RF-34-3"
+    ],
+    "activityPackage": 1046,
+    "sequencePackage": 1113,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-34",
+        "scenario": 1,
+        "name": "SEQ-RF-34-01 - Guardar favorito",
+        "title": "Guardar favorito",
+        "diagram": 1068,
+        "interaction": 12075,
+        "refs": [
+          "RF-34",
+          "RF-34-1",
+          "RF-34-2"
+        ],
+        "file": "secuencias/RF-34-01-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12643,
+          "U": 12644,
+          "C": 12645,
+          "D": 12646
+        },
+        "classifiers": {
+          "U": 12640,
+          "C": 12641,
+          "D": 12642
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-34",
+        "scenario": 2,
+        "name": "SEQ-RF-34-02 - Quitar favorito",
+        "title": "Quitar favorito",
+        "diagram": 1147,
+        "interaction": 12076,
+        "refs": [
+          "RF-34"
+        ],
+        "file": "secuencias/RF-34-02-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12648,
+          "U": 12649,
+          "C": 12650,
+          "D": 12651
+        },
+        "classifiers": {
+          "U": 12640,
+          "C": 12641,
+          "D": 12642
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-34",
+        "scenario": 3,
+        "name": "SEQ-RF-34-03 - Consultar favoritos",
+        "title": "Consultar favoritos",
+        "diagram": 1148,
+        "interaction": 12077,
+        "refs": [
+          "RF-34",
+          "RF-34-3"
+        ],
+        "file": "secuencias/RF-34-03-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12653,
+          "U": 12654,
+          "C": 12655,
+          "D": 12656
+        },
+        "classifiers": {
+          "U": 12640,
+          "C": 12641,
+          "D": 12642
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      }
+    ]
+  },
+  {
+    "code": "RF-35",
+    "name": "Meta de canje",
+    "module": "Puntos y recompensas",
+    "package": 1047,
+    "activity": 1069,
+    "sequence": 1070,
+    "activityElement": 11419,
+    "sequenceElement": 11443,
+    "requirements": [
+      "RF-35",
+      "RF-35-1",
+      "RF-35-2",
+      "RF-35-3"
+    ],
+    "activityPackage": 1047,
+    "sequencePackage": 1114,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-35",
+        "scenario": 1,
+        "name": "SEQ-RF-35-01 - Elegir meta",
+        "title": "Elegir meta",
+        "diagram": 1070,
+        "interaction": 12078,
+        "refs": [
+          "RF-35",
+          "RF-35-1"
+        ],
+        "file": "secuencias/RF-35-01-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12661,
+          "U": 12662,
+          "C": 12663,
+          "D": 12664
+        },
+        "classifiers": {
+          "U": 12658,
+          "C": 12659,
+          "D": 12660
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-35",
+        "scenario": 2,
+        "name": "SEQ-RF-35-02 - Actualizar progreso de meta",
+        "title": "Actualizar progreso de meta",
+        "diagram": 1149,
+        "interaction": 12079,
+        "refs": [
+          "RF-35",
+          "RF-35-2",
+          "RF-35-3"
+        ],
+        "file": "secuencias/RF-35-02-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12666,
+          "U": 12667,
+          "C": 12668,
+          "D": 12669
+        },
+        "classifiers": {
+          "U": 12658,
+          "C": 12659,
+          "D": 12660
+        },
+        "external": null,
+        "height": 1065,
+        "messageCount": 9
+      }
+    ]
+  },
+  {
+    "code": "RF-36",
+    "name": "Búsqueda global",
+    "module": "Búsquedas",
+    "package": 1049,
+    "activity": 1071,
+    "sequence": 1072,
+    "activityElement": 11458,
+    "sequenceElement": 11471,
+    "requirements": [
+      "RF-36",
+      "RF-36-1",
+      "RF-36-2"
+    ],
+    "activityPackage": 1049,
+    "sequencePackage": 1116,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-36",
+        "scenario": 1,
+        "name": "SEQ-RF-36-01 - Buscar",
+        "title": "Buscar",
+        "diagram": 1072,
+        "interaction": 12080,
+        "refs": [
+          "RF-36",
+          "RF-36-1",
+          "RF-36-2"
+        ],
+        "file": "secuencias/RF-36-01-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12675,
+          "U": 12676,
+          "C": 12677,
+          "D": 12678
+        },
+        "classifiers": {
+          "U": 12672,
+          "C": 12673,
+          "D": 12674
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-37",
+    "name": "Bandeja y alertas de campañas",
+    "module": "Notificaciones",
+    "package": 1051,
+    "activity": 1073,
+    "sequence": 1074,
+    "activityElement": 11481,
+    "sequenceElement": 11511,
+    "requirements": [
+      "RF-37",
+      "RF-37-1",
+      "RF-37-2",
+      "RF-37-3"
+    ],
+    "activityPackage": 1051,
+    "sequencePackage": 1118,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-37",
+        "scenario": 1,
+        "name": "SEQ-RF-37-01 - Notificar campaña",
+        "title": "Notificar campaña",
+        "diagram": 1074,
+        "interaction": 12081,
+        "refs": [
+          "RF-37",
+          "RF-37-1"
+        ],
+        "file": "secuencias/RF-37-01-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12683,
+          "U": 12684,
+          "C": 12685,
+          "D": 12686
+        },
+        "classifiers": {
+          "U": 12680,
+          "C": 12681,
+          "D": 12682
+        },
+        "external": null,
+        "height": 905,
+        "messageCount": 8
+      },
+      {
+        "code": "RF-37",
+        "scenario": 2,
+        "name": "SEQ-RF-37-02 - Leer bandeja",
+        "title": "Leer bandeja",
+        "diagram": 1150,
+        "interaction": 12082,
+        "refs": [
+          "RF-37",
+          "RF-37-2"
+        ],
+        "file": "secuencias/RF-37-02-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12688,
+          "U": 12689,
+          "C": 12690,
+          "D": 12691
+        },
+        "classifiers": {
+          "U": 12680,
+          "C": 12681,
+          "D": 12682
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-37",
+        "scenario": 3,
+        "name": "SEQ-RF-37-03 - Purgar informativas",
+        "title": "Purgar informativas",
+        "diagram": 1151,
+        "interaction": 12083,
+        "refs": [
+          "RF-37",
+          "RF-37-3"
+        ],
+        "file": "secuencias/RF-37-03-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12693,
+          "U": 12694,
+          "C": 12695,
+          "D": 12696
+        },
+        "classifiers": {
+          "U": 12680,
+          "C": 12681,
+          "D": 12682
+        },
+        "external": null,
+        "height": 905,
+        "messageCount": 8
+      }
+    ]
+  },
+  {
+    "code": "RF-38",
+    "name": "Alertas de puntos, nivel, insignias y canjes",
+    "module": "Notificaciones",
+    "package": 1052,
+    "activity": 1075,
+    "sequence": 1076,
+    "activityElement": 11527,
+    "sequenceElement": 11540,
+    "requirements": [
+      "RF-38",
+      "RF-38-1",
+      "RF-38-2"
+    ],
+    "activityPackage": 1052,
+    "sequencePackage": 1119,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-38",
+        "scenario": 1,
+        "name": "SEQ-RF-38-01 - Notificar recompensa",
+        "title": "Notificar recompensa",
+        "diagram": 1076,
+        "interaction": 12084,
+        "refs": [
+          "RF-38",
+          "RF-38-1",
+          "RF-38-2"
+        ],
+        "file": "secuencias/RF-38-01-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12701,
+          "U": 12702,
+          "C": 12703,
+          "D": 12704
+        },
+        "classifiers": {
+          "U": 12698,
+          "C": 12699,
+          "D": 12700
+        },
+        "external": null,
+        "height": 975,
+        "messageCount": 9
+      }
+    ]
+  },
+  {
+    "code": "RF-39",
+    "name": "Alertas de referidos y de cuenta vinculada",
+    "module": "Notificaciones",
+    "package": 1053,
+    "activity": 1077,
+    "sequence": 1078,
+    "activityElement": 11549,
+    "sequenceElement": 11562,
+    "requirements": [
+      "RF-39",
+      "RF-39-1",
+      "RF-39-2"
+    ],
+    "activityPackage": 1053,
+    "sequencePackage": 1120,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-39",
+        "scenario": 1,
+        "name": "SEQ-RF-39-01 - Notificar resultado automático",
+        "title": "Notificar resultado automático",
+        "diagram": 1078,
+        "interaction": 12085,
+        "refs": [
+          "RF-39",
+          "RF-39-1",
+          "RF-39-2"
+        ],
+        "file": "secuencias/RF-39-01-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12709,
+          "U": 12710,
+          "C": 12711,
+          "D": 12712
+        },
+        "classifiers": {
+          "U": 12706,
+          "C": 12707,
+          "D": 12708
+        },
+        "external": null,
+        "height": 975,
+        "messageCount": 9
+      }
+    ]
+  },
+  {
+    "code": "RF-40",
+    "name": "Recordatorios automáticos",
+    "module": "Notificaciones",
+    "package": 1054,
+    "activity": 1079,
+    "sequence": 1080,
+    "activityElement": 11571,
+    "sequenceElement": 11592,
+    "requirements": [
+      "RF-40",
+      "RF-40-1",
+      "RF-40-2"
+    ],
+    "activityPackage": 1054,
+    "sequencePackage": 1121,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-40",
+        "scenario": 1,
+        "name": "SEQ-RF-40-01 - Recordar taller",
+        "title": "Recordar taller",
+        "diagram": 1080,
+        "interaction": 12086,
+        "refs": [
+          "RF-40",
+          "RF-40-1"
+        ],
+        "file": "secuencias/RF-40-01-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12717,
+          "U": 12718,
+          "C": 12719,
+          "D": 12720
+        },
+        "classifiers": {
+          "U": 12714,
+          "C": 12715,
+          "D": 12716
+        },
+        "external": null,
+        "height": 905,
+        "messageCount": 8
+      },
+      {
+        "code": "RF-40",
+        "scenario": 2,
+        "name": "SEQ-RF-40-02 - Recordar reto",
+        "title": "Recordar reto",
+        "diagram": 1152,
+        "interaction": 12087,
+        "refs": [
+          "RF-40",
+          "RF-40-2"
+        ],
+        "file": "secuencias/RF-40-02-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12722,
+          "U": 12723,
+          "C": 12724,
+          "D": 12725
+        },
+        "classifiers": {
+          "U": 12714,
+          "C": 12715,
+          "D": 12716
+        },
+        "external": null,
+        "height": 905,
+        "messageCount": 8
+      }
+    ]
+  },
+  {
+    "code": "RF-41",
+    "name": "Solicitudes de soporte",
+    "module": "Administración",
+    "package": 1055,
+    "activity": 1081,
+    "sequence": 1082,
+    "activityElement": 11604,
+    "sequenceElement": 11634,
+    "requirements": [
+      "RF-41",
+      "RF-41-1",
+      "RF-41-2",
+      "RF-41-3",
+      "RF-41-4"
+    ],
+    "activityPackage": 1055,
+    "sequencePackage": 1122,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-41",
+        "scenario": 1,
+        "name": "SEQ-RF-41-01 - Crear solicitud",
+        "title": "Crear solicitud",
+        "diagram": 1082,
+        "interaction": 12088,
+        "refs": [
+          "RF-41",
+          "RF-41-1"
+        ],
+        "file": "secuencias/RF-41-01-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12730,
+          "U": 12731,
+          "C": 12732,
+          "D": 12733
+        },
+        "classifiers": {
+          "U": 12727,
+          "C": 12728,
+          "D": 12729
+        },
+        "external": null,
+        "height": 1325,
+        "messageCount": 14
+      },
+      {
+        "code": "RF-41",
+        "scenario": 2,
+        "name": "SEQ-RF-41-02 - Atender y cerrar",
+        "title": "Atender y cerrar",
+        "diagram": 1153,
+        "interaction": 12089,
+        "refs": [
+          "RF-41",
+          "RF-41-2",
+          "RF-41-3"
+        ],
+        "file": "secuencias/RF-41-02-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12735,
+          "U": 12736,
+          "C": 12737,
+          "D": 12738
+        },
+        "classifiers": {
+          "U": 12727,
+          "C": 12728,
+          "D": 12729
+        },
+        "external": null,
+        "height": 1470,
+        "messageCount": 15
+      },
+      {
+        "code": "RF-41",
+        "scenario": 3,
+        "name": "SEQ-RF-41-03 - Consultar mis solicitudes",
+        "title": "Consultar mis solicitudes",
+        "diagram": 1154,
+        "interaction": 12090,
+        "refs": [
+          "RF-41",
+          "RF-41-4"
+        ],
+        "file": "secuencias/RF-41-03-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12741,
+          "U": 12742,
+          "C": 12743,
+          "D": 12744
+        },
+        "classifiers": {
+          "U": 12727,
+          "C": 12728,
+          "D": 12729
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      }
+    ]
+  },
+  {
+    "code": "RF-42",
+    "name": "Bitácora de auditoría",
+    "module": "Administración",
+    "package": 1056,
+    "activity": 1083,
+    "sequence": 1084,
+    "activityElement": 11650,
+    "sequenceElement": 11671,
+    "requirements": [
+      "RF-42",
+      "RF-42-1",
+      "RF-42-2"
+    ],
+    "activityPackage": 1056,
+    "sequencePackage": 1123,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-42",
+        "scenario": 1,
+        "name": "SEQ-RF-42-01 - Registrar auditoría",
+        "title": "Registrar auditoría",
+        "diagram": 1084,
+        "interaction": 12091,
+        "refs": [
+          "RF-42",
+          "RF-42-1"
+        ],
+        "file": "secuencias/RF-42-01-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12749,
+          "U": 12750,
+          "C": 12751,
+          "D": 12752
+        },
+        "classifiers": {
+          "U": 12746,
+          "C": 12747,
+          "D": 12748
+        },
+        "external": null,
+        "height": 975,
+        "messageCount": 9
+      },
+      {
+        "code": "RF-42",
+        "scenario": 2,
+        "name": "SEQ-RF-42-02 - Consultar bitácora",
+        "title": "Consultar bitácora",
+        "diagram": 1155,
+        "interaction": 12092,
+        "refs": [
+          "RF-42",
+          "RF-42-2"
+        ],
+        "file": "secuencias/RF-42-02-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12754,
+          "U": 12755,
+          "C": 12756,
+          "D": 12757
+        },
+        "classifiers": {
+          "U": 12746,
+          "C": 12747,
+          "D": 12748
+        },
+        "external": null,
+        "height": 1185,
+        "messageCount": 12
+      }
+    ]
+  },
+  {
+    "code": "RF-43",
+    "name": "Reporte de referidos",
+    "module": "Reportes",
+    "package": 1058,
+    "activity": 1085,
+    "sequence": 1086,
+    "activityElement": 11685,
+    "sequenceElement": 11698,
+    "requirements": [
+      "RF-43",
+      "RF-43-1",
+      "RF-43-2",
+      "RF-43-3"
+    ],
+    "activityPackage": 1058,
+    "sequencePackage": 1125,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-43",
+        "scenario": 1,
+        "name": "SEQ-RF-43-01 - Generar reporte de referidos",
+        "title": "Generar reporte de referidos",
+        "diagram": 1086,
+        "interaction": 12093,
+        "refs": [
+          "RF-43",
+          "RF-43-1",
+          "RF-43-3",
+          "RF-43-2"
+        ],
+        "file": "secuencias/RF-43-01-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12762,
+          "U": 12763,
+          "C": 12764,
+          "D": 12765
+        },
+        "classifiers": {
+          "U": 12759,
+          "C": 12760,
+          "D": 12761
+        },
+        "external": null,
+        "height": 1325,
+        "messageCount": 14
+      }
+    ]
+  },
+  {
+    "code": "RF-44",
+    "name": "Encuestas de satisfacción",
+    "module": "Encuestas",
+    "package": 1060,
+    "activity": 1087,
+    "sequence": 1088,
+    "activityElement": 11708,
+    "sequenceElement": 11720,
+    "requirements": [
+      "RF-44",
+      "RF-44-1",
+      "RF-44-2"
+    ],
+    "activityPackage": 1060,
+    "sequencePackage": 1127,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-44",
+        "scenario": 1,
+        "name": "SEQ-RF-44-01 - Responder encuesta",
+        "title": "Responder encuesta",
+        "diagram": 1088,
+        "interaction": 12094,
+        "refs": [
+          "RF-44",
+          "RF-44-1",
+          "RF-44-2"
+        ],
+        "file": "secuencias/RF-44-01-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12770,
+          "U": 12771,
+          "C": 12772,
+          "D": 12773
+        },
+        "classifiers": {
+          "U": 12767,
+          "C": 12768,
+          "D": 12769
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-45",
+    "name": "Tablero de indicadores",
+    "module": "Reportes",
+    "package": 1061,
+    "activity": 1089,
+    "sequence": 1090,
+    "activityElement": 11729,
+    "sequenceElement": 11752,
+    "requirements": [
+      "RF-45",
+      "RF-45-1",
+      "RF-45-2",
+      "RF-45-3",
+      "RF-45-4"
+    ],
+    "activityPackage": 1061,
+    "sequencePackage": 1128,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-45",
+        "scenario": 1,
+        "name": "SEQ-RF-45-01 - Consultar indicadores",
+        "title": "Consultar indicadores",
+        "diagram": 1090,
+        "interaction": 12095,
+        "refs": [
+          "RF-45",
+          "RF-45-1",
+          "RF-45-2",
+          "RF-45-3"
+        ],
+        "file": "secuencias/RF-45-01-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12778,
+          "U": 12779,
+          "C": 12780,
+          "D": 12781
+        },
+        "classifiers": {
+          "U": 12775,
+          "C": 12776,
+          "D": 12777
+        },
+        "external": null,
+        "height": 1395,
+        "messageCount": 15
+      },
+      {
+        "code": "RF-45",
+        "scenario": 2,
+        "name": "SEQ-RF-45-02 - Exportar indicadores",
+        "title": "Exportar indicadores",
+        "diagram": 1156,
+        "interaction": 12096,
+        "refs": [
+          "RF-45",
+          "RF-45-4"
+        ],
+        "file": "secuencias/RF-45-02-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12783,
+          "U": 12784,
+          "C": 12785,
+          "D": 12786
+        },
+        "classifiers": {
+          "U": 12775,
+          "C": 12776,
+          "D": 12777
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-46",
+    "name": "Privacidad del perfil",
+    "module": "Usuarios y perfiles",
+    "package": 1063,
+    "activity": 1091,
+    "sequence": 1092,
+    "activityElement": 11765,
+    "sequenceElement": 11787,
+    "requirements": [
+      "RF-46",
+      "RF-46-1",
+      "RF-46-2",
+      "RF-46-3"
+    ],
+    "activityPackage": 1063,
+    "sequencePackage": 1130,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-46",
+        "scenario": 1,
+        "name": "SEQ-RF-46-01 - Cambiar privacidad",
+        "title": "Cambiar privacidad",
+        "diagram": 1092,
+        "interaction": 12097,
+        "refs": [
+          "RF-46",
+          "RF-46-1"
+        ],
+        "file": "secuencias/RF-46-01-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12791,
+          "U": 12792,
+          "C": 12793,
+          "D": 12794
+        },
+        "classifiers": {
+          "U": 12788,
+          "C": 12789,
+          "D": 12790
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-46",
+        "scenario": 2,
+        "name": "SEQ-RF-46-02 - Consultar perfil ajeno",
+        "title": "Consultar perfil ajeno",
+        "diagram": 1157,
+        "interaction": 12098,
+        "refs": [
+          "RF-46",
+          "RF-46-2",
+          "RF-46-3"
+        ],
+        "file": "secuencias/RF-46-02-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12796,
+          "U": 12797,
+          "C": 12798,
+          "D": 12799
+        },
+        "classifiers": {
+          "U": 12788,
+          "C": 12789,
+          "D": 12790
+        },
+        "external": null,
+        "height": 1325,
+        "messageCount": 14
+      }
+    ]
+  },
+  {
+    "code": "RF-47",
+    "name": "Autorización de tratamiento de datos",
+    "module": "Gestión de usuarios",
+    "package": 1064,
+    "activity": 1093,
+    "sequence": 1094,
+    "activityElement": 11799,
+    "sequenceElement": 11821,
+    "requirements": [
+      "RF-47",
+      "RF-47-1",
+      "RF-47-2",
+      "RF-47-3",
+      "RF-47-4"
+    ],
+    "activityPackage": 1064,
+    "sequencePackage": 1131,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-47",
+        "scenario": 1,
+        "name": "SEQ-RF-47-01 - Aceptar aviso",
+        "title": "Aceptar aviso",
+        "diagram": 1094,
+        "interaction": 12099,
+        "refs": [
+          "RF-47",
+          "RF-47-1",
+          "RF-47-2",
+          "RF-47-3"
+        ],
+        "file": "secuencias/RF-47-01-sequence.png",
+        "actor": "Prospecto",
+        "automatic": false,
+        "lifelines": {
+          "A": 12804,
+          "U": 12805,
+          "C": 12806,
+          "D": 12807
+        },
+        "classifiers": {
+          "U": 12801,
+          "C": 12802,
+          "D": 12803
+        },
+        "external": null,
+        "height": 1325,
+        "messageCount": 14
+      },
+      {
+        "code": "RF-47",
+        "scenario": 2,
+        "name": "SEQ-RF-47-02 - Publicar nueva versión",
+        "title": "Publicar nueva versión",
+        "diagram": 1158,
+        "interaction": 12100,
+        "refs": [
+          "RF-47",
+          "RF-47-4"
+        ],
+        "file": "secuencias/RF-47-02-sequence.png",
+        "actor": "Administrador",
+        "automatic": false,
+        "lifelines": {
+          "A": 12809,
+          "U": 12810,
+          "C": 12811,
+          "D": 12812
+        },
+        "classifiers": {
+          "U": 12801,
+          "C": 12802,
+          "D": 12803
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      }
+    ]
+  },
+  {
+    "code": "RF-48",
+    "name": "Pantalla de inicio",
+    "module": "Usuarios y perfiles",
+    "package": 1065,
+    "activity": 1095,
+    "sequence": 1096,
+    "activityElement": 11834,
+    "sequenceElement": 11852,
+    "requirements": [
+      "RF-48",
+      "RF-48-1",
+      "RF-48-2",
+      "RF-48-3"
+    ],
+    "activityPackage": 1065,
+    "sequencePackage": 1132,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-48",
+        "scenario": 1,
+        "name": "SEQ-RF-48-01 - Cargar inicio",
+        "title": "Cargar inicio",
+        "diagram": 1096,
+        "interaction": 12101,
+        "refs": [
+          "RF-48",
+          "RF-48-1",
+          "RF-48-2",
+          "RF-48-3"
+        ],
+        "file": "secuencias/RF-48-01-sequence.png",
+        "actor": "Socio / Cliente",
+        "automatic": false,
+        "lifelines": {
+          "A": 12817,
+          "U": 12818,
+          "C": 12819,
+          "D": 12820
+        },
+        "classifiers": {
+          "U": 12814,
+          "C": 12815,
+          "D": 12816
+        },
+        "external": null,
+        "height": 1800,
+        "messageCount": 19
+      }
+    ]
+  },
+  {
+    "code": "RF-49",
+    "name": "Navegación, ayudas y mensajes de la interfaz",
+    "module": "Usuarios y perfiles",
+    "package": 1066,
+    "activity": 1097,
+    "sequence": 1098,
+    "activityElement": 11862,
+    "sequenceElement": 11887,
+    "requirements": [
+      "RF-49",
+      "RF-49-1",
+      "RF-49-2",
+      "RF-49-3",
+      "RF-49-4"
+    ],
+    "activityPackage": 1066,
+    "sequencePackage": 1133,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-49",
+        "scenario": 1,
+        "name": "SEQ-RF-49-01 - Abrir formulario o menú",
+        "title": "Abrir formulario o menú",
+        "diagram": 1098,
+        "interaction": 12102,
+        "refs": [
+          "RF-49",
+          "RF-49-1",
+          "RF-49-4"
+        ],
+        "file": "secuencias/RF-49-01-sequence.png",
+        "actor": "Usuario de la plataforma",
+        "automatic": false,
+        "lifelines": {
+          "A": 12826,
+          "U": 12827,
+          "C": 12828,
+          "D": 12829
+        },
+        "classifiers": {
+          "U": 12823,
+          "C": 12824,
+          "D": 12825
+        },
+        "external": null,
+        "height": 1255,
+        "messageCount": 13
+      },
+      {
+        "code": "RF-49",
+        "scenario": 2,
+        "name": "SEQ-RF-49-02 - Presentar resultado de acción",
+        "title": "Presentar resultado de acción",
+        "diagram": 1159,
+        "interaction": 12103,
+        "refs": [
+          "RF-49",
+          "RF-49-2",
+          "RF-49-3"
+        ],
+        "file": "secuencias/RF-49-02-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12831,
+          "U": 12832,
+          "C": 12833,
+          "D": 12834
+        },
+        "classifiers": {
+          "U": 12823,
+          "C": 12824,
+          "D": 12825
+        },
+        "external": null,
+        "height": 855,
+        "messageCount": 6
+      }
+    ]
+  },
+  {
+    "code": "RF-50",
+    "name": "Validación automática contra la base institucional",
+    "module": "Gestión de usuarios",
+    "package": 1067,
+    "activity": 1099,
+    "sequence": 1100,
+    "activityElement": 11901,
+    "sequenceElement": 11918,
+    "requirements": [
+      "RF-50",
+      "RF-50-1",
+      "RF-50-2"
+    ],
+    "activityPackage": 1067,
+    "sequencePackage": 1134,
+    "activityRoot": 1001,
+    "sequenceRoot": 1068,
+    "sequences": [
+      {
+        "code": "RF-50",
+        "scenario": 1,
+        "name": "SEQ-RF-50-01 - Validar contra fuente institucional",
+        "title": "Validar contra fuente institucional",
+        "diagram": 1100,
+        "interaction": 12104,
+        "refs": [
+          "RF-50",
+          "RF-50-1",
+          "RF-50-2"
+        ],
+        "file": "secuencias/RF-50-01-sequence.png",
+        "actor": "Evento del sistema",
+        "automatic": true,
+        "lifelines": {
+          "A": 12841,
+          "U": 12842,
+          "C": 12843,
+          "D": 12844,
+          "E": 12845
+        },
+        "classifiers": {
+          "U": 12837,
+          "C": 12838,
+          "D": 12839,
+          "E": 12840
+        },
+        "external": "Fuente institucional",
+        "height": 2055,
+        "messageCount": 15
+      }
+    ]
+  }
+]

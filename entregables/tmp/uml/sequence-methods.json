@@ -1,0 +1,2758 @@
+[
+  {
+    "classifier": 12105,
+    "signature": "registrarCuenta(datos, clave, consentimiento)"
+  },
+  {
+    "classifier": 12106,
+    "signature": "registrarCuenta(datos, clave, consentimiento)"
+  },
+  {
+    "classifier": 12107,
+    "signature": "buscarRegistro(correo, versionAviso)"
+  },
+  {
+    "classifier": 12106,
+    "signature": "validarRegistrarCuenta(datos, contexto)"
+  },
+  {
+    "classifier": 12106,
+    "signature": "validarDatosPersonales(datos)"
+  },
+  {
+    "classifier": 12106,
+    "signature": "validarDatosOpcionales(cuenta, referido)"
+  },
+  {
+    "classifier": 12106,
+    "signature": "protegerClave(clave)"
+  },
+  {
+    "classifier": 12107,
+    "signature": "crearUsuario(datos, hash, consentimiento)"
+  },
+  {
+    "classifier": 12105,
+    "signature": "conservarProgreso(datos, paso)"
+  },
+  {
+    "classifier": 12105,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12105,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12120,
+    "signature": "emitirCodigo(idUsuario, motivo)"
+  },
+  {
+    "classifier": 12121,
+    "signature": "consultarUltimoEnvio(idUsuario)"
+  },
+  {
+    "classifier": 12120,
+    "signature": "validarEmitirCodigo(datos, contexto)"
+  },
+  {
+    "classifier": 12120,
+    "signature": "generarCodigo(6, 10min)"
+  },
+  {
+    "classifier": 12121,
+    "signature": "guardarCodigo(idUsuario, hash, vencimiento)"
+  },
+  {
+    "classifier": 12122,
+    "signature": "enviarCodigo(correo, codigo)"
+  },
+  {
+    "classifier": 12119,
+    "signature": "confirmarCorreo(idUsuario, codigo)"
+  },
+  {
+    "classifier": 12120,
+    "signature": "confirmarCorreo(idUsuario, codigo)"
+  },
+  {
+    "classifier": 12121,
+    "signature": "buscarCodigoVigente(idUsuario)"
+  },
+  {
+    "classifier": 12120,
+    "signature": "validarConfirmarCorreo(datos, contexto)"
+  },
+  {
+    "classifier": 12120,
+    "signature": "compararCodigo(codigo, hash)"
+  },
+  {
+    "classifier": 12121,
+    "signature": "confirmarCorreo(idUsuario, codigo)"
+  },
+  {
+    "classifier": 12119,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12119,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12134,
+    "signature": "consultarPerfil(idUsuario)"
+  },
+  {
+    "classifier": 12135,
+    "signature": "consultarPerfil(idUsuario)"
+  },
+  {
+    "classifier": 12136,
+    "signature": "buscarPerfil(idUsuario)"
+  },
+  {
+    "classifier": 12135,
+    "signature": "validarConsultarPerfil(datos, contexto)"
+  },
+  {
+    "classifier": 12135,
+    "signature": "seleccionarDatosPropios(perfil)"
+  },
+  {
+    "classifier": 12134,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12134,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12134,
+    "signature": "actualizarPerfil(idUsuario, cambios)"
+  },
+  {
+    "classifier": 12135,
+    "signature": "actualizarPerfil(idUsuario, cambios)"
+  },
+  {
+    "classifier": 12136,
+    "signature": "buscarPerfilYCorreo(idUsuario, correo)"
+  },
+  {
+    "classifier": 12135,
+    "signature": "validarActualizarPerfil(datos, contexto)"
+  },
+  {
+    "classifier": 12135,
+    "signature": "validarCambios(cambios)"
+  },
+  {
+    "classifier": 12136,
+    "signature": "actualizarPerfil(idUsuario, cambios)"
+  },
+  {
+    "classifier": 12134,
+    "signature": "darBajaPerfil(idUsuario, confirmacion)"
+  },
+  {
+    "classifier": 12135,
+    "signature": "darBajaPerfil(idUsuario, confirmacion)"
+  },
+  {
+    "classifier": 12136,
+    "signature": "buscarEstadoPerfil(idUsuario)"
+  },
+  {
+    "classifier": 12135,
+    "signature": "validarDarBajaPerfil(datos, contexto)"
+  },
+  {
+    "classifier": 12136,
+    "signature": "inactivarPerfil(idUsuario)"
+  },
+  {
+    "classifier": 12152,
+    "signature": "iniciarSesion(correo, clave)"
+  },
+  {
+    "classifier": 12153,
+    "signature": "iniciarSesion(correo, clave)"
+  },
+  {
+    "classifier": 12154,
+    "signature": "buscarCredencialesYRol(correo)"
+  },
+  {
+    "classifier": 12153,
+    "signature": "validarIniciarSesion(datos, contexto)"
+  },
+  {
+    "classifier": 12153,
+    "signature": "verificarClave(clave, hash)"
+  },
+  {
+    "classifier": 12153,
+    "signature": "emitirToken(idUsuario, rol)"
+  },
+  {
+    "classifier": 12154,
+    "signature": "registrarSesion(idUsuario, token)"
+  },
+  {
+    "classifier": 12152,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12152,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12153,
+    "signature": "expirarSesion(idSesion, ahora)"
+  },
+  {
+    "classifier": 12154,
+    "signature": "buscarUltimaActividad(idSesion)"
+  },
+  {
+    "classifier": 12153,
+    "signature": "validarExpirarSesion(datos, contexto)"
+  },
+  {
+    "classifier": 12154,
+    "signature": "invalidarSesion(idSesion)"
+  },
+  {
+    "classifier": 12152,
+    "signature": "cerrarSesion(idSesion)"
+  },
+  {
+    "classifier": 12153,
+    "signature": "cerrarSesion(idSesion)"
+  },
+  {
+    "classifier": 12154,
+    "signature": "buscarSesion(idSesion)"
+  },
+  {
+    "classifier": 12153,
+    "signature": "validarCerrarSesion(datos, contexto)"
+  },
+  {
+    "classifier": 12170,
+    "signature": "vincularCuenta(idUsuario, tipo, numero)"
+  },
+  {
+    "classifier": 12171,
+    "signature": "vincularCuenta(idUsuario, tipo, numero)"
+  },
+  {
+    "classifier": 12172,
+    "signature": "buscarVinculacion(tipo, numero)"
+  },
+  {
+    "classifier": 12171,
+    "signature": "validarVincularCuenta(datos, contexto)"
+  },
+  {
+    "classifier": 12172,
+    "signature": "crearSolicitudUnica(idUsuario, tipo, numero)"
+  },
+  {
+    "classifier": 12170,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12170,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12170,
+    "signature": "consultarValidaciones(filtros, pagina)"
+  },
+  {
+    "classifier": 12171,
+    "signature": "consultarValidaciones(filtros, pagina)"
+  },
+  {
+    "classifier": 12172,
+    "signature": "buscarPendientes(filtros, pagina, 20)"
+  },
+  {
+    "classifier": 12171,
+    "signature": "validarConsultarValidaciones(datos, contexto)"
+  },
+  {
+    "classifier": 12171,
+    "signature": "ordenarPorAntiguedad(pendientes)"
+  },
+  {
+    "classifier": 12170,
+    "signature": "consultarCuenta(idUsuario, revelar)"
+  },
+  {
+    "classifier": 12171,
+    "signature": "consultarCuenta(idUsuario, revelar)"
+  },
+  {
+    "classifier": 12172,
+    "signature": "buscarCuentaPropia(idUsuario)"
+  },
+  {
+    "classifier": 12171,
+    "signature": "validarConsultarCuenta(datos, contexto)"
+  },
+  {
+    "classifier": 12171,
+    "signature": "aplicarMascara(cuenta, revelar, titular)"
+  },
+  {
+    "classifier": 12170,
+    "signature": "corregirCuenta(idSolicitud, cambios)"
+  },
+  {
+    "classifier": 12171,
+    "signature": "corregirCuenta(idSolicitud, cambios)"
+  },
+  {
+    "classifier": 12172,
+    "signature": "buscarSolicitudRechazada(idSolicitud)"
+  },
+  {
+    "classifier": 12171,
+    "signature": "validarCorregirCuenta(datos, contexto)"
+  },
+  {
+    "classifier": 12172,
+    "signature": "registrarCorreccion(idSolicitud, cambios)"
+  },
+  {
+    "classifier": 12195,
+    "signature": "solicitarFuncion(idUsuario, funcion)"
+  },
+  {
+    "classifier": 12196,
+    "signature": "solicitarFuncion(idUsuario, funcion)"
+  },
+  {
+    "classifier": 12197,
+    "signature": "buscarEstadoCuentaYRol(idUsuario)"
+  },
+  {
+    "classifier": 12196,
+    "signature": "validarSolicitarFuncion(datos, contexto)"
+  },
+  {
+    "classifier": 12196,
+    "signature": "autorizarFuncionRestringida(funcion, estadoYRol)"
+  },
+  {
+    "classifier": 12196,
+    "signature": "autorizarFuncionAbierta(funcion, usuarioActivo)"
+  },
+  {
+    "classifier": 12195,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12195,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12203,
+    "signature": "solicitarRecuperacion(correo)"
+  },
+  {
+    "classifier": 12204,
+    "signature": "solicitarRecuperacion(correo)"
+  },
+  {
+    "classifier": 12205,
+    "signature": "buscarUsuarioPorCorreo(correo)"
+  },
+  {
+    "classifier": 12204,
+    "signature": "validarSolicitarRecuperacion(datos, contexto)"
+  },
+  {
+    "classifier": 12204,
+    "signature": "generarEnlaceUnico(30min)"
+  },
+  {
+    "classifier": 12205,
+    "signature": "guardarTokenRecuperacion(idUsuario, hash)"
+  },
+  {
+    "classifier": 12206,
+    "signature": "enviarEnlace(correo, enlace)"
+  },
+  {
+    "classifier": 12203,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12203,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12203,
+    "signature": "restablecerClave(token, nuevaClave)"
+  },
+  {
+    "classifier": 12204,
+    "signature": "restablecerClave(token, nuevaClave)"
+  },
+  {
+    "classifier": 12205,
+    "signature": "buscarTokenRecuperacion(token)"
+  },
+  {
+    "classifier": 12204,
+    "signature": "validarRestablecerClave(datos, contexto)"
+  },
+  {
+    "classifier": 12204,
+    "signature": "validarClave(nuevaClave)"
+  },
+  {
+    "classifier": 12205,
+    "signature": "actualizarClaveYConsumirToken(idUsuario, hash, token)"
+  },
+  {
+    "classifier": 12218,
+    "signature": "gestionarRol(accion, idUsuario, rol)"
+  },
+  {
+    "classifier": 12219,
+    "signature": "gestionarRol(accion, idUsuario, rol)"
+  },
+  {
+    "classifier": 12220,
+    "signature": "buscarRolesYPermisos(idUsuario)"
+  },
+  {
+    "classifier": 12219,
+    "signature": "validarGestionarRol(datos, contexto)"
+  },
+  {
+    "classifier": 12219,
+    "signature": "validarRolProtegido(accion, rol)"
+  },
+  {
+    "classifier": 12220,
+    "signature": "guardarRolYPermisos(rol, permisos)"
+  },
+  {
+    "classifier": 12220,
+    "signature": "asignarRolYAuditar(idUsuario, rol, autor)"
+  },
+  {
+    "classifier": 12218,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12218,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12219,
+    "signature": "asignarRolInicial(idUsuario)"
+  },
+  {
+    "classifier": 12220,
+    "signature": "buscarRolInicial(idUsuario)"
+  },
+  {
+    "classifier": 12219,
+    "signature": "validarAsignarRolInicial(datos, contexto)"
+  },
+  {
+    "classifier": 12220,
+    "signature": "asignarRolSocioSiAusente(idUsuario)"
+  },
+  {
+    "classifier": 12218,
+    "signature": "accederFuncion(idUsuario, funcion)"
+  },
+  {
+    "classifier": 12219,
+    "signature": "accederFuncion(idUsuario, funcion)"
+  },
+  {
+    "classifier": 12220,
+    "signature": "buscarPermisos(idUsuario)"
+  },
+  {
+    "classifier": 12219,
+    "signature": "validarAccederFuncion(datos, contexto)"
+  },
+  {
+    "classifier": 12219,
+    "signature": "verificarPermiso(funcion, permisos)"
+  },
+  {
+    "classifier": 12218,
+    "signature": "mostrarOpcionesPermitidas(permisos)"
+  },
+  {
+    "classifier": 12237,
+    "signature": "generarIdentidadReferido(idUsuario)"
+  },
+  {
+    "classifier": 12238,
+    "signature": "buscarCuentaYCodigo(idUsuario)"
+  },
+  {
+    "classifier": 12237,
+    "signature": "validarGenerarIdentidadReferido(datos, contexto)"
+  },
+  {
+    "classifier": 12237,
+    "signature": "generarCodigoUnico(8)"
+  },
+  {
+    "classifier": 12238,
+    "signature": "guardarCodigoYEnlace(idUsuario, codigo)"
+  },
+  {
+    "classifier": 12237,
+    "signature": "generarQrPng(enlace, 256)"
+  },
+  {
+    "classifier": 12238,
+    "signature": "guardarQr(idUsuario, png)"
+  },
+  {
+    "classifier": 12236,
+    "signature": "descargarQr(idUsuario)"
+  },
+  {
+    "classifier": 12237,
+    "signature": "descargarQr(idUsuario)"
+  },
+  {
+    "classifier": 12238,
+    "signature": "buscarQrPropio(idUsuario)"
+  },
+  {
+    "classifier": 12237,
+    "signature": "validarDescargarQr(datos, contexto)"
+  },
+  {
+    "classifier": 12236,
+    "signature": "descargarArchivo(qr, PNG)"
+  },
+  {
+    "classifier": 12236,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12236,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12249,
+    "signature": "compartirEnlace(idUsuario, canal)"
+  },
+  {
+    "classifier": 12250,
+    "signature": "compartirEnlace(idUsuario, canal)"
+  },
+  {
+    "classifier": 12251,
+    "signature": "buscarEnlaceOficial(idUsuario)"
+  },
+  {
+    "classifier": 12250,
+    "signature": "validarCompartirEnlace(datos, contexto)"
+  },
+  {
+    "classifier": 12249,
+    "signature": "copiarAlPortapapeles(enlace)"
+  },
+  {
+    "classifier": 12249,
+    "signature": "prepararMensaje(enlace, 300)"
+  },
+  {
+    "classifier": 12252,
+    "signature": "abrirCanal(canal, mensaje)"
+  },
+  {
+    "classifier": 12249,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12249,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12262,
+    "signature": "reevaluarReferido(idUsuario, codigo)"
+  },
+  {
+    "classifier": 12263,
+    "signature": "buscarRelacionYCuenta(idUsuario, codigo)"
+  },
+  {
+    "classifier": 12262,
+    "signature": "validarReevaluarReferido(datos, contexto)"
+  },
+  {
+    "classifier": 12263,
+    "signature": "guardarRelacionUnica(idUsuario, referidor)"
+  },
+  {
+    "classifier": 12262,
+    "signature": "determinarEstado(relacionYCuenta)"
+  },
+  {
+    "classifier": 12263,
+    "signature": "actualizarEstadoReferido(idRelacion, estado)"
+  },
+  {
+    "classifier": 12261,
+    "signature": "consultarMisReferidos(idUsuario, pagina)"
+  },
+  {
+    "classifier": 12262,
+    "signature": "consultarMisReferidos(idUsuario, pagina)"
+  },
+  {
+    "classifier": 12263,
+    "signature": "buscarReferidosPropios(idUsuario, pagina, 10)"
+  },
+  {
+    "classifier": 12262,
+    "signature": "validarConsultarMisReferidos(datos, contexto)"
+  },
+  {
+    "classifier": 12262,
+    "signature": "limitarDatosReferido(referidos)"
+  },
+  {
+    "classifier": 12261,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12261,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12261,
+    "signature": "consultarReferidos(filtros, pagina, exportar)"
+  },
+  {
+    "classifier": 12262,
+    "signature": "consultarReferidos(filtros, pagina, exportar)"
+  },
+  {
+    "classifier": 12263,
+    "signature": "buscarReferidosGlobales(filtros, pagina, 20)"
+  },
+  {
+    "classifier": 12262,
+    "signature": "validarConsultarReferidos(datos, contexto)"
+  },
+  {
+    "classifier": 12262,
+    "signature": "prepararSeguimiento(referidos)"
+  },
+  {
+    "classifier": 12262,
+    "signature": "generarCsvPendientes(referidos)"
+  },
+  {
+    "classifier": 12261,
+    "signature": "asociarReferido(idUsuario, idReferidor)"
+  },
+  {
+    "classifier": 12262,
+    "signature": "asociarReferido(idUsuario, idReferidor)"
+  },
+  {
+    "classifier": 12263,
+    "signature": "buscarUsuarioSinReferidor(idUsuario)"
+  },
+  {
+    "classifier": 12262,
+    "signature": "validarAsociarReferido(datos, contexto)"
+  },
+  {
+    "classifier": 12263,
+    "signature": "asociarReferidor(idUsuario, idReferidor)"
+  },
+  {
+    "classifier": 12261,
+    "signature": "ocultarReferido(idRelacion)"
+  },
+  {
+    "classifier": 12262,
+    "signature": "ocultarReferido(idRelacion)"
+  },
+  {
+    "classifier": 12263,
+    "signature": "buscarRelacion(idRelacion)"
+  },
+  {
+    "classifier": 12262,
+    "signature": "validarOcultarReferido(datos, contexto)"
+  },
+  {
+    "classifier": 12263,
+    "signature": "ocultarRelacion(idRelacion)"
+  },
+  {
+    "classifier": 12296,
+    "signature": "acreditarPuntos(evento, claveUnica)"
+  },
+  {
+    "classifier": 12297,
+    "signature": "buscarEventoYConfiguracion(claveUnica)"
+  },
+  {
+    "classifier": 12296,
+    "signature": "validarAcreditarPuntos(datos, contexto)"
+  },
+  {
+    "classifier": 12296,
+    "signature": "resolverPuntos(evento, parametros, campana)"
+  },
+  {
+    "classifier": 12297,
+    "signature": "acreditarReferidoAtomico(evento, puntos)"
+  },
+  {
+    "classifier": 12296,
+    "signature": "resolverAcreditacionActividad(evento, puntos)"
+  },
+  {
+    "classifier": 12297,
+    "signature": "acreditarActividadAtomica(evento, puntos)"
+  },
+  {
+    "classifier": 12295,
+    "signature": "consultarPuntos(idUsuario, pagina)"
+  },
+  {
+    "classifier": 12296,
+    "signature": "consultarPuntos(idUsuario, pagina)"
+  },
+  {
+    "classifier": 12297,
+    "signature": "buscarSaldoYMovimientos(idUsuario, pagina, 20)"
+  },
+  {
+    "classifier": 12296,
+    "signature": "validarConsultarPuntos(datos, contexto)"
+  },
+  {
+    "classifier": 12296,
+    "signature": "ordenarMovimientosPorFecha(movimientos)"
+  },
+  {
+    "classifier": 12296,
+    "signature": "separarSaldoYAcumulado(saldoYMovimientos)"
+  },
+  {
+    "classifier": 12295,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12295,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12310,
+    "signature": "guardarCampana(datos)"
+  },
+  {
+    "classifier": 12311,
+    "signature": "guardarCampana(datos)"
+  },
+  {
+    "classifier": 12312,
+    "signature": "buscarCampanasSuperpuestas(fechas, provincias)"
+  },
+  {
+    "classifier": 12311,
+    "signature": "validarGuardarCampana(datos, contexto)"
+  },
+  {
+    "classifier": 12312,
+    "signature": "guardarCampana(datos)"
+  },
+  {
+    "classifier": 12310,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12310,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12310,
+    "signature": "cambiarEstadoCampana(idCampana, nuevoEstado)"
+  },
+  {
+    "classifier": 12311,
+    "signature": "cambiarEstadoCampana(idCampana, nuevoEstado)"
+  },
+  {
+    "classifier": 12312,
+    "signature": "buscarCampana(idCampana)"
+  },
+  {
+    "classifier": 12311,
+    "signature": "validarCambiarEstadoCampana(datos, contexto)"
+  },
+  {
+    "classifier": 12312,
+    "signature": "actualizarEstadoCampana(idCampana, nuevoEstado)"
+  },
+  {
+    "classifier": 12310,
+    "signature": "consultarCampanas(idUsuario)"
+  },
+  {
+    "classifier": 12311,
+    "signature": "consultarCampanas(idUsuario)"
+  },
+  {
+    "classifier": 12312,
+    "signature": "buscarCampanasActivas(provincia, ahora)"
+  },
+  {
+    "classifier": 12311,
+    "signature": "validarConsultarCampanas(datos, contexto)"
+  },
+  {
+    "classifier": 12311,
+    "signature": "prepararBeneficiosYVigencia(campanas)"
+  },
+  {
+    "classifier": 12328,
+    "signature": "actualizarParametro(nombre, valor)"
+  },
+  {
+    "classifier": 12329,
+    "signature": "actualizarParametro(nombre, valor)"
+  },
+  {
+    "classifier": 12330,
+    "signature": "buscarParametro(nombre)"
+  },
+  {
+    "classifier": 12329,
+    "signature": "validarActualizarParametro(datos, contexto)"
+  },
+  {
+    "classifier": 12329,
+    "signature": "validarTipoParametro(nombre, valor)"
+  },
+  {
+    "classifier": 12330,
+    "signature": "guardarParametro(nombre, valor)"
+  },
+  {
+    "classifier": 12330,
+    "signature": "auditarCambioParametro(autor, anterior, nuevo)"
+  },
+  {
+    "classifier": 12329,
+    "signature": "invalidarCacheParametros()"
+  },
+  {
+    "classifier": 12328,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12328,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12336,
+    "signature": "ajustarPuntos(idUsuario, ajuste, motivo)"
+  },
+  {
+    "classifier": 12337,
+    "signature": "ajustarPuntos(idUsuario, ajuste, motivo)"
+  },
+  {
+    "classifier": 12338,
+    "signature": "buscarSaldo(idUsuario)"
+  },
+  {
+    "classifier": 12337,
+    "signature": "validarAjustarPuntos(datos, contexto)"
+  },
+  {
+    "classifier": 12337,
+    "signature": "validarAjuste(saldo, ajuste, motivo)"
+  },
+  {
+    "classifier": 12338,
+    "signature": "ajustarSaldoYRegistrarMovimiento(idUsuario, ajuste, motivo)"
+  },
+  {
+    "classifier": 12336,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12336,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12345,
+    "signature": "recalcularNivel(idUsuario)"
+  },
+  {
+    "classifier": 12346,
+    "signature": "buscarAcumuladoYUmbrales(idUsuario)"
+  },
+  {
+    "classifier": 12345,
+    "signature": "validarRecalcularNivel(datos, contexto)"
+  },
+  {
+    "classifier": 12345,
+    "signature": "calcularNivel(acumulado, umbrales)"
+  },
+  {
+    "classifier": 12346,
+    "signature": "guardarNivel(idUsuario, nivel)"
+  },
+  {
+    "classifier": 12344,
+    "signature": "consultarNivelYRanking(idUsuario)"
+  },
+  {
+    "classifier": 12345,
+    "signature": "consultarNivelYRanking(idUsuario)"
+  },
+  {
+    "classifier": 12346,
+    "signature": "buscarNivelYRankingPublico(idUsuario, 10)"
+  },
+  {
+    "classifier": 12345,
+    "signature": "validarConsultarNivelYRanking(datos, contexto)"
+  },
+  {
+    "classifier": 12345,
+    "signature": "calcularPuntosFaltantes(acumulado, umbral)"
+  },
+  {
+    "classifier": 12345,
+    "signature": "excluirPerfilesPrivados(ranking)"
+  },
+  {
+    "classifier": 12344,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12344,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12344,
+    "signature": "configurarNiveles(niveles)"
+  },
+  {
+    "classifier": 12345,
+    "signature": "configurarNiveles(niveles)"
+  },
+  {
+    "classifier": 12346,
+    "signature": "buscarUmbralesActuales()"
+  },
+  {
+    "classifier": 12345,
+    "signature": "validarConfigurarNiveles(datos, contexto)"
+  },
+  {
+    "classifier": 12346,
+    "signature": "guardarNiveles(niveles)"
+  },
+  {
+    "classifier": 12362,
+    "signature": "gestionarInsignia(accion, datos)"
+  },
+  {
+    "classifier": 12363,
+    "signature": "gestionarInsignia(accion, datos)"
+  },
+  {
+    "classifier": 12364,
+    "signature": "buscarInsignia(datos)"
+  },
+  {
+    "classifier": 12363,
+    "signature": "validarGestionarInsignia(datos, contexto)"
+  },
+  {
+    "classifier": 12364,
+    "signature": "crearInsignia(tipoLogro, meta)"
+  },
+  {
+    "classifier": 12364,
+    "signature": "inactivarInsignia(idInsignia)"
+  },
+  {
+    "classifier": 12362,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12362,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12363,
+    "signature": "otorgarInsignia(idUsuario, evento)"
+  },
+  {
+    "classifier": 12364,
+    "signature": "buscarLogroYAsignacion(idUsuario, evento)"
+  },
+  {
+    "classifier": 12363,
+    "signature": "validarOtorgarInsignia(datos, contexto)"
+  },
+  {
+    "classifier": 12364,
+    "signature": "otorgarInsigniaUnica(idUsuario, idInsignia)"
+  },
+  {
+    "classifier": 12362,
+    "signature": "consultarInsignias(idUsuario)"
+  },
+  {
+    "classifier": 12363,
+    "signature": "consultarInsignias(idUsuario)"
+  },
+  {
+    "classifier": 12364,
+    "signature": "buscarInsigniasUsuario(idUsuario)"
+  },
+  {
+    "classifier": 12363,
+    "signature": "validarConsultarInsignias(datos, contexto)"
+  },
+  {
+    "classifier": 12363,
+    "signature": "ordenarInsigniasPorFecha(insignias)"
+  },
+  {
+    "classifier": 12382,
+    "signature": "gestionarReto(accion, datos)"
+  },
+  {
+    "classifier": 12383,
+    "signature": "gestionarReto(accion, datos)"
+  },
+  {
+    "classifier": 12384,
+    "signature": "buscarReto(datos)"
+  },
+  {
+    "classifier": 12383,
+    "signature": "validarGestionarReto(datos, contexto)"
+  },
+  {
+    "classifier": 12384,
+    "signature": "crearReto(fechas, meta, puntos)"
+  },
+  {
+    "classifier": 12384,
+    "signature": "finalizarReto(idReto)"
+  },
+  {
+    "classifier": 12382,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12382,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12383,
+    "signature": "actualizarAvanceReto(idUsuario, evento)"
+  },
+  {
+    "classifier": 12384,
+    "signature": "buscarAvanceYMeta(idUsuario, evento)"
+  },
+  {
+    "classifier": 12383,
+    "signature": "validarActualizarAvanceReto(datos, contexto)"
+  },
+  {
+    "classifier": 12383,
+    "signature": "calcularAvance(actividad, meta)"
+  },
+  {
+    "classifier": 12384,
+    "signature": "guardarAvance(idUsuario, idReto, avance)"
+  },
+  {
+    "classifier": 12399,
+    "signature": "crearPregunta(enunciado, opciones, tema)"
+  },
+  {
+    "classifier": 12400,
+    "signature": "crearPregunta(enunciado, opciones, tema)"
+  },
+  {
+    "classifier": 12401,
+    "signature": "buscarTemasPermitidos()"
+  },
+  {
+    "classifier": 12400,
+    "signature": "validarCrearPregunta(datos, contexto)"
+  },
+  {
+    "classifier": 12401,
+    "signature": "guardarPregunta(enunciado, opciones, tema)"
+  },
+  {
+    "classifier": 12399,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12399,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12399,
+    "signature": "filtrarPreguntas(dificultad)"
+  },
+  {
+    "classifier": 12400,
+    "signature": "filtrarPreguntas(dificultad)"
+  },
+  {
+    "classifier": 12401,
+    "signature": "buscarPreguntas(dificultad)"
+  },
+  {
+    "classifier": 12400,
+    "signature": "validarFiltrarPreguntas(datos, contexto)"
+  },
+  {
+    "classifier": 12399,
+    "signature": "mostrarPreguntas(preguntas)"
+  },
+  {
+    "classifier": 12399,
+    "signature": "desactivarPregunta(idPregunta)"
+  },
+  {
+    "classifier": 12400,
+    "signature": "desactivarPregunta(idPregunta)"
+  },
+  {
+    "classifier": 12401,
+    "signature": "buscarPregunta(idPregunta)"
+  },
+  {
+    "classifier": 12400,
+    "signature": "validarDesactivarPregunta(datos, contexto)"
+  },
+  {
+    "classifier": 12401,
+    "signature": "inactivarPregunta(idPregunta)"
+  },
+  {
+    "classifier": 12417,
+    "signature": "jugarTrivia(idUsuario)"
+  },
+  {
+    "classifier": 12418,
+    "signature": "jugarTrivia(idUsuario)"
+  },
+  {
+    "classifier": 12419,
+    "signature": "contarPartidasUltimas24h(idUsuario)"
+  },
+  {
+    "classifier": 12418,
+    "signature": "validarJugarTrivia(datos, contexto)"
+  },
+  {
+    "classifier": 12419,
+    "signature": "seleccionarPreguntasActivas(10)"
+  },
+  {
+    "classifier": 12417,
+    "signature": "mostrarPregunta(pregunta)"
+  },
+  {
+    "classifier": 12417,
+    "signature": "responderPregunta(opcion)"
+  },
+  {
+    "classifier": 12418,
+    "signature": "registrarRespuesta(opcion, tiempo)"
+  },
+  {
+    "classifier": 12418,
+    "signature": "evaluarRespuesta(respuesta, tiempo)"
+  },
+  {
+    "classifier": 12418,
+    "signature": "marcarRespuestaIncorrectaPorTiempo()"
+  },
+  {
+    "classifier": 12418,
+    "signature": "calcularPuntaje(respuestas)"
+  },
+  {
+    "classifier": 12419,
+    "signature": "guardarPartida(idUsuario, resultado)"
+  },
+  {
+    "classifier": 12417,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12417,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12428,
+    "signature": "publicarCapacitacion(material, cuestionario)"
+  },
+  {
+    "classifier": 12429,
+    "signature": "publicarCapacitacion(material, cuestionario)"
+  },
+  {
+    "classifier": 12430,
+    "signature": "buscarConfiguracionMaterial()"
+  },
+  {
+    "classifier": 12429,
+    "signature": "validarPublicarCapacitacion(datos, contexto)"
+  },
+  {
+    "classifier": 12430,
+    "signature": "guardarCapacitacion(material, cuestionario)"
+  },
+  {
+    "classifier": 12428,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12428,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12428,
+    "signature": "consultarCapacitaciones(pagina)"
+  },
+  {
+    "classifier": 12429,
+    "signature": "consultarCapacitaciones(pagina)"
+  },
+  {
+    "classifier": 12430,
+    "signature": "buscarCapacitacionesActivas(pagina, 10)"
+  },
+  {
+    "classifier": 12429,
+    "signature": "validarConsultarCapacitaciones(datos, contexto)"
+  },
+  {
+    "classifier": 12428,
+    "signature": "mostrarCatalogo(capacitaciones)"
+  },
+  {
+    "classifier": 12428,
+    "signature": "desactivarCapacitacion(idCapacitacion)"
+  },
+  {
+    "classifier": 12429,
+    "signature": "desactivarCapacitacion(idCapacitacion)"
+  },
+  {
+    "classifier": 12430,
+    "signature": "buscarCapacitacion(idCapacitacion)"
+  },
+  {
+    "classifier": 12429,
+    "signature": "validarDesactivarCapacitacion(datos, contexto)"
+  },
+  {
+    "classifier": 12430,
+    "signature": "inactivarCapacitacion(idCapacitacion)"
+  },
+  {
+    "classifier": 12446,
+    "signature": "rendirEvaluacion(idCapacitacion, respuestas)"
+  },
+  {
+    "classifier": 12447,
+    "signature": "rendirEvaluacion(idCapacitacion, respuestas)"
+  },
+  {
+    "classifier": 12448,
+    "signature": "buscarEvaluacionEIntentos(idUsuario, idCapacitacion)"
+  },
+  {
+    "classifier": 12447,
+    "signature": "validarRendirEvaluacion(datos, contexto)"
+  },
+  {
+    "classifier": 12447,
+    "signature": "calificar(respuestas, solucion)"
+  },
+  {
+    "classifier": 12448,
+    "signature": "guardarIntento(idUsuario, calificacion)"
+  },
+  {
+    "classifier": 12448,
+    "signature": "marcarCapacitacionCompletada(idUsuario, idCapacitacion)"
+  },
+  {
+    "classifier": 12448,
+    "signature": "guardarEvaluacionNoAprobada(idUsuario, calificacion)"
+  },
+  {
+    "classifier": 12447,
+    "signature": "generarCertificadoPdf(idUsuario, idCapacitacion)"
+  },
+  {
+    "classifier": 12448,
+    "signature": "guardarCertificado(codigoUnico, pdf)"
+  },
+  {
+    "classifier": 12446,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12446,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12458,
+    "signature": "crearTaller(fecha, lugar, cupos)"
+  },
+  {
+    "classifier": 12459,
+    "signature": "crearTaller(fecha, lugar, cupos)"
+  },
+  {
+    "classifier": 12460,
+    "signature": "buscarConfiguracionTaller()"
+  },
+  {
+    "classifier": 12459,
+    "signature": "validarCrearTaller(datos, contexto)"
+  },
+  {
+    "classifier": 12460,
+    "signature": "guardarTaller(fecha, lugar, cupos)"
+  },
+  {
+    "classifier": 12458,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12458,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12458,
+    "signature": "consultarCalendario(mes)"
+  },
+  {
+    "classifier": 12459,
+    "signature": "consultarCalendario(mes)"
+  },
+  {
+    "classifier": 12460,
+    "signature": "buscarTalleres(mes)"
+  },
+  {
+    "classifier": 12459,
+    "signature": "validarConsultarCalendario(datos, contexto)"
+  },
+  {
+    "classifier": 12459,
+    "signature": "agruparTalleresPorMes(talleres)"
+  },
+  {
+    "classifier": 12458,
+    "signature": "cambiarCupos(idTaller, cupos)"
+  },
+  {
+    "classifier": 12459,
+    "signature": "cambiarCupos(idTaller, cupos)"
+  },
+  {
+    "classifier": 12460,
+    "signature": "contarInscritos(idTaller)"
+  },
+  {
+    "classifier": 12459,
+    "signature": "validarCambiarCupos(datos, contexto)"
+  },
+  {
+    "classifier": 12460,
+    "signature": "actualizarCupos(idTaller, cupos)"
+  },
+  {
+    "classifier": 12458,
+    "signature": "cancelarTaller(idTaller)"
+  },
+  {
+    "classifier": 12459,
+    "signature": "cancelarTaller(idTaller)"
+  },
+  {
+    "classifier": 12460,
+    "signature": "buscarTallerEInscripciones(idTaller)"
+  },
+  {
+    "classifier": 12459,
+    "signature": "validarCancelarTaller(datos, contexto)"
+  },
+  {
+    "classifier": 12460,
+    "signature": "cancelarTallerYLiberarInscripciones(idTaller)"
+  },
+  {
+    "classifier": 12481,
+    "signature": "inscribirseTaller(idUsuario, idTaller)"
+  },
+  {
+    "classifier": 12482,
+    "signature": "inscribirseTaller(idUsuario, idTaller)"
+  },
+  {
+    "classifier": 12483,
+    "signature": "buscarTallerYDuplicado(idUsuario, idTaller)"
+  },
+  {
+    "classifier": 12482,
+    "signature": "validarInscribirseTaller(datos, contexto)"
+  },
+  {
+    "classifier": 12483,
+    "signature": "inscribirYDescontarCupoAtomico(idUsuario, idTaller)"
+  },
+  {
+    "classifier": 12481,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12481,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12481,
+    "signature": "anularInscripcion(idInscripcion)"
+  },
+  {
+    "classifier": 12482,
+    "signature": "anularInscripcion(idInscripcion)"
+  },
+  {
+    "classifier": 12483,
+    "signature": "buscarInscripcionPropia(idUsuario, idInscripcion)"
+  },
+  {
+    "classifier": 12482,
+    "signature": "validarAnularInscripcion(datos, contexto)"
+  },
+  {
+    "classifier": 12483,
+    "signature": "anularYRestituirCupo(idInscripcion)"
+  },
+  {
+    "classifier": 12494,
+    "signature": "marcarAsistencia(idInscripcion, estado)"
+  },
+  {
+    "classifier": 12495,
+    "signature": "marcarAsistencia(idInscripcion, estado)"
+  },
+  {
+    "classifier": 12496,
+    "signature": "buscarInscripcionYAsistencia(idInscripcion)"
+  },
+  {
+    "classifier": 12495,
+    "signature": "validarMarcarAsistencia(datos, contexto)"
+  },
+  {
+    "classifier": 12496,
+    "signature": "guardarAsistencia(idInscripcion, estado)"
+  },
+  {
+    "classifier": 12494,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12494,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12504,
+    "signature": "guardarPublicacion(accion, texto, imagen)"
+  },
+  {
+    "classifier": 12505,
+    "signature": "guardarPublicacion(accion, texto, imagen)"
+  },
+  {
+    "classifier": 12506,
+    "signature": "buscarAutorYPublicacion(idUsuario, idPublicacion)"
+  },
+  {
+    "classifier": 12505,
+    "signature": "validarGuardarPublicacion(datos, contexto)"
+  },
+  {
+    "classifier": 12506,
+    "signature": "guardarPublicacion(idUsuario, texto, imagen)"
+  },
+  {
+    "classifier": 12506,
+    "signature": "marcarPublicacionOficial(idPublicacion)"
+  },
+  {
+    "classifier": 12504,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12504,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12504,
+    "signature": "consultarMuro(pagina)"
+  },
+  {
+    "classifier": 12505,
+    "signature": "consultarMuro(pagina)"
+  },
+  {
+    "classifier": 12506,
+    "signature": "buscarPublicacionesActivas(pagina, 10)"
+  },
+  {
+    "classifier": 12505,
+    "signature": "validarConsultarMuro(datos, contexto)"
+  },
+  {
+    "classifier": 12504,
+    "signature": "mostrarMuro(publicaciones)"
+  },
+  {
+    "classifier": 12504,
+    "signature": "eliminarPublicacion(idPublicacion)"
+  },
+  {
+    "classifier": 12505,
+    "signature": "eliminarPublicacion(idPublicacion)"
+  },
+  {
+    "classifier": 12506,
+    "signature": "buscarAutorPublicacion(idPublicacion)"
+  },
+  {
+    "classifier": 12505,
+    "signature": "validarEliminarPublicacion(datos, contexto)"
+  },
+  {
+    "classifier": 12506,
+    "signature": "eliminarPublicacionPropia(idUsuario, idPublicacion)"
+  },
+  {
+    "classifier": 12523,
+    "signature": "comentar(idPublicacion, texto)"
+  },
+  {
+    "classifier": 12524,
+    "signature": "comentar(idPublicacion, texto)"
+  },
+  {
+    "classifier": 12525,
+    "signature": "buscarPublicacionActiva(idPublicacion)"
+  },
+  {
+    "classifier": 12524,
+    "signature": "validarComentar(datos, contexto)"
+  },
+  {
+    "classifier": 12525,
+    "signature": "guardarComentario(idUsuario, idPublicacion, texto)"
+  },
+  {
+    "classifier": 12523,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12523,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12523,
+    "signature": "consultarComentarios(idPublicacion)"
+  },
+  {
+    "classifier": 12524,
+    "signature": "consultarComentarios(idPublicacion)"
+  },
+  {
+    "classifier": 12525,
+    "signature": "buscarComentarios(idPublicacion)"
+  },
+  {
+    "classifier": 12524,
+    "signature": "validarConsultarComentarios(datos, contexto)"
+  },
+  {
+    "classifier": 12524,
+    "signature": "ordenarComentariosCronologicamente(comentarios)"
+  },
+  {
+    "classifier": 12523,
+    "signature": "eliminarComentario(idComentario)"
+  },
+  {
+    "classifier": 12524,
+    "signature": "eliminarComentario(idComentario)"
+  },
+  {
+    "classifier": 12525,
+    "signature": "buscarAutorComentario(idComentario)"
+  },
+  {
+    "classifier": 12524,
+    "signature": "validarEliminarComentario(datos, contexto)"
+  },
+  {
+    "classifier": 12525,
+    "signature": "borrarComentarioLogicamente(idComentario)"
+  },
+  {
+    "classifier": 12541,
+    "signature": "cambiarReaccion(idPublicacion, accion)"
+  },
+  {
+    "classifier": 12542,
+    "signature": "cambiarReaccion(idPublicacion, accion)"
+  },
+  {
+    "classifier": 12543,
+    "signature": "buscarReaccion(idUsuario, idPublicacion)"
+  },
+  {
+    "classifier": 12542,
+    "signature": "validarCambiarReaccion(datos, contexto)"
+  },
+  {
+    "classifier": 12542,
+    "signature": "resolverCambioReaccion(accion, reaccion)"
+  },
+  {
+    "classifier": 12543,
+    "signature": "actualizarReaccionYContadorAtomico(idUsuario, idPublicacion, accion)"
+  },
+  {
+    "classifier": 12541,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12541,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12549,
+    "signature": "fijarPublicacion(idPublicacion, duracion)"
+  },
+  {
+    "classifier": 12550,
+    "signature": "fijarPublicacion(idPublicacion, duracion)"
+  },
+  {
+    "classifier": 12551,
+    "signature": "buscarPublicacionYFijaciones(idPublicacion)"
+  },
+  {
+    "classifier": 12550,
+    "signature": "validarFijarPublicacion(datos, contexto)"
+  },
+  {
+    "classifier": 12551,
+    "signature": "fijarPublicacion(idPublicacion, fechaFin)"
+  },
+  {
+    "classifier": 12549,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12549,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12550,
+    "signature": "retirarFijacionVencida(idPublicacion, ahora)"
+  },
+  {
+    "classifier": 12551,
+    "signature": "buscarFijacion(idPublicacion)"
+  },
+  {
+    "classifier": 12550,
+    "signature": "validarRetirarFijacionVencida(datos, contexto)"
+  },
+  {
+    "classifier": 12551,
+    "signature": "retirarFijacion(idPublicacion)"
+  },
+  {
+    "classifier": 12562,
+    "signature": "reportarContenido(idContenido, motivo)"
+  },
+  {
+    "classifier": 12563,
+    "signature": "reportarContenido(idContenido, motivo)"
+  },
+  {
+    "classifier": 12564,
+    "signature": "buscarContenidoYReporte(idUsuario, idContenido)"
+  },
+  {
+    "classifier": 12563,
+    "signature": "validarReportarContenido(datos, contexto)"
+  },
+  {
+    "classifier": 12564,
+    "signature": "guardarReporteYContarUsuarios(idUsuario, idContenido, motivo)"
+  },
+  {
+    "classifier": 12564,
+    "signature": "ocultarContenido(idContenido)"
+  },
+  {
+    "classifier": 12562,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12562,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12562,
+    "signature": "resolverModeracion(idContenido, accion)"
+  },
+  {
+    "classifier": 12563,
+    "signature": "resolverModeracion(idContenido, accion)"
+  },
+  {
+    "classifier": 12564,
+    "signature": "buscarContenidoReportado(idContenido)"
+  },
+  {
+    "classifier": 12563,
+    "signature": "validarResolverModeracion(datos, contexto)"
+  },
+  {
+    "classifier": 12564,
+    "signature": "aplicarModeracion(idContenido, accion)"
+  },
+  {
+    "classifier": 12576,
+    "signature": "publicarSalud(tipo, contenido)"
+  },
+  {
+    "classifier": 12577,
+    "signature": "publicarSalud(tipo, contenido)"
+  },
+  {
+    "classifier": 12578,
+    "signature": "buscarCategoriasSalud()"
+  },
+  {
+    "classifier": 12577,
+    "signature": "validarPublicarSalud(datos, contexto)"
+  },
+  {
+    "classifier": 12578,
+    "signature": "publicarContenidoSalud(tipo, contenido)"
+  },
+  {
+    "classifier": 12576,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12576,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12576,
+    "signature": "consultarSalud(tipo, pagina)"
+  },
+  {
+    "classifier": 12577,
+    "signature": "consultarSalud(tipo, pagina)"
+  },
+  {
+    "classifier": 12578,
+    "signature": "buscarContenidosSaludActivos(tipo, pagina)"
+  },
+  {
+    "classifier": 12577,
+    "signature": "validarConsultarSalud(datos, contexto)"
+  },
+  {
+    "classifier": 12577,
+    "signature": "clasificarArticulosYServicios(contenidos)"
+  },
+  {
+    "classifier": 12576,
+    "signature": "despublicarSalud(idContenido)"
+  },
+  {
+    "classifier": 12577,
+    "signature": "despublicarSalud(idContenido)"
+  },
+  {
+    "classifier": 12578,
+    "signature": "buscarContenidoSalud(idContenido)"
+  },
+  {
+    "classifier": 12577,
+    "signature": "validarDespublicarSalud(datos, contexto)"
+  },
+  {
+    "classifier": 12578,
+    "signature": "cambiarSaludABorrador(idContenido)"
+  },
+  {
+    "classifier": 12594,
+    "signature": "crearPremio(nombre, costo, stock, foto)"
+  },
+  {
+    "classifier": 12595,
+    "signature": "crearPremio(nombre, costo, stock, foto)"
+  },
+  {
+    "classifier": 12596,
+    "signature": "buscarConfiguracionPremios()"
+  },
+  {
+    "classifier": 12595,
+    "signature": "validarCrearPremio(datos, contexto)"
+  },
+  {
+    "classifier": 12596,
+    "signature": "guardarPremio(nombre, costo, stock, foto)"
+  },
+  {
+    "classifier": 12594,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12594,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12594,
+    "signature": "consultarPremios(pagina)"
+  },
+  {
+    "classifier": 12595,
+    "signature": "consultarPremios(pagina)"
+  },
+  {
+    "classifier": 12596,
+    "signature": "buscarPremiosActivosConStock(pagina)"
+  },
+  {
+    "classifier": 12595,
+    "signature": "validarConsultarPremios(datos, contexto)"
+  },
+  {
+    "classifier": 12594,
+    "signature": "mostrarPremios(premios)"
+  },
+  {
+    "classifier": 12595,
+    "signature": "descontarInventario(idCanje, idPremio)"
+  },
+  {
+    "classifier": 12596,
+    "signature": "buscarCanjeYStock(idCanje, idPremio)"
+  },
+  {
+    "classifier": 12595,
+    "signature": "validarDescontarInventario(datos, contexto)"
+  },
+  {
+    "classifier": 12596,
+    "signature": "descontarUnidadEnTransaccion(idCanje, idPremio)"
+  },
+  {
+    "classifier": 12594,
+    "signature": "inactivarPremio(idPremio)"
+  },
+  {
+    "classifier": 12595,
+    "signature": "inactivarPremio(idPremio)"
+  },
+  {
+    "classifier": 12596,
+    "signature": "buscarPremio(idPremio)"
+  },
+  {
+    "classifier": 12595,
+    "signature": "validarInactivarPremio(datos, contexto)"
+  },
+  {
+    "classifier": 12596,
+    "signature": "inactivarPremio(idPremio)"
+  },
+  {
+    "classifier": 12617,
+    "signature": "canjearPremio(idUsuario, idPremio)"
+  },
+  {
+    "classifier": 12618,
+    "signature": "canjearPremio(idUsuario, idPremio)"
+  },
+  {
+    "classifier": 12619,
+    "signature": "buscarCuentaSaldoYStock(idUsuario, idPremio)"
+  },
+  {
+    "classifier": 12618,
+    "signature": "validarCanjearPremio(datos, contexto)"
+  },
+  {
+    "classifier": 12619,
+    "signature": "registrarCanjeYDescontarAtomico(idUsuario, idPremio)"
+  },
+  {
+    "classifier": 12617,
+    "signature": "mostrarComprobante(comprobante)"
+  },
+  {
+    "classifier": 12617,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12617,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12617,
+    "signature": "consultarMisCanjes(idUsuario)"
+  },
+  {
+    "classifier": 12618,
+    "signature": "consultarMisCanjes(idUsuario)"
+  },
+  {
+    "classifier": 12619,
+    "signature": "buscarCanjesPropios(idUsuario)"
+  },
+  {
+    "classifier": 12618,
+    "signature": "validarConsultarMisCanjes(datos, contexto)"
+  },
+  {
+    "classifier": 12618,
+    "signature": "ordenarCanjesPorFecha(canjes)"
+  },
+  {
+    "classifier": 12617,
+    "signature": "actualizarEntrega(idCanje, nuevoEstado)"
+  },
+  {
+    "classifier": 12618,
+    "signature": "actualizarEntrega(idCanje, nuevoEstado)"
+  },
+  {
+    "classifier": 12619,
+    "signature": "buscarEstadoEntrega(idCanje)"
+  },
+  {
+    "classifier": 12618,
+    "signature": "validarActualizarEntrega(datos, contexto)"
+  },
+  {
+    "classifier": 12619,
+    "signature": "actualizarEntrega(idCanje, nuevoEstado)"
+  },
+  {
+    "classifier": 12617,
+    "signature": "consultarCanjesGlobales(desde, hasta, pagina)"
+  },
+  {
+    "classifier": 12618,
+    "signature": "consultarCanjesGlobales(desde, hasta, pagina)"
+  },
+  {
+    "classifier": 12619,
+    "signature": "buscarCanjesPorFecha(desde, hasta, pagina, 50)"
+  },
+  {
+    "classifier": 12618,
+    "signature": "validarConsultarCanjesGlobales(datos, contexto)"
+  },
+  {
+    "classifier": 12617,
+    "signature": "mostrarCanjes(canjes)"
+  },
+  {
+    "classifier": 12640,
+    "signature": "guardarFavorito(idUsuario, idPremio)"
+  },
+  {
+    "classifier": 12641,
+    "signature": "guardarFavorito(idUsuario, idPremio)"
+  },
+  {
+    "classifier": 12642,
+    "signature": "buscarPremioYFavorito(idUsuario, idPremio)"
+  },
+  {
+    "classifier": 12641,
+    "signature": "validarGuardarFavorito(datos, contexto)"
+  },
+  {
+    "classifier": 12642,
+    "signature": "guardarFavoritoUnico(idUsuario, idPremio)"
+  },
+  {
+    "classifier": 12640,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12640,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12640,
+    "signature": "quitarFavorito(idUsuario, idPremio)"
+  },
+  {
+    "classifier": 12641,
+    "signature": "quitarFavorito(idUsuario, idPremio)"
+  },
+  {
+    "classifier": 12642,
+    "signature": "buscarFavorito(idUsuario, idPremio)"
+  },
+  {
+    "classifier": 12641,
+    "signature": "validarQuitarFavorito(datos, contexto)"
+  },
+  {
+    "classifier": 12642,
+    "signature": "quitarFavorito(idUsuario, idPremio)"
+  },
+  {
+    "classifier": 12640,
+    "signature": "consultarFavoritos(idUsuario)"
+  },
+  {
+    "classifier": 12641,
+    "signature": "consultarFavoritos(idUsuario)"
+  },
+  {
+    "classifier": 12642,
+    "signature": "buscarFavoritosActivos(idUsuario)"
+  },
+  {
+    "classifier": 12641,
+    "signature": "validarConsultarFavoritos(datos, contexto)"
+  },
+  {
+    "classifier": 12640,
+    "signature": "mostrarFavoritos(favoritos)"
+  },
+  {
+    "classifier": 12658,
+    "signature": "elegirMeta(idUsuario, idPremio)"
+  },
+  {
+    "classifier": 12659,
+    "signature": "elegirMeta(idUsuario, idPremio)"
+  },
+  {
+    "classifier": 12660,
+    "signature": "buscarPremioYMeta(idUsuario, idPremio)"
+  },
+  {
+    "classifier": 12659,
+    "signature": "validarElegirMeta(datos, contexto)"
+  },
+  {
+    "classifier": 12660,
+    "signature": "reemplazarMetaActiva(idUsuario, idPremio)"
+  },
+  {
+    "classifier": 12658,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12658,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12659,
+    "signature": "actualizarProgresoMeta(idUsuario)"
+  },
+  {
+    "classifier": 12660,
+    "signature": "buscarSaldoMetaYAviso(idUsuario)"
+  },
+  {
+    "classifier": 12659,
+    "signature": "validarActualizarProgresoMeta(datos, contexto)"
+  },
+  {
+    "classifier": 12659,
+    "signature": "calcularFaltante(costo, saldo)"
+  },
+  {
+    "classifier": 12660,
+    "signature": "guardarNotificacionMetaUnica(idUsuario, idMeta)"
+  },
+  {
+    "classifier": 12672,
+    "signature": "buscar(termino, pagina)"
+  },
+  {
+    "classifier": 12673,
+    "signature": "buscar(termino, pagina)"
+  },
+  {
+    "classifier": 12674,
+    "signature": "buscarResultadosPermitidos(termino, idUsuario, pagina, 20)"
+  },
+  {
+    "classifier": 12673,
+    "signature": "validarBuscar(datos, contexto)"
+  },
+  {
+    "classifier": 12673,
+    "signature": "aplicarPrivacidad(resultados)"
+  },
+  {
+    "classifier": 12672,
+    "signature": "mostrarResultados(resultados, pagina)"
+  },
+  {
+    "classifier": 12672,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12672,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12681,
+    "signature": "notificarCampana(idCampana)"
+  },
+  {
+    "classifier": 12682,
+    "signature": "buscarCampanaYDestinatarios(idCampana)"
+  },
+  {
+    "classifier": 12681,
+    "signature": "validarNotificarCampana(datos, contexto)"
+  },
+  {
+    "classifier": 12682,
+    "signature": "crearAlertasYActualizarContadores(idCampana, destinatarios)"
+  },
+  {
+    "classifier": 12680,
+    "signature": "leerBandeja(idUsuario, idNotificacion, pagina)"
+  },
+  {
+    "classifier": 12681,
+    "signature": "leerBandeja(idUsuario, idNotificacion, pagina)"
+  },
+  {
+    "classifier": 12682,
+    "signature": "buscarNotificaciones(idUsuario, pagina, 20)"
+  },
+  {
+    "classifier": 12681,
+    "signature": "validarLeerBandeja(datos, contexto)"
+  },
+  {
+    "classifier": 12682,
+    "signature": "marcarLeidaUnaVez(idUsuario, idNotificacion)"
+  },
+  {
+    "classifier": 12680,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12680,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12681,
+    "signature": "purgarInformativas(ahora)"
+  },
+  {
+    "classifier": 12682,
+    "signature": "buscarInformativasVencidas(ahora)"
+  },
+  {
+    "classifier": 12681,
+    "signature": "validarPurgarInformativas(datos, contexto)"
+  },
+  {
+    "classifier": 12682,
+    "signature": "borrarInformativasVencidas(ids)"
+  },
+  {
+    "classifier": 12699,
+    "signature": "notificarRecompensa(evento)"
+  },
+  {
+    "classifier": 12700,
+    "signature": "buscarEventoYDestinatario(evento)"
+  },
+  {
+    "classifier": 12699,
+    "signature": "validarNotificarRecompensa(datos, contexto)"
+  },
+  {
+    "classifier": 12699,
+    "signature": "construirAlertaRecompensa(datosEvento)"
+  },
+  {
+    "classifier": 12700,
+    "signature": "guardarAlertaConRetencion(alerta, 90dias)"
+  },
+  {
+    "classifier": 12707,
+    "signature": "notificarValidacion(evento, claveUnica)"
+  },
+  {
+    "classifier": 12708,
+    "signature": "buscarCambioYNotificacion(claveUnica)"
+  },
+  {
+    "classifier": 12707,
+    "signature": "validarNotificarValidacion(datos, contexto)"
+  },
+  {
+    "classifier": 12707,
+    "signature": "prepararAvisoPrivado(cambio)"
+  },
+  {
+    "classifier": 12708,
+    "signature": "guardarAvisoUnico(claveUnica, destinatario, aviso)"
+  },
+  {
+    "classifier": 12715,
+    "signature": "recordarTalleres(ahora)"
+  },
+  {
+    "classifier": 12716,
+    "signature": "buscarTalleresProximosEInscritos(ahora)"
+  },
+  {
+    "classifier": 12715,
+    "signature": "validarRecordarTalleres(datos, contexto)"
+  },
+  {
+    "classifier": 12716,
+    "signature": "guardarRecordatorioUnico(idTaller, idUsuario)"
+  },
+  {
+    "classifier": 12715,
+    "signature": "recordarRetos(ahora)"
+  },
+  {
+    "classifier": 12716,
+    "signature": "buscarRetosProximosYParticipantes(ahora)"
+  },
+  {
+    "classifier": 12715,
+    "signature": "validarRecordarRetos(datos, contexto)"
+  },
+  {
+    "classifier": 12716,
+    "signature": "guardarRecordatorioUnico(idReto, idUsuario)"
+  },
+  {
+    "classifier": 12727,
+    "signature": "crearSolicitud(descripcion)"
+  },
+  {
+    "classifier": 12728,
+    "signature": "crearSolicitud(descripcion)"
+  },
+  {
+    "classifier": 12729,
+    "signature": "buscarUsuarioActivo(idUsuario)"
+  },
+  {
+    "classifier": 12728,
+    "signature": "validarCrearSolicitud(datos, contexto)"
+  },
+  {
+    "classifier": 12728,
+    "signature": "generarCodigoSoporte(6)"
+  },
+  {
+    "classifier": 12729,
+    "signature": "crearSolicitudAbierta(idUsuario, descripcion, codigo)"
+  },
+  {
+    "classifier": 12727,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12727,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12727,
+    "signature": "atenderSolicitud(idSolicitud, estado, respuesta)"
+  },
+  {
+    "classifier": 12728,
+    "signature": "atenderSolicitud(idSolicitud, estado, respuesta)"
+  },
+  {
+    "classifier": 12729,
+    "signature": "buscarSolicitud(idSolicitud)"
+  },
+  {
+    "classifier": 12728,
+    "signature": "validarAtenderSolicitud(datos, contexto)"
+  },
+  {
+    "classifier": 12729,
+    "signature": "actualizarSolicitud(idSolicitud, estado, respuesta)"
+  },
+  {
+    "classifier": 12729,
+    "signature": "crearAvisoRespuestaSoporte(idUsuario, respuesta)"
+  },
+  {
+    "classifier": 12727,
+    "signature": "consultarMisSolicitudes(idUsuario)"
+  },
+  {
+    "classifier": 12728,
+    "signature": "consultarMisSolicitudes(idUsuario)"
+  },
+  {
+    "classifier": 12729,
+    "signature": "buscarSolicitudesPropias(idUsuario)"
+  },
+  {
+    "classifier": 12728,
+    "signature": "validarConsultarMisSolicitudes(datos, contexto)"
+  },
+  {
+    "classifier": 12727,
+    "signature": "mostrarSolicitudes(solicitudes)"
+  },
+  {
+    "classifier": 12747,
+    "signature": "registrarAuditoria(evento)"
+  },
+  {
+    "classifier": 12748,
+    "signature": "buscarPoliticaAuditoria(tipoEvento)"
+  },
+  {
+    "classifier": 12747,
+    "signature": "validarRegistrarAuditoria(datos, contexto)"
+  },
+  {
+    "classifier": 12747,
+    "signature": "excluirDatosFinancieros(evento)"
+  },
+  {
+    "classifier": 12748,
+    "signature": "insertarRegistroInmutable(evento)"
+  },
+  {
+    "classifier": 12746,
+    "signature": "consultarBitacora(fechas, usuario, accion, pagina)"
+  },
+  {
+    "classifier": 12747,
+    "signature": "consultarBitacora(fechas, usuario, accion, pagina)"
+  },
+  {
+    "classifier": 12748,
+    "signature": "buscarAuditoria(fechas, usuario, accion, pagina, 50)"
+  },
+  {
+    "classifier": 12747,
+    "signature": "validarConsultarBitacora(datos, contexto)"
+  },
+  {
+    "classifier": 12746,
+    "signature": "mostrarBitacora(registros)"
+  },
+  {
+    "classifier": 12746,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12746,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12759,
+    "signature": "generarReporteReferidos(desde, hasta)"
+  },
+  {
+    "classifier": 12760,
+    "signature": "generarReporteReferidos(desde, hasta)"
+  },
+  {
+    "classifier": 12761,
+    "signature": "buscarReferidosReporte(desde, hasta)"
+  },
+  {
+    "classifier": 12760,
+    "signature": "validarGenerarReporteReferidos(datos, contexto)"
+  },
+  {
+    "classifier": 12760,
+    "signature": "agruparReferidos(referidos)"
+  },
+  {
+    "classifier": 12760,
+    "signature": "calcularPorcentajeAprobados(aprobados, total)"
+  },
+  {
+    "classifier": 12759,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12759,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12767,
+    "signature": "responderEncuesta(idEvento, respuestas)"
+  },
+  {
+    "classifier": 12768,
+    "signature": "responderEncuesta(idEvento, respuestas)"
+  },
+  {
+    "classifier": 12769,
+    "signature": "buscarEventoYRespuesta(idUsuario, idEvento)"
+  },
+  {
+    "classifier": 12768,
+    "signature": "validarResponderEncuesta(datos, contexto)"
+  },
+  {
+    "classifier": 12769,
+    "signature": "guardarRespuestaUnica(idUsuario, idEvento, respuestas)"
+  },
+  {
+    "classifier": 12767,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12767,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12775,
+    "signature": "consultarIndicadores(filtros)"
+  },
+  {
+    "classifier": 12776,
+    "signature": "consultarIndicadores(filtros)"
+  },
+  {
+    "classifier": 12777,
+    "signature": "buscarAgregadosIndicadores(filtros)"
+  },
+  {
+    "classifier": 12776,
+    "signature": "validarConsultarIndicadores(datos, contexto)"
+  },
+  {
+    "classifier": 12776,
+    "signature": "calcularSeisIndicadores(agregados)"
+  },
+  {
+    "classifier": 12776,
+    "signature": "calcularCostoReferido(puntos, valorPunto, aprobados)"
+  },
+  {
+    "classifier": 12776,
+    "signature": "calcularParticipacionYCompletitud(agregados)"
+  },
+  {
+    "classifier": 12775,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12775,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12775,
+    "signature": "exportarIndicadores(filtros)"
+  },
+  {
+    "classifier": 12776,
+    "signature": "exportarIndicadores(filtros)"
+  },
+  {
+    "classifier": 12776,
+    "signature": "validarExportarIndicadores(datos, contexto)"
+  },
+  {
+    "classifier": 12776,
+    "signature": "generarCsvIndicadores(agregados)"
+  },
+  {
+    "classifier": 12788,
+    "signature": "cambiarPrivacidad(idUsuario, visibilidad)"
+  },
+  {
+    "classifier": 12789,
+    "signature": "cambiarPrivacidad(idUsuario, visibilidad)"
+  },
+  {
+    "classifier": 12790,
+    "signature": "buscarPerfilPropio(idUsuario)"
+  },
+  {
+    "classifier": 12789,
+    "signature": "validarCambiarPrivacidad(datos, contexto)"
+  },
+  {
+    "classifier": 12790,
+    "signature": "guardarPrivacidad(idUsuario, visibilidad)"
+  },
+  {
+    "classifier": 12788,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12788,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12788,
+    "signature": "consultarPerfilAjeno(idPerfil)"
+  },
+  {
+    "classifier": 12789,
+    "signature": "consultarPerfilAjeno(idPerfil)"
+  },
+  {
+    "classifier": 12790,
+    "signature": "buscarPerfilYVisibilidad(idPerfil)"
+  },
+  {
+    "classifier": 12789,
+    "signature": "validarConsultarPerfilAjeno(datos, contexto)"
+  },
+  {
+    "classifier": 12789,
+    "signature": "excluirDatosPersonales(perfil)"
+  },
+  {
+    "classifier": 12789,
+    "signature": "seleccionarDatosPublicos(perfil)"
+  },
+  {
+    "classifier": 12801,
+    "signature": "aceptarAviso(idUsuario, version)"
+  },
+  {
+    "classifier": 12802,
+    "signature": "aceptarAviso(idUsuario, version)"
+  },
+  {
+    "classifier": 12803,
+    "signature": "buscarAvisoVigente()"
+  },
+  {
+    "classifier": 12802,
+    "signature": "validarAceptarAviso(datos, contexto)"
+  },
+  {
+    "classifier": 12803,
+    "signature": "registrarAceptacion(idUsuario, fechaHora, version)"
+  },
+  {
+    "classifier": 12803,
+    "signature": "establecerRetencion(evidencia, 5anios)"
+  },
+  {
+    "classifier": 12801,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12801,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12801,
+    "signature": "publicarAviso(version, contenido)"
+  },
+  {
+    "classifier": 12802,
+    "signature": "publicarAviso(version, contenido)"
+  },
+  {
+    "classifier": 12803,
+    "signature": "buscarVersionAviso(version)"
+  },
+  {
+    "classifier": 12802,
+    "signature": "validarPublicarAviso(datos, contexto)"
+  },
+  {
+    "classifier": 12803,
+    "signature": "publicarVersionUnicaVigente(version, contenido)"
+  },
+  {
+    "classifier": 12814,
+    "signature": "cargarInicio(idUsuario)"
+  },
+  {
+    "classifier": 12815,
+    "signature": "cargarInicio(idUsuario)"
+  },
+  {
+    "classifier": 12816,
+    "signature": "buscarEstadoCuentaYPermisos(idUsuario)"
+  },
+  {
+    "classifier": 12815,
+    "signature": "validarCargarInicio(datos, contexto)"
+  },
+  {
+    "classifier": 12816,
+    "signature": "consultarSaldo(idUsuario)"
+  },
+  {
+    "classifier": 12816,
+    "signature": "consultarNivelYFaltantes(idUsuario)"
+  },
+  {
+    "classifier": 12816,
+    "signature": "contarNoLeidas(idUsuario)"
+  },
+  {
+    "classifier": 12815,
+    "signature": "seleccionarAccionCuenta(estadoCuenta)"
+  },
+  {
+    "classifier": 12814,
+    "signature": "mostrarAccesosPermitidos(permisos)"
+  },
+  {
+    "classifier": 12814,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12814,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12823,
+    "signature": "abrirPantalla(pantalla, ancho)"
+  },
+  {
+    "classifier": 12824,
+    "signature": "abrirPantalla(pantalla, ancho)"
+  },
+  {
+    "classifier": 12825,
+    "signature": "buscarPermisosYAyudas(idUsuario, pantalla)"
+  },
+  {
+    "classifier": 12824,
+    "signature": "validarAbrirPantalla(datos, contexto)"
+  },
+  {
+    "classifier": 12823,
+    "signature": "mostrarAyudas(configuracionUI)"
+  },
+  {
+    "classifier": 12823,
+    "signature": "adaptarMenu(permisos, ancho)"
+  },
+  {
+    "classifier": 12823,
+    "signature": "mostrarResultado(resultado)"
+  },
+  {
+    "classifier": 12823,
+    "signature": "mostrarError(causa, correccion)"
+  },
+  {
+    "classifier": 12824,
+    "signature": "presentarResultado(resultado)"
+  },
+  {
+    "classifier": 12824,
+    "signature": "validarPresentarResultado(datos, contexto)"
+  },
+  {
+    "classifier": 12823,
+    "signature": "marcarCamposConError(errores)"
+  },
+  {
+    "classifier": 12823,
+    "signature": "mostrarMensaje(resultado, 4s)"
+  },
+  {
+    "classifier": 12838,
+    "signature": "validarCuenta(idSolicitud, intento)"
+  },
+  {
+    "classifier": 12839,
+    "signature": "buscarSolicitudYRegla(idSolicitud)"
+  },
+  {
+    "classifier": 12840,
+    "signature": "consultarCuentaInstitucional(tipo, numero)"
+  },
+  {
+    "classifier": 12838,
+    "signature": "validarValidarCuenta(datos, contexto)"
+  },
+  {
+    "classifier": 12838,
+    "signature": "compararTitularYCondicion(solicitud, evidencia)"
+  },
+  {
+    "classifier": 12839,
+    "signature": "aprobarCuentaConEvidencia(idSolicitud, evidencia)"
+  },
+  {
+    "classifier": 12839,
+    "signature": "rechazarCuentaConEvidencia(idSolicitud, causa, evidencia)"
+  },
+  {
+    "classifier": 12839,
+    "signature": "mantenerPendienteYProgramarReintento(idSolicitud, causa)"
+  }
+]

@@ -1,0 +1,109 @@
+01.1|registrarCuenta(datos, clave, consentimiento)|buscarRegistro(correo, versionAviso)>registroActual|C validarDatosPersonales(datos)^C validarDatosOpcionales(cuenta, referido)^C protegerClave(clave) & D crearUsuario(datos, hash, consentimiento)>idUsuario^U conservarProgreso(datos, paso)^R RF-02
+02.1|emitirCodigo(idUsuario, motivo)|consultarUltimoEnvio(idUsuario)>ultimoEnvio|C generarCodigo(6, 10min) & D guardarCodigo(idUsuario, hash, vencimiento) & E enviarCodigo(correo, codigo)>idEnvio
+02.2|confirmarCorreo(idUsuario, codigo)|buscarCodigoVigente(idUsuario)>codigoGuardado|C compararCodigo(codigo, hash) & D confirmarCorreo(idUsuario, codigo)>correoConfirmado
+03.1|consultarPerfil(idUsuario)|buscarPerfil(idUsuario)>perfil|C seleccionarDatosPropios(perfil)
+03.2|actualizarPerfil(idUsuario, cambios)|buscarPerfilYCorreo(idUsuario, correo)>perfilActual|C validarCambios(cambios) & D actualizarPerfil(idUsuario, cambios)>perfilActualizado
+03.3|darBajaPerfil(idUsuario, confirmacion)|buscarEstadoPerfil(idUsuario)>estado|D inactivarPerfil(idUsuario)>perfilInactivo
+04.1|iniciarSesion(correo, clave)|buscarCredencialesYRol(correo)>credenciales|C verificarClave(clave, hash) & C emitirToken(idUsuario, rol) & D registrarSesion(idUsuario, token)>sesion
+04.2|expirarSesion(idSesion, ahora)|buscarUltimaActividad(idSesion)>ultimaActividad|D invalidarSesion(idSesion)>sesionExpirada
+04.3|cerrarSesion(idSesion)|buscarSesion(idSesion)>sesion|D invalidarSesion(idSesion)>sesionCerrada
+05.1|vincularCuenta(idUsuario, tipo, numero)|buscarVinculacion(tipo, numero)>vinculacion|D crearSolicitudUnica(idUsuario, tipo, numero)>idSolicitud^R RF-50
+05.2|consultarValidaciones(filtros, pagina)|buscarPendientes(filtros, pagina, 20)>pendientes|C ordenarPorAntiguedad(pendientes)
+05.3|consultarCuenta(idUsuario, revelar)|buscarCuentaPropia(idUsuario)>cuenta|C aplicarMascara(cuenta, revelar, titular)
+05.4|corregirCuenta(idSolicitud, cambios)|buscarSolicitudRechazada(idSolicitud)>solicitud|D registrarCorreccion(idSolicitud, cambios) & R RF-50
+06.1|solicitarFuncion(idUsuario, funcion)|buscarEstadoCuentaYRol(idUsuario)>estadoYRol|C autorizarFuncionRestringida(funcion, estadoYRol)^C autorizarFuncionAbierta(funcion, usuarioActivo)
+07.1|solicitarRecuperacion(correo)|buscarUsuarioPorCorreo(correo)>usuario|C generarEnlaceUnico(30min) & D guardarTokenRecuperacion(idUsuario, hash)>tokenGuardado & E enviarEnlace(correo, enlace)>idEnvio
+07.2|restablecerClave(token, nuevaClave)|buscarTokenRecuperacion(token)>tokenGuardado|C validarClave(nuevaClave) & D actualizarClaveYConsumirToken(idUsuario, hash, token)>claveActualizada
+08.1|gestionarRol(accion, idUsuario, rol)|buscarRolesYPermisos(idUsuario)>roles|C validarRolProtegido(accion, rol) & D guardarRolYPermisos(rol, permisos)^D asignarRolYAuditar(idUsuario, rol, autor)>rolAsignado
+08.2|asignarRolInicial(idUsuario)|buscarRolInicial(idUsuario)>rolActual|D asignarRolSocioSiAusente(idUsuario)>rolInicial
+08.3|accederFuncion(idUsuario, funcion)|buscarPermisos(idUsuario)>permisos|C verificarPermiso(funcion, permisos) & U mostrarOpcionesPermitidas(permisos)
+09.1|generarIdentidadReferido(idUsuario)|buscarCuentaYCodigo(idUsuario)>cuentaYCodigo|C generarCodigoUnico(8) & D guardarCodigoYEnlace(idUsuario, codigo)>enlace^C generarQrPng(enlace, 256) & D guardarQr(idUsuario, png)>qr
+09.2|descargarQr(idUsuario)|buscarQrPropio(idUsuario)>qr|U descargarArchivo(qr, PNG)
+10.1|compartirEnlace(idUsuario, canal)|buscarEnlaceOficial(idUsuario)>enlace|U copiarAlPortapapeles(enlace)^U prepararMensaje(enlace, 300) & E abrirCanal(canal, mensaje)>canalAbierto
+11.1|reevaluarReferido(idUsuario, codigo)|buscarRelacionYCuenta(idUsuario, codigo)>relacionYCuenta|D guardarRelacionUnica(idUsuario, referidor)>idRelacion^C determinarEstado(relacionYCuenta) & D actualizarEstadoReferido(idRelacion, estado)>estadoConfirmado^R RF-39
+11.2|consultarMisReferidos(idUsuario, pagina)|buscarReferidosPropios(idUsuario, pagina, 10)>referidos|C limitarDatosReferido(referidos)
+11.3|consultarReferidos(filtros, pagina, exportar)|buscarReferidosGlobales(filtros, pagina, 20)>referidos|C prepararSeguimiento(referidos)^C generarCsvPendientes(referidos)>archivoCsv
+11.4|asociarReferido(idUsuario, idReferidor)|buscarUsuarioSinReferidor(idUsuario)>usuario|D asociarReferidor(idUsuario, idReferidor) & R RF-11
+11.5|ocultarReferido(idRelacion)|buscarRelacion(idRelacion)>relacion|D ocultarRelacion(idRelacion)>relacionOculta
+12.1|acreditarPuntos(evento, claveUnica)|buscarEventoYConfiguracion(claveUnica)>eventoYReglas|C resolverPuntos(evento, parametros, campana)^D acreditarReferidoAtomico(evento, puntos)>saldosActualizados^C resolverAcreditacionActividad(evento, puntos)
+12.2|consultarPuntos(idUsuario, pagina)|buscarSaldoYMovimientos(idUsuario, pagina, 20)>saldoYMovimientos|C ordenarMovimientosPorFecha(movimientos)^C separarSaldoYAcumulado(saldoYMovimientos)
+13.1|guardarCampana(datos)|buscarCampanasSuperpuestas(fechas, provincias)>superposiciones|D guardarCampana(datos)>campana
+13.2|cambiarEstadoCampana(idCampana, nuevoEstado)|buscarCampana(idCampana)>campana|D actualizarEstadoCampana(idCampana, nuevoEstado)>estado
+13.3|consultarCampanas(idUsuario)|buscarCampanasActivas(provincia, ahora)>campanas|C prepararBeneficiosYVigencia(campanas)
+14.1|actualizarParametro(nombre, valor)|buscarParametro(nombre)>parametroActual|C validarTipoParametro(nombre, valor) & D guardarParametro(nombre, valor)^D auditarCambioParametro(autor, anterior, nuevo) & C invalidarCacheParametros()
+15.1|ajustarPuntos(idUsuario, ajuste, motivo)|buscarSaldo(idUsuario)>saldo|C validarAjuste(saldo, ajuste, motivo)^D ajustarSaldoYRegistrarMovimiento(idUsuario, ajuste, motivo)>saldoActualizado
+16.1|recalcularNivel(idUsuario)|buscarAcumuladoYUmbrales(idUsuario)>acumuladoYUmbrales|C calcularNivel(acumulado, umbrales) & D guardarNivel(idUsuario, nivel)>nivel
+16.2|consultarNivelYRanking(idUsuario)|buscarNivelYRankingPublico(idUsuario, 10)>nivelYRanking|C calcularPuntosFaltantes(acumulado, umbral)^C excluirPerfilesPrivados(ranking)
+16.3|configurarNiveles(niveles)|buscarUmbralesActuales()>umbrales|D guardarNiveles(niveles)>nivelesActualizados
+17.1|gestionarInsignia(accion, datos)|buscarInsignia(datos)>insignia|D crearInsignia(tipoLogro, meta)>insignia^D inactivarInsignia(idInsignia)>insigniaInactiva
+17.2|otorgarInsignia(idUsuario, evento)|buscarLogroYAsignacion(idUsuario, evento)>logroYAsignacion|D otorgarInsigniaUnica(idUsuario, idInsignia)>insigniaOtorgada
+17.3|consultarInsignias(idUsuario)|buscarInsigniasUsuario(idUsuario)>insignias|C ordenarInsigniasPorFecha(insignias)
+18.1|gestionarReto(accion, datos)|buscarReto(datos)>reto|D crearReto(fechas, meta, puntos)>reto^D finalizarReto(idReto)>retoFinalizado
+18.2|actualizarAvanceReto(idUsuario, evento)|buscarAvanceYMeta(idUsuario, evento)>avanceYMeta|C calcularAvance(actividad, meta) & D guardarAvance(idUsuario, idReto, avance)^R RF-12
+19.1|crearPregunta(enunciado, opciones, tema)|buscarTemasPermitidos()>temas|D guardarPregunta(enunciado, opciones, tema)>pregunta
+19.2|filtrarPreguntas(dificultad)|buscarPreguntas(dificultad)>preguntas|U mostrarPreguntas(preguntas)
+19.3|desactivarPregunta(idPregunta)|buscarPregunta(idPregunta)>pregunta|D inactivarPregunta(idPregunta)>preguntaInactiva
+20.1|jugarTrivia(idUsuario)|contarPartidasUltimas24h(idUsuario)>cantidadPartidas|D seleccionarPreguntasActivas(10)>preguntas^C evaluarRespuesta(respuesta, tiempo)^C calcularPuntaje(respuestas) & D guardarPartida(idUsuario, resultado) & R RF-12
+21.1|publicarCapacitacion(material, cuestionario)|buscarConfiguracionMaterial()>limites|D guardarCapacitacion(material, cuestionario)>capacitacion
+21.2|consultarCapacitaciones(pagina)|buscarCapacitacionesActivas(pagina, 10)>capacitaciones|U mostrarCatalogo(capacitaciones)
+21.3|desactivarCapacitacion(idCapacitacion)|buscarCapacitacion(idCapacitacion)>capacitacion|D inactivarCapacitacion(idCapacitacion)>capacitacionInactiva
+22.1|rendirEvaluacion(idCapacitacion, respuestas)|buscarEvaluacionEIntentos(idUsuario, idCapacitacion)>evaluacion|C calificar(respuestas, solucion) & D guardarIntento(idUsuario, calificacion)^D marcarCapacitacionCompletada(idUsuario, idCapacitacion)^C generarCertificadoPdf(idUsuario, idCapacitacion) & D guardarCertificado(codigoUnico, pdf)>certificado^R RF-12
+23.1|crearTaller(fecha, lugar, cupos)|buscarConfiguracionTaller()>configuracion|D guardarTaller(fecha, lugar, cupos)>taller
+23.2|consultarCalendario(mes)|buscarTalleres(mes)>talleres|C agruparTalleresPorMes(talleres)
+23.3|cambiarCupos(idTaller, cupos)|contarInscritos(idTaller)>inscritos|D actualizarCupos(idTaller, cupos)>cuposActualizados
+23.4|cancelarTaller(idTaller)|buscarTallerEInscripciones(idTaller)>taller|D cancelarTallerYLiberarInscripciones(idTaller)>tallerCancelado
+24.1|inscribirseTaller(idUsuario, idTaller)|buscarTallerYDuplicado(idUsuario, idTaller)>disponibilidad|D inscribirYDescontarCupoAtomico(idUsuario, idTaller)>inscripcion
+24.2|anularInscripcion(idInscripcion)|buscarInscripcionPropia(idUsuario, idInscripcion)>inscripcion|D anularYRestituirCupo(idInscripcion)>inscripcionAnulada
+25.1|marcarAsistencia(idInscripcion, estado)|buscarInscripcionYAsistencia(idInscripcion)>asistencia|D guardarAsistencia(idInscripcion, estado)>asistencia^R RF-12
+26.1|guardarPublicacion(accion, texto, imagen)|buscarAutorYPublicacion(idUsuario, idPublicacion)>autorYPublicacion|D guardarPublicacion(idUsuario, texto, imagen)>publicacion^D marcarPublicacionOficial(idPublicacion)
+26.2|consultarMuro(pagina)|buscarPublicacionesActivas(pagina, 10)>publicaciones|U mostrarMuro(publicaciones)
+26.3|eliminarPublicacion(idPublicacion)|buscarAutorPublicacion(idPublicacion)>autor|D eliminarPublicacionPropia(idUsuario, idPublicacion)>publicacionEliminada
+27.1|comentar(idPublicacion, texto)|buscarPublicacionActiva(idPublicacion)>publicacion|D guardarComentario(idUsuario, idPublicacion, texto)>comentario
+27.2|consultarComentarios(idPublicacion)|buscarComentarios(idPublicacion)>comentarios|C ordenarComentariosCronologicamente(comentarios)
+27.3|eliminarComentario(idComentario)|buscarAutorComentario(idComentario)>autor|D borrarComentarioLogicamente(idComentario)>comentarioEliminado
+28.1|cambiarReaccion(idPublicacion, accion)|buscarReaccion(idUsuario, idPublicacion)>reaccion|C resolverCambioReaccion(accion, reaccion)^D actualizarReaccionYContadorAtomico(idUsuario, idPublicacion, accion)>contador
+29.1|fijarPublicacion(idPublicacion, duracion)|buscarPublicacionYFijaciones(idPublicacion)>publicacion|D fijarPublicacion(idPublicacion, fechaFin)>fijacion
+29.2|retirarFijacionVencida(idPublicacion, ahora)|buscarFijacion(idPublicacion)>fijacion|D retirarFijacion(idPublicacion)>fijacionRetirada
+30.1|reportarContenido(idContenido, motivo)|buscarContenidoYReporte(idUsuario, idContenido)>reporte|D guardarReporteYContarUsuarios(idUsuario, idContenido, motivo)>cantidadReportes^D ocultarContenido(idContenido)
+30.2|resolverModeracion(idContenido, accion)|buscarContenidoReportado(idContenido)>contenido|D aplicarModeracion(idContenido, accion)>resolucion
+31.1|publicarSalud(tipo, contenido)|buscarCategoriasSalud()>categorias|D publicarContenidoSalud(tipo, contenido)>contenido
+31.2|consultarSalud(tipo, pagina)|buscarContenidosSaludActivos(tipo, pagina)>contenidos|C clasificarArticulosYServicios(contenidos)
+31.3|despublicarSalud(idContenido)|buscarContenidoSalud(idContenido)>contenido|D cambiarSaludABorrador(idContenido)>contenidoBorrador
+32.1|crearPremio(nombre, costo, stock, foto)|buscarConfiguracionPremios()>configuracion|D guardarPremio(nombre, costo, stock, foto)>premio
+32.2|consultarPremios(pagina)|buscarPremiosActivosConStock(pagina)>premios|U mostrarPremios(premios)
+32.3|descontarInventario(idCanje, idPremio)|buscarCanjeYStock(idCanje, idPremio)>canjeYStock|D descontarUnidadEnTransaccion(idCanje, idPremio)>stockActualizado
+32.4|inactivarPremio(idPremio)|buscarPremio(idPremio)>premio|D inactivarPremio(idPremio)>premioInactivo
+33.1|canjearPremio(idUsuario, idPremio)|buscarCuentaSaldoYStock(idUsuario, idPremio)>disponibilidad|D registrarCanjeYDescontarAtomico(idUsuario, idPremio)>comprobante^U mostrarComprobante(comprobante)
+33.2|consultarMisCanjes(idUsuario)|buscarCanjesPropios(idUsuario)>canjes|C ordenarCanjesPorFecha(canjes)
+33.3|actualizarEntrega(idCanje, nuevoEstado)|buscarEstadoEntrega(idCanje)>estadoActual|D actualizarEntrega(idCanje, nuevoEstado)>estadoEntrega
+33.4|consultarCanjesGlobales(desde, hasta, pagina)|buscarCanjesPorFecha(desde, hasta, pagina, 50)>canjes|U mostrarCanjes(canjes)
+34.1|guardarFavorito(idUsuario, idPremio)|buscarPremioYFavorito(idUsuario, idPremio)>favorito|D guardarFavoritoUnico(idUsuario, idPremio)>favorito
+34.2|quitarFavorito(idUsuario, idPremio)|buscarFavorito(idUsuario, idPremio)>favorito|D quitarFavorito(idUsuario, idPremio)>favoritoRetirado
+34.3|consultarFavoritos(idUsuario)|buscarFavoritosActivos(idUsuario)>favoritos|U mostrarFavoritos(favoritos)
+35.1|elegirMeta(idUsuario, idPremio)|buscarPremioYMeta(idUsuario, idPremio)>meta|D reemplazarMetaActiva(idUsuario, idPremio)>metaActual
+35.2|actualizarProgresoMeta(idUsuario)|buscarSaldoMetaYAviso(idUsuario)>saldoMetaYAviso|C calcularFaltante(costo, saldo)^D guardarNotificacionMetaUnica(idUsuario, idMeta)>aviso
+36.1|buscar(termino, pagina)|buscarResultadosPermitidos(termino, idUsuario, pagina, 20)>resultados|C aplicarPrivacidad(resultados)^U mostrarResultados(resultados, pagina)
+37.1|notificarCampana(idCampana)|buscarCampanaYDestinatarios(idCampana)>destinatarios|D crearAlertasYActualizarContadores(idCampana, destinatarios)>notificaciones
+37.2|leerBandeja(idUsuario, idNotificacion, pagina)|buscarNotificaciones(idUsuario, pagina, 20)>notificaciones|D marcarLeidaUnaVez(idUsuario, idNotificacion)>contadorNoLeidas
+37.3|purgarInformativas(ahora)|buscarInformativasVencidas(ahora)>notificaciones|D borrarInformativasVencidas(ids)>cantidadEliminadas
+38.1|notificarRecompensa(evento)|buscarEventoYDestinatario(evento)>datosEvento|C construirAlertaRecompensa(datosEvento)^D guardarAlertaConRetencion(alerta, 90dias)>notificacion
+39.1|notificarValidacion(evento, claveUnica)|buscarCambioYNotificacion(claveUnica)>cambio|C prepararAvisoPrivado(cambio)^D guardarAvisoUnico(claveUnica, destinatario, aviso)>notificacion
+40.1|recordarTalleres(ahora)|buscarTalleresProximosEInscritos(ahora)>destinatarios|D guardarRecordatorioUnico(idTaller, idUsuario)>recordatorio
+40.2|recordarRetos(ahora)|buscarRetosProximosYParticipantes(ahora)>destinatarios|D guardarRecordatorioUnico(idReto, idUsuario)>recordatorio
+41.1|crearSolicitud(descripcion)|buscarUsuarioActivo(idUsuario)>usuario|C generarCodigoSoporte(6) & D crearSolicitudAbierta(idUsuario, descripcion, codigo)>solicitud
+41.2|atenderSolicitud(idSolicitud, estado, respuesta)|buscarSolicitud(idSolicitud)>solicitud|D actualizarSolicitud(idSolicitud, estado, respuesta)>solicitudActualizada
+41.3|consultarMisSolicitudes(idUsuario)|buscarSolicitudesPropias(idUsuario)>solicitudes|U mostrarSolicitudes(solicitudes)
+42.1|registrarAuditoria(evento)|buscarPoliticaAuditoria(tipoEvento)>politica|C excluirDatosFinancieros(evento) & D insertarRegistroInmutable(evento)>idRegistro
+42.2|consultarBitacora(fechas, usuario, accion, pagina)|buscarAuditoria(fechas, usuario, accion, pagina, 50)>registros|U mostrarBitacora(registros)
+43.1|generarReporteReferidos(desde, hasta)|buscarReferidosReporte(desde, hasta)>referidos|C agruparReferidos(referidos)^C calcularPorcentajeAprobados(aprobados, total)>reporte
+44.1|responderEncuesta(idEvento, respuestas)|buscarEventoYRespuesta(idUsuario, idEvento)>respuestaAnterior|D guardarRespuestaUnica(idUsuario, idEvento, respuestas)>respuesta
+45.1|consultarIndicadores(filtros)|buscarAgregadosIndicadores(filtros)>agregados|C calcularSeisIndicadores(agregados)^C calcularCostoReferido(puntos, valorPunto, aprobados)^C calcularParticipacionYCompletitud(agregados)>indicadores
+45.2|exportarIndicadores(filtros)|buscarAgregadosIndicadores(filtros)>agregados|C generarCsvIndicadores(agregados)>archivoCsv
+46.1|cambiarPrivacidad(idUsuario, visibilidad)|buscarPerfilPropio(idUsuario)>perfil|D guardarPrivacidad(idUsuario, visibilidad)>privacidad
+46.2|consultarPerfilAjeno(idPerfil)|buscarPerfilYVisibilidad(idPerfil)>perfil|C excluirDatosPersonales(perfil)^C seleccionarDatosPublicos(perfil)>perfilVisible
+47.1|aceptarAviso(idUsuario, version)|buscarAvisoVigente()>aviso|D registrarAceptacion(idUsuario, fechaHora, version)>evidencia^D establecerRetencion(evidencia, 5anios)
+47.2|publicarAviso(version, contenido)|buscarVersionAviso(version)>versionActual|D publicarVersionUnicaVigente(version, contenido)>aviso
+48.1|cargarInicio(idUsuario)|buscarEstadoCuentaYPermisos(idUsuario)>estadoYPermisos|D consultarResumenInicio(idUsuario)>resumen^C seleccionarAccionCuenta(estadoCuenta)^U mostrarAccesosPermitidos(permisos)
+49.1|abrirPantalla(pantalla, ancho)|buscarPermisosYAyudas(idUsuario, pantalla)>configuracionUI|U mostrarAyudas(configuracionUI)^U adaptarMenu(permisos, ancho)
+49.2|presentarResultado(resultado)|-|U marcarCamposConError(errores)^U mostrarMensaje(resultado, 4s)
+50.1|validarCuenta(idSolicitud, intento)|buscarSolicitudYRegla(idSolicitud)>solicitudYRegla|E consultarCuentaInstitucional(tipo, numero)>evidencia & C compararTitularYCondicion(solicitud, evidencia)^D aprobarCuentaConEvidencia(idSolicitud, evidencia)>estadoAprobado^R RF-11 & R RF-39 & R RF-42

@@ -1,0 +1,159 @@
+RF-01 Registro de cuenta en 3 pasos
+0: Registrar cuenta | Prospecto | Completar datos, cuenta opcional y contraseña | Validar nombre 3–100, correo único, celular 09 de 10 dígitos y provincia; Conservar cuenta opcional y código de referido opcional; validar si se informan; Crear cuenta con contraseña de 8 caracteres, mayúscula, número y confirmación; Conservar datos al retroceder y mostrar paso 1–3 y porcentaje; Iniciar confirmación RF-02; invocar RF-05/RF-11 cuando se informaron cuenta/referido
+RF-02 Confirmación de correo
+0: Emitir o reenviar código | Evento del sistema | Recibir registro, cambio de correo o solicitud de reenvío | Generar código de 6 dígitos válido 10 minutos y enviar en ≤60 s
+1: Confirmar correo | Prospecto | Introducir el código recibido | Confirmar correo y habilitar autenticación RF-04
+RF-03 Consulta, actualización y baja del perfil
+0: Consultar perfil | Socio / Cliente | Abrir mi perfil | Mostrar nombres y apellidos, correo, celular y estado de cuenta
+1: Actualizar perfil | Socio / Cliente | Enviar datos modificados | Actualizar nombre, correo, celular y contraseña en ≤2 s
+2: Dar de baja perfil | Socio / Cliente | Confirmar baja de la cuenta | Inactivar lógicamente y conservar todo el historial de puntos y referidos
+RF-04 Autenticación y cierre de sesión
+0: Iniciar sesión | Usuario de la plataforma | Introducir correo y contraseña | Emitir token y cargar permisos del rol en ≤3 s
+1: Expirar sesión | Evento del sistema | Detectar inactividad de una sesión | Invalidar sesión inactiva
+2: Cerrar sesión | Usuario de la plataforma | Seleccionar Cerrar sesión | Invalidar sesión y confirmar cierre en ≤2 s
+RF-05 Vinculación y validación automática de cuenta
+0: Solicitar vinculación | Socio / Cliente | Indicar tipo y número de cuenta | Guardar solicitud Pendiente con unicidad en base de datos; Invocar validación institucional RF-50; aplicar su resultado automático
+1: Consultar seguimiento | Administrador | Solicitar validaciones pendientes | Listar Pendientes por antigüedad, 20/página, causa y reintentos; sin dictamen manual
+2: Consultar cuenta | Socio / Cliente | Abrir datos de mi cuenta | Mostrar últimos 4 dígitos; revelar número solo a petición del titular
+3: Corregir cuenta rechazada | Socio / Cliente | Corregir datos y solicitar nuevo intento | Conservar historial e iniciar nueva validación RF-50 sin duplicar solicitud
+RF-06 Acceso según la verificación de la cuenta
+0: Solicitar función | Socio / Cliente | Abrir referidos, canjes o una función abierta | Autorizar referir/canjear solo con Aprobado; ignorar estados del cliente; Permitir formación, talleres, juegos, retos y comunidad a todo usuario activo
+RF-07 Recuperación de acceso
+0: Solicitar recuperación | Usuario de la plataforma | Enviar correo para recuperar acceso | Generar enlace de un uso, vigencia 30 minutos y enviarlo en ≤60 s
+1: Restablecer contraseña | Usuario de la plataforma | Abrir enlace y enviar nueva contraseña | Actualizar contraseña y consumir enlace de un solo uso
+RF-08 Roles y permisos
+0: Gestionar roles | Administrador | Crear rol adicional o cambiar rol de usuario | Asignar permisos por rol; conservar Socio, Gestor y Administrador; Guardar cambio y auditar autor, usuario y nuevo rol
+1: Asignar rol inicial | Evento del sistema | Recibir creación de cuenta | Asignar Socio / Cliente por defecto; privilegiados solo por administrador
+2: Acceder a función | Usuario de la plataforma | Abrir menú o invocar función | Mostrar únicamente opciones autorizadas y ejecutar control de acceso
+RF-09 Enlace de referido y código QR
+0: Generar identidad de referido | Evento del sistema | Recibir aprobación persistida de la cuenta | Crear código único de 8 caracteres mayúsculos y enlace oficial; Generar QR PNG de al menos 256 × 256 en ≤3 s
+1: Descargar QR | Socio / Cliente | Pulsar Descargar QR | Entregar PNG con una acción
+RF-10 Compartir el enlace de referido
+0: Compartir enlace | Socio / Cliente | Elegir copiar, WhatsApp, Facebook o compartir | Copiar una URL oficial al portapapeles; Abrir canal en ≤2 s; WhatsApp con mensaje ≤300 caracteres e incluir enlace
+RF-11 Registro y gestión de referidos
+0: Registrar o reevaluar relación | Evento del sistema | Recibir registro, vinculación o corrección | Guardar relación única e iniciar validación automática; Si activo y cuenta Aprobada: aprobar; si incumple: rechazar; si falta requisito o falla técnica: Pendiente; Tras confirmar estado: notificar RF-39; acreditar RF-12 solo si el referido queda Aprobado y no fue acreditado
+1: Consultar referidos | Socio / Cliente | Solicitar mis referidos | Mostrar solo propios: nombre de pila, fecha y estado; 10/página
+2: Consultar y exportar global | Administrador | Elegir listado o exportación de Pendientes | Listar 20/página con filtros; mostrar causa e intentos sin aprobar manualmente; Exportar CSV de Pendientes en ≤10 s: nombre, correo, celular, referidor y fecha
+3: Asociar usuario sin código | Administrador | Seleccionar usuario y referidor | Guardar asociación y disparar validación automática; no aprobar manualmente
+4: Ocultar referido | Administrador | Solicitar baja lógica del referido | Ocultar del listado conservando historial
+RF-12 Asignación automática de puntos
+0: Acreditar actividad o referido | Evento del sistema | Recibir evento bonificable confirmado | Obtener entero de RF-14 o campaña activa RF-13; Acreditar ambas partes atómicamente; sin campaña usar Puntos por referido; Si no es referido: sumar puntos de actividad; confirmar saldo y movimientos atómicamente en ≤2 s
+1: Consultar puntos | Socio / Cliente | Abrir saldo e historial | Listar movimientos recientes primero, 20/página; Separar saldo disponible y acumulado histórico
+RF-13 Campañas de referidos
+0: Crear o editar campaña | Administrador | Introducir vigencia, título, premios y provincias | Guardar campaña válida sin superposición de activas por provincia
+1: Cambiar estado o cerrar | Administrador | Seleccionar estado de campaña | Aplicar Borrador, Activa, Pausada o Finalizada; detener bonificación si Pausada/Finalizada
+2: Consultar campañas vigentes | Socio / Cliente | Abrir campañas de mi provincia | Mostrar activas de su provincia, puntos de ambas partes y fecha final
+RF-14 Parámetros globales
+0: Actualizar parámetro | Administrador | Enviar valor de un parámetro | Guardar valor tipado; tratar valor del punto como decimal monetario; Auditar parámetro, valor anterior y nuevo; aplicar en ≤5 s
+RF-15 Ajuste manual de puntos
+0: Ajustar saldo | Administrador | Indicar usuario, ajuste y motivo | Comprobar saldo y motivo antes de modificar; Guardar movimiento Ajuste administrativo con fecha/hora y actualizar saldo en ≤3 s
+RF-16 Niveles y ranking
+0: Recalcular nivel | Evento del sistema | Recibir acreditación de puntos | Calcular nivel con acumulado histórico en ≤1 s
+1: Consultar avance y ranking | Socio / Cliente | Abrir nivel o ranking | Mostrar nivel y max(umbral siguiente − acumulado, 0), a ≤2 pasos; Mostrar top 10 excluyendo perfiles Privados
+2: Configurar niveles | Administrador | Enviar niveles y umbrales | Guardar niveles y umbrales
+RF-17 Insignias
+0: Crear o inactivar insignia | Administrador | Elegir crear o inactivar | Guardar uno de los 5 tipos de logro y meta entera ≥1; Inactivar sin retirar insignias otorgadas
+1: Otorgar insignia | Evento del sistema | Recibir evento de logro | Registrar una sola insignia por usuario en ≤5 s
+2: Consultar insignias | Socio / Cliente | Abrir perfil | Mostrar insignias recientes primero
+RF-18 Retos
+0: Crear o finalizar reto | Administrador | Elegir crear o finalizar | Guardar fechas, meta entera 1–1000 y puntos; Marcar Finalizado y retirar de activos
+1: Actualizar avance | Evento del sistema | Recibir actividad del participante | Actualizar avance entre 0 % y 100 %; Emitir una sola orden de acreditación por usuario y reto
+RF-19 Banco de preguntas de educación financiera
+0: Crear pregunta | Gestor de contenidos | Enviar pregunta, opciones y tema | Guardar pregunta de Ahorro, Crédito, Presupuesto o Inversión
+1: Filtrar preguntas | Gestor de contenidos | Elegir dificultad | Listar preguntas según dificultad
+2: Desactivar pregunta | Gestor de contenidos | Seleccionar pregunta a retirar | Marcar Inactiva y excluir de nuevas partidas
+RF-20 Partida de trivia
+0: Jugar partida | Socio / Cliente | Solicitar nueva partida | Cargar 10 preguntas activas al azar; Recibir respuesta hasta 30 s; al expirar marcar incorrecta y avanzar pregunta; Calcular puntaje en ≤3 s e invocar RF-12 con valor exacto
+RF-21 Gestión de capacitaciones
+0: Cargar y publicar | Gestor de contenidos | Enviar material y cuestionario | Guardar material y publicar capacitación válida
+1: Consultar catálogo | Socio / Cliente | Abrir capacitaciones | Mostrar activas, 10/página
+2: Desactivar capacitación | Gestor de contenidos | Solicitar desactivación | Marcar Inactiva y conservar historial
+RF-22 Evaluación y certificado
+0: Rendir evaluación | Socio / Cliente | Enviar respuestas de la evaluación | Registrar intento y calificar en ≤3 s; Marcar capacitación Completada; Generar certificado PDF con código único en ≤10 s; Acreditar puntos una sola vez por RF-12
+RF-23 Gestión de talleres
+0: Crear taller | Gestor de contenidos | Enviar fecha, lugar y cupos | Guardar taller en ≤3 s
+1: Consultar calendario | Socio / Cliente | Abrir calendario | Agrupar talleres por mes en ≤3 s
+2: Cambiar cupos | Gestor de contenidos | Enviar nuevo cupo | Actualizar cupo sin perder inscripciones
+3: Cancelar taller | Gestor de contenidos | Confirmar cancelación | Marcar Cancelado y liberar todas las inscripciones
+RF-24 Inscripción a talleres
+0: Inscribirse | Socio / Cliente | Elegir taller y confirmar inscripción | Crear inscripción y restar 1 cupo de forma atómica; máximo 3 pasos y ≤3 s
+1: Anular inscripción | Socio / Cliente | Solicitar anulación | Anular inscripción y devolver 1 cupo
+RF-25 Registro de asistencia
+0: Marcar asistencia | Gestor de contenidos | Enviar asistencia de un inscrito | Guardar asistencia en ≤2 s; Acreditar una sola vez puntos de RF-14 mediante RF-12
+RF-26 Publicaciones en el muro
+0: Publicar o editar | Usuario de la plataforma | Enviar texto e imagen opcional | Guardar contenido validado; permitir editar solo al autor; Etiquetar publicación como Oficial
+1: Consultar muro | Socio / Cliente | Abrir muro | Mostrar publicaciones activas, 10/página
+2: Eliminar publicación | Socio / Cliente | Confirmar eliminación de publicación propia | Eliminar publicación propia
+RF-27 Comentarios
+0: Comentar | Socio / Cliente | Enviar comentario | Registrar comentario en ≤3 s
+1: Consultar comentarios | Socio / Cliente | Abrir comentarios de publicación | Mostrar comentarios en orden cronológico
+2: Eliminar comentario propio | Socio / Cliente | Solicitar borrado de comentario | Aplicar borrado lógico al comentario
+RF-28 Reacciones
+0: Reaccionar o retirar reacción | Socio / Cliente | Pulsar Me gusta o retirar | Mantener unicidad por usuario y publicación; Crear y sumar 1 o retirar y restar 1 en ≤2 s
+RF-29 Publicaciones fijadas
+0: Fijar publicación oficial | Gestor de contenidos | Elegir publicación y duración | Guardar fijación y colocar en primeras posiciones en ≤3 s
+1: Retirar fijación vencida | Evento del sistema | Detectar fecha de fin | Retirar fijación sin borrar publicación
+RF-30 Moderación de contenidos
+0: Reportar contenido | Socio / Cliente | Elegir contenido y motivo | Registrar reporte y contar usuarios distintos; Ocultar contenido en ≤5 s
+1: Resolver moderación | Administrador | Elegir eliminar, restaurar u ocultar | Aplicar resolución en ≤2 s; permitir ocultar directamente sin reportes
+RF-31 Contenidos y servicios de salud
+0: Publicar contenido de salud | Gestor de contenidos | Enviar artículo o información de servicio | Publicar contenido de salud en ≤3 s
+1: Consultar salud | Socio / Cliente | Abrir salud desde inicio | Separar artículos y servicios; recientes primero; acceso en ≤2 pasos
+2: Despublicar | Gestor de contenidos | Seleccionar contenido | Cambiar a Borrador y ocultar a usuarios
+RF-32 Catálogo de premios
+0: Crear premio | Administrador | Enviar nombre, costo, stock y foto | Guardar premio válido en ≤3 s
+1: Consultar catálogo | Socio / Cliente | Abrir recompensas | Mostrar solo premios activos con stock >0
+2: Descontar inventario | Evento del sistema | Recibir canje confirmado | Restar exactamente 1 unidad dentro de transacción de canje
+3: Inactivar premio | Administrador | Confirmar inactivación | Marcar Inactivo y bloquear nuevos canjes
+RF-33 Canje de premios
+0: Canjear premio | Socio / Cliente | Elegir premio y confirmar | Registrar canje, descontar puntos y 1 unidad atómicamente; Mostrar comprobante; elegir–confirmar–comprobante en ≤3 pasos y ≤3 s
+1: Consultar mis canjes | Socio / Cliente | Abrir Mis canjes | Listar propios con estado, recientes primero
+2: Actualizar entrega | Administrador | Seleccionar siguiente estado | Guardar siguiente estado en ≤2 s
+3: Consultar historial global | Administrador | Enviar rango de fechas | Listar todos los canjes filtrados, 50/página
+RF-34 Favoritos
+0: Guardar favorito | Socio / Cliente | Seleccionar premio favorito | Guardar favorito en ≤2 s
+1: Quitar favorito | Socio / Cliente | Solicitar retirada de favorito | Quitar favorito en ≤2 s
+2: Consultar favoritos | Socio / Cliente | Abrir favoritos | Mostrar propios excluyendo premios inactivos
+RF-35 Meta de canje
+0: Elegir meta | Socio / Cliente | Seleccionar premio meta | Guardar una sola meta activa reemplazando anterior
+1: Actualizar progreso de meta | Evento del sistema | Recibir cambio de saldo o consulta de meta | Calcular max(costo − saldo, 0) en ≤2 s; Emitir una notificación en ≤1 minuto
+RF-36 Búsqueda global
+0: Buscar | Socio / Cliente | Introducir término de búsqueda | Buscar respetando privacidad RF-46; Mostrar hasta 20 resultados por página en ≤3 s
+RF-37 Bandeja y alertas de campañas
+0: Notificar campaña | Evento del sistema | Recibir activación de campaña | Almacenar notificación y sumar 1 a no leídas; entregar en ≤60 s
+1: Leer bandeja | Socio / Cliente | Abrir bandeja o una notificación | Listar 20/página recientes primero; al abrir no leída restar 1 una sola vez
+2: Purgar informativas | Evento del sistema | Ejecutar mantenimiento de notificaciones | Borrar informativas vencidas
+RF-38 Alertas de puntos, nivel, insignias y canjes
+0: Notificar recompensa | Evento del sistema | Recibir puntos, nivel, insignia o cambio de canje | Incluir puntos exactos cuando aplique y entregar alerta en ≤5 s; Asignar retención mínima de 90 días
+RF-39 Alertas de referidos y de cuenta vinculada
+0: Notificar resultado automático | Evento del sistema | Recibir cambio de cuenta o referido confirmado | Preparar resultado para titular o socio; del referido solo nombre de pila; Persistir unicidad y entregar aviso en ≤5 s; tolerar reintentos de 5 minutos
+RF-40 Recordatorios automáticos
+0: Recordar taller | Evento del sistema | Ejecutar verificación horaria | Enviar una alerta por taller e inscrito
+1: Recordar reto | Evento del sistema | Ejecutar verificación horaria | Enviar una alerta por reto y participante
+RF-41 Solicitudes de soporte
+0: Crear solicitud | Socio / Cliente | Enviar descripción de soporte | Generar código único de 6 caracteres y registrar Abierta en ≤3 s
+1: Atender y cerrar | Administrador | Elegir siguiente estado y respuesta al cerrar | Guardar estado; al cerrar registrar una respuesta y entregarla en bandeja en ≤5 s
+2: Consultar mis solicitudes | Socio / Cliente | Abrir solicitudes | Listar propias con estado y respuesta
+RF-42 Bitácora de auditoría
+0: Registrar auditoría | Evento del sistema | Recibir acción crítica o intento/resultado de validación | Guardar registro inmutable; en validación incluir estados, causa, intento, fuente y regla; sin datos financieros
+1: Consultar bitácora | Administrador | Enviar fechas, usuario y tipo de acción | Filtrar y mostrar 50/página en ≤5 s
+RF-43 Reporte de referidos
+0: Generar reporte de referidos | Administrador | Enviar rango del reporte | Obtener socio referidor, campaña, provincia, estado y fecha; Calcular porcentaje Aprobados/total; si total es 0 mostrar Sin datos; generar en ≤10 s
+RF-44 Encuestas de satisfacción
+0: Responder encuesta | Socio / Cliente | Enviar respuestas del evento | Guardar una respuesta por usuario y evento en ≤3 s
+RF-45 Tablero de indicadores
+0: Consultar indicadores | Administrador | Abrir tablero | Calcular 6 indicadores: referidos, aprobación, activos, puntos otorgados/canjeados e inscripciones; Calcular costo = puntos por referidos × valor del punto / aprobados; sin aprobados mostrar No aplica; Mostrar participantes y porcentaje completado por reto/juego; tablero en ≤5 s
+1: Exportar indicadores | Administrador | Solicitar CSV del tablero | Generar CSV en ≤10 s
+RF-46 Privacidad del perfil
+0: Cambiar privacidad | Socio / Cliente | Elegir Público o Privado | Guardar visibilidad en ≤3 s; usar Privado por defecto
+1: Consultar perfil ajeno | Socio / Cliente | Abrir perfil de otro usuario | Excluir siempre correo, celular y cuenta para otros usuarios; Mostrar solo nombre de pila, nivel e insignias
+RF-47 Autorización de tratamiento de datos
+0: Aceptar aviso | Prospecto | Marcar aceptación al registrarse | Registrar fecha, hora y versión aceptada en ≤2 s; Conservar evidencia al menos 5 años
+1: Publicar nueva versión | Administrador | Enviar nueva versión numerada del aviso | Publicar manteniendo exactamente una versión vigente
+RF-48 Pantalla de inicio
+0: Cargar inicio | Socio / Cliente | Completar inicio de sesión | Consultar saldo, nivel, faltantes y no leídas en paralelo y reunir resultados; Mostrar Compartir mi enlace a un toque si verificada; en otro caso Vincular mi cuenta; Mostrar Referidos, Recompensas, Retos, Juegos, Talleres y Comunidad en ≤3 s
+RF-49 Navegación, ayudas y mensajes de la interfaz
+0: Abrir formulario o menú | Usuario de la plataforma | Navegar a pantalla | Mostrar ayuda o ejemplo en cada campo; Mostrar menú del rol completo si ancho ≥768 px; desplegable si menor
+1: Presentar resultado de acción | Evento del sistema | Recibir resultado de validación o ejecución | Marcar campos en rojo; mostrar causa y corrección; Mostrar éxito/error en ≤1 s y mantener ≥4 s o hasta cierre
+RF-50 Validación automática contra la base institucional
+0: Validar contra fuente institucional | Evento del sistema | Recibir solicitud o reintento programado | Comparar titular institucional, tipo, número y condición; sin saldos ni movimientos; Persistir Aprobado con evidencia institucional; Reevaluar referido RF-11; notificar RF-39 y auditar RF-42; acreditar RF-12 solo ante nueva aprobación elegible

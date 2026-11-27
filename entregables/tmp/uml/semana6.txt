@@ -1,0 +1,248 @@
+PAGINA 9
+3.1. Diagramas de 
+interacción (secuencia)
+• La vista de interacción proporciona una 
+vista más integral del comportamiento 
+de un conjunto de objetos.
+• Una interacción es un conjunto de 
+mensajes, dentro de un clasificador 
+estructurado o colaboración, 
+intercambiado por roles a través de 
+conectores.
+PAGINA 10
+Diagramas de interacción (secuencia)
+Los diagramas de secuencia UML son una técnica de modelado dinámico, que se utilizan 
+normalmente para:
+• Validar y desarrollar la lógica y la integridad de un escenario de uso. Un escenario de uso es 
+exactamente lo que indica su nombre: la descripción de una forma en que se podría 
+utilizar su sistema.
+• La lógica de un escenario de uso puede ser parte de un caso de uso, tal vez un curso 
+alternativo; un recorrido completo por un caso de uso, como la lógica descrita por el curso de 
+acción básico o una parte del curso de acción básico más uno o más escenarios alternativos; o 
+un recorrido por la lógica contenida en varios casos de uso, como cuando un estudiante se 
+inscribe en la universidad y luego se inscribe inmediatamente en tres seminarios.
+PAGINA 11
+Diagramas de interacción (secuencia)
+• Explorar su diseño porque le brindan una manera de recorrer visualmente la invocación de las 
+operaciones definidas por sus clases.
+• Le dan una idea de qué clases en su aplicación serán complejas, lo que a su vez es una 
+indicación de que puede necesitar dibujar diagramas de máquina de estados para esas clases.
+• Detectar cuellos de botella dentro de un diseño orientado a objetos. Al observar qué mensajes 
+se envían a un objeto y al observar aproximadamente cuánto tiempo lleva ejecutar el método 
+invocado, rápidamente comprenderá dónde debe cambiar su diseño para distribuir la carga 
+dentro de su sistema.
+PAGINA 12
+Especificaciones 
+de ejecución
+• Una llamada expresa el comienzo de 
+la ejecución.
+• Una llamada síncrona se representa 
+con una flecha triangular rellena.
+• Una llamada recursiva se da 
+cuando el control vuelve ha iniciar 
+una operación sobre el mismo 
+objeto, pero la segunda llamada es 
+una especificación de ejecución 
+distinta de la primera.
+• El retorno del control desde una 
+llamada se muestra con una flecha 
+de línea discontinua con la punta de 
+flecha abierta
+
+PAGINA 13
+Anatomía de un diagrama de secuencia
+Cliente
+:CarritoUI
+ :PedidoController
+ :Notificador
+:Pedido
+confirmar()
+crearPedido(items)
+«create»
+calcularTotal()
+aplicarDescuento()
+total
+enviarConfirmacion()
+pedido
+resumen
+El tiempo avanza hacia abajo ↓
+Línea de vida
+El participante a lo largo del tiempo
+Activación
+El objeto está ejecutando una 
+operación
+Mensaje síncrono
+El emisor espera la respuesta
+Mensaje asíncrono
+El emisor continúa sin esperar
+Retorno
+Devuelve el control o un valor
+«create»
+Crea el objeto; su cabecera baja
+Autollamada
+Mensaje al mismo objeto
+Destrucción
+Fin de la vida del objeto
+PAGINA 14
+Construcciones 
+de control
+• Uso de interacción (ref):
+Referencia a otra interacción. 
+Define su propio diagrama de 
+secuencia
+• Bucle (loop): subfragmento, se 
+ejecuta mientras la 
+primeracondición de guarda del 
+subfragmento es verdadera
+• Fragmento condicional (alt):
+tiene dos o más subfragmentos, 
+cada uno de los cuales tiene una 
+condición de guarda inicial. 
+Cuando se alcanza el fragmento 
+condicional, se ejecuta el 
+subfragmento cuya condición de 
+guarda sea verdadera
+
+PAGINA 15
+Fragmentos combinados: control de flujo
+Operador Significado Guarda de ejemplo Equivalente en código
+alt Alternativas excluyentes: se ejecuta el operando cuya guarda es verdadera. [aprobado] / [else] if… else
+opt Opcional: se ejecuta solo si la guarda es verdadera. [tieneCupón] if sin else
+loop Repetición mientras la guarda sea verdadera. [para cada línea] for / while
+par Los operandos se ejecutan en paralelo. — hilos, CompletableFuture
+break Interrumpe el fragmento que lo contiene si se cumple la guarda. [stock = 0] break / return / throw
+ref Referencia a otra interacción dibujada en otro diagrama. ref Autenticar usuario llamada a un método o subflujo
+PAGINA 16
+Técnica: patrón Boundary–Control–Entity (BCE)
+«boundary» Frontera
+Interfaz con el actor: pantallas, formularios, API 
+REST.
+Ej.: CarritoUI
+«control» Control
+Coordina un caso de uso; no guarda datos de 
+negocio.
+Ej.: PedidoController
+«entity» Entidad
+Información del dominio que persiste (viene del 
+diagrama de clases).
+Ej.: Pedido, Producto
+Quién puede hablar con quién
+Actor
+ Boundary
+ Control
+ Entity
+Prohibido: actor → entity
+• El actor solo se comunica con objetos boundary.
+• Boundary delega en control; no contiene lógica de 
+negocio.
+• Control coordina y habla con entity y con otros control.
+• Entity no conoce a boundary ni a los actores.
+• Punto de partida: un control por caso de uso.
+PAGINA 17
+Técnica: diagrama de secuencia en 6 pasos
+1 Elegir un escenario
+Un solo camino del caso de uso: «el 
+cliente confirma su pedido» (flujo 
+básico).
+2 Identificar participantes
+Actor, boundary, control y entity. Las 
+entity salen del diagrama de clases.
+3 Ordenar de izquierda a derecha
+Primero el actor; luego cada participante 
+en el orden en que interviene.
+4 Trazar el flujo básico
+Mensajes con nombre de operación y 
+parámetros; retornos solo si aportan.
+5 Añadir alternativas
+alt, opt y loop para excepciones y 
+repeticiones, o diagramas separados.
+6 Verificar con las clases
+Cada mensaje debe ser una operación 
+del receptor. Si no existe, agréguela.
+Consejo: si el diagrama no cabe en una página, extraiga partes con un fragmento ref.
+PAGINA 18
+Ejemplo práctico: secuencia «Confirmar pedido»
+Cliente
+:CarritoUI
+ :PedidoController
+ :Pedido
+ :LineaPedido
+ :MetodoPago
+ :Notificador
+confirmar()
+confirmarPedido(id)
+calcularTotal()
+loop [para cada línea]
+subtotal()
+monto
+total
+autorizar(total)
+resultado
+alt [aprobado]
+ marcarConfirmado()
+enviarConfirmacion(cliente)
+ok
+[else]
+ error("pago rechazado")
+mostrarResultado
+PAGINA 19
+Del diagrama de secuencia al código Java
+En UML → en Java
+Mensaje síncrono
+ obj.metodo(args)
+Retorno
+ return valor;
+«create»
+ new Clase(...)
+loop [condición]
+ for / while
+alt [g] / [else]
+ if… else
+Mensaje asíncrono
+ hilo, cola o evento
+public class PedidoController {
+private PedidoRepositorio repo;
+private MetodoPago metodoPago;
+private Notificador notificador;
+public Resultado confirmarPedido(int id) {
+Pedido pedido = repo.buscar(id);
+double total = pedido.calcularTotal();
+boolean ok = metodoPago.autorizar(total);
+if (ok) { // alt [aprobado]
+pedido.marcarConfirmado();
+CompletableFuture.runAsync(() -> // asíncrono
+notificador.enviarConfirmacion(pedido.getCliente()));
+return Resultado.ok();
+} else { // [else]
+return Resultado.error("pago rechazado");
+}
+}
+}
+// En Pedido
+public double calcularTotal(){
+double total = 0;
+for (LineaPedido l : lineas) { // loop
+total += l.subtotal();
+}
+return total;
+}
+PAGINA 20
+Buenas prácticas y errores comunes en secuencia
+Un diagrama para todo el caso de uso
+ERROR Todos los flujos alternativos en un solo diagrama ilegible.
+MEJOR Un diagrama por escenario; reutilice con ref.
+Mensajes que no son operaciones
+ERROR «procesar los datos» escrito en lenguaje natural.
+MEJOR Nombre de operación con parámetros: autorizar(total).
+El actor habla con la base de datos
+ERROR La UI o el actor llaman directamente a una entity.
+MEJOR Respete BCE: actor → boundary → control → entity.
+Retorno en cada mensaje
+ERROR Flechas de retorno que solo repiten lo obvio.
+MEJOR Dibuje retornos solo cuando devuelven un valor útil.
+Inconsistencia con las clases
+ERROR Mensajes a operaciones que no existen en el receptor.
+MEJOR Cada mensaje = una operación del diagrama de clases.
+Una lifeline «Dios»
+ERROR Un solo objeto recibe y hace casi todo.
+MEJOR Redistribuya responsabilidades con tarjetas CRC.

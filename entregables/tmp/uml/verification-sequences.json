@@ -1,0 +1,13 @@
+{
+  "estado": "VERIFICADO",
+  "actividades_conservadas": 50,
+  "secuencias_por_escenario": 109,
+  "casos_de_uso_y_objetos_originales": "sin cambios",
+  "trazas_anteriores_conservadas": 458,
+  "rf": 50,
+  "subrequisitos": 179,
+  "mensajes": 1369,
+  "operaciones_declaradas": 689,
+  "orden_participantes": "actor/evento, UI SUMA, Sistema SUMA, BD SUMA, externo si aplica",
+  "acceso_directo_actor_UI_a_BD": 0
+}
