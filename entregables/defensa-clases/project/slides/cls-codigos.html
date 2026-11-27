@@ -1,0 +1,26 @@
+<section id="cls-codigos">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<img class="dots-tl" src="/_blob/1e2fea8d754caedaac7d450c0f54bca4" alt="">
+<img class="dots-br" src="/_blob/1e2fea8d754caedaac7d450c0f54bca4" alt="">
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">DIAGRAMA DE CLASES · CÓDIGOS · HU-003 · HU-014</p>
+<h2>Códigos y confirmación del correo</h2>
+</div>
+<div class="clases2">
+<div class="crow">
+<div class="frame"><img class="cimg" src="/_blob/3ef5a7f55e8c203db0ef10f462420ac0" alt="Clase CodigoVerificacion en Enterprise Architect"></div>
+<div class="panel"><p class="ptitle">CodigoVerificacion&#160;&#160;<span class="rt">backend/src/dominio/acceso.mjs:147</span></p>
+<p class="src">export class CodigoVerificacion {<br>&#160;&#160;static huella(valor) { <span class="c">/* sha256: solo se guarda la huella */</span> }<br>&#160;&#160;static segundoFactor() {<br>&#160;&#160;&#160;&#160;return String(randomInt(1_000_000)).padStart(6, <span class="s">'0'</span>); }<br>&#160;&#160;esValido(valor, ahora = new Date()) {<br>&#160;&#160;&#160;&#160;return !this.usado &amp;&amp; new Date(this.expira) &gt; ahora<br>&#160;&#160;&#160;&#160;&#160;&#160;&amp;&amp; timingSafeEqual(esperado, recibido); } }</p></div>
+</div>
+<div class="crow">
+<div class="frame"><img class="cimg" src="/_blob/46270f0fef894721164ca4d371c3bb40" alt="Clase ConfirmacionCorreo en Enterprise Architect"></div>
+<div class="panel"><p class="ptitle">ConfirmacionCorreo&#160;&#160;<span class="rt">backend/src/dominio/confirmacion-correo.mjs:8</span></p>
+<p class="src">export class ConfirmacionCorreo {<br>&#160;&#160;emitir(usuarioId, ahora) {<br>&#160;&#160;&#160;&#160;const codigo = CodigoVerificacion.segundoFactor();<br>&#160;&#160;&#160;&#160;const vence = new Date(ahora + 10 * MINUTO).toISOString();<br>&#160;&#160;&#160;&#160;return { codigo, vence,<br>&#160;&#160;&#160;&#160;&#160;&#160;huella: this.firmar(usuarioId, vence, codigo) }; }<br>&#160;&#160;async iniciar(usuarioId, client) { … } }&#160;<span class="c">// RF-02-1</span></p></div>
+</div>
+</div>
+<p class="foot">Diagrama de clases (Enterprise Architect) · Documento de Visión, Figura 3</p>
+<div class="pnum"></div>
+<aside>(20 s) CodigoVerificacion genera los códigos de seis dígitos y los compara en tiempo constante; de cada código solo se guarda la huella. ConfirmacionCorreo lo usa para emitir el código que activa la cuenta, con vigencia de diez minutos.</aside>
+</section>

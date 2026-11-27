@@ -1,0 +1,26 @@
+<section id="cls-sesion">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<img class="dots-tl" src="/_blob/1e2fea8d754caedaac7d450c0f54bca4" alt="">
+<img class="dots-br" src="/_blob/1e2fea8d754caedaac7d450c0f54bca4" alt="">
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">DIAGRAMA DE CLASES · ACCESO · HU-003 · HU-013</p>
+<h2>Usuario y Sesion</h2>
+</div>
+<div class="clases2">
+<div class="crow">
+<div class="frame"><img class="cimg" src="/_blob/cb1e35f7bc0e3973a6d5add3682e7fd7" alt="Clase Usuario en Enterprise Architect"></div>
+<div class="panel"><p class="ptitle">Usuario&#160;&#160;<span class="rt">backend/src/dominio/acceso.mjs:112</span></p>
+<p class="src">export class Usuario {<br>&#160;&#160;constructor({ id, nombre, correo, rol, activo, … }) {<br>&#160;&#160;&#160;&#160;const cuentaVerificada =<br>&#160;&#160;&#160;&#160;&#160;&#160;CuentaCooperativa.estaAprobada(cuentaEstado);<br>&#160;&#160;&#160;&#160;Object.assign(this, { id, nombre, correo, rol,<br>&#160;&#160;&#160;&#160;&#160;&#160;activo: Boolean(activo), cuentaVerificada, … });<br>&#160;&#160;} }</p></div>
+</div>
+<div class="crow">
+<div class="frame"><img class="cimg" src="/_blob/4401ec99a4dc990955586d1248a67e38" alt="Clase Sesion en Enterprise Architect"></div>
+<div class="panel"><p class="ptitle">Sesion&#160;&#160;<span class="rt">backend/src/dominio/acceso.mjs:98</span></p>
+<p class="src">export class Sesion {<br>&#160;&#160;static INACTIVIDAD_MS = 15 * 60_000;&#160;<span class="c">// RF-04-3</span><br>&#160;&#160;static vencimiento(ahora = Date.now()) {<br>&#160;&#160;&#160;&#160;return new Date(ahora + Sesion.INACTIVIDAD_MS)…; }<br>&#160;&#160;estaVigente(ahora = new Date()) {<br>&#160;&#160;&#160;&#160;return new Date(this.expira) &gt; ahora; }<br>}</p></div>
+</div>
+</div>
+<p class="foot">Diagrama de clases (Enterprise Architect) · Documento de Visión, Figura 3</p>
+<div class="pnum"></div>
+<aside>(20 s) Usuario representa a cualquier persona registrada y calcula si su cuenta de la Cooperativa está verificada. Sesion fija los 15 minutos de inactividad y sabe si sigue vigente.</aside>
+</section>

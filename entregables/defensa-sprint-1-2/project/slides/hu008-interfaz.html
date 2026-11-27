@@ -1,0 +1,26 @@
+<section id="hu008-interfaz">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">SPRINT 2 · EPI-04 · HU-008</p>
+<h2>Interfaz según el rol y el dispositivo</h2>
+</div>
+<div class="dual">
+<div class="fig"><div class="frame" style="width:620px; height:400px;"><img src="/_blob/ec5e1c850efd87bd3846d11cff76739f" alt="CU-02 Detalle: Iniciar sesión, incluye CU-02.4 Ver menú del rol" style="width:590px; height:370px; object-fit:contain;"></div><p class="cap"><b>CU-02.4</b> Ver el menú del rol · dentro de Fig. 12</p>
+<div class="status" style="width:620px;"><div class="verdict"><x-icon name="CheckCircle"></x-icon><p class="word">Cumple</p></div><p class="ev">features.spec.ts: «un rol nuevo creado por el administrador obtiene exactamente el menú que se le asignó» · smoke e2e a 390 px.</p></div></div>
+<div style="display:flex; flex-direction:column; gap:20px; width:1048px;">
+<table class="ttable" style="width:1048px;">
+<tr class="hrow"><th style="width:230px;">Eslabón</th><th>En SUMA</th></tr>
+<tr><td class="k">Requisitos</td><td>UR-04 · UR-53 · RF-49-4 menú desplegable bajo 768 px · RF-08-3 · RNF-18 (360 a 1920 px)</td></tr>
+<tr class="alt"><td class="k">Código</td><td>interfazMatch · ShellComponent · ComunidadShellComponent</td></tr>
+<tr><td class="k">Especificación</td><td>sprint-2/03-interfaz · CA-01, CA-02, CA-07</td></tr>
+</table>
+<div class="panel" style="width:1048px;"><p class="ptitle">Angular · core/auth/guards.ts · app.routes.ts</p>
+<p class="src"><span class="c">// La experiencia la define Rol.interfaz, no su nombre</span><br>export const interfazMatch = (interfaz: Interfaz):<br>&#160;&#160;CanMatchFn =&gt; async () =&gt; {<br>&#160;&#160;&#160;&#160;const usuario = await session.cargar();<br>&#160;&#160;&#160;&#160;return usuario?.interfaz === interfaz;<br>&#160;&#160;};<br>{ path: <span class="s">'panel'</span>, canMatch: [interfazMatch(<span class="s">'COMUNIDAD'</span>)],<br>&#160;&#160;loadComponent: () =&gt; ComunidadShellComponent }</p></div>
+</div>
+</div>
+<p class="foot">specs/sprint-2/03-interfaz · frontend/src/app/core/auth/guards.ts:34 · app.routes.ts:60 · layout/</p>
+<div class="pnum"></div>
+<aside>HU-008 hace que cada rol entre a la experiencia que tiene configurada: el socio ve una red social y el administrador un panel. La decisión sale de la columna interfaz de la tabla Rol, no del nombre del rol. Debajo de 768 px el menú se vuelve desplegable o barra inferior, sin desplazamiento horizontal.</aside>
+</section>

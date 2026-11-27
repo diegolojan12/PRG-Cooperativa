@@ -1,0 +1,21 @@
+<section id="arq-backend">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<img class="dots-tl" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<img class="dots-br" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">ARQUITECTURA · 2 DE 3</p>
+<h2>El backend: un monolito modular</h2>
+</div>
+<p class="lead">Una sola aplicación, dividida en capas. Tomamos la idea principal de la arquitectura hexagonal: el dominio no depende de la tecnología.</p>
+<div class="layers">
+<div class="layer"><p class="lname">1 · Rutas</p><p class="ltxt">Reciben cada petición, validan sesión, rol y datos, y llaman al dominio.</p><p class="lfile">backend/src/api.mjs</p></div>
+<div class="layer l2"><p class="lname">2 · Dominio</p><p class="ltxt">Reglas del negocio como clases propias: Rol, Sesion, Usuario, Referido, CuentaCooperativa, ConfirmacionCorreo…</p><p class="lfile">backend/src/dominio/</p></div>
+<div class="layer l3"><p class="lname">3 · Infraestructura</p><p class="ltxt">Se conecta con la base de datos y con el correo. Se puede reemplazar por un doble en las pruebas.</p><p class="lfile">database.mjs · infraestructura/correo.mjs</p></div>
+</div>
+<div class="note"><p class="lbl">RESULTADO</p><p class="txt">Las dependencias apuntan hacia el dominio: una regla se prueba y se cambia sin tocar Express ni SQL (RNF-25, módulos independientes).</p></div>
+<p class="foot">Constitución VII.3 · «las reglas van en dominio/; api.mjs solo orquesta»</p>
+<div class="pnum"></div>
+<aside>El backend es un monolito modular: una sola aplicación, dividida en capas. Las rutas reciben y validan cada petición, el dominio contiene las reglas del negocio como clases propias, y la infraestructura se conecta con la base de datos y el correo. Tomamos la idea principal de la arquitectura hexagonal: el dominio no depende de la tecnología, así que se puede probar y cambiar sin tocar lo demás.</aside>
+</section>

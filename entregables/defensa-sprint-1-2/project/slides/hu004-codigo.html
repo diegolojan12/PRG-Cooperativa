@@ -1,0 +1,19 @@
+<section id="hu004-codigo">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">HU-004 · CÓDIGO</p>
+<h2>Un enlace de un solo uso</h2>
+</div>
+<div class="code">
+<div class="panel"><p class="ptitle">Ruta · api.mjs · POST /api/auth/forgot</p>
+<p class="src">const RECUPERACION_MS = 30 * 60_000; <span class="c">// RF-07-1</span><br>route(<span class="s">'post'</span>, <span class="s">'/auth/forgot'</span>, async (req, res) =&gt; {<br>&#160;&#160;rate(req, <span class="s">'forgot'</span>, 5);<br>&#160;&#160;const result = { message:<br>&#160;&#160;&#160;&#160;<span class="s">'Si el correo está registrado,…'</span> };<br>&#160;&#160;<span class="c">// CA-02: misma respuesta exista o no</span><br>&#160;&#160;if (user?.activo) {<br>&#160;&#160;&#160;&#160;const url = await createResetLink(<br>&#160;&#160;&#160;&#160;&#160;&#160;user.id, RECUPERACION_MS, client);<br>&#160;&#160;&#160;&#160;void sendMail({ to: correo, … });<br>&#160;&#160;}<br>&#160;&#160;res.json(result);<br>});</p></div>
+<div class="panel"><p class="ptitle">Ruta · api.mjs · POST /api/auth/reset</p>
+<p class="src">const clave = password(req.body.clave);<br><span class="c">// RF-07-2: 8 caracteres, mayúscula y número</span><br>await db.transaction(async (client) =&gt; {<br>&#160;&#160;const [reset] = await db.query(<br>&#160;&#160;&#160;&#160;<span class="s">'DELETE FROM "Recuperacion"</span><br><span class="s">&#160;&#160;&#160;&#160;&#160;WHERE token=$1 AND expira&gt;$2 …'</span>);<br>&#160;&#160;if (!reset) fail(<span class="s">'El enlace venció o ya…'</span>);<br>&#160;&#160;<span class="c">// RF-07-1: borrar el token = un solo uso</span><br>&#160;&#160;await db.query(<span class="s">'UPDATE "Usuario" SET</span><br><span class="s">&#160;&#160;&#160;&#160;"passwordHash"=$2 …'</span>);<br>&#160;&#160;await db.query(<span class="s">'DELETE FROM "Sesion" …'</span>);<br>&#160;&#160;<span class="c">// CA-05: cierra todas las sesiones</span><br>});</p></div>
+</div>
+<div class="note"><p class="lbl">SEGURIDAD</p><p class="txt">Del token solo se guarda la huella (digest), nunca el valor. En producción el enlace nunca aparece en la respuesta: solo llega por correo (CA-06, RNF-12).</p></div>
+<p class="foot">backend/src/api.mjs:17, 788 y 807 · frontend/src/app/features/publico/recuperar.page.ts</p>
+<div class="pnum"></div>
+<aside>La recuperación usa dos rutas. La primera responde igual exista o no la cuenta, para no revelar qué correos están registrados, y envía un enlace de 30 minutos. La segunda borra el token en la misma transacción en que cambia la contraseña, así el enlace solo sirve una vez, y cierra todas las sesiones.</aside>
+</section>

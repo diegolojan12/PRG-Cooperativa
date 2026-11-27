@@ -1,0 +1,1374 @@
+RF-03-2 Actualizar (Modificación)
+RF-03-2 | Gestión de usuarios
+El sistema deberá actualizar el nombre, el correo, el celular y la contraseña en máximo 2 segundos, validando que el correo y el celular no pertenezcan a otra cuenta.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+Dep.: RF-03
+RF-03-3 Eliminar (Baja lógica)
+RF-03-3 | Gestión de usuarios
+El sistema deberá inactivar la cuenta mediante 1 borrado lógico que conserve el 100 % de su historial de referidos y puntos.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+Dep.: RF-03
+RF-04 Autenticación y cierre de sesión
+RF-04 | Validación de usuarios
+El sistema deberá autenticar al usuario con su correo y contraseña en un máximo de 3 segundos, y cerrar la sesión tras 15 minutos de inactividad.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos / Administrador
+Prioridad: Debe tener
+UR: UR-03, UR-04 | RF: RF-02, RF-08
+RF-04-1 Crear (Sesión)
+RF-04-1 | Validación de usuarios
+El sistema deberá verificar las credenciales y generar el token de sesión en un máximo de 3 segundos.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos / Administrador
+Prioridad: Debe tener
+Dep.: RF-04
+RF-04-2 Validar (Bloqueo de intentos)
+RF-04-2 | Validación de usuarios
+El sistema deberá bloquear el inicio de sesión durante 15 minutos tras 5 intentos fallidos consecutivos.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos / Administrador
+Prioridad: Debe tener
+Dep.: RF-04
+RF-04-3 Eliminar (Expiración)
+RF-04-3 | Validación de usuarios
+El sistema deberá invalidar toda sesión que no registre acciones durante 15 minutos consecutivos.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos / Administrador
+Prioridad: Debe tener
+Dep.: RF-04
+RF-04-4 Eliminar (Cierre manual)
+RF-04-4 | Validación de usuarios
+El sistema deberá cerrar la sesión en máximo 2 segundos cuando el usuario seleccione «Cerrar sesión».
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos / Administrador
+Prioridad: Debe tener
+Dep.: RF-04
+RF-05 Vinculación y validación automática de cuenta
+RF-05 | Gestión de usuarios
+El sistema deberá registrar la solicitud de vinculación en máximo 3 segundos e iniciar automáticamente la validación de existencia, titularidad y condición habilitada contra la base institucional autorizada (RF-50), sin intervención del administrador.
+Responsable en la matriz: Socio / Cliente / Sistema
+Prioridad: Debe tener
+UR: UR-07, UR-08, UR-14 | RF: RF-01, RF-39, RF-42, RF-50
+RF-05-1 Crear (Datos de la cuenta)
+RF-05-1 | Gestión de usuarios
+El sistema deberá aceptar 1 de 2 tipos de cuenta (Ahorros o Corriente) y un número de cuenta de exactamente 10 dígitos.
+Responsable en la matriz: Socio / Cliente / Sistema
+Prioridad: Debe tener
+Dep.: RF-05
+RF-05-2 Validar (Unicidad)
+RF-05-2 | Gestión de usuarios
+El sistema deberá impedir que una cuenta quede vinculada a más de un usuario en estado Pendiente o Aprobado, mediante unicidad en base de datos y control de concurrencia.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-05
+RF-05-3 Leer (Seguimiento de validaciones)
+RF-05-3 | Gestión de usuarios
+El sistema deberá mostrar al administrador las validaciones Pendientes de la más antigua a la más reciente, 20 por página, con causa, último intento y siguiente reintento, sin acciones de aprobación o rechazo manual.
+Responsable en la matriz: Administrador (consulta)
+Prioridad: Debe tener
+Dep.: RF-05
+RF-05-4 Actualizar (Resultado automático)
+RF-05-4 | Gestión de usuarios
+El sistema deberá guardar automáticamente Aprobado si la fuente institucional confirma existencia, titularidad y condición habilitada, o Rechazado con causa ante un incumplimiento confirmado, en máximo 2 segundos desde la respuesta. Una falla técnica o fuente desactualizada conservará Pendiente.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-05, RF-50
+RF-05-5 Leer (Enmascarado)
+RF-05-5 | Gestión de usuarios
+El sistema deberá mostrar el número de cuenta oculto, con solo sus 4 últimos dígitos visibles, salvo cuando el propio usuario pida verlo.
+Responsable en la matriz: Socio / Cliente / Sistema
+Prioridad: Debe tener
+Dep.: RF-05
+RF-05-6 Actualizar (Nuevo intento)
+RF-05-6 | Gestión de usuarios
+El sistema deberá permitir corregir una cuenta Rechazada e iniciar una nueva validación automática, conservando el historial. Los reintentos técnicos de una solicitud Pendiente no crearán vinculaciones duplicadas.
+Responsable en la matriz: Socio / Cliente / Sistema
+Prioridad: Debe tener
+Dep.: RF-05
+RF-06 Acceso según la verificación de la cuenta
+RF-06 | Gestión de usuarios
+El sistema deberá habilitar referir y canjear en máximo 3 segundos después de persistir la aprobación automática de la cuenta vinculada.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+UR: UR-09 | RF: RF-05, RF-50
+RF-06-1 Validar (Bloqueo)
+RF-06-1 | Gestión de usuarios
+El sistema deberá bloquear en el servidor el 100 % de los intentos de referir o canjear sin cuenta Aprobada por validación automática institucional; no aceptará estados enviados por el cliente.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-06
+RF-06-2 Leer (Aviso)
+RF-06-2 | Gestión de usuarios
+El sistema deberá mostrar «Vincular mi cuenta» si falta una cuenta, «Validación automática pendiente» si espera datos o reintento y la corrección requerida cuando la vinculación resulte Rechazada.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-06
+RF-06-3 Leer (Funciones abiertas)
+RF-06-3 | Gestión de usuarios
+El sistema deberá permitir a todos los usuarios activos participar en capacitaciones, talleres, juegos, retos y comunidad, sin importar el estado de su cuenta vinculada.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-06
+RF-07 Recuperación de acceso
+RF-07 | Validación de usuarios
+El sistema deberá enviar al correo registrado un enlace temporal de recuperación en un máximo de 60 segundos tras la solicitud.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+UR: UR-05 | RF: RF-04
+RF-07-1 Crear (Enlace)
+RF-07-1 | Validación de usuarios
+El sistema deberá generar 1 enlace de recuperación de un solo uso que expire a los 30 minutos.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+Dep.: RF-07
+RF-07-2 Actualizar (Contraseña)
+RF-07-2 | Validación de usuarios
+El sistema deberá exigir que la nueva contraseña tenga al menos 8 caracteres con 1 mayúscula y 1 número.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+Dep.: RF-07
+RF-08 Roles y permisos
+RF-08 | Administración
+El sistema deberá actualizar el rol de un usuario en un máximo de 3 segundos.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+UR: UR-04 | RF: RF-42
+RF-08-1 Actualizar (Rol)
+RF-08-1 | Administración
+El sistema deberá incluir 3 roles base que no se pueden eliminar (Socio / Cliente, Gestor de contenidos y Administrador) y permitir al administrador crear roles adicionales; los permisos se asignan por rol, no por persona.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-08
+RF-08-2 Crear (Rol por defecto)
+RF-08-2 | Administración
+El sistema deberá asignar el rol «Socio / Cliente» a toda cuenta creada en el registro y permitir solo al administrador crear cuentas de Gestor de contenidos o Administrador.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-08
+RF-08-3 Leer (Menú por rol)
+RF-08-3 | Administración
+El sistema deberá mostrar exclusivamente las opciones del menú asociadas al rol del usuario, con 0 opciones de otros roles.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-08
+RF-08-4 Validar (Acceso)
+RF-08-4 | Administración
+El sistema deberá rechazar el 100 % de los intentos de acceso a funciones no autorizadas para el rol, con un mensaje de acceso denegado.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-08
+RF-08-5 Leer (Auditoría de roles)
+RF-08-5 | Administración
+El sistema deberá registrar en la bitácora 3 datos (ID del autor, ID del usuario y nuevo rol) en cada cambio.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-08
+RF-09 Enlace de referido y código QR
+RF-09 | Referidos
+El sistema deberá generar 1 código, 1 enlace y 1 código QR de referido únicos en máximo 3 segundos después de persistir la aprobación automática de la cuenta del socio.
+Responsable en la matriz: Sistema / Socio / Cliente
+Prioridad: Debe tener
+UR: UR-10, UR-11 | RF: RF-05, RF-06, RF-50
+RF-09-1 Crear (Código y enlace)
+RF-09-1 | Referidos
+El sistema deberá generar un código alfanumérico único de exactamente 8 caracteres en mayúsculas e incluirlo en el enlace oficial, sin códigos repetidos entre socios.
+Responsable en la matriz: Sistema / Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-09
+RF-09-2 Crear (QR)
+RF-09-2 | Referidos
+El sistema deberá generar el QR del enlace en formato PNG con una resolución mínima de 256 x 256 píxeles.
+Responsable en la matriz: Sistema / Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-09
+RF-09-3 Leer (Descargar QR)
+RF-09-3 | Referidos
+El sistema deberá permitir al socio descargar su QR con 1 acción.
+Responsable en la matriz: Sistema / Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-09
+RF-10 Compartir el enlace de referido
+RF-10 | Referidos
+El sistema deberá permitir al socio copiar su enlace o compartirlo por WhatsApp o redes sociales con 1 toque, abriendo el canal elegido en un máximo de 2 segundos.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+UR: UR-12 | RF: RF-09
+RF-10-1 Leer (Copiar)
+RF-10-1 | Referidos
+El sistema deberá copiar al portapapeles exactamente 1 URL validada como enlace oficial.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-10
+RF-10-2 Crear (WhatsApp)
+RF-10-2 | Referidos
+El sistema deberá abrir WhatsApp con un mensaje predefinido de máximo 300 caracteres que incluya el enlace.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-10
+RF-10-3 Crear (Redes sociales)
+RF-10-3 | Referidos
+El sistema deberá ofrecer al menos 3 canales: WhatsApp, Facebook y el menú de compartir del dispositivo.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-10
+RF-11 Registro y gestión de referidos
+RF-11 | Referidos
+El sistema deberá registrar al referido y su relación única con el socio en máximo 3 segundos, e iniciar su validación automática al registrarse, vincular su cuenta o corregir su asociación, sin aprobación del administrador.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+UR: UR-13, UR-15, UR-16, UR-17, UR-18, UR-54 | RF: RF-01, RF-02, RF-05, RF-09, RF-12, RF-39, RF-42, RF-50
+RF-11-1 Validar (Código)
+RF-11-1 | Referidos
+El sistema deberá aceptar solo códigos existentes de socios con cuenta validada automáticamente, rechazar la autorreferencia y comprobar la relación única en base de datos.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-11
+RF-11-2 Leer (Consulta propia)
+RF-11-2 | Referidos
+El sistema deberá mostrar al socio sus referidos con nombre de pila, fecha de registro y estado, 10 por página.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-11
+RF-11-3 Leer (Listado global)
+RF-11-3 | Referidos
+El sistema deberá mostrar al administrador todos los referidos, 20 por página, con filtros por estado, campaña, provincia y fecha. Los Pendientes indicarán requisito faltante o incidencia técnica y último intento, sin acciones para dictaminar manualmente.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-11
+RF-11-4 Actualizar (Validación automática)
+RF-11-4 | Referidos
+El sistema deberá aprobar automáticamente en máximo 2 segundos al referido activo cuya cuenta esté Aprobada por RF-50 y cuya relación sea válida y única. Un incumplimiento confirmado generará Rechazado con causa; requisitos aún no completados o fallas técnicas conservarán Pendiente. El administrador no podrá decidir el estado.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-11, RF-02, RF-05-4, RF-50
+RF-11-5 Crear (Asociación manual)
+RF-11-5 | Referidos
+El sistema deberá permitir al administrador asociar al referidor un usuario registrado sin código durante los primeros 30 días, comprobando unicidad y ausencia de autorreferencia y disparando la validación automática; esta asociación no equivale a aprobar al referido.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-11
+RF-11-6 Eliminar (Baja lógica)
+RF-11-6 | Referidos
+El sistema deberá ocultar un referido del listado mediante 1 borrado lógico, conservando su historial.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-11
+RF-11-7 Crear (Exportación)
+RF-11-7 | Referidos
+El sistema deberá exportar en CSV, en máximo 10 segundos, los referidos Pendientes con nombre, correo, celular, referidor y fecha para seguimiento comercial, sin convertirlos en una cola de aprobación manual.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-11
+RF-12 Asignación automática de puntos
+RF-12 | Puntos y recompensas
+El sistema deberá sumar puntos al saldo de un usuario en un máximo de 2 segundos al confirmarse una actividad bonificable.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+UR: UR-19, UR-24 | RF: RF-11-4, RF-13, RF-14, RF-50
+RF-12-1 Crear (Movimiento)
+RF-12-1 | Puntos y recompensas
+El sistema deberá incrementar el saldo exactamente con el valor entero definido en los parámetros (RF-14) o en la campaña vigente (RF-13).
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-12
+RF-12-2 Crear (Premio por referido)
+RF-12-2 | Puntos y recompensas
+El sistema deberá acreditar a ambas partes los puntos de la campaña activa en máximo 2 segundos desde la aprobación automática del referido, en una transacción con clave única por evento y destinatario, sin duplicados ante reintentos. Sin campaña activa aplicará a ambas partes «Puntos por referido» (RF-14).
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-12, RF-11-4
+RF-12-3 Leer (Historial)
+RF-12-3 | Puntos y recompensas
+El sistema deberá mostrar el historial de movimientos del más reciente al más antiguo, 20 por página.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-12
+RF-12-4 Leer (Saldo)
+RF-12-4 | Puntos y recompensas
+El sistema deberá mostrar por separado el saldo disponible y los puntos acumulados históricos.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-12
+RF-13 Campañas de referidos
+RF-13 | Administración
+El sistema deberá permitir al administrador gestionar campañas de referidos con vigencia, provincias y puntos para ambas partes, completando cada operación en un máximo de 3 segundos.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+UR: UR-20, UR-21, UR-22, UR-23 | RF: RF-42
+RF-13-1 Crear (Campaña)
+RF-13-1 | Administración
+El sistema deberá bloquear la creación si la fecha de fin es igual o anterior a la de inicio.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-13
+RF-13-2 Validar (Título)
+RF-13-2 | Administración
+El sistema deberá restringir el título a un máximo de 100 caracteres.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-13
+RF-13-3 Crear (Premios)
+RF-13-3 | Administración
+El sistema deberá exigir los puntos para el socio referidor y para el referido como enteros entre 1 y 10,000.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-13
+RF-13-4 Crear (Provincias)
+RF-13-4 | Administración
+El sistema deberá exigir la selección de entre 1 y 8 provincias de cobertura.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-13
+RF-13-5 Actualizar (Estado)
+RF-13-5 | Administración
+El sistema deberá manejar 4 estados (Borrador, Activa, Pausada y Finalizada), aplicar cada cambio en máximo 2 segundos y no acreditar puntos mientras la campaña esté Pausada.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-13
+RF-13-6 Eliminar (Cierre)
+RF-13-6 | Administración
+El sistema deberá impedir cambios en una campaña «Finalizada» y detener su bonificación.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-13
+RF-13-7 Validar (Superposición)
+RF-13-7 | Administración
+El sistema deberá impedir que 2 campañas activas incluyan la misma provincia en fechas superpuestas.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-13
+RF-13-8 Leer (Campañas vigentes)
+RF-13-8 | Administración
+El sistema deberá mostrar al socio las campañas activas de su provincia con los puntos para ambas partes y la fecha de fin.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-13
+RF-14 Parámetros globales
+RF-14 | Administración
+El sistema deberá aplicar el cambio de un parámetro en un máximo de 5 segundos tras guardarlo.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+UR: UR-46 | RF: RF-42
+RF-14-1 Validar (Tipo)
+RF-14-1 | Administración
+El sistema deberá aceptar en los parámetros numéricos solo números enteros y en los de texto un máximo de 500 caracteres.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-14
+RF-14-2 Leer (Auditoría)
+RF-14-2 | Administración
+El sistema deberá registrar en la bitácora 3 campos (parámetro, valor anterior y valor nuevo) en cada cambio.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-14
+RF-14-3 Actualizar (Puntos por acción)
+RF-14-3 | Administración
+El sistema deberá mantener 1 valor entero entre 0 y 10,000 para cada acción bonificable (capacitación aprobada, partida de trivia, asistencia a taller y reto cumplido).
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-14
+RF-14-4 Actualizar (Valor del punto)
+RF-14-4 | Administración
+El sistema deberá mantener el valor en dólares de 1 punto, con 2 decimales, para calcular el costo por captación (RF-45).
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-14
+RF-15 Ajuste manual de puntos
+RF-15 | Puntos y recompensas
+El sistema deberá registrar un ajuste manual de puntos en un máximo de 3 segundos.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+UR: UR-47 | RF: RF-12, RF-42
+RF-15-1 Validar (Saldo)
+RF-15-1 | Puntos y recompensas
+El sistema deberá bloquear una resta que deje el saldo en negativo.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-15
+RF-15-2 Crear (Traza)
+RF-15-2 | Puntos y recompensas
+El sistema deberá registrar 1 movimiento etiquetado como «Ajuste administrativo» con fecha y hora.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-15
+RF-01 Registro de cuenta en 3 pasos
+RF-01 | Gestión de usuarios
+El sistema deberá registrar la cuenta de un usuario en 3 pasos (datos, cuenta en la Cooperativa y acceso), guardándola en un máximo de 3 segundos al finalizar.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+UR: UR-01, UR-13, UR-14, UR-22 | RF: RF-05, RF-11, RF-47, RF-50
+RF-01-1 Crear (Paso 1: datos)
+RF-01-1 | Gestión de usuarios
+El sistema deberá exigir nombres y apellidos (al menos un nombre y un apellido) de entre 3 y 100 caracteres, un correo con formato válido, un celular de exactamente 10 dígitos que inicie con 09 y 1 de las 24 provincias del Ecuador.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-01
+RF-01-2 Validar (Unicidad)
+RF-01-2 | Gestión de usuarios
+El sistema deberá rechazar el registro si el correo o el celular ya pertenecen a otra cuenta.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-01
+RF-01-3 Crear (Paso 2: cuenta)
+RF-01-3 | Gestión de usuarios
+El sistema deberá permitir continuar sin vincular una cuenta de la Cooperativa al elegir «No, aún no».
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-01
+RF-01-4 Crear (Paso 3: contraseña)
+RF-01-4 | Gestión de usuarios
+El sistema deberá exigir una contraseña de al menos 8 caracteres con 1 mayúscula y 1 número, y que su confirmación coincida exactamente.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-01
+RF-01-5 Crear (Código de referido)
+RF-01-5 | Gestión de usuarios
+El sistema deberá llenar automáticamente el código de referido cuando la persona llegue por un enlace o QR válido, y permitir escribirlo a mano o dejarlo vacío.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-01
+RF-01-6 Leer (Progreso)
+RF-01-6 | Gestión de usuarios
+El sistema deberá mostrar el paso actual (1 a 3) con su porcentaje y conservar los datos ingresados al volver a un paso anterior.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-01
+RF-02 Confirmación de correo
+RF-02 | Gestión de usuarios
+El sistema deberá enviar un código de confirmación al correo del usuario en un máximo de 60 segundos tras crear la cuenta o cambiar el correo.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+UR: UR-02 | RF: RF-01
+RF-02-1 Crear (Código)
+RF-02-1 | Gestión de usuarios
+El sistema deberá generar un código numérico de exactamente 6 dígitos que expire a los 10 minutos.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-02
+RF-02-2 Validar (Reenvío)
+RF-02-2 | Gestión de usuarios
+El sistema deberá permitir un máximo de 3 reenvíos del código por hora.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-02
+RF-02-3 Validar (Activación)
+RF-02-3 | Gestión de usuarios
+El sistema deberá impedir el inicio de sesión de una cuenta mientras su correo no esté confirmado.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-02
+RF-03 Consulta, actualización y baja del perfil
+RF-03 | Gestión de usuarios
+El sistema deberá permitir al usuario consultar, actualizar o dar de baja su perfil, completando cada operación en un máximo de 3 segundos.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+UR: UR-06 | RF: RF-01, RF-02, RF-42
+RF-03-1 Leer (Consulta)
+RF-03-1 | Gestión de usuarios
+El sistema deberá mostrar exactamente 4 datos del perfil: nombres y apellidos, correo, celular y estado de la cuenta vinculada.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+Dep.: RF-03
+RF-15-3 Validar (Motivo)
+RF-15-3 | Puntos y recompensas
+El sistema deberá exigir un motivo de entre 10 y 200 caracteres.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-15
+RF-16 Niveles y ranking
+RF-16 | Gamificación
+El sistema deberá recalcular el nivel de un usuario en un máximo de 1 segundo tras acreditarle puntos.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+UR: UR-25 | RF: RF-12, RF-46
+RF-16-1 Actualizar (Nivel)
+RF-16-1 | Gamificación
+El sistema deberá calcular el nivel con los puntos acumulados históricos, de modo que un canje no reduzca el nivel.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+Dep.: RF-16
+RF-16-2 Leer (Avance)
+RF-16-2 | Gamificación
+El sistema deberá mostrar el nivel actual y los puntos faltantes para el siguiente (umbral siguiente − puntos acumulados, mínimo 0) en máximo 2 pasos desde la pantalla de inicio.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+Dep.: RF-16
+RF-16-3 Leer (Ranking)
+RF-16-3 | Gamificación
+El sistema deberá mostrar en el ranking solo a los 10 primeros usuarios, excluyendo a los de perfil «Privado».
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+Dep.: RF-16
+RF-16-4 Crear (Niveles)
+RF-16-4 | Gamificación
+El sistema deberá permitir al administrador definir entre 2 y 10 niveles con umbrales enteros únicos y crecientes.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+Dep.: RF-16
+RF-17 Insignias
+RF-17 | Gamificación
+El sistema deberá otorgar una insignia al usuario en un máximo de 5 segundos tras cumplir la condición del logro.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+UR: UR-26 | RF: RF-12
+RF-17-1 Crear (Insignia)
+RF-17-1 | Gamificación
+El sistema deberá exigir 1 de 5 tipos de logro (referidos aprobados, capacitaciones aprobadas, retos cumplidos, partidas de trivia o talleres asistidos) y una meta entera mayor o igual a 1.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+Dep.: RF-17
+RF-17-2 Crear (Otorgamiento)
+RF-17-2 | Gamificación
+El sistema deberá otorgar cada insignia una sola vez por usuario.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+Dep.: RF-17
+RF-17-3 Leer (Perfil)
+RF-17-3 | Gamificación
+El sistema deberá mostrar las insignias en el perfil, de la más reciente a la más antigua.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+Dep.: RF-17
+RF-17-4 Eliminar (Inactivar)
+RF-17-4 | Gamificación
+El sistema deberá permitir inactivar una insignia sin retirarla a quienes ya la obtuvieron.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+Dep.: RF-17
+RF-18 Retos
+RF-18 | Gamificación
+El sistema deberá permitir al administrador gestionar retos con meta numérica y puntos de recompensa, completando cada operación en un máximo de 3 segundos.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+UR: UR-27 | RF: RF-12
+RF-18-1 Crear (Reto)
+RF-18-1 | Gamificación
+El sistema deberá bloquear el reto si la fecha de fin es igual o anterior a la de inicio.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-18
+RF-18-2 Validar (Meta)
+RF-18-2 | Gamificación
+El sistema deberá aceptar como meta un número entero entre 1 y 1,000.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-18
+RF-18-3 Leer (Progreso)
+RF-18-3 | Gamificación
+El sistema deberá mostrar el avance del usuario de 0 % a 100 % respecto de la meta.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-18
+RF-18-4 Actualizar (Cumplimiento)
+RF-18-4 | Gamificación
+El sistema deberá emitir 1 sola orden de acreditación por usuario y reto al llegar al 100 %.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-18
+RF-18-5 Eliminar (Finalizar)
+RF-18-5 | Gamificación
+El sistema deberá cambiar el reto a «Finalizado», retirándolo de los retos activos.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-18
+RF-19 Banco de preguntas de educación financiera
+RF-19 | Juegos
+El sistema deberá permitir al gestor de contenidos gestionar las preguntas de la trivia de educación financiera, completando cada operación en un máximo de 3 segundos.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+UR: UR-28 | RF: RF-08
+RF-19-1 Crear (Pregunta)
+RF-19-1 | Juegos
+El sistema deberá exigir exactamente 1 opción correcta entre 2 y 4 opciones.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+Dep.: RF-19
+RF-19-2 Validar (Tema)
+RF-19-2 | Juegos
+El sistema deberá clasificar cada pregunta en 1 de 4 temas (Ahorro, Crédito, Presupuesto o Inversión).
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+Dep.: RF-19
+RF-19-3 Leer (Dificultad)
+RF-19-3 | Juegos
+El sistema deberá filtrar las preguntas por 1 de 3 niveles (Básico, Intermedio o Avanzado).
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+Dep.: RF-19
+RF-19-4 Eliminar (Desactivar)
+RF-19-4 | Juegos
+El sistema deberá cambiar la pregunta a «Inactiva» para excluirla de nuevas partidas.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+Dep.: RF-19
+RF-20 Partida de trivia
+RF-20 | Juegos
+El sistema deberá calcular el puntaje de una partida de trivia en un máximo de 3 segundos tras responder la última pregunta.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+UR: UR-24, UR-29 | RF: RF-19, RF-12
+RF-20-1 Validar (Límite diario)
+RF-20-1 | Juegos
+El sistema deberá bloquear una nueva partida si el usuario completó 3 en las últimas 24 horas.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-20
+RF-20-2 Leer (Preguntas)
+RF-20-2 | Juegos
+El sistema deberá cargar exactamente 10 preguntas activas al azar.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-20
+RF-20-3 Validar (Tiempo)
+RF-20-3 | Juegos
+El sistema deberá limitar cada pregunta a 30 segundos y darla por incorrecta al agotarse.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-20
+RF-20-4 Actualizar (Puntos)
+RF-20-4 | Juegos
+El sistema deberá enviar al módulo de puntos el valor exacto ganado.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-20
+RF-21 Gestión de capacitaciones
+RF-21 | Capacitaciones
+El sistema deberá permitir al gestor de contenidos gestionar capacitaciones, completando cada operación en un máximo de 3 segundos.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+UR: UR-30 | RF: RF-08
+RF-21-1 Crear (Material)
+RF-21-1 | Capacitaciones
+El sistema deberá bloquear cualquier archivo de material que supere los 50 MB.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+Dep.: RF-21
+RF-21-2 Crear (Publicación)
+RF-21-2 | Capacitaciones
+El sistema deberá permitir publicar una capacitación solo si tiene al menos 1 material y un cuestionario de mínimo 5 preguntas.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+Dep.: RF-21
+RF-21-3 Leer (Catálogo)
+RF-21-3 | Capacitaciones
+El sistema deberá mostrar las capacitaciones activas, 10 por página.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+Dep.: RF-21
+RF-21-4 Eliminar (Desactivar)
+RF-21-4 | Capacitaciones
+El sistema deberá cambiar la capacitación a «Inactiva» sin borrar su historial.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+Dep.: RF-21
+RF-22 Evaluación y certificado
+RF-22 | Capacitaciones
+El sistema deberá calificar la evaluación de una capacitación en un máximo de 3 segundos.
+Responsable en la matriz: Sistema / Socio / Cliente
+Prioridad: Debería tener
+UR: UR-24, UR-31 | RF: RF-21, RF-12
+RF-22-1 Leer (Calificación)
+RF-22-1 | Capacitaciones
+El sistema deberá exigir al menos el 70 % de respuestas correctas para marcar la capacitación como «Completada».
+Responsable en la matriz: Sistema / Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-22
+RF-22-2 Crear (Certificado)
+RF-22-2 | Capacitaciones
+El sistema deberá generar el certificado en PDF con 1 código único de validación en máximo 10 segundos tras aprobar.
+Responsable en la matriz: Sistema / Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-22
+RF-22-3 Actualizar (Puntos)
+RF-22-3 | Capacitaciones
+El sistema deberá acreditar los puntos de la capacitación solo la primera vez que se aprueba.
+Responsable en la matriz: Sistema / Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-22
+RF-22-4 Validar (Intentos)
+RF-22-4 | Capacitaciones
+El sistema deberá permitir un máximo de 3 intentos por capacitación cada 24 horas.
+Responsable en la matriz: Sistema / Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-22
+RF-23 Gestión de talleres
+RF-23 | Talleres
+El sistema deberá registrar un taller con fecha futura, lugar y cupos mayores a 0 en un máximo de 3 segundos.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debe tener
+UR: UR-32 | RF: RF-08
+RF-23-1 Crear (Taller)
+RF-23-1 | Talleres
+El sistema deberá exigir que la fecha del taller sea posterior a la fecha actual.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-23
+RF-23-2 Leer (Calendario)
+RF-23-2 | Talleres
+El sistema deberá mostrar los talleres activos agrupados por mes en máximo 3 segundos.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-23
+RF-23-3 Actualizar (Cupos)
+RF-23-3 | Talleres
+El sistema deberá permitir cambiar los cupos siempre que el nuevo valor sea mayor o igual al número de inscritos.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-23
+RF-23-4 Eliminar (Cancelación)
+RF-23-4 | Talleres
+El sistema deberá cambiar el taller a «Cancelado» y liberar el 100 % de sus inscripciones.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-23
+RF-24 Inscripción a talleres
+RF-24 | Talleres
+El sistema deberá confirmar la inscripción de un usuario a un taller en un máximo de 3 segundos cuando existan cupos.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+UR: UR-33 | RF: RF-23
+RF-24-1 Crear (Inscripción)
+RF-24-1 | Talleres
+El sistema deberá completar la inscripción en máximo 3 pasos y restar exactamente 1 cupo.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-24
+RF-24-2 Validar (Duplicidad)
+RF-24-2 | Talleres
+El sistema deberá impedir más de 1 inscripción del mismo usuario en un taller.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-24
+RF-24-3 Eliminar (Anulación)
+RF-24-3 | Talleres
+El sistema deberá permitir anular la inscripción hasta 24 horas antes del taller, devolviendo 1 cupo.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-24
+RF-25 Registro de asistencia
+RF-25 | Talleres
+El sistema deberá registrar la asistencia de un inscrito en un máximo de 2 segundos.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debe tener
+UR: UR-24, UR-34 | RF: RF-24, RF-12
+RF-25-1 Actualizar (Asistencia)
+RF-25-1 | Talleres
+El sistema deberá admitir solo 2 valores (Asistió o No asistió).
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-25
+RF-25-2 Crear (Puntos)
+RF-25-2 | Talleres
+El sistema deberá acreditar una sola vez los puntos de asistencia definidos en los parámetros.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-25
+RF-25-3 Validar (Fecha)
+RF-25-3 | Talleres
+El sistema deberá permitir marcar la asistencia solo desde la hora de inicio del taller hasta 48 horas después.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-25
+RF-26 Publicaciones en el muro
+RF-26 | Comunidad
+El sistema deberá permitir al usuario y al gestor de contenidos publicar en el muro, con la publicación visible en un máximo de 3 segundos.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos
+Prioridad: Debe tener
+UR: UR-35, UR-36 | RF: RF-08
+RF-26-1 Validar (Texto)
+RF-26-1 | Comunidad
+El sistema deberá restringir el texto a un máximo de 500 caracteres.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-26
+RF-26-2 Validar (Imagen)
+RF-26-2 | Comunidad
+El sistema deberá rechazar imágenes de más de 2 MB o en un formato distinto de JPG o PNG.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-26
+RF-26-3 Leer (Muro)
+RF-26-3 | Comunidad
+El sistema deberá mostrar las publicaciones activas, 10 por página.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-26
+RF-26-4 Crear (Oficial)
+RF-26-4 | Comunidad
+El sistema deberá etiquetar como «Oficial» el 100 % de las publicaciones del gestor de contenidos.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-26
+RF-26-5 Actualizar (Autoría)
+RF-26-5 | Comunidad
+El sistema deberá permitir editar o eliminar una publicación solo a su autor.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-26
+RF-27 Comentarios
+RF-27 | Comunidad
+El sistema deberá registrar el comentario de un usuario sobre una publicación en un máximo de 3 segundos.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+UR: UR-35 | RF: RF-26
+RF-27-1 Validar (Texto)
+RF-27-1 | Comunidad
+El sistema deberá bloquear comentarios de más de 250 caracteres.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-27
+RF-27-2 Leer (Listado)
+RF-27-2 | Comunidad
+El sistema deberá mostrar los comentarios en orden cronológico debajo de la publicación.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-27
+RF-27-3 Eliminar (Borrado propio)
+RF-27-3 | Comunidad
+El sistema deberá permitir al autor aplicar 1 borrado lógico a su comentario.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-27
+RF-28 Reacciones
+RF-28 | Comunidad
+El sistema deberá registrar la reacción «Me gusta» de un usuario a una publicación en un máximo de 2 segundos.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+UR: UR-35 | RF: RF-26
+RF-28-1 Validar (Reacción única)
+RF-28-1 | Comunidad
+El sistema deberá permitir como máximo 1 reacción por usuario en cada publicación.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-28
+RF-28-2 Actualizar (Contador)
+RF-28-2 | Comunidad
+El sistema deberá sumar 1 al contador al reaccionar y restar 1 al retirar la reacción.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-28
+RF-29 Publicaciones fijadas
+RF-29 | Comunidad
+El sistema deberá fijar una publicación oficial en las primeras posiciones del muro en un máximo de 3 segundos y retirarla al cumplirse su fecha de fin.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Podría tener
+UR: UR-36 | RF: RF-26
+RF-29-1 Validar (Límite)
+RF-29-1 | Comunidad
+El sistema deberá permitir un máximo de 3 publicaciones fijadas a la vez.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Podría tener
+Dep.: RF-29
+RF-29-2 Validar (Duración)
+RF-29-2 | Comunidad
+El sistema deberá aceptar una duración de fijación de entre 1 y 30 días.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Podría tener
+Dep.: RF-29
+RF-30 Moderación de contenidos
+RF-30 | Comunidad
+El sistema deberá ocultar un contenido en un máximo de 5 segundos cuando reciba 3 reportes de usuarios distintos.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debería tener
+UR: UR-37 | RF: RF-26, RF-27
+RF-30-1 Crear (Reporte)
+RF-30-1 | Comunidad
+El sistema deberá exigir 1 de 4 motivos (Ofensivo, Spam, Falso u Otro) y aceptar 1 solo reporte por usuario y contenido.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debería tener
+Dep.: RF-30
+RF-30-2 Actualizar (Resolución)
+RF-30-2 | Comunidad
+El sistema deberá permitir al administrador eliminar o restaurar el contenido en máximo 2 segundos.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debería tener
+Dep.: RF-30
+RF-30-3 Eliminar (Ocultamiento directo)
+RF-30-3 | Comunidad
+El sistema deberá permitir al administrador ocultar cualquier publicación o comentario sin necesidad de reportes.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debería tener
+Dep.: RF-30
+RF-31 Contenidos y servicios de salud
+RF-31 | Salud y bienestar
+El sistema deberá permitir al gestor de contenidos publicar artículos de salud y la información de los servicios de salud de la Cooperativa, completando cada operación en un máximo de 3 segundos.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Podría tener
+UR: UR-38 | RF: RF-08
+RF-31-1 Validar (Categoría)
+RF-31-1 | Salud y bienestar
+El sistema deberá exigir 1 de 4 categorías (Nutrición, Actividad física, Salud mental o Prevención).
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Podría tener
+Dep.: RF-31
+RF-31-2 Leer (Catálogo)
+RF-31-2 | Salud y bienestar
+El sistema deberá mostrar los artículos y los servicios en secciones separadas, del más reciente al más antiguo, accesibles en máximo 2 pasos desde la pantalla de inicio.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Podría tener
+Dep.: RF-31
+RF-31-3 Eliminar (Despublicar)
+RF-31-3 | Salud y bienestar
+El sistema deberá cambiar el contenido a «Borrador» para ocultarlo a los usuarios.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Podría tener
+Dep.: RF-31
+RF-32 Catálogo de premios
+RF-32 | Puntos y recompensas
+El sistema deberá permitir al administrador gestionar los premios del catálogo, completando cada operación en un máximo de 3 segundos.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+UR: UR-39 | RF: RF-42
+RF-32-1 Crear (Premio)
+RF-32-1 | Puntos y recompensas
+El sistema deberá registrar un premio solo si su costo es un entero mayor a 0, su stock un entero mayor o igual a 1 y su nombre no existe en el catálogo.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-32
+RF-32-2 Validar (Foto)
+RF-32-2 | Puntos y recompensas
+El sistema deberá aceptar la foto solo en JPG o PNG y de hasta 2 MB.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-32
+RF-32-3 Leer (Catálogo)
+RF-32-3 | Puntos y recompensas
+El sistema deberá excluir del catálogo los premios «Inactivos» o con stock 0.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-32
+RF-32-4 Actualizar (Inventario)
+RF-32-4 | Puntos y recompensas
+El sistema deberá restar exactamente 1 unidad del stock por cada canje.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-32
+RF-32-5 Eliminar (Inactivar)
+RF-32-5 | Puntos y recompensas
+El sistema deberá cambiar el premio a «Inactivo», bloqueando nuevos canjes.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-32
+RF-33 Canje de premios
+RF-33 | Puntos y recompensas
+El sistema deberá registrar el canje de 1 premio descontando los puntos en un máximo de 3 segundos, cuando el saldo cubra el costo y exista stock.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+UR: UR-40, UR-41 | RF: RF-06, RF-12, RF-32
+RF-33-1 Validar (Saldo y stock)
+RF-33-1 | Puntos y recompensas
+El sistema deberá bloquear el canje si el saldo es menor al costo o si el stock es 0.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+Dep.: RF-33
+RF-33-2 Crear (Pasos)
+RF-33-2 | Puntos y recompensas
+El sistema deberá completar el canje en máximo 3 pasos: elegir, confirmar y ver el comprobante.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+Dep.: RF-33
+RF-33-3 Leer (Mis canjes)
+RF-33-3 | Puntos y recompensas
+El sistema deberá mostrar al usuario sus canjes con su estado, del más reciente al más antiguo.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+Dep.: RF-33
+RF-33-4 Actualizar (Entrega)
+RF-33-4 | Puntos y recompensas
+El sistema deberá permitir al administrador avanzar el estado solo en la secuencia «Pendiente» → «Listo para retiro» → «Entregado», en máximo 2 segundos.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+Dep.: RF-33
+RF-33-5 Leer (Historial global)
+RF-33-5 | Puntos y recompensas
+El sistema deberá mostrar al administrador todos los canjes, 50 por página, filtrando por rango de fechas.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+Dep.: RF-33
+RF-34 Favoritos
+RF-34 | Puntos y recompensas
+El sistema deberá guardar o quitar un premio de los favoritos del usuario en un máximo de 2 segundos.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+UR: UR-42 | RF: RF-32
+RF-34-1 Validar (Duplicado)
+RF-34-1 | Puntos y recompensas
+El sistema deberá impedir guardar 2 veces el mismo premio.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-34
+RF-34-2 Validar (Límite)
+RF-34-2 | Puntos y recompensas
+El sistema deberá permitir un máximo de 50 favoritos por usuario.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-34
+RF-34-3 Leer (Consulta)
+RF-34-3 | Puntos y recompensas
+El sistema deberá excluir de la lista los premios inactivos.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-34
+RF-35 Meta de canje
+RF-35 | Puntos y recompensas
+El sistema deberá calcular los puntos que faltan para el premio meta del usuario en un máximo de 2 segundos.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+UR: UR-42 | RF: RF-12, RF-32, RF-38
+RF-35-1 Crear (Meta)
+RF-35-1 | Puntos y recompensas
+El sistema deberá mantener exactamente 1 meta activa por usuario, reemplazándola si elige otra.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-35
+RF-35-2 Leer (Faltantes)
+RF-35-2 | Puntos y recompensas
+El sistema deberá calcular los faltantes como costo − saldo, con un mínimo de 0.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-35
+RF-35-3 Crear (Aviso)
+RF-35-3 | Puntos y recompensas
+El sistema deberá enviar 1 notificación en máximo 1 minuto cuando el saldo alcance el costo de la meta.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-35
+RF-36 Búsqueda global
+RF-36 | Búsquedas
+El sistema deberá mostrar los resultados de búsqueda en un máximo de 3 segundos.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+UR: UR-43 | RF: RF-46
+RF-36-1 Validar (Longitud)
+RF-36-1 | Búsquedas
+El sistema deberá exigir al menos 3 caracteres para buscar.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-36
+RF-36-2 Leer (Paginación)
+RF-36-2 | Búsquedas
+El sistema deberá mostrar un máximo de 20 resultados por página.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-36
+RF-37 Bandeja y alertas de campañas
+RF-37 | Notificaciones
+El sistema deberá entregar la notificación de una campaña a los usuarios de sus provincias en un máximo de 60 segundos tras su activación.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+UR: UR-44 | RF: RF-13
+RF-37-1 Crear (Entrega)
+RF-37-1 | Notificaciones
+El sistema deberá sumar 1 al contador de no leídas por cada notificación almacenada.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+Dep.: RF-37
+RF-37-2 Leer (Bandeja)
+RF-37-2 | Notificaciones
+El sistema deberá mostrar 20 notificaciones por página, de la más reciente a la más antigua, y restar 1 al contador al abrir una no leída.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+Dep.: RF-37
+RF-37-3 Eliminar (Purga)
+RF-37-3 | Notificaciones
+El sistema deberá borrar las notificaciones informativas a los 30 días calendario.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+Dep.: RF-37
+RF-38 Alertas de puntos, nivel, insignias y canjes
+RF-38 | Notificaciones
+El sistema deberá notificar al usuario en un máximo de 5 segundos tras acreditarle puntos, subirlo de nivel, otorgarle una insignia o cambiar el estado de su canje.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+UR: UR-24, UR-44 | RF: RF-12, RF-16, RF-17, RF-33
+RF-38-1 Crear (Mensaje)
+RF-38-1 | Notificaciones
+El sistema deberá incluir en la alerta el valor exacto de los puntos ganados.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+Dep.: RF-38
+RF-38-2 Eliminar (Retención)
+RF-38-2 | Notificaciones
+El sistema deberá conservar estas alertas un mínimo de 90 días calendario.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+Dep.: RF-38
+RF-39 Alertas de referidos y de cuenta vinculada
+RF-39 | Notificaciones
+El sistema deberá notificar al titular el resultado automático de su cuenta y al socio el cambio de estado de su referido en máximo 5 segundos desde su confirmación en base de datos, sin exponer datos personales ajenos.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+UR: UR-15, UR-44 | RF: RF-05-4, RF-11-4, RF-50
+RF-39-1 Crear (Privacidad)
+RF-39-1 | Notificaciones
+El sistema deberá mostrar del referido solo su nombre de pila, sin apellidos ni datos de contacto.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+Dep.: RF-39
+RF-39-2 Validar (Duplicidad)
+RF-39-2 | Notificaciones
+El sistema deberá emitir una sola notificación por evento de cambio de estado y destinatario, con unicidad en base de datos, incluso si el evento se reintenta después de 5 minutos.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+Dep.: RF-39
+RF-40 Recordatorios automáticos
+RF-40 | Notificaciones
+El sistema deberá ejecutar cada 1 hora la verificación de recordatorios de talleres y retos.
+Responsable en la matriz: Sistema
+Prioridad: Podría tener
+UR: UR-27, UR-33, UR-44 | RF: RF-18, RF-24
+RF-40-1 Crear (Taller)
+RF-40-1 | Notificaciones
+El sistema deberá enviar 1 alerta entre 24 y 25 horas antes de cada taller en el que el usuario esté inscrito.
+Responsable en la matriz: Sistema
+Prioridad: Podría tener
+Dep.: RF-40
+RF-40-2 Crear (Reto)
+RF-40-2 | Notificaciones
+El sistema deberá enviar 1 alerta entre 72 y 73 horas antes del cierre de un reto con avance mayor a 0 %.
+Responsable en la matriz: Sistema
+Prioridad: Podría tener
+Dep.: RF-40
+RF-41 Solicitudes de soporte
+RF-41 | Administración
+El sistema deberá registrar una solicitud de soporte en un máximo de 3 segundos y entregar la respuesta del administrador en la bandeja del usuario en un máximo de 5 segundos.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Podría tener
+UR: UR-45 | RF: RF-37
+RF-41-1 Crear (Solicitud)
+RF-41-1 | Administración
+El sistema deberá generar un código único de exactamente 6 caracteres por solicitud y limitar la descripción a 1,000 caracteres.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Podría tener
+Dep.: RF-41
+RF-41-2 Actualizar (Estado)
+RF-41-2 | Administración
+El sistema deberá avanzar el estado solo en la secuencia «Abierta» → «En atención» → «Cerrada».
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Podría tener
+Dep.: RF-41
+RF-41-3 Crear (Respuesta única)
+RF-41-3 | Administración
+El sistema deberá permitir al administrador registrar 1 sola respuesta de hasta 1,000 caracteres al cerrar la solicitud, sin conversación entre usuarios.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Podría tener
+Dep.: RF-41
+RF-41-4 Leer (Mis solicitudes)
+RF-41-4 | Administración
+El sistema deberá mostrar al usuario sus solicitudes con su estado y la respuesta recibida.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Podría tener
+Dep.: RF-41
+RF-42 Bitácora de auditoría
+RF-42 | Administración
+El sistema deberá registrar en la bitácora el 100 % de las acciones críticas administrativas y de los intentos y resultados de validación automática de cuentas y referidos.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+UR: UR-48 | RF: RF-05, RF-08, RF-11, RF-13, RF-14, RF-15, RF-30, RF-32, RF-47, RF-50
+RF-42-1 Crear (Registro)
+RF-42-1 | Administración
+El sistema deberá guardar registros inmutables con actor (usuario o Sistema), acción, fecha, origen o IP cuando aplique y registro afectado. Para validaciones automáticas incluirá estado anterior y nuevo, causa, intento, referencia y fecha de la fuente institucional y versión de regla, sin datos financieros.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-42
+RF-42-2 Leer (Filtros)
+RF-42-2 | Administración
+El sistema deberá filtrar por rango de fechas, usuario y tipo de acción en máximo 5 segundos, mostrando 50 registros por página.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-42
+RF-43 Reporte de referidos
+RF-43 | Reportes
+El sistema deberá generar el reporte de conversión de referidos en un máximo de 10 segundos.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+UR: UR-49 | RF: RF-11, RF-13
+RF-43-1 Validar (Rango)
+RF-43-1 | Reportes
+El sistema deberá restringir la consulta a un máximo de 12 meses.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-43
+RF-43-2 Crear (Conversión)
+RF-43-2 | Reportes
+El sistema deberá incluir 1 columna con el % de referidos Aprobados sobre el total.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-43
+RF-43-3 Crear (Detalle)
+RF-43-3 | Reportes
+El sistema deberá incluir por referido el socio que lo refirió, la campaña, la provincia, el estado y la fecha.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-43
+RF-44 Encuestas de satisfacción
+RF-44 | Encuestas
+El sistema deberá registrar la respuesta de un usuario a una encuesta en un máximo de 3 segundos.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos
+Prioridad: Podría tener
+UR: UR-50 | RF: RF-22, RF-25
+RF-44-1 Validar (Respuesta única)
+RF-44-1 | Encuestas
+El sistema deberá aceptar 1 sola respuesta por usuario y evento.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos
+Prioridad: Podría tener
+Dep.: RF-44
+RF-44-2 Validar (Escala)
+RF-44-2 | Encuestas
+El sistema deberá aceptar solo enteros entre 1 y 5, en encuestas de máximo 5 preguntas.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos
+Prioridad: Podría tener
+Dep.: RF-44
+RF-45 Tablero de indicadores
+RF-45 | Reportes
+El sistema deberá mostrar al administrador el tablero de indicadores de captación y fidelización en un máximo de 5 segundos, con datos de máximo 24 horas de antigüedad.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+UR: UR-49 | RF: RF-11, RF-12, RF-14, RF-33
+RF-45-1 Leer (Indicadores)
+RF-45-1 | Reportes
+El sistema deberá mostrar 6 indicadores: referidos registrados, % de referidos Aprobados, usuarios activos en el mes (con al menos 1 actividad distinta de iniciar o cerrar sesión), puntos otorgados, puntos canjeados e inscripciones a talleres.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-45
+RF-45-2 Leer (Costo por captación)
+RF-45-2 | Reportes
+El sistema deberá calcular el costo por captación como (puntos otorgados por referidos × valor del punto) / referidos Aprobados.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-45
+RF-45-3 Leer (Participación)
+RF-45-3 | Reportes
+El sistema deberá mostrar por cada reto y juego el número de participantes y el % que lo completó.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-45
+RF-45-4 Crear (Exportación)
+RF-45-4 | Reportes
+El sistema deberá exportar los indicadores en CSV en máximo 10 segundos.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-45
+RF-46 Privacidad del perfil
+RF-46 | Usuarios y perfiles
+El sistema deberá aplicar la visibilidad del perfil elegida por el usuario en un máximo de 3 segundos.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+UR: UR-51 | RF: RF-03
+RF-46-1 Actualizar (Valor)
+RF-46-1 | Usuarios y perfiles
+El sistema deberá aceptar solo 2 valores (Público o Privado), con «Privado» por defecto.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-46
+RF-46-2 Leer (Datos protegidos)
+RF-46-2 | Usuarios y perfiles
+El sistema deberá ocultar al 100 % de los demás usuarios el correo, el celular y el número de cuenta de cualquier perfil.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-46
+RF-46-3 Leer (Perfil público)
+RF-46-3 | Usuarios y perfiles
+El sistema deberá mostrar en un perfil público solo 3 datos: nombre de pila, nivel e insignias.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-46
+RF-47 Autorización de tratamiento de datos
+RF-47 | Gestión de usuarios
+El sistema deberá condicionar la creación de la cuenta a la aceptación expresa de los términos y del aviso de privacidad vigente, validándola en un máximo de 2 segundos.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+UR: UR-52 | RF: RF-42
+RF-47-1 Validar (Aceptación)
+RF-47-1 | Gestión de usuarios
+El sistema deberá bloquear la creación de la cuenta mientras la casilla de aceptación no esté marcada.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-47
+RF-47-2 Crear (Evidencia)
+RF-47-2 | Gestión de usuarios
+El sistema deberá registrar 3 datos de evidencia (fecha, hora y versión del aviso aceptado).
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-47
+RF-47-3 Leer (Conservación)
+RF-47-3 | Gestión de usuarios
+El sistema deberá conservar la evidencia durante un mínimo de 5 años.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-47
+RF-47-4 Crear (Versión del aviso)
+RF-47-4 | Gestión de usuarios
+El sistema deberá permitir al administrador publicar una nueva versión numerada del aviso, manteniendo exactamente 1 vigente; la persona que se registra debe aceptar la versión vigente.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-47
+RF-48 Pantalla de inicio
+RF-48 | Usuarios y perfiles
+El sistema deberá mostrar al usuario, en un máximo de 3 segundos tras iniciar sesión, su saldo, su nivel, los puntos faltantes y el botón para compartir su enlace.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+UR: UR-12, UR-24, UR-25 | RF: RF-10, RF-12, RF-16, RF-37
+RF-48-1 Leer (Resumen)
+RF-48-1 | Usuarios y perfiles
+El sistema deberá mostrar 4 datos: saldo, nivel, puntos faltantes y notificaciones sin leer.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-48
+RF-48-2 Leer (Compartir)
+RF-48-2 | Usuarios y perfiles
+El sistema deberá ubicar el botón «Compartir mi enlace» a 1 toque, o el aviso «Vincular mi cuenta» si la cuenta no está verificada.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-48
+RF-48-3 Leer (Accesos directos)
+RF-48-3 | Usuarios y perfiles
+El sistema deberá mostrar 6 accesos directos: Referidos, Recompensas, Retos, Juegos, Talleres y Comunidad.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-48
+RF-49 Navegación, ayudas y mensajes de la interfaz
+RF-49 | Usuarios y perfiles
+El sistema deberá mostrar un mensaje de éxito o de error en un máximo de 1 segundo después de cada acción del usuario.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+UR: UR-04, UR-53 | RF: RF-08
+RF-49-1 Leer (Ayuda en campos)
+RF-49-1 | Usuarios y perfiles
+El sistema deberá mostrar en el 100 % de los campos de los formularios un texto de ayuda o un ejemplo.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-49
+RF-49-2 Leer (Campos con error)
+RF-49-2 | Usuarios y perfiles
+El sistema deberá marcar en rojo cada campo con error y mostrar debajo la causa y la corrección esperada.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-49
+RF-49-3 Leer (Mensajes)
+RF-49-3 | Usuarios y perfiles
+El sistema deberá mostrar un aviso de éxito o error durante al menos 4 segundos o hasta que el usuario lo cierre.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-49
+RF-49-4 Leer (Menú)
+RF-49-4 | Usuarios y perfiles
+El sistema deberá mostrar el menú del rol completo en pantallas de 768 píxeles o más y como menú desplegable en pantallas menores.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-49
+RF-50 Validación automática contra la base institucional
+RF-50 | Gestión de usuarios
+El sistema deberá validar automáticamente existencia, titularidad y condición habilitada de las cuentas de asociados y referidos contra registros institucionales autorizados en máximo 5 segundos con la fuente disponible y vigente, sin intervención del administrador.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+UR: UR-07, UR-08, UR-09, UR-14, UR-16 | RF: RF-05, RF-11, RF-12, RF-39, RF-42
+RF-50-1 Leer (Consulta)
+RF-50-1 | Gestión de usuarios
+El sistema deberá consultar una fuente institucional de solo lectura o su réplica autorizada con trazabilidad de origen y vigencia, comparando identificador institucional del titular, tipo, número y condición habilitada. No obtendrá saldos ni movimientos ni aceptará como evidencia datos declarados por el usuario.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-50
+RF-50-2 Actualizar (Resultado y reintento automático)
+RF-50-2 | Gestión de usuarios
+El sistema deberá persistir el resultado y su evidencia, reevaluar automáticamente al referido asociado y disparar puntos y avisos. Ante falta de respuesta o fuente no vigente conservará Pendiente con causa y reintentará automáticamente cada 5 minutos, sin derivar a aprobación manual ni duplicar efectos.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-50, RF-05-4, RF-11-4, RF-12-2, RF-39, RF-42

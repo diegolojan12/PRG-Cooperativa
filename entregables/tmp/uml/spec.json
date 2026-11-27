@@ -1,0 +1,4057 @@
+[
+  {
+    "class": "Usuario",
+    "scenarios": [
+      {
+        "name": "Registrar cuenta",
+        "actor": "Prospecto",
+        "request": "Completar datos, cuenta opcional y contraseña",
+        "check": "Validar datos, unicidad, contraseña y aceptación vigente",
+        "guard": "datos válidos y aceptación expresa",
+        "fail": "Indicar los campos a corregir; no crear la cuenta",
+        "steps": [
+          {
+            "refs": [
+              "RF-01-1",
+              "RF-01-2"
+            ],
+            "text": "Validar nombre 3–100, correo único, celular 09 de 10 dígitos y provincia"
+          },
+          {
+            "refs": [
+              "RF-01-3",
+              "RF-01-5"
+            ],
+            "text": "Conservar cuenta opcional y código de referido opcional; validar si se informan"
+          },
+          {
+            "refs": [
+              "RF-01-4"
+            ],
+            "text": "Crear cuenta con contraseña de 8 caracteres, mayúscula, número y confirmación"
+          },
+          {
+            "refs": [
+              "RF-01-6"
+            ],
+            "text": "Conservar datos al retroceder y mostrar paso 1–3 y porcentaje"
+          },
+          {
+            "refs": [
+              "RF-01"
+            ],
+            "text": "Iniciar confirmación RF-02; invocar RF-05/RF-11 cuando se informaron cuenta/referido",
+            "when": "registro creado"
+          }
+        ]
+      }
+    ],
+    "code": "RF-01",
+    "name": "Registro de cuenta en 3 pasos",
+    "uc": 1243,
+    "notes": "RF-01 | Gestión de usuarios\nEl sistema deberá registrar la cuenta de un usuario en 3 pasos (datos, cuenta en la Cooperativa y acceso), guardándola en un máximo de 3 segundos al finalizar.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nUR: UR-01, UR-13, UR-14, UR-22 | RF: RF-05, RF-11, RF-47, RF-50",
+    "module": "Gestión de usuarios",
+    "requirements": [
+      {
+        "code": "RF-01",
+        "id": 1243,
+        "name": "RF-01 Registro de cuenta en 3 pasos",
+        "notes": "RF-01 | Gestión de usuarios\nEl sistema deberá registrar la cuenta de un usuario en 3 pasos (datos, cuenta en la Cooperativa y acceso), guardándola en un máximo de 3 segundos al finalizar.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nUR: UR-01, UR-13, UR-14, UR-22 | RF: RF-05, RF-11, RF-47, RF-50"
+      },
+      {
+        "code": "RF-01-1",
+        "id": 1244,
+        "name": "RF-01-1 Crear (Paso 1: datos)",
+        "notes": "RF-01-1 | Gestión de usuarios\nEl sistema deberá exigir nombres y apellidos (al menos un nombre y un apellido) de entre 3 y 100 caracteres, un correo con formato válido, un celular de exactamente 10 dígitos que inicie con 09 y 1 de las 24 provincias del Ecuador.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nDep.: RF-01"
+      },
+      {
+        "code": "RF-01-2",
+        "id": 1245,
+        "name": "RF-01-2 Validar (Unicidad)",
+        "notes": "RF-01-2 | Gestión de usuarios\nEl sistema deberá rechazar el registro si el correo o el celular ya pertenecen a otra cuenta.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nDep.: RF-01"
+      },
+      {
+        "code": "RF-01-3",
+        "id": 1246,
+        "name": "RF-01-3 Crear (Paso 2: cuenta)",
+        "notes": "RF-01-3 | Gestión de usuarios\nEl sistema deberá permitir continuar sin vincular una cuenta de la Cooperativa al elegir «No, aún no».\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nDep.: RF-01"
+      },
+      {
+        "code": "RF-01-4",
+        "id": 1247,
+        "name": "RF-01-4 Crear (Paso 3: contraseña)",
+        "notes": "RF-01-4 | Gestión de usuarios\nEl sistema deberá exigir una contraseña de al menos 8 caracteres con 1 mayúscula y 1 número, y que su confirmación coincida exactamente.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nDep.: RF-01"
+      },
+      {
+        "code": "RF-01-5",
+        "id": 1248,
+        "name": "RF-01-5 Crear (Código de referido)",
+        "notes": "RF-01-5 | Gestión de usuarios\nEl sistema deberá llenar automáticamente el código de referido cuando la persona llegue por un enlace o QR válido, y permitir escribirlo a mano o dejarlo vacío.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nDep.: RF-01"
+      },
+      {
+        "code": "RF-01-6",
+        "id": 1249,
+        "name": "RF-01-6 Leer (Progreso)",
+        "notes": "RF-01-6 | Gestión de usuarios\nEl sistema deberá mostrar el paso actual (1 a 3) con su porcentaje y conservar los datos ingresados al volver a un paso anterior.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nDep.: RF-01"
+      }
+    ]
+  },
+  {
+    "class": "ConfirmacionCorreo",
+    "scenarios": [
+      {
+        "name": "Emitir o reenviar código",
+        "actor": "Evento del sistema",
+        "request": "Recibir registro, cambio de correo o solicitud de reenvío",
+        "check": "Comprobar si es emisión inicial o el límite de reenvíos",
+        "guard": "emisión inicial o menos de 3 reenvíos/hora",
+        "fail": "Informar límite; no reenviar",
+        "steps": [
+          {
+            "refs": [
+              "RF-02-1",
+              "RF-02-2"
+            ],
+            "text": "Generar código de 6 dígitos válido 10 minutos y enviar en ≤60 s"
+          }
+        ]
+      },
+      {
+        "name": "Confirmar correo",
+        "actor": "Prospecto",
+        "request": "Introducir el código recibido",
+        "check": "Validar código y vigencia",
+        "guard": "código correcto y vigente",
+        "fail": "Mantener correo sin confirmar y bloquear inicio de sesión",
+        "steps": [
+          {
+            "refs": [
+              "RF-02-3"
+            ],
+            "text": "Confirmar correo y habilitar autenticación RF-04"
+          }
+        ]
+      }
+    ],
+    "code": "RF-02",
+    "name": "Confirmación de correo",
+    "uc": 1250,
+    "notes": "RF-02 | Gestión de usuarios\nEl sistema deberá enviar un código de confirmación al correo del usuario en un máximo de 60 segundos tras crear la cuenta o cambiar el correo.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nUR: UR-02 | RF: RF-01",
+    "module": "Gestión de usuarios",
+    "requirements": [
+      {
+        "code": "RF-02",
+        "id": 1250,
+        "name": "RF-02 Confirmación de correo",
+        "notes": "RF-02 | Gestión de usuarios\nEl sistema deberá enviar un código de confirmación al correo del usuario en un máximo de 60 segundos tras crear la cuenta o cambiar el correo.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nUR: UR-02 | RF: RF-01"
+      },
+      {
+        "code": "RF-02-1",
+        "id": 1251,
+        "name": "RF-02-1 Crear (Código)",
+        "notes": "RF-02-1 | Gestión de usuarios\nEl sistema deberá generar un código numérico de exactamente 6 dígitos que expire a los 10 minutos.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-02"
+      },
+      {
+        "code": "RF-02-2",
+        "id": 1252,
+        "name": "RF-02-2 Validar (Reenvío)",
+        "notes": "RF-02-2 | Gestión de usuarios\nEl sistema deberá permitir un máximo de 3 reenvíos del código por hora.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-02"
+      },
+      {
+        "code": "RF-02-3",
+        "id": 1253,
+        "name": "RF-02-3 Validar (Activación)",
+        "notes": "RF-02-3 | Gestión de usuarios\nEl sistema deberá impedir el inicio de sesión de una cuenta mientras su correo no esté confirmado.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-02"
+      }
+    ]
+  },
+  {
+    "class": "Usuario",
+    "scenarios": [
+      {
+        "name": "Consultar perfil",
+        "actor": "Socio / Cliente",
+        "request": "Abrir mi perfil",
+        "check": "Verificar identidad y permiso sobre el perfil",
+        "guard": "consulta autorizada",
+        "fail": "Denegar acceso al perfil",
+        "steps": [
+          {
+            "refs": [
+              "RF-03-1"
+            ],
+            "text": "Mostrar nombres y apellidos, correo, celular y estado de cuenta"
+          }
+        ]
+      },
+      {
+        "name": "Actualizar perfil",
+        "actor": "Socio / Cliente",
+        "request": "Enviar datos modificados",
+        "check": "Comprobar formato, permiso y unicidad de correo y celular",
+        "guard": "datos válidos y únicos",
+        "fail": "Mostrar errores y conservar datos anteriores",
+        "steps": [
+          {
+            "refs": [
+              "RF-03-2"
+            ],
+            "text": "Actualizar nombre, correo, celular y contraseña en ≤2 s"
+          }
+        ]
+      },
+      {
+        "name": "Dar de baja perfil",
+        "actor": "Socio / Cliente",
+        "request": "Confirmar baja de la cuenta",
+        "check": "Verificar identidad y confirmación de baja",
+        "guard": "baja autorizada y confirmada",
+        "fail": "Cancelar baja",
+        "steps": [
+          {
+            "refs": [
+              "RF-03-3"
+            ],
+            "text": "Inactivar lógicamente y conservar todo el historial de puntos y referidos"
+          }
+        ]
+      }
+    ],
+    "code": "RF-03",
+    "name": "Consulta, actualización y baja del perfil",
+    "uc": 1254,
+    "notes": "RF-03 | Gestión de usuarios\nEl sistema deberá permitir al usuario consultar, actualizar o dar de baja su perfil, completando cada operación en un máximo de 3 segundos.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Debe tener\nUR: UR-06 | RF: RF-01, RF-02, RF-42",
+    "module": "Gestión de usuarios",
+    "requirements": [
+      {
+        "code": "RF-03-2",
+        "id": 1256,
+        "name": "RF-03-2 Actualizar (Modificación)",
+        "notes": "RF-03-2 | Gestión de usuarios\nEl sistema deberá actualizar el nombre, el correo, el celular y la contraseña en máximo 2 segundos, validando que el correo y el celular no pertenezcan a otra cuenta.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Debe tener\nDep.: RF-03"
+      },
+      {
+        "code": "RF-03-3",
+        "id": 1257,
+        "name": "RF-03-3 Eliminar (Baja lógica)",
+        "notes": "RF-03-3 | Gestión de usuarios\nEl sistema deberá inactivar la cuenta mediante 1 borrado lógico que conserve el 100 % de su historial de referidos y puntos.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Debe tener\nDep.: RF-03"
+      },
+      {
+        "code": "RF-03",
+        "id": 1254,
+        "name": "RF-03 Consulta, actualización y baja del perfil",
+        "notes": "RF-03 | Gestión de usuarios\nEl sistema deberá permitir al usuario consultar, actualizar o dar de baja su perfil, completando cada operación en un máximo de 3 segundos.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Debe tener\nUR: UR-06 | RF: RF-01, RF-02, RF-42"
+      },
+      {
+        "code": "RF-03-1",
+        "id": 1255,
+        "name": "RF-03-1 Leer (Consulta)",
+        "notes": "RF-03-1 | Gestión de usuarios\nEl sistema deberá mostrar exactamente 4 datos del perfil: nombres y apellidos, correo, celular y estado de la cuenta vinculada.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Debe tener\nDep.: RF-03"
+      }
+    ]
+  },
+  {
+    "class": "Sesion",
+    "scenarios": [
+      {
+        "name": "Iniciar sesión",
+        "actor": "Usuario de la plataforma",
+        "request": "Introducir correo y contraseña",
+        "check": "Comprobar bloqueo, correo confirmado, credenciales y rol",
+        "guard": "credenciales válidas y cuenta habilitada",
+        "fail": "Contar fallo; al quinto bloquear 15 minutos; no emitir token",
+        "steps": [
+          {
+            "refs": [
+              "RF-04-1",
+              "RF-04-2"
+            ],
+            "text": "Emitir token y cargar permisos del rol en ≤3 s"
+          }
+        ]
+      },
+      {
+        "name": "Expirar sesión",
+        "actor": "Evento del sistema",
+        "request": "Detectar inactividad de una sesión",
+        "check": "Calcular minutos sin acciones",
+        "guard": "inactividad ≥15 minutos",
+        "fail": "Mantener sesión vigente",
+        "steps": [
+          {
+            "refs": [
+              "RF-04-3"
+            ],
+            "text": "Invalidar sesión inactiva"
+          }
+        ]
+      },
+      {
+        "name": "Cerrar sesión",
+        "actor": "Usuario de la plataforma",
+        "request": "Seleccionar Cerrar sesión",
+        "check": "Localizar la sesión actual",
+        "guard": "sesión existente",
+        "fail": "Mostrar sesión ya cerrada",
+        "steps": [
+          {
+            "refs": [
+              "RF-04-4"
+            ],
+            "text": "Invalidar sesión y confirmar cierre en ≤2 s"
+          }
+        ]
+      }
+    ],
+    "code": "RF-04",
+    "name": "Autenticación y cierre de sesión",
+    "uc": 1258,
+    "notes": "RF-04 | Validación de usuarios\nEl sistema deberá autenticar al usuario con su correo y contraseña en un máximo de 3 segundos, y cerrar la sesión tras 15 minutos de inactividad.\nResponsable en la matriz: Socio / Cliente / Gestor de contenidos / Administrador\nPrioridad: Debe tener\nUR: UR-03, UR-04 | RF: RF-02, RF-08",
+    "module": "Validación de usuarios",
+    "requirements": [
+      {
+        "code": "RF-04",
+        "id": 1258,
+        "name": "RF-04 Autenticación y cierre de sesión",
+        "notes": "RF-04 | Validación de usuarios\nEl sistema deberá autenticar al usuario con su correo y contraseña en un máximo de 3 segundos, y cerrar la sesión tras 15 minutos de inactividad.\nResponsable en la matriz: Socio / Cliente / Gestor de contenidos / Administrador\nPrioridad: Debe tener\nUR: UR-03, UR-04 | RF: RF-02, RF-08"
+      },
+      {
+        "code": "RF-04-1",
+        "id": 1259,
+        "name": "RF-04-1 Crear (Sesión)",
+        "notes": "RF-04-1 | Validación de usuarios\nEl sistema deberá verificar las credenciales y generar el token de sesión en un máximo de 3 segundos.\nResponsable en la matriz: Socio / Cliente / Gestor de contenidos / Administrador\nPrioridad: Debe tener\nDep.: RF-04"
+      },
+      {
+        "code": "RF-04-2",
+        "id": 1260,
+        "name": "RF-04-2 Validar (Bloqueo de intentos)",
+        "notes": "RF-04-2 | Validación de usuarios\nEl sistema deberá bloquear el inicio de sesión durante 15 minutos tras 5 intentos fallidos consecutivos.\nResponsable en la matriz: Socio / Cliente / Gestor de contenidos / Administrador\nPrioridad: Debe tener\nDep.: RF-04"
+      },
+      {
+        "code": "RF-04-3",
+        "id": 1261,
+        "name": "RF-04-3 Eliminar (Expiración)",
+        "notes": "RF-04-3 | Validación de usuarios\nEl sistema deberá invalidar toda sesión que no registre acciones durante 15 minutos consecutivos.\nResponsable en la matriz: Socio / Cliente / Gestor de contenidos / Administrador\nPrioridad: Debe tener\nDep.: RF-04"
+      },
+      {
+        "code": "RF-04-4",
+        "id": 1262,
+        "name": "RF-04-4 Eliminar (Cierre manual)",
+        "notes": "RF-04-4 | Validación de usuarios\nEl sistema deberá cerrar la sesión en máximo 2 segundos cuando el usuario seleccione «Cerrar sesión».\nResponsable en la matriz: Socio / Cliente / Gestor de contenidos / Administrador\nPrioridad: Debe tener\nDep.: RF-04"
+      }
+    ]
+  },
+  {
+    "class": "ValidadorCuenta",
+    "scenarios": [
+      {
+        "name": "Solicitar vinculación",
+        "actor": "Socio / Cliente",
+        "request": "Indicar tipo y número de cuenta",
+        "check": "Validar tipo, 10 dígitos y unicidad con control concurrente",
+        "guard": "Ahorros o Corriente y cuenta no vinculada a otro usuario",
+        "fail": "Rechazar solicitud inválida o duplicada",
+        "steps": [
+          {
+            "refs": [
+              "RF-05-1",
+              "RF-05-2"
+            ],
+            "text": "Guardar solicitud Pendiente con unicidad en base de datos"
+          },
+          {
+            "refs": [
+              "RF-05-4"
+            ],
+            "text": "Invocar validación institucional RF-50; aplicar su resultado automático"
+          }
+        ]
+      },
+      {
+        "name": "Consultar seguimiento",
+        "actor": "Administrador",
+        "request": "Solicitar validaciones pendientes",
+        "check": "Verificar permiso de consulta administrativa",
+        "guard": "administrador autorizado",
+        "fail": "Denegar acceso",
+        "steps": [
+          {
+            "refs": [
+              "RF-05-3"
+            ],
+            "text": "Listar Pendientes por antigüedad, 20/página, causa y reintentos; sin dictamen manual"
+          }
+        ]
+      },
+      {
+        "name": "Consultar cuenta",
+        "actor": "Socio / Cliente",
+        "request": "Abrir datos de mi cuenta",
+        "check": "Verificar propiedad de la cuenta",
+        "guard": "titular autenticado",
+        "fail": "Denegar acceso",
+        "steps": [
+          {
+            "refs": [
+              "RF-05-5"
+            ],
+            "text": "Mostrar últimos 4 dígitos; revelar número solo a petición del titular"
+          }
+        ]
+      },
+      {
+        "name": "Corregir cuenta rechazada",
+        "actor": "Socio / Cliente",
+        "request": "Corregir datos y solicitar nuevo intento",
+        "check": "Verificar estado Rechazado y datos corregidos",
+        "guard": "cuenta Rechazada y corrección válida",
+        "fail": "No crear otra vinculación para un Pendiente",
+        "steps": [
+          {
+            "refs": [
+              "RF-05-6"
+            ],
+            "text": "Conservar historial e iniciar nueva validación RF-50 sin duplicar solicitud"
+          }
+        ]
+      }
+    ],
+    "code": "RF-05",
+    "name": "Vinculación y validación automática de cuenta",
+    "uc": 1263,
+    "notes": "RF-05 | Gestión de usuarios\nEl sistema deberá registrar la solicitud de vinculación en máximo 3 segundos e iniciar automáticamente la validación de existencia, titularidad y condición habilitada contra la base institucional autorizada (RF-50), sin intervención del administrador.\nResponsable en la matriz: Socio / Cliente / Sistema\nPrioridad: Debe tener\nUR: UR-07, UR-08, UR-14 | RF: RF-01, RF-39, RF-42, RF-50",
+    "module": "Gestión de usuarios",
+    "requirements": [
+      {
+        "code": "RF-05",
+        "id": 1263,
+        "name": "RF-05 Vinculación y validación automática de cuenta",
+        "notes": "RF-05 | Gestión de usuarios\nEl sistema deberá registrar la solicitud de vinculación en máximo 3 segundos e iniciar automáticamente la validación de existencia, titularidad y condición habilitada contra la base institucional autorizada (RF-50), sin intervención del administrador.\nResponsable en la matriz: Socio / Cliente / Sistema\nPrioridad: Debe tener\nUR: UR-07, UR-08, UR-14 | RF: RF-01, RF-39, RF-42, RF-50"
+      },
+      {
+        "code": "RF-05-1",
+        "id": 1264,
+        "name": "RF-05-1 Crear (Datos de la cuenta)",
+        "notes": "RF-05-1 | Gestión de usuarios\nEl sistema deberá aceptar 1 de 2 tipos de cuenta (Ahorros o Corriente) y un número de cuenta de exactamente 10 dígitos.\nResponsable en la matriz: Socio / Cliente / Sistema\nPrioridad: Debe tener\nDep.: RF-05"
+      },
+      {
+        "code": "RF-05-2",
+        "id": 1265,
+        "name": "RF-05-2 Validar (Unicidad)",
+        "notes": "RF-05-2 | Gestión de usuarios\nEl sistema deberá impedir que una cuenta quede vinculada a más de un usuario en estado Pendiente o Aprobado, mediante unicidad en base de datos y control de concurrencia.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-05"
+      },
+      {
+        "code": "RF-05-3",
+        "id": 1266,
+        "name": "RF-05-3 Leer (Seguimiento de validaciones)",
+        "notes": "RF-05-3 | Gestión de usuarios\nEl sistema deberá mostrar al administrador las validaciones Pendientes de la más antigua a la más reciente, 20 por página, con causa, último intento y siguiente reintento, sin acciones de aprobación o rechazo manual.\nResponsable en la matriz: Administrador (consulta)\nPrioridad: Debe tener\nDep.: RF-05"
+      },
+      {
+        "code": "RF-05-4",
+        "id": 1267,
+        "name": "RF-05-4 Actualizar (Resultado automático)",
+        "notes": "RF-05-4 | Gestión de usuarios\nEl sistema deberá guardar automáticamente Aprobado si la fuente institucional confirma existencia, titularidad y condición habilitada, o Rechazado con causa ante un incumplimiento confirmado, en máximo 2 segundos desde la respuesta. Una falla técnica o fuente desactualizada conservará Pendiente.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-05, RF-50"
+      },
+      {
+        "code": "RF-05-5",
+        "id": 1268,
+        "name": "RF-05-5 Leer (Enmascarado)",
+        "notes": "RF-05-5 | Gestión de usuarios\nEl sistema deberá mostrar el número de cuenta oculto, con solo sus 4 últimos dígitos visibles, salvo cuando el propio usuario pida verlo.\nResponsable en la matriz: Socio / Cliente / Sistema\nPrioridad: Debe tener\nDep.: RF-05"
+      },
+      {
+        "code": "RF-05-6",
+        "id": 1269,
+        "name": "RF-05-6 Actualizar (Nuevo intento)",
+        "notes": "RF-05-6 | Gestión de usuarios\nEl sistema deberá permitir corregir una cuenta Rechazada e iniciar una nueva validación automática, conservando el historial. Los reintentos técnicos de una solicitud Pendiente no crearán vinculaciones duplicadas.\nResponsable en la matriz: Socio / Cliente / Sistema\nPrioridad: Debe tener\nDep.: RF-05"
+      }
+    ]
+  },
+  {
+    "class": "CuentaCooperativa",
+    "scenarios": [
+      {
+        "name": "Solicitar función",
+        "actor": "Socio / Cliente",
+        "request": "Abrir referidos, canjes o una función abierta",
+        "check": "Leer estado persistido de cuenta y tipo de función",
+        "guard": "función abierta o cuenta Aprobada por RF-50",
+        "fail": "Bloquear referir/canjear; mostrar vinculación, pendiente o corrección",
+        "steps": [
+          {
+            "refs": [
+              "RF-06-1",
+              "RF-06-2"
+            ],
+            "text": "Autorizar referir/canjear solo con Aprobado; ignorar estados del cliente"
+          },
+          {
+            "refs": [
+              "RF-06-3"
+            ],
+            "text": "Permitir formación, talleres, juegos, retos y comunidad a todo usuario activo"
+          }
+        ]
+      }
+    ],
+    "code": "RF-06",
+    "name": "Acceso según la verificación de la cuenta",
+    "uc": 1270,
+    "notes": "RF-06 | Gestión de usuarios\nEl sistema deberá habilitar referir y canjear en máximo 3 segundos después de persistir la aprobación automática de la cuenta vinculada.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nUR: UR-09 | RF: RF-05, RF-50",
+    "module": "Gestión de usuarios",
+    "requirements": [
+      {
+        "code": "RF-06",
+        "id": 1270,
+        "name": "RF-06 Acceso según la verificación de la cuenta",
+        "notes": "RF-06 | Gestión de usuarios\nEl sistema deberá habilitar referir y canjear en máximo 3 segundos después de persistir la aprobación automática de la cuenta vinculada.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nUR: UR-09 | RF: RF-05, RF-50"
+      },
+      {
+        "code": "RF-06-1",
+        "id": 1271,
+        "name": "RF-06-1 Validar (Bloqueo)",
+        "notes": "RF-06-1 | Gestión de usuarios\nEl sistema deberá bloquear en el servidor el 100 % de los intentos de referir o canjear sin cuenta Aprobada por validación automática institucional; no aceptará estados enviados por el cliente.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-06"
+      },
+      {
+        "code": "RF-06-2",
+        "id": 1272,
+        "name": "RF-06-2 Leer (Aviso)",
+        "notes": "RF-06-2 | Gestión de usuarios\nEl sistema deberá mostrar «Vincular mi cuenta» si falta una cuenta, «Validación automática pendiente» si espera datos o reintento y la corrección requerida cuando la vinculación resulte Rechazada.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-06"
+      },
+      {
+        "code": "RF-06-3",
+        "id": 1273,
+        "name": "RF-06-3 Leer (Funciones abiertas)",
+        "notes": "RF-06-3 | Gestión de usuarios\nEl sistema deberá permitir a todos los usuarios activos participar en capacitaciones, talleres, juegos, retos y comunidad, sin importar el estado de su cuenta vinculada.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-06"
+      }
+    ]
+  },
+  {
+    "class": "Usuario",
+    "scenarios": [
+      {
+        "name": "Solicitar recuperación",
+        "actor": "Usuario de la plataforma",
+        "request": "Enviar correo para recuperar acceso",
+        "check": "Localizar cuenta y preparar recuperación",
+        "guard": "cuenta registrada",
+        "fail": "Informar recepción de solicitud sin emitir enlace para cuenta inexistente",
+        "steps": [
+          {
+            "refs": [
+              "RF-07-1"
+            ],
+            "text": "Generar enlace de un uso, vigencia 30 minutos y enviarlo en ≤60 s"
+          }
+        ]
+      },
+      {
+        "name": "Restablecer contraseña",
+        "actor": "Usuario de la plataforma",
+        "request": "Abrir enlace y enviar nueva contraseña",
+        "check": "Validar enlace no usado, vigencia y contraseña",
+        "guard": "enlace válido y contraseña ≥8 con mayúscula y número",
+        "fail": "Rechazar cambio; solicitar enlace o contraseña válidos",
+        "steps": [
+          {
+            "refs": [
+              "RF-07-2"
+            ],
+            "text": "Actualizar contraseña y consumir enlace de un solo uso"
+          }
+        ]
+      }
+    ],
+    "code": "RF-07",
+    "name": "Recuperación de acceso",
+    "uc": 1274,
+    "notes": "RF-07 | Validación de usuarios\nEl sistema deberá enviar al correo registrado un enlace temporal de recuperación en un máximo de 60 segundos tras la solicitud.\nResponsable en la matriz: Sistema\nPrioridad: Debería tener\nUR: UR-05 | RF: RF-04",
+    "module": "Validación de usuarios",
+    "requirements": [
+      {
+        "code": "RF-07",
+        "id": 1274,
+        "name": "RF-07 Recuperación de acceso",
+        "notes": "RF-07 | Validación de usuarios\nEl sistema deberá enviar al correo registrado un enlace temporal de recuperación en un máximo de 60 segundos tras la solicitud.\nResponsable en la matriz: Sistema\nPrioridad: Debería tener\nUR: UR-05 | RF: RF-04"
+      },
+      {
+        "code": "RF-07-1",
+        "id": 1275,
+        "name": "RF-07-1 Crear (Enlace)",
+        "notes": "RF-07-1 | Validación de usuarios\nEl sistema deberá generar 1 enlace de recuperación de un solo uso que expire a los 30 minutos.\nResponsable en la matriz: Sistema\nPrioridad: Debería tener\nDep.: RF-07"
+      },
+      {
+        "code": "RF-07-2",
+        "id": 1276,
+        "name": "RF-07-2 Actualizar (Contraseña)",
+        "notes": "RF-07-2 | Validación de usuarios\nEl sistema deberá exigir que la nueva contraseña tenga al menos 8 caracteres con 1 mayúscula y 1 número.\nResponsable en la matriz: Sistema\nPrioridad: Debería tener\nDep.: RF-07"
+      }
+    ]
+  },
+  {
+    "class": "Rol",
+    "scenarios": [
+      {
+        "name": "Gestionar roles",
+        "actor": "Administrador",
+        "request": "Crear rol adicional o cambiar rol de usuario",
+        "check": "Verificar privilegios y proteger los 3 roles base",
+        "guard": "administrador autorizado y roles base preservados",
+        "fail": "Denegar operación",
+        "steps": [
+          {
+            "refs": [
+              "RF-08-1"
+            ],
+            "text": "Asignar permisos por rol; conservar Socio, Gestor y Administrador"
+          },
+          {
+            "refs": [
+              "RF-08-5"
+            ],
+            "text": "Guardar cambio y auditar autor, usuario y nuevo rol"
+          }
+        ]
+      },
+      {
+        "name": "Asignar rol inicial",
+        "actor": "Evento del sistema",
+        "request": "Recibir creación de cuenta",
+        "check": "Distinguir registro público de creación administrativa",
+        "guard": "registro público o creador administrador autorizado",
+        "fail": "Impedir crear cuentas privilegiadas",
+        "steps": [
+          {
+            "refs": [
+              "RF-08-2"
+            ],
+            "text": "Asignar Socio / Cliente por defecto; privilegiados solo por administrador"
+          }
+        ]
+      },
+      {
+        "name": "Acceder a función",
+        "actor": "Usuario de la plataforma",
+        "request": "Abrir menú o invocar función",
+        "check": "Comprobar permisos del rol en servidor",
+        "guard": "función autorizada por rol",
+        "fail": "Mostrar acceso denegado",
+        "steps": [
+          {
+            "refs": [
+              "RF-08-3",
+              "RF-08-4"
+            ],
+            "text": "Mostrar únicamente opciones autorizadas y ejecutar control de acceso"
+          }
+        ]
+      }
+    ],
+    "code": "RF-08",
+    "name": "Roles y permisos",
+    "uc": 1277,
+    "notes": "RF-08 | Administración\nEl sistema deberá actualizar el rol de un usuario en un máximo de 3 segundos.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nUR: UR-04 | RF: RF-42",
+    "module": "Administración",
+    "requirements": [
+      {
+        "code": "RF-08",
+        "id": 1277,
+        "name": "RF-08 Roles y permisos",
+        "notes": "RF-08 | Administración\nEl sistema deberá actualizar el rol de un usuario en un máximo de 3 segundos.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nUR: UR-04 | RF: RF-42"
+      },
+      {
+        "code": "RF-08-1",
+        "id": 1278,
+        "name": "RF-08-1 Actualizar (Rol)",
+        "notes": "RF-08-1 | Administración\nEl sistema deberá incluir 3 roles base que no se pueden eliminar (Socio / Cliente, Gestor de contenidos y Administrador) y permitir al administrador crear roles adicionales; los permisos se asignan por rol, no por persona.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-08"
+      },
+      {
+        "code": "RF-08-2",
+        "id": 1279,
+        "name": "RF-08-2 Crear (Rol por defecto)",
+        "notes": "RF-08-2 | Administración\nEl sistema deberá asignar el rol «Socio / Cliente» a toda cuenta creada en el registro y permitir solo al administrador crear cuentas de Gestor de contenidos o Administrador.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-08"
+      },
+      {
+        "code": "RF-08-3",
+        "id": 1280,
+        "name": "RF-08-3 Leer (Menú por rol)",
+        "notes": "RF-08-3 | Administración\nEl sistema deberá mostrar exclusivamente las opciones del menú asociadas al rol del usuario, con 0 opciones de otros roles.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-08"
+      },
+      {
+        "code": "RF-08-4",
+        "id": 1281,
+        "name": "RF-08-4 Validar (Acceso)",
+        "notes": "RF-08-4 | Administración\nEl sistema deberá rechazar el 100 % de los intentos de acceso a funciones no autorizadas para el rol, con un mensaje de acceso denegado.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-08"
+      },
+      {
+        "code": "RF-08-5",
+        "id": 1282,
+        "name": "RF-08-5 Leer (Auditoría de roles)",
+        "notes": "RF-08-5 | Administración\nEl sistema deberá registrar en la bitácora 3 datos (ID del autor, ID del usuario y nuevo rol) en cada cambio.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-08"
+      }
+    ]
+  },
+  {
+    "class": "CodigoReferido",
+    "scenarios": [
+      {
+        "name": "Generar identidad de referido",
+        "actor": "Evento del sistema",
+        "request": "Recibir aprobación persistida de la cuenta",
+        "check": "Verificar aprobación automática y código existente",
+        "guard": "cuenta Aprobada y sin código previo",
+        "fail": "Conservar código existente o esperar aprobación",
+        "steps": [
+          {
+            "refs": [
+              "RF-09-1"
+            ],
+            "text": "Crear código único de 8 caracteres mayúsculos y enlace oficial"
+          },
+          {
+            "refs": [
+              "RF-09-2"
+            ],
+            "text": "Generar QR PNG de al menos 256 × 256 en ≤3 s"
+          }
+        ]
+      },
+      {
+        "name": "Descargar QR",
+        "actor": "Socio / Cliente",
+        "request": "Pulsar Descargar QR",
+        "check": "Comprobar titularidad y QR generado",
+        "guard": "QR propio disponible",
+        "fail": "Informar que falta validación o generación",
+        "steps": [
+          {
+            "refs": [
+              "RF-09-3"
+            ],
+            "text": "Entregar PNG con una acción"
+          }
+        ]
+      }
+    ],
+    "code": "RF-09",
+    "name": "Enlace de referido y código QR",
+    "uc": 1283,
+    "notes": "RF-09 | Referidos\nEl sistema deberá generar 1 código, 1 enlace y 1 código QR de referido únicos en máximo 3 segundos después de persistir la aprobación automática de la cuenta del socio.\nResponsable en la matriz: Sistema / Socio / Cliente\nPrioridad: Debe tener\nUR: UR-10, UR-11 | RF: RF-05, RF-06, RF-50",
+    "module": "Referidos",
+    "requirements": [
+      {
+        "code": "RF-09",
+        "id": 1283,
+        "name": "RF-09 Enlace de referido y código QR",
+        "notes": "RF-09 | Referidos\nEl sistema deberá generar 1 código, 1 enlace y 1 código QR de referido únicos en máximo 3 segundos después de persistir la aprobación automática de la cuenta del socio.\nResponsable en la matriz: Sistema / Socio / Cliente\nPrioridad: Debe tener\nUR: UR-10, UR-11 | RF: RF-05, RF-06, RF-50"
+      },
+      {
+        "code": "RF-09-1",
+        "id": 1284,
+        "name": "RF-09-1 Crear (Código y enlace)",
+        "notes": "RF-09-1 | Referidos\nEl sistema deberá generar un código alfanumérico único de exactamente 8 caracteres en mayúsculas e incluirlo en el enlace oficial, sin códigos repetidos entre socios.\nResponsable en la matriz: Sistema / Socio / Cliente\nPrioridad: Debe tener\nDep.: RF-09"
+      },
+      {
+        "code": "RF-09-2",
+        "id": 1285,
+        "name": "RF-09-2 Crear (QR)",
+        "notes": "RF-09-2 | Referidos\nEl sistema deberá generar el QR del enlace en formato PNG con una resolución mínima de 256 x 256 píxeles.\nResponsable en la matriz: Sistema / Socio / Cliente\nPrioridad: Debe tener\nDep.: RF-09"
+      },
+      {
+        "code": "RF-09-3",
+        "id": 1286,
+        "name": "RF-09-3 Leer (Descargar QR)",
+        "notes": "RF-09-3 | Referidos\nEl sistema deberá permitir al socio descargar su QR con 1 acción.\nResponsable en la matriz: Sistema / Socio / Cliente\nPrioridad: Debe tener\nDep.: RF-09"
+      }
+    ]
+  },
+  {
+    "class": "CodigoReferido",
+    "scenarios": [
+      {
+        "name": "Compartir enlace",
+        "actor": "Socio / Cliente",
+        "request": "Elegir copiar, WhatsApp, Facebook o compartir",
+        "check": "Validar enlace oficial y acceso RF-06",
+        "guard": "enlace oficial disponible y cuenta Aprobada",
+        "fail": "Mostrar aviso para vincular o validar cuenta",
+        "steps": [
+          {
+            "refs": [
+              "RF-10-1"
+            ],
+            "text": "Copiar una URL oficial al portapapeles",
+            "when": "canal = copiar"
+          },
+          {
+            "refs": [
+              "RF-10-2",
+              "RF-10-3"
+            ],
+            "text": "Abrir canal en ≤2 s; WhatsApp con mensaje ≤300 caracteres e incluir enlace",
+            "when": "canal = WhatsApp, Facebook o menú de compartir"
+          }
+        ]
+      }
+    ],
+    "code": "RF-10",
+    "name": "Compartir el enlace de referido",
+    "uc": 1287,
+    "notes": "RF-10 | Referidos\nEl sistema deberá permitir al socio copiar su enlace o compartirlo por WhatsApp o redes sociales con 1 toque, abriendo el canal elegido en un máximo de 2 segundos.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nUR: UR-12 | RF: RF-09",
+    "module": "Referidos",
+    "requirements": [
+      {
+        "code": "RF-10",
+        "id": 1287,
+        "name": "RF-10 Compartir el enlace de referido",
+        "notes": "RF-10 | Referidos\nEl sistema deberá permitir al socio copiar su enlace o compartirlo por WhatsApp o redes sociales con 1 toque, abriendo el canal elegido en un máximo de 2 segundos.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nUR: UR-12 | RF: RF-09"
+      },
+      {
+        "code": "RF-10-1",
+        "id": 1288,
+        "name": "RF-10-1 Leer (Copiar)",
+        "notes": "RF-10-1 | Referidos\nEl sistema deberá copiar al portapapeles exactamente 1 URL validada como enlace oficial.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nDep.: RF-10"
+      },
+      {
+        "code": "RF-10-2",
+        "id": 1289,
+        "name": "RF-10-2 Crear (WhatsApp)",
+        "notes": "RF-10-2 | Referidos\nEl sistema deberá abrir WhatsApp con un mensaje predefinido de máximo 300 caracteres que incluya el enlace.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nDep.: RF-10"
+      },
+      {
+        "code": "RF-10-3",
+        "id": 1290,
+        "name": "RF-10-3 Crear (Redes sociales)",
+        "notes": "RF-10-3 | Referidos\nEl sistema deberá ofrecer al menos 3 canales: WhatsApp, Facebook y el menú de compartir del dispositivo.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nDep.: RF-10"
+      }
+    ]
+  },
+  {
+    "class": "ValidadorReferido",
+    "scenarios": [
+      {
+        "name": "Registrar o reevaluar relación",
+        "actor": "Evento del sistema",
+        "request": "Recibir registro, vinculación o corrección",
+        "check": "Validar código, socio aprobado, ausencia de autorreferencia y unicidad",
+        "guard": "relación válida y única",
+        "fail": "Registrar causa; no aprobar relación inválida",
+        "steps": [
+          {
+            "refs": [
+              "RF-11-1"
+            ],
+            "text": "Guardar relación única e iniciar validación automática"
+          },
+          {
+            "refs": [
+              "RF-11-4"
+            ],
+            "text": "Si activo y cuenta Aprobada: aprobar; si incumple: rechazar; si falta requisito o falla técnica: Pendiente"
+          },
+          {
+            "refs": [
+              "RF-11"
+            ],
+            "text": "Tras confirmar estado: notificar RF-39; acreditar RF-12 solo si el referido queda Aprobado y no fue acreditado"
+          }
+        ]
+      },
+      {
+        "name": "Consultar referidos",
+        "actor": "Socio / Cliente",
+        "request": "Solicitar mis referidos",
+        "check": "Comprobar identidad del socio",
+        "guard": "socio autenticado",
+        "fail": "Denegar consulta",
+        "steps": [
+          {
+            "refs": [
+              "RF-11-2"
+            ],
+            "text": "Mostrar solo propios: nombre de pila, fecha y estado; 10/página"
+          }
+        ]
+      },
+      {
+        "name": "Consultar y exportar global",
+        "actor": "Administrador",
+        "request": "Elegir listado o exportación de Pendientes",
+        "check": "Verificar permisos administrativos",
+        "guard": "consulta autorizada",
+        "fail": "Denegar acceso",
+        "steps": [
+          {
+            "refs": [
+              "RF-11-3"
+            ],
+            "text": "Listar 20/página con filtros; mostrar causa e intentos sin aprobar manualmente"
+          },
+          {
+            "refs": [
+              "RF-11-7"
+            ],
+            "text": "Exportar CSV de Pendientes en ≤10 s: nombre, correo, celular, referidor y fecha",
+            "when": "operación = exportar Pendientes"
+          }
+        ]
+      },
+      {
+        "name": "Asociar usuario sin código",
+        "actor": "Administrador",
+        "request": "Seleccionar usuario y referidor",
+        "check": "Verificar primeros 30 días, ausencia de código, unicidad y no autorreferencia",
+        "guard": "asociación permitida",
+        "fail": "Rechazar asociación y conservar relación anterior",
+        "steps": [
+          {
+            "refs": [
+              "RF-11-5"
+            ],
+            "text": "Guardar asociación y disparar validación automática; no aprobar manualmente",
+            "when": "operación = asociar sin código"
+          }
+        ]
+      },
+      {
+        "name": "Ocultar referido",
+        "actor": "Administrador",
+        "request": "Solicitar baja lógica del referido",
+        "check": "Verificar permisos y existencia",
+        "guard": "operación autorizada",
+        "fail": "Denegar baja",
+        "steps": [
+          {
+            "refs": [
+              "RF-11-6"
+            ],
+            "text": "Ocultar del listado conservando historial"
+          }
+        ]
+      }
+    ],
+    "code": "RF-11",
+    "name": "Registro y gestión de referidos",
+    "uc": 1291,
+    "notes": "RF-11 | Referidos\nEl sistema deberá registrar al referido y su relación única con el socio en máximo 3 segundos, e iniciar su validación automática al registrarse, vincular su cuenta o corregir su asociación, sin aprobación del administrador.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debe tener\nUR: UR-13, UR-15, UR-16, UR-17, UR-18, UR-54 | RF: RF-01, RF-02, RF-05, RF-09, RF-12, RF-39, RF-42, RF-50",
+    "module": "Referidos",
+    "requirements": [
+      {
+        "code": "RF-11",
+        "id": 1291,
+        "name": "RF-11 Registro y gestión de referidos",
+        "notes": "RF-11 | Referidos\nEl sistema deberá registrar al referido y su relación única con el socio en máximo 3 segundos, e iniciar su validación automática al registrarse, vincular su cuenta o corregir su asociación, sin aprobación del administrador.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debe tener\nUR: UR-13, UR-15, UR-16, UR-17, UR-18, UR-54 | RF: RF-01, RF-02, RF-05, RF-09, RF-12, RF-39, RF-42, RF-50"
+      },
+      {
+        "code": "RF-11-1",
+        "id": 1292,
+        "name": "RF-11-1 Validar (Código)",
+        "notes": "RF-11-1 | Referidos\nEl sistema deberá aceptar solo códigos existentes de socios con cuenta validada automáticamente, rechazar la autorreferencia y comprobar la relación única en base de datos.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-11"
+      },
+      {
+        "code": "RF-11-2",
+        "id": 1293,
+        "name": "RF-11-2 Leer (Consulta propia)",
+        "notes": "RF-11-2 | Referidos\nEl sistema deberá mostrar al socio sus referidos con nombre de pila, fecha de registro y estado, 10 por página.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debe tener\nDep.: RF-11"
+      },
+      {
+        "code": "RF-11-3",
+        "id": 1294,
+        "name": "RF-11-3 Leer (Listado global)",
+        "notes": "RF-11-3 | Referidos\nEl sistema deberá mostrar al administrador todos los referidos, 20 por página, con filtros por estado, campaña, provincia y fecha. Los Pendientes indicarán requisito faltante o incidencia técnica y último intento, sin acciones para dictaminar manualmente.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debe tener\nDep.: RF-11"
+      },
+      {
+        "code": "RF-11-4",
+        "id": 1295,
+        "name": "RF-11-4 Actualizar (Validación automática)",
+        "notes": "RF-11-4 | Referidos\nEl sistema deberá aprobar automáticamente en máximo 2 segundos al referido activo cuya cuenta esté Aprobada por RF-50 y cuya relación sea válida y única. Un incumplimiento confirmado generará Rechazado con causa; requisitos aún no completados o fallas técnicas conservarán Pendiente. El administrador no podrá decidir el estado.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-11, RF-02, RF-05-4, RF-50"
+      },
+      {
+        "code": "RF-11-5",
+        "id": 1296,
+        "name": "RF-11-5 Crear (Asociación manual)",
+        "notes": "RF-11-5 | Referidos\nEl sistema deberá permitir al administrador asociar al referidor un usuario registrado sin código durante los primeros 30 días, comprobando unicidad y ausencia de autorreferencia y disparando la validación automática; esta asociación no equivale a aprobar al referido.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debe tener\nDep.: RF-11"
+      },
+      {
+        "code": "RF-11-6",
+        "id": 1297,
+        "name": "RF-11-6 Eliminar (Baja lógica)",
+        "notes": "RF-11-6 | Referidos\nEl sistema deberá ocultar un referido del listado mediante 1 borrado lógico, conservando su historial.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debe tener\nDep.: RF-11"
+      },
+      {
+        "code": "RF-11-7",
+        "id": 1298,
+        "name": "RF-11-7 Crear (Exportación)",
+        "notes": "RF-11-7 | Referidos\nEl sistema deberá exportar en CSV, en máximo 10 segundos, los referidos Pendientes con nombre, correo, celular, referidor y fecha para seguimiento comercial, sin convertirlos en una cola de aprobación manual.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debe tener\nDep.: RF-11"
+      }
+    ]
+  },
+  {
+    "class": "AcreditacionPuntos",
+    "scenarios": [
+      {
+        "name": "Acreditar actividad o referido",
+        "actor": "Evento del sistema",
+        "request": "Recibir evento bonificable confirmado",
+        "check": "Resolver parámetro/campaña y comprobar clave evento-destinatario",
+        "guard": "evento nuevo y elegible",
+        "fail": "Devolver resultado previo sin acreditar de nuevo",
+        "steps": [
+          {
+            "refs": [
+              "RF-12-1"
+            ],
+            "text": "Obtener entero de RF-14 o campaña activa RF-13"
+          },
+          {
+            "refs": [
+              "RF-12-2"
+            ],
+            "text": "Acreditar ambas partes atómicamente; sin campaña usar Puntos por referido",
+            "when": "evento = referido aprobado"
+          },
+          {
+            "refs": [
+              "RF-12"
+            ],
+            "text": "Si no es referido: sumar puntos de actividad; confirmar saldo y movimientos atómicamente en ≤2 s"
+          }
+        ]
+      },
+      {
+        "name": "Consultar puntos",
+        "actor": "Socio / Cliente",
+        "request": "Abrir saldo e historial",
+        "check": "Validar identidad",
+        "guard": "usuario autenticado",
+        "fail": "Denegar consulta",
+        "steps": [
+          {
+            "refs": [
+              "RF-12-3"
+            ],
+            "text": "Listar movimientos recientes primero, 20/página"
+          },
+          {
+            "refs": [
+              "RF-12-4"
+            ],
+            "text": "Separar saldo disponible y acumulado histórico"
+          }
+        ]
+      }
+    ],
+    "code": "RF-12",
+    "name": "Asignación automática de puntos",
+    "uc": 1299,
+    "notes": "RF-12 | Puntos y recompensas\nEl sistema deberá sumar puntos al saldo de un usuario en un máximo de 2 segundos al confirmarse una actividad bonificable.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nUR: UR-19, UR-24 | RF: RF-11-4, RF-13, RF-14, RF-50",
+    "module": "Puntos y recompensas",
+    "requirements": [
+      {
+        "code": "RF-12",
+        "id": 1299,
+        "name": "RF-12 Asignación automática de puntos",
+        "notes": "RF-12 | Puntos y recompensas\nEl sistema deberá sumar puntos al saldo de un usuario en un máximo de 2 segundos al confirmarse una actividad bonificable.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nUR: UR-19, UR-24 | RF: RF-11-4, RF-13, RF-14, RF-50"
+      },
+      {
+        "code": "RF-12-1",
+        "id": 1300,
+        "name": "RF-12-1 Crear (Movimiento)",
+        "notes": "RF-12-1 | Puntos y recompensas\nEl sistema deberá incrementar el saldo exactamente con el valor entero definido en los parámetros (RF-14) o en la campaña vigente (RF-13).\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-12"
+      },
+      {
+        "code": "RF-12-2",
+        "id": 1301,
+        "name": "RF-12-2 Crear (Premio por referido)",
+        "notes": "RF-12-2 | Puntos y recompensas\nEl sistema deberá acreditar a ambas partes los puntos de la campaña activa en máximo 2 segundos desde la aprobación automática del referido, en una transacción con clave única por evento y destinatario, sin duplicados ante reintentos. Sin campaña activa aplicará a ambas partes «Puntos por referido» (RF-14).\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-12, RF-11-4"
+      },
+      {
+        "code": "RF-12-3",
+        "id": 1302,
+        "name": "RF-12-3 Leer (Historial)",
+        "notes": "RF-12-3 | Puntos y recompensas\nEl sistema deberá mostrar el historial de movimientos del más reciente al más antiguo, 20 por página.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-12"
+      },
+      {
+        "code": "RF-12-4",
+        "id": 1303,
+        "name": "RF-12-4 Leer (Saldo)",
+        "notes": "RF-12-4 | Puntos y recompensas\nEl sistema deberá mostrar por separado el saldo disponible y los puntos acumulados históricos.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-12"
+      }
+    ]
+  },
+  {
+    "class": "Campania",
+    "scenarios": [
+      {
+        "name": "Crear o editar campaña",
+        "actor": "Administrador",
+        "request": "Introducir vigencia, título, premios y provincias",
+        "check": "Validar fechas, título, enteros, cobertura y superposición",
+        "guard": "fin > inicio; título ≤100; puntos 1–10000; 1–8 provincias; sin solapamiento",
+        "fail": "Mostrar errores; no guardar campaña",
+        "steps": [
+          {
+            "refs": [
+              "RF-13-1",
+              "RF-13-2",
+              "RF-13-3",
+              "RF-13-4",
+              "RF-13-7"
+            ],
+            "text": "Guardar campaña válida sin superposición de activas por provincia"
+          }
+        ]
+      },
+      {
+        "name": "Cambiar estado o cerrar",
+        "actor": "Administrador",
+        "request": "Seleccionar estado de campaña",
+        "check": "Comprobar permiso y campaña no Finalizada",
+        "guard": "campaña modificable",
+        "fail": "Rechazar cambios en Finalizada",
+        "steps": [
+          {
+            "refs": [
+              "RF-13-5",
+              "RF-13-6"
+            ],
+            "text": "Aplicar Borrador, Activa, Pausada o Finalizada; detener bonificación si Pausada/Finalizada"
+          }
+        ]
+      },
+      {
+        "name": "Consultar campañas vigentes",
+        "actor": "Socio / Cliente",
+        "request": "Abrir campañas de mi provincia",
+        "check": "Obtener provincia del socio",
+        "guard": "socio autenticado",
+        "fail": "Solicitar autenticación",
+        "steps": [
+          {
+            "refs": [
+              "RF-13-8"
+            ],
+            "text": "Mostrar activas de su provincia, puntos de ambas partes y fecha final"
+          }
+        ]
+      }
+    ],
+    "code": "RF-13",
+    "name": "Campañas de referidos",
+    "uc": 1304,
+    "notes": "RF-13 | Administración\nEl sistema deberá permitir al administrador gestionar campañas de referidos con vigencia, provincias y puntos para ambas partes, completando cada operación en un máximo de 3 segundos.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nUR: UR-20, UR-21, UR-22, UR-23 | RF: RF-42",
+    "module": "Administración",
+    "requirements": [
+      {
+        "code": "RF-13",
+        "id": 1304,
+        "name": "RF-13 Campañas de referidos",
+        "notes": "RF-13 | Administración\nEl sistema deberá permitir al administrador gestionar campañas de referidos con vigencia, provincias y puntos para ambas partes, completando cada operación en un máximo de 3 segundos.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nUR: UR-20, UR-21, UR-22, UR-23 | RF: RF-42"
+      },
+      {
+        "code": "RF-13-1",
+        "id": 1305,
+        "name": "RF-13-1 Crear (Campaña)",
+        "notes": "RF-13-1 | Administración\nEl sistema deberá bloquear la creación si la fecha de fin es igual o anterior a la de inicio.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-13"
+      },
+      {
+        "code": "RF-13-2",
+        "id": 1306,
+        "name": "RF-13-2 Validar (Título)",
+        "notes": "RF-13-2 | Administración\nEl sistema deberá restringir el título a un máximo de 100 caracteres.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-13"
+      },
+      {
+        "code": "RF-13-3",
+        "id": 1307,
+        "name": "RF-13-3 Crear (Premios)",
+        "notes": "RF-13-3 | Administración\nEl sistema deberá exigir los puntos para el socio referidor y para el referido como enteros entre 1 y 10,000.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-13"
+      },
+      {
+        "code": "RF-13-4",
+        "id": 1308,
+        "name": "RF-13-4 Crear (Provincias)",
+        "notes": "RF-13-4 | Administración\nEl sistema deberá exigir la selección de entre 1 y 8 provincias de cobertura.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-13"
+      },
+      {
+        "code": "RF-13-5",
+        "id": 1309,
+        "name": "RF-13-5 Actualizar (Estado)",
+        "notes": "RF-13-5 | Administración\nEl sistema deberá manejar 4 estados (Borrador, Activa, Pausada y Finalizada), aplicar cada cambio en máximo 2 segundos y no acreditar puntos mientras la campaña esté Pausada.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-13"
+      },
+      {
+        "code": "RF-13-6",
+        "id": 1310,
+        "name": "RF-13-6 Eliminar (Cierre)",
+        "notes": "RF-13-6 | Administración\nEl sistema deberá impedir cambios en una campaña «Finalizada» y detener su bonificación.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-13"
+      },
+      {
+        "code": "RF-13-7",
+        "id": 1311,
+        "name": "RF-13-7 Validar (Superposición)",
+        "notes": "RF-13-7 | Administración\nEl sistema deberá impedir que 2 campañas activas incluyan la misma provincia en fechas superpuestas.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-13"
+      },
+      {
+        "code": "RF-13-8",
+        "id": 1312,
+        "name": "RF-13-8 Leer (Campañas vigentes)",
+        "notes": "RF-13-8 | Administración\nEl sistema deberá mostrar al socio las campañas activas de su provincia con los puntos para ambas partes y la fecha de fin.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-13"
+      }
+    ]
+  },
+  {
+    "class": "ParametroGlobal",
+    "scenarios": [
+      {
+        "name": "Actualizar parámetro",
+        "actor": "Administrador",
+        "request": "Enviar valor de un parámetro",
+        "check": "Validar según tipo y permiso administrativo",
+        "guard": "entero o texto ≤500; puntos 0–10000; valor monetario con 2 decimales",
+        "fail": "Rechazar valor inválido",
+        "steps": [
+          {
+            "refs": [
+              "RF-14-1",
+              "RF-14-3",
+              "RF-14-4"
+            ],
+            "text": "Guardar valor tipado; tratar valor del punto como decimal monetario"
+          },
+          {
+            "refs": [
+              "RF-14-2"
+            ],
+            "text": "Auditar parámetro, valor anterior y nuevo; aplicar en ≤5 s"
+          }
+        ]
+      }
+    ],
+    "code": "RF-14",
+    "name": "Parámetros globales",
+    "uc": 1313,
+    "notes": "RF-14 | Administración\nEl sistema deberá aplicar el cambio de un parámetro en un máximo de 5 segundos tras guardarlo.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nUR: UR-46 | RF: RF-42",
+    "module": "Administración",
+    "requirements": [
+      {
+        "code": "RF-14",
+        "id": 1313,
+        "name": "RF-14 Parámetros globales",
+        "notes": "RF-14 | Administración\nEl sistema deberá aplicar el cambio de un parámetro en un máximo de 5 segundos tras guardarlo.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nUR: UR-46 | RF: RF-42"
+      },
+      {
+        "code": "RF-14-1",
+        "id": 1314,
+        "name": "RF-14-1 Validar (Tipo)",
+        "notes": "RF-14-1 | Administración\nEl sistema deberá aceptar en los parámetros numéricos solo números enteros y en los de texto un máximo de 500 caracteres.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-14"
+      },
+      {
+        "code": "RF-14-2",
+        "id": 1315,
+        "name": "RF-14-2 Leer (Auditoría)",
+        "notes": "RF-14-2 | Administración\nEl sistema deberá registrar en la bitácora 3 campos (parámetro, valor anterior y valor nuevo) en cada cambio.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-14"
+      },
+      {
+        "code": "RF-14-3",
+        "id": 1316,
+        "name": "RF-14-3 Actualizar (Puntos por acción)",
+        "notes": "RF-14-3 | Administración\nEl sistema deberá mantener 1 valor entero entre 0 y 10,000 para cada acción bonificable (capacitación aprobada, partida de trivia, asistencia a taller y reto cumplido).\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-14"
+      },
+      {
+        "code": "RF-14-4",
+        "id": 1317,
+        "name": "RF-14-4 Actualizar (Valor del punto)",
+        "notes": "RF-14-4 | Administración\nEl sistema deberá mantener el valor en dólares de 1 punto, con 2 decimales, para calcular el costo por captación (RF-45).\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-14"
+      }
+    ]
+  },
+  {
+    "class": "MovimientoPuntos",
+    "scenarios": [
+      {
+        "name": "Ajustar saldo",
+        "actor": "Administrador",
+        "request": "Indicar usuario, ajuste y motivo",
+        "check": "Validar motivo y saldo resultante",
+        "guard": "motivo 10–200 caracteres y saldo final ≥0",
+        "fail": "Bloquear ajuste y mostrar causa",
+        "steps": [
+          {
+            "refs": [
+              "RF-15-1",
+              "RF-15-3"
+            ],
+            "text": "Comprobar saldo y motivo antes de modificar"
+          },
+          {
+            "refs": [
+              "RF-15-2"
+            ],
+            "text": "Guardar movimiento Ajuste administrativo con fecha/hora y actualizar saldo en ≤3 s"
+          }
+        ]
+      }
+    ],
+    "code": "RF-15",
+    "name": "Ajuste manual de puntos",
+    "uc": 1318,
+    "notes": "RF-15 | Puntos y recompensas\nEl sistema deberá registrar un ajuste manual de puntos en un máximo de 3 segundos.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nUR: UR-47 | RF: RF-12, RF-42",
+    "module": "Puntos y recompensas",
+    "requirements": [
+      {
+        "code": "RF-15",
+        "id": 1318,
+        "name": "RF-15 Ajuste manual de puntos",
+        "notes": "RF-15 | Puntos y recompensas\nEl sistema deberá registrar un ajuste manual de puntos en un máximo de 3 segundos.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nUR: UR-47 | RF: RF-12, RF-42"
+      },
+      {
+        "code": "RF-15-1",
+        "id": 1319,
+        "name": "RF-15-1 Validar (Saldo)",
+        "notes": "RF-15-1 | Puntos y recompensas\nEl sistema deberá bloquear una resta que deje el saldo en negativo.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nDep.: RF-15"
+      },
+      {
+        "code": "RF-15-2",
+        "id": 1320,
+        "name": "RF-15-2 Crear (Traza)",
+        "notes": "RF-15-2 | Puntos y recompensas\nEl sistema deberá registrar 1 movimiento etiquetado como «Ajuste administrativo» con fecha y hora.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nDep.: RF-15"
+      },
+      {
+        "code": "RF-15-3",
+        "id": 1321,
+        "name": "RF-15-3 Validar (Motivo)",
+        "notes": "RF-15-3 | Puntos y recompensas\nEl sistema deberá exigir un motivo de entre 10 y 200 caracteres.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nDep.: RF-15"
+      }
+    ]
+  },
+  {
+    "class": "Nivel",
+    "scenarios": [
+      {
+        "name": "Recalcular nivel",
+        "actor": "Evento del sistema",
+        "request": "Recibir acreditación de puntos",
+        "check": "Consultar acumulado histórico y umbrales",
+        "guard": "umbrales configurados",
+        "fail": "Registrar falta de configuración; no reducir nivel por canjes",
+        "steps": [
+          {
+            "refs": [
+              "RF-16-1"
+            ],
+            "text": "Calcular nivel con acumulado histórico en ≤1 s"
+          }
+        ]
+      },
+      {
+        "name": "Consultar avance y ranking",
+        "actor": "Socio / Cliente",
+        "request": "Abrir nivel o ranking",
+        "check": "Aplicar privacidad del perfil",
+        "guard": "consulta autorizada",
+        "fail": "Denegar acceso",
+        "steps": [
+          {
+            "refs": [
+              "RF-16-2"
+            ],
+            "text": "Mostrar nivel y max(umbral siguiente − acumulado, 0), a ≤2 pasos"
+          },
+          {
+            "refs": [
+              "RF-16-3"
+            ],
+            "text": "Mostrar top 10 excluyendo perfiles Privados"
+          }
+        ]
+      },
+      {
+        "name": "Configurar niveles",
+        "actor": "Administrador",
+        "request": "Enviar niveles y umbrales",
+        "check": "Validar cantidad y orden de umbrales",
+        "guard": "2–10 niveles, umbrales enteros únicos y crecientes",
+        "fail": "Rechazar configuración",
+        "steps": [
+          {
+            "refs": [
+              "RF-16-4"
+            ],
+            "text": "Guardar niveles y umbrales"
+          }
+        ]
+      }
+    ],
+    "code": "RF-16",
+    "name": "Niveles y ranking",
+    "uc": 1322,
+    "notes": "RF-16 | Gamificación\nEl sistema deberá recalcular el nivel de un usuario en un máximo de 1 segundo tras acreditarle puntos.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debería tener\nUR: UR-25 | RF: RF-12, RF-46",
+    "module": "Gamificación",
+    "requirements": [
+      {
+        "code": "RF-16",
+        "id": 1322,
+        "name": "RF-16 Niveles y ranking",
+        "notes": "RF-16 | Gamificación\nEl sistema deberá recalcular el nivel de un usuario en un máximo de 1 segundo tras acreditarle puntos.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debería tener\nUR: UR-25 | RF: RF-12, RF-46"
+      },
+      {
+        "code": "RF-16-1",
+        "id": 1323,
+        "name": "RF-16-1 Actualizar (Nivel)",
+        "notes": "RF-16-1 | Gamificación\nEl sistema deberá calcular el nivel con los puntos acumulados históricos, de modo que un canje no reduzca el nivel.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debería tener\nDep.: RF-16"
+      },
+      {
+        "code": "RF-16-2",
+        "id": 1324,
+        "name": "RF-16-2 Leer (Avance)",
+        "notes": "RF-16-2 | Gamificación\nEl sistema deberá mostrar el nivel actual y los puntos faltantes para el siguiente (umbral siguiente − puntos acumulados, mínimo 0) en máximo 2 pasos desde la pantalla de inicio.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debería tener\nDep.: RF-16"
+      },
+      {
+        "code": "RF-16-3",
+        "id": 1325,
+        "name": "RF-16-3 Leer (Ranking)",
+        "notes": "RF-16-3 | Gamificación\nEl sistema deberá mostrar en el ranking solo a los 10 primeros usuarios, excluyendo a los de perfil «Privado».\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debería tener\nDep.: RF-16"
+      },
+      {
+        "code": "RF-16-4",
+        "id": 1326,
+        "name": "RF-16-4 Crear (Niveles)",
+        "notes": "RF-16-4 | Gamificación\nEl sistema deberá permitir al administrador definir entre 2 y 10 niveles con umbrales enteros únicos y crecientes.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debería tener\nDep.: RF-16"
+      }
+    ]
+  },
+  {
+    "class": "Insignia",
+    "scenarios": [
+      {
+        "name": "Crear o inactivar insignia",
+        "actor": "Administrador",
+        "request": "Elegir crear o inactivar",
+        "check": "Validar operación y parámetros del logro",
+        "guard": "inactivar existente o crear con tipo válido y meta ≥1",
+        "fail": "Rechazar configuración",
+        "steps": [
+          {
+            "refs": [
+              "RF-17-1"
+            ],
+            "text": "Guardar uno de los 5 tipos de logro y meta entera ≥1",
+            "when": "operación = crear"
+          },
+          {
+            "refs": [
+              "RF-17-4"
+            ],
+            "text": "Inactivar sin retirar insignias otorgadas",
+            "when": "operación = inactivar"
+          }
+        ]
+      },
+      {
+        "name": "Otorgar insignia",
+        "actor": "Evento del sistema",
+        "request": "Recibir evento de logro",
+        "check": "Comprobar meta y ausencia de otorgamiento previo",
+        "guard": "meta cumplida y no otorgada",
+        "fail": "No otorgar otra insignia",
+        "steps": [
+          {
+            "refs": [
+              "RF-17-2"
+            ],
+            "text": "Registrar una sola insignia por usuario en ≤5 s"
+          }
+        ]
+      },
+      {
+        "name": "Consultar insignias",
+        "actor": "Socio / Cliente",
+        "request": "Abrir perfil",
+        "check": "Verificar privacidad y acceso",
+        "guard": "perfil visible para solicitante",
+        "fail": "Ocultar perfil privado",
+        "steps": [
+          {
+            "refs": [
+              "RF-17-3"
+            ],
+            "text": "Mostrar insignias recientes primero"
+          }
+        ]
+      }
+    ],
+    "code": "RF-17",
+    "name": "Insignias",
+    "uc": 1327,
+    "notes": "RF-17 | Gamificación\nEl sistema deberá otorgar una insignia al usuario en un máximo de 5 segundos tras cumplir la condición del logro.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debería tener\nUR: UR-26 | RF: RF-12",
+    "module": "Gamificación",
+    "requirements": [
+      {
+        "code": "RF-17",
+        "id": 1327,
+        "name": "RF-17 Insignias",
+        "notes": "RF-17 | Gamificación\nEl sistema deberá otorgar una insignia al usuario en un máximo de 5 segundos tras cumplir la condición del logro.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debería tener\nUR: UR-26 | RF: RF-12"
+      },
+      {
+        "code": "RF-17-1",
+        "id": 1328,
+        "name": "RF-17-1 Crear (Insignia)",
+        "notes": "RF-17-1 | Gamificación\nEl sistema deberá exigir 1 de 5 tipos de logro (referidos aprobados, capacitaciones aprobadas, retos cumplidos, partidas de trivia o talleres asistidos) y una meta entera mayor o igual a 1.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debería tener\nDep.: RF-17"
+      },
+      {
+        "code": "RF-17-2",
+        "id": 1329,
+        "name": "RF-17-2 Crear (Otorgamiento)",
+        "notes": "RF-17-2 | Gamificación\nEl sistema deberá otorgar cada insignia una sola vez por usuario.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debería tener\nDep.: RF-17"
+      },
+      {
+        "code": "RF-17-3",
+        "id": 1330,
+        "name": "RF-17-3 Leer (Perfil)",
+        "notes": "RF-17-3 | Gamificación\nEl sistema deberá mostrar las insignias en el perfil, de la más reciente a la más antigua.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debería tener\nDep.: RF-17"
+      },
+      {
+        "code": "RF-17-4",
+        "id": 1331,
+        "name": "RF-17-4 Eliminar (Inactivar)",
+        "notes": "RF-17-4 | Gamificación\nEl sistema deberá permitir inactivar una insignia sin retirarla a quienes ya la obtuvieron.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debería tener\nDep.: RF-17"
+      }
+    ]
+  },
+  {
+    "class": "Reto",
+    "scenarios": [
+      {
+        "name": "Crear o finalizar reto",
+        "actor": "Administrador",
+        "request": "Elegir crear o finalizar",
+        "check": "Validar operación, fechas y meta",
+        "guard": "finalizar existente o crear con fin > inicio y meta 1–1000",
+        "fail": "Rechazar operación",
+        "steps": [
+          {
+            "refs": [
+              "RF-18-1",
+              "RF-18-2"
+            ],
+            "text": "Guardar fechas, meta entera 1–1000 y puntos",
+            "when": "operación = crear"
+          },
+          {
+            "refs": [
+              "RF-18-5"
+            ],
+            "text": "Marcar Finalizado y retirar de activos",
+            "when": "operación = finalizar"
+          }
+        ]
+      },
+      {
+        "name": "Actualizar avance",
+        "actor": "Evento del sistema",
+        "request": "Recibir actividad del participante",
+        "check": "Calcular progreso y comprobar cumplimiento previo",
+        "guard": "actividad aplicable al reto",
+        "fail": "Conservar progreso actual",
+        "steps": [
+          {
+            "refs": [
+              "RF-18-3"
+            ],
+            "text": "Actualizar avance entre 0 % y 100 %"
+          },
+          {
+            "refs": [
+              "RF-18-4"
+            ],
+            "text": "Emitir una sola orden de acreditación por usuario y reto",
+            "when": "avance =100 % y acreditación no emitida"
+          }
+        ]
+      }
+    ],
+    "code": "RF-18",
+    "name": "Retos",
+    "uc": 1332,
+    "notes": "RF-18 | Gamificación\nEl sistema deberá permitir al administrador gestionar retos con meta numérica y puntos de recompensa, completando cada operación en un máximo de 3 segundos.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nUR: UR-27 | RF: RF-12",
+    "module": "Gamificación",
+    "requirements": [
+      {
+        "code": "RF-18",
+        "id": 1332,
+        "name": "RF-18 Retos",
+        "notes": "RF-18 | Gamificación\nEl sistema deberá permitir al administrador gestionar retos con meta numérica y puntos de recompensa, completando cada operación en un máximo de 3 segundos.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nUR: UR-27 | RF: RF-12"
+      },
+      {
+        "code": "RF-18-1",
+        "id": 1333,
+        "name": "RF-18-1 Crear (Reto)",
+        "notes": "RF-18-1 | Gamificación\nEl sistema deberá bloquear el reto si la fecha de fin es igual o anterior a la de inicio.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nDep.: RF-18"
+      },
+      {
+        "code": "RF-18-2",
+        "id": 1334,
+        "name": "RF-18-2 Validar (Meta)",
+        "notes": "RF-18-2 | Gamificación\nEl sistema deberá aceptar como meta un número entero entre 1 y 1,000.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nDep.: RF-18"
+      },
+      {
+        "code": "RF-18-3",
+        "id": 1335,
+        "name": "RF-18-3 Leer (Progreso)",
+        "notes": "RF-18-3 | Gamificación\nEl sistema deberá mostrar el avance del usuario de 0 % a 100 % respecto de la meta.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nDep.: RF-18"
+      },
+      {
+        "code": "RF-18-4",
+        "id": 1336,
+        "name": "RF-18-4 Actualizar (Cumplimiento)",
+        "notes": "RF-18-4 | Gamificación\nEl sistema deberá emitir 1 sola orden de acreditación por usuario y reto al llegar al 100 %.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nDep.: RF-18"
+      },
+      {
+        "code": "RF-18-5",
+        "id": 1337,
+        "name": "RF-18-5 Eliminar (Finalizar)",
+        "notes": "RF-18-5 | Gamificación\nEl sistema deberá cambiar el reto a «Finalizado», retirándolo de los retos activos.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nDep.: RF-18"
+      }
+    ]
+  },
+  {
+    "class": "PreguntaTrivia",
+    "scenarios": [
+      {
+        "name": "Crear pregunta",
+        "actor": "Gestor de contenidos",
+        "request": "Enviar pregunta, opciones y tema",
+        "check": "Validar opciones y clasificación",
+        "guard": "2–4 opciones, una correcta y tema permitido",
+        "fail": "Rechazar pregunta",
+        "steps": [
+          {
+            "refs": [
+              "RF-19-1",
+              "RF-19-2"
+            ],
+            "text": "Guardar pregunta de Ahorro, Crédito, Presupuesto o Inversión"
+          }
+        ]
+      },
+      {
+        "name": "Filtrar preguntas",
+        "actor": "Gestor de contenidos",
+        "request": "Elegir dificultad",
+        "check": "Validar filtro",
+        "guard": "Básico, Intermedio o Avanzado",
+        "fail": "Solicitar dificultad válida",
+        "steps": [
+          {
+            "refs": [
+              "RF-19-3"
+            ],
+            "text": "Listar preguntas según dificultad"
+          }
+        ]
+      },
+      {
+        "name": "Desactivar pregunta",
+        "actor": "Gestor de contenidos",
+        "request": "Seleccionar pregunta a retirar",
+        "check": "Comprobar permiso y existencia",
+        "guard": "pregunta existente y operación autorizada",
+        "fail": "Denegar operación",
+        "steps": [
+          {
+            "refs": [
+              "RF-19-4"
+            ],
+            "text": "Marcar Inactiva y excluir de nuevas partidas"
+          }
+        ]
+      }
+    ],
+    "code": "RF-19",
+    "name": "Banco de preguntas de educación financiera",
+    "uc": 1338,
+    "notes": "RF-19 | Juegos\nEl sistema deberá permitir al gestor de contenidos gestionar las preguntas de la trivia de educación financiera, completando cada operación en un máximo de 3 segundos.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debería tener\nUR: UR-28 | RF: RF-08",
+    "module": "Juegos",
+    "requirements": [
+      {
+        "code": "RF-19",
+        "id": 1338,
+        "name": "RF-19 Banco de preguntas de educación financiera",
+        "notes": "RF-19 | Juegos\nEl sistema deberá permitir al gestor de contenidos gestionar las preguntas de la trivia de educación financiera, completando cada operación en un máximo de 3 segundos.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debería tener\nUR: UR-28 | RF: RF-08"
+      },
+      {
+        "code": "RF-19-1",
+        "id": 1339,
+        "name": "RF-19-1 Crear (Pregunta)",
+        "notes": "RF-19-1 | Juegos\nEl sistema deberá exigir exactamente 1 opción correcta entre 2 y 4 opciones.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debería tener\nDep.: RF-19"
+      },
+      {
+        "code": "RF-19-2",
+        "id": 1340,
+        "name": "RF-19-2 Validar (Tema)",
+        "notes": "RF-19-2 | Juegos\nEl sistema deberá clasificar cada pregunta en 1 de 4 temas (Ahorro, Crédito, Presupuesto o Inversión).\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debería tener\nDep.: RF-19"
+      },
+      {
+        "code": "RF-19-3",
+        "id": 1341,
+        "name": "RF-19-3 Leer (Dificultad)",
+        "notes": "RF-19-3 | Juegos\nEl sistema deberá filtrar las preguntas por 1 de 3 niveles (Básico, Intermedio o Avanzado).\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debería tener\nDep.: RF-19"
+      },
+      {
+        "code": "RF-19-4",
+        "id": 1342,
+        "name": "RF-19-4 Eliminar (Desactivar)",
+        "notes": "RF-19-4 | Juegos\nEl sistema deberá cambiar la pregunta a «Inactiva» para excluirla de nuevas partidas.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debería tener\nDep.: RF-19"
+      }
+    ]
+  },
+  {
+    "class": "PartidaTrivia",
+    "scenarios": [
+      {
+        "name": "Jugar partida",
+        "actor": "Socio / Cliente",
+        "request": "Solicitar nueva partida",
+        "check": "Contar partidas completadas en últimas 24 horas",
+        "guard": "menos de 3 partidas completadas",
+        "fail": "Bloquear nueva partida por límite diario",
+        "steps": [
+          {
+            "refs": [
+              "RF-20-1",
+              "RF-20-2"
+            ],
+            "text": "Cargar 10 preguntas activas al azar"
+          },
+          {
+            "refs": [
+              "RF-20-3"
+            ],
+            "text": "Recibir respuesta hasta 30 s; al expirar marcar incorrecta y avanzar pregunta",
+            "loop": "por cada una de las 10 preguntas"
+          },
+          {
+            "refs": [
+              "RF-20-4"
+            ],
+            "text": "Calcular puntaje en ≤3 s e invocar RF-12 con valor exacto"
+          }
+        ]
+      }
+    ],
+    "code": "RF-20",
+    "name": "Partida de trivia",
+    "uc": 1343,
+    "notes": "RF-20 | Juegos\nEl sistema deberá calcular el puntaje de una partida de trivia en un máximo de 3 segundos tras responder la última pregunta.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debería tener\nUR: UR-24, UR-29 | RF: RF-19, RF-12",
+    "module": "Juegos",
+    "requirements": [
+      {
+        "code": "RF-20",
+        "id": 1343,
+        "name": "RF-20 Partida de trivia",
+        "notes": "RF-20 | Juegos\nEl sistema deberá calcular el puntaje de una partida de trivia en un máximo de 3 segundos tras responder la última pregunta.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debería tener\nUR: UR-24, UR-29 | RF: RF-19, RF-12"
+      },
+      {
+        "code": "RF-20-1",
+        "id": 1344,
+        "name": "RF-20-1 Validar (Límite diario)",
+        "notes": "RF-20-1 | Juegos\nEl sistema deberá bloquear una nueva partida si el usuario completó 3 en las últimas 24 horas.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debería tener\nDep.: RF-20"
+      },
+      {
+        "code": "RF-20-2",
+        "id": 1345,
+        "name": "RF-20-2 Leer (Preguntas)",
+        "notes": "RF-20-2 | Juegos\nEl sistema deberá cargar exactamente 10 preguntas activas al azar.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debería tener\nDep.: RF-20"
+      },
+      {
+        "code": "RF-20-3",
+        "id": 1346,
+        "name": "RF-20-3 Validar (Tiempo)",
+        "notes": "RF-20-3 | Juegos\nEl sistema deberá limitar cada pregunta a 30 segundos y darla por incorrecta al agotarse.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debería tener\nDep.: RF-20"
+      },
+      {
+        "code": "RF-20-4",
+        "id": 1347,
+        "name": "RF-20-4 Actualizar (Puntos)",
+        "notes": "RF-20-4 | Juegos\nEl sistema deberá enviar al módulo de puntos el valor exacto ganado.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debería tener\nDep.: RF-20"
+      }
+    ]
+  },
+  {
+    "class": "Capacitacion",
+    "scenarios": [
+      {
+        "name": "Cargar y publicar",
+        "actor": "Gestor de contenidos",
+        "request": "Enviar material y cuestionario",
+        "check": "Validar tamaño y contenido para publicación",
+        "guard": "material ≤50 MB; al menos 1 material y 5 preguntas",
+        "fail": "Rechazar carga/publicación y señalar requisito faltante",
+        "steps": [
+          {
+            "refs": [
+              "RF-21-1",
+              "RF-21-2"
+            ],
+            "text": "Guardar material y publicar capacitación válida"
+          }
+        ]
+      },
+      {
+        "name": "Consultar catálogo",
+        "actor": "Socio / Cliente",
+        "request": "Abrir capacitaciones",
+        "check": "Filtrar capacitaciones activas",
+        "guard": "consulta permitida",
+        "fail": "Denegar consulta",
+        "steps": [
+          {
+            "refs": [
+              "RF-21-3"
+            ],
+            "text": "Mostrar activas, 10/página"
+          }
+        ]
+      },
+      {
+        "name": "Desactivar capacitación",
+        "actor": "Gestor de contenidos",
+        "request": "Solicitar desactivación",
+        "check": "Comprobar existencia y permiso",
+        "guard": "operación autorizada",
+        "fail": "Denegar operación",
+        "steps": [
+          {
+            "refs": [
+              "RF-21-4"
+            ],
+            "text": "Marcar Inactiva y conservar historial"
+          }
+        ]
+      }
+    ],
+    "code": "RF-21",
+    "name": "Gestión de capacitaciones",
+    "uc": 1348,
+    "notes": "RF-21 | Capacitaciones\nEl sistema deberá permitir al gestor de contenidos gestionar capacitaciones, completando cada operación en un máximo de 3 segundos.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debería tener\nUR: UR-30 | RF: RF-08",
+    "module": "Capacitaciones",
+    "requirements": [
+      {
+        "code": "RF-21",
+        "id": 1348,
+        "name": "RF-21 Gestión de capacitaciones",
+        "notes": "RF-21 | Capacitaciones\nEl sistema deberá permitir al gestor de contenidos gestionar capacitaciones, completando cada operación en un máximo de 3 segundos.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debería tener\nUR: UR-30 | RF: RF-08"
+      },
+      {
+        "code": "RF-21-1",
+        "id": 1349,
+        "name": "RF-21-1 Crear (Material)",
+        "notes": "RF-21-1 | Capacitaciones\nEl sistema deberá bloquear cualquier archivo de material que supere los 50 MB.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debería tener\nDep.: RF-21"
+      },
+      {
+        "code": "RF-21-2",
+        "id": 1350,
+        "name": "RF-21-2 Crear (Publicación)",
+        "notes": "RF-21-2 | Capacitaciones\nEl sistema deberá permitir publicar una capacitación solo si tiene al menos 1 material y un cuestionario de mínimo 5 preguntas.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debería tener\nDep.: RF-21"
+      },
+      {
+        "code": "RF-21-3",
+        "id": 1351,
+        "name": "RF-21-3 Leer (Catálogo)",
+        "notes": "RF-21-3 | Capacitaciones\nEl sistema deberá mostrar las capacitaciones activas, 10 por página.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debería tener\nDep.: RF-21"
+      },
+      {
+        "code": "RF-21-4",
+        "id": 1352,
+        "name": "RF-21-4 Eliminar (Desactivar)",
+        "notes": "RF-21-4 | Capacitaciones\nEl sistema deberá cambiar la capacitación a «Inactiva» sin borrar su historial.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debería tener\nDep.: RF-21"
+      }
+    ]
+  },
+  {
+    "class": "ResultadoCapacitacion",
+    "scenarios": [
+      {
+        "name": "Rendir evaluación",
+        "actor": "Socio / Cliente",
+        "request": "Enviar respuestas de la evaluación",
+        "check": "Contar intentos de la capacitación en 24 horas",
+        "guard": "menos de 3 intentos",
+        "fail": "Bloquear intento por límite diario",
+        "steps": [
+          {
+            "refs": [
+              "RF-22-4"
+            ],
+            "text": "Registrar intento y calificar en ≤3 s"
+          },
+          {
+            "refs": [
+              "RF-22-1"
+            ],
+            "text": "Marcar capacitación Completada",
+            "when": "calificación ≥70 %",
+            "otherwise": "Registrar resultado no aprobado"
+          },
+          {
+            "refs": [
+              "RF-22-2"
+            ],
+            "text": "Generar certificado PDF con código único en ≤10 s",
+            "when": "calificación ≥70 %"
+          },
+          {
+            "refs": [
+              "RF-22-3"
+            ],
+            "text": "Acreditar puntos una sola vez por RF-12",
+            "when": "calificación ≥70 % y primera aprobación"
+          }
+        ]
+      }
+    ],
+    "code": "RF-22",
+    "name": "Evaluación y certificado",
+    "uc": 1353,
+    "notes": "RF-22 | Capacitaciones\nEl sistema deberá calificar la evaluación de una capacitación en un máximo de 3 segundos.\nResponsable en la matriz: Sistema / Socio / Cliente\nPrioridad: Debería tener\nUR: UR-24, UR-31 | RF: RF-21, RF-12",
+    "module": "Capacitaciones",
+    "requirements": [
+      {
+        "code": "RF-22",
+        "id": 1353,
+        "name": "RF-22 Evaluación y certificado",
+        "notes": "RF-22 | Capacitaciones\nEl sistema deberá calificar la evaluación de una capacitación en un máximo de 3 segundos.\nResponsable en la matriz: Sistema / Socio / Cliente\nPrioridad: Debería tener\nUR: UR-24, UR-31 | RF: RF-21, RF-12"
+      },
+      {
+        "code": "RF-22-1",
+        "id": 1354,
+        "name": "RF-22-1 Leer (Calificación)",
+        "notes": "RF-22-1 | Capacitaciones\nEl sistema deberá exigir al menos el 70 % de respuestas correctas para marcar la capacitación como «Completada».\nResponsable en la matriz: Sistema / Socio / Cliente\nPrioridad: Debería tener\nDep.: RF-22"
+      },
+      {
+        "code": "RF-22-2",
+        "id": 1355,
+        "name": "RF-22-2 Crear (Certificado)",
+        "notes": "RF-22-2 | Capacitaciones\nEl sistema deberá generar el certificado en PDF con 1 código único de validación en máximo 10 segundos tras aprobar.\nResponsable en la matriz: Sistema / Socio / Cliente\nPrioridad: Debería tener\nDep.: RF-22"
+      },
+      {
+        "code": "RF-22-3",
+        "id": 1356,
+        "name": "RF-22-3 Actualizar (Puntos)",
+        "notes": "RF-22-3 | Capacitaciones\nEl sistema deberá acreditar los puntos de la capacitación solo la primera vez que se aprueba.\nResponsable en la matriz: Sistema / Socio / Cliente\nPrioridad: Debería tener\nDep.: RF-22"
+      },
+      {
+        "code": "RF-22-4",
+        "id": 1357,
+        "name": "RF-22-4 Validar (Intentos)",
+        "notes": "RF-22-4 | Capacitaciones\nEl sistema deberá permitir un máximo de 3 intentos por capacitación cada 24 horas.\nResponsable en la matriz: Sistema / Socio / Cliente\nPrioridad: Debería tener\nDep.: RF-22"
+      }
+    ]
+  },
+  {
+    "class": "Taller",
+    "scenarios": [
+      {
+        "name": "Crear taller",
+        "actor": "Gestor de contenidos",
+        "request": "Enviar fecha, lugar y cupos",
+        "check": "Validar fecha futura, lugar y cupos",
+        "guard": "fecha futura, lugar informado y cupos >0",
+        "fail": "Rechazar taller",
+        "steps": [
+          {
+            "refs": [
+              "RF-23-1"
+            ],
+            "text": "Guardar taller en ≤3 s"
+          }
+        ]
+      },
+      {
+        "name": "Consultar calendario",
+        "actor": "Socio / Cliente",
+        "request": "Abrir calendario",
+        "check": "Filtrar talleres activos",
+        "guard": "consulta permitida",
+        "fail": "Denegar consulta",
+        "steps": [
+          {
+            "refs": [
+              "RF-23-2"
+            ],
+            "text": "Agrupar talleres por mes en ≤3 s"
+          }
+        ]
+      },
+      {
+        "name": "Cambiar cupos",
+        "actor": "Gestor de contenidos",
+        "request": "Enviar nuevo cupo",
+        "check": "Comparar con inscritos actuales",
+        "guard": "nuevo cupo ≥inscritos",
+        "fail": "Rechazar reducción por debajo de inscritos",
+        "steps": [
+          {
+            "refs": [
+              "RF-23-3"
+            ],
+            "text": "Actualizar cupo sin perder inscripciones"
+          }
+        ]
+      },
+      {
+        "name": "Cancelar taller",
+        "actor": "Gestor de contenidos",
+        "request": "Confirmar cancelación",
+        "check": "Comprobar permiso y existencia",
+        "guard": "cancelación autorizada",
+        "fail": "No cancelar",
+        "steps": [
+          {
+            "refs": [
+              "RF-23-4"
+            ],
+            "text": "Marcar Cancelado y liberar todas las inscripciones"
+          }
+        ]
+      }
+    ],
+    "code": "RF-23",
+    "name": "Gestión de talleres",
+    "uc": 1358,
+    "notes": "RF-23 | Talleres\nEl sistema deberá registrar un taller con fecha futura, lugar y cupos mayores a 0 en un máximo de 3 segundos.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debe tener\nUR: UR-32 | RF: RF-08",
+    "module": "Talleres",
+    "requirements": [
+      {
+        "code": "RF-23",
+        "id": 1358,
+        "name": "RF-23 Gestión de talleres",
+        "notes": "RF-23 | Talleres\nEl sistema deberá registrar un taller con fecha futura, lugar y cupos mayores a 0 en un máximo de 3 segundos.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debe tener\nUR: UR-32 | RF: RF-08"
+      },
+      {
+        "code": "RF-23-1",
+        "id": 1359,
+        "name": "RF-23-1 Crear (Taller)",
+        "notes": "RF-23-1 | Talleres\nEl sistema deberá exigir que la fecha del taller sea posterior a la fecha actual.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debe tener\nDep.: RF-23"
+      },
+      {
+        "code": "RF-23-2",
+        "id": 1360,
+        "name": "RF-23-2 Leer (Calendario)",
+        "notes": "RF-23-2 | Talleres\nEl sistema deberá mostrar los talleres activos agrupados por mes en máximo 3 segundos.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debe tener\nDep.: RF-23"
+      },
+      {
+        "code": "RF-23-3",
+        "id": 1361,
+        "name": "RF-23-3 Actualizar (Cupos)",
+        "notes": "RF-23-3 | Talleres\nEl sistema deberá permitir cambiar los cupos siempre que el nuevo valor sea mayor o igual al número de inscritos.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debe tener\nDep.: RF-23"
+      },
+      {
+        "code": "RF-23-4",
+        "id": 1362,
+        "name": "RF-23-4 Eliminar (Cancelación)",
+        "notes": "RF-23-4 | Talleres\nEl sistema deberá cambiar el taller a «Cancelado» y liberar el 100 % de sus inscripciones.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debe tener\nDep.: RF-23"
+      }
+    ]
+  },
+  {
+    "class": "Inscripcion",
+    "scenarios": [
+      {
+        "name": "Inscribirse",
+        "actor": "Socio / Cliente",
+        "request": "Elegir taller y confirmar inscripción",
+        "check": "Verificar cupo y ausencia de inscripción previa",
+        "guard": "cupo disponible y usuario no inscrito",
+        "fail": "Informar sin cupos o duplicidad",
+        "steps": [
+          {
+            "refs": [
+              "RF-24-1",
+              "RF-24-2"
+            ],
+            "text": "Crear inscripción y restar 1 cupo de forma atómica; máximo 3 pasos y ≤3 s"
+          }
+        ]
+      },
+      {
+        "name": "Anular inscripción",
+        "actor": "Socio / Cliente",
+        "request": "Solicitar anulación",
+        "check": "Verificar titularidad y antelación",
+        "guard": "inscripción propia y faltan ≥24 horas",
+        "fail": "Rechazar anulación fuera de plazo",
+        "steps": [
+          {
+            "refs": [
+              "RF-24-3"
+            ],
+            "text": "Anular inscripción y devolver 1 cupo"
+          }
+        ]
+      }
+    ],
+    "code": "RF-24",
+    "name": "Inscripción a talleres",
+    "uc": 1363,
+    "notes": "RF-24 | Talleres\nEl sistema deberá confirmar la inscripción de un usuario a un taller en un máximo de 3 segundos cuando existan cupos.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nUR: UR-33 | RF: RF-23",
+    "module": "Talleres",
+    "requirements": [
+      {
+        "code": "RF-24",
+        "id": 1363,
+        "name": "RF-24 Inscripción a talleres",
+        "notes": "RF-24 | Talleres\nEl sistema deberá confirmar la inscripción de un usuario a un taller en un máximo de 3 segundos cuando existan cupos.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nUR: UR-33 | RF: RF-23"
+      },
+      {
+        "code": "RF-24-1",
+        "id": 1364,
+        "name": "RF-24-1 Crear (Inscripción)",
+        "notes": "RF-24-1 | Talleres\nEl sistema deberá completar la inscripción en máximo 3 pasos y restar exactamente 1 cupo.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nDep.: RF-24"
+      },
+      {
+        "code": "RF-24-2",
+        "id": 1365,
+        "name": "RF-24-2 Validar (Duplicidad)",
+        "notes": "RF-24-2 | Talleres\nEl sistema deberá impedir más de 1 inscripción del mismo usuario en un taller.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nDep.: RF-24"
+      },
+      {
+        "code": "RF-24-3",
+        "id": 1366,
+        "name": "RF-24-3 Eliminar (Anulación)",
+        "notes": "RF-24-3 | Talleres\nEl sistema deberá permitir anular la inscripción hasta 24 horas antes del taller, devolviendo 1 cupo.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nDep.: RF-24"
+      }
+    ]
+  },
+  {
+    "class": "Inscripcion",
+    "scenarios": [
+      {
+        "name": "Marcar asistencia",
+        "actor": "Gestor de contenidos",
+        "request": "Enviar asistencia de un inscrito",
+        "check": "Validar hora y valor de asistencia",
+        "guard": "entre inicio y +48 h; Asistió o No asistió",
+        "fail": "Rechazar registro fuera de plazo o valor inválido",
+        "steps": [
+          {
+            "refs": [
+              "RF-25-1",
+              "RF-25-3"
+            ],
+            "text": "Guardar asistencia en ≤2 s"
+          },
+          {
+            "refs": [
+              "RF-25-2"
+            ],
+            "text": "Acreditar una sola vez puntos de RF-14 mediante RF-12",
+            "when": "asistencia = Asistió y puntos no acreditados"
+          }
+        ]
+      }
+    ],
+    "code": "RF-25",
+    "name": "Registro de asistencia",
+    "uc": 1367,
+    "notes": "RF-25 | Talleres\nEl sistema deberá registrar la asistencia de un inscrito en un máximo de 2 segundos.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debe tener\nUR: UR-24, UR-34 | RF: RF-24, RF-12",
+    "module": "Talleres",
+    "requirements": [
+      {
+        "code": "RF-25",
+        "id": 1367,
+        "name": "RF-25 Registro de asistencia",
+        "notes": "RF-25 | Talleres\nEl sistema deberá registrar la asistencia de un inscrito en un máximo de 2 segundos.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debe tener\nUR: UR-24, UR-34 | RF: RF-24, RF-12"
+      },
+      {
+        "code": "RF-25-1",
+        "id": 1368,
+        "name": "RF-25-1 Actualizar (Asistencia)",
+        "notes": "RF-25-1 | Talleres\nEl sistema deberá admitir solo 2 valores (Asistió o No asistió).\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debe tener\nDep.: RF-25"
+      },
+      {
+        "code": "RF-25-2",
+        "id": 1369,
+        "name": "RF-25-2 Crear (Puntos)",
+        "notes": "RF-25-2 | Talleres\nEl sistema deberá acreditar una sola vez los puntos de asistencia definidos en los parámetros.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debe tener\nDep.: RF-25"
+      },
+      {
+        "code": "RF-25-3",
+        "id": 1370,
+        "name": "RF-25-3 Validar (Fecha)",
+        "notes": "RF-25-3 | Talleres\nEl sistema deberá permitir marcar la asistencia solo desde la hora de inicio del taller hasta 48 horas después.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Debe tener\nDep.: RF-25"
+      }
+    ]
+  },
+  {
+    "class": "Publicacion",
+    "scenarios": [
+      {
+        "name": "Publicar o editar",
+        "actor": "Usuario de la plataforma",
+        "request": "Enviar texto e imagen opcional",
+        "check": "Validar texto, imagen y autoría al editar",
+        "guard": "texto ≤500; imagen JPG/PNG ≤2 MB; edición por autor",
+        "fail": "Rechazar contenido o edición no autorizada",
+        "steps": [
+          {
+            "refs": [
+              "RF-26-1",
+              "RF-26-2",
+              "RF-26-5"
+            ],
+            "text": "Guardar contenido validado; permitir editar solo al autor"
+          },
+          {
+            "refs": [
+              "RF-26-4"
+            ],
+            "text": "Etiquetar publicación como Oficial",
+            "when": "autor = Gestor de contenidos"
+          }
+        ]
+      },
+      {
+        "name": "Consultar muro",
+        "actor": "Socio / Cliente",
+        "request": "Abrir muro",
+        "check": "Filtrar contenido activo y visible",
+        "guard": "consulta permitida",
+        "fail": "Denegar consulta",
+        "steps": [
+          {
+            "refs": [
+              "RF-26-3"
+            ],
+            "text": "Mostrar publicaciones activas, 10/página"
+          }
+        ]
+      },
+      {
+        "name": "Eliminar publicación",
+        "actor": "Socio / Cliente",
+        "request": "Confirmar eliminación de publicación propia",
+        "check": "Comprobar autoría",
+        "guard": "solicitante es autor",
+        "fail": "Denegar eliminación",
+        "steps": [
+          {
+            "refs": [
+              "RF-26-5"
+            ],
+            "text": "Eliminar publicación propia"
+          }
+        ]
+      }
+    ],
+    "code": "RF-26",
+    "name": "Publicaciones en el muro",
+    "uc": 1371,
+    "notes": "RF-26 | Comunidad\nEl sistema deberá permitir al usuario y al gestor de contenidos publicar en el muro, con la publicación visible en un máximo de 3 segundos.\nResponsable en la matriz: Socio / Cliente / Gestor de contenidos\nPrioridad: Debe tener\nUR: UR-35, UR-36 | RF: RF-08",
+    "module": "Comunidad",
+    "requirements": [
+      {
+        "code": "RF-26",
+        "id": 1371,
+        "name": "RF-26 Publicaciones en el muro",
+        "notes": "RF-26 | Comunidad\nEl sistema deberá permitir al usuario y al gestor de contenidos publicar en el muro, con la publicación visible en un máximo de 3 segundos.\nResponsable en la matriz: Socio / Cliente / Gestor de contenidos\nPrioridad: Debe tener\nUR: UR-35, UR-36 | RF: RF-08"
+      },
+      {
+        "code": "RF-26-1",
+        "id": 1372,
+        "name": "RF-26-1 Validar (Texto)",
+        "notes": "RF-26-1 | Comunidad\nEl sistema deberá restringir el texto a un máximo de 500 caracteres.\nResponsable en la matriz: Socio / Cliente / Gestor de contenidos\nPrioridad: Debe tener\nDep.: RF-26"
+      },
+      {
+        "code": "RF-26-2",
+        "id": 1373,
+        "name": "RF-26-2 Validar (Imagen)",
+        "notes": "RF-26-2 | Comunidad\nEl sistema deberá rechazar imágenes de más de 2 MB o en un formato distinto de JPG o PNG.\nResponsable en la matriz: Socio / Cliente / Gestor de contenidos\nPrioridad: Debe tener\nDep.: RF-26"
+      },
+      {
+        "code": "RF-26-3",
+        "id": 1374,
+        "name": "RF-26-3 Leer (Muro)",
+        "notes": "RF-26-3 | Comunidad\nEl sistema deberá mostrar las publicaciones activas, 10 por página.\nResponsable en la matriz: Socio / Cliente / Gestor de contenidos\nPrioridad: Debe tener\nDep.: RF-26"
+      },
+      {
+        "code": "RF-26-4",
+        "id": 1375,
+        "name": "RF-26-4 Crear (Oficial)",
+        "notes": "RF-26-4 | Comunidad\nEl sistema deberá etiquetar como «Oficial» el 100 % de las publicaciones del gestor de contenidos.\nResponsable en la matriz: Socio / Cliente / Gestor de contenidos\nPrioridad: Debe tener\nDep.: RF-26"
+      },
+      {
+        "code": "RF-26-5",
+        "id": 1376,
+        "name": "RF-26-5 Actualizar (Autoría)",
+        "notes": "RF-26-5 | Comunidad\nEl sistema deberá permitir editar o eliminar una publicación solo a su autor.\nResponsable en la matriz: Socio / Cliente / Gestor de contenidos\nPrioridad: Debe tener\nDep.: RF-26"
+      }
+    ]
+  },
+  {
+    "class": "Comentario",
+    "scenarios": [
+      {
+        "name": "Comentar",
+        "actor": "Socio / Cliente",
+        "request": "Enviar comentario",
+        "check": "Validar extensión y publicación destino",
+        "guard": "texto ≤250 y publicación accesible",
+        "fail": "Rechazar comentario",
+        "steps": [
+          {
+            "refs": [
+              "RF-27-1"
+            ],
+            "text": "Registrar comentario en ≤3 s"
+          }
+        ]
+      },
+      {
+        "name": "Consultar comentarios",
+        "actor": "Socio / Cliente",
+        "request": "Abrir comentarios de publicación",
+        "check": "Comprobar publicación visible",
+        "guard": "publicación accesible",
+        "fail": "Denegar consulta",
+        "steps": [
+          {
+            "refs": [
+              "RF-27-2"
+            ],
+            "text": "Mostrar comentarios en orden cronológico"
+          }
+        ]
+      },
+      {
+        "name": "Eliminar comentario propio",
+        "actor": "Socio / Cliente",
+        "request": "Solicitar borrado de comentario",
+        "check": "Comprobar autoría",
+        "guard": "solicitante es autor",
+        "fail": "Denegar borrado",
+        "steps": [
+          {
+            "refs": [
+              "RF-27-3"
+            ],
+            "text": "Aplicar borrado lógico al comentario"
+          }
+        ]
+      }
+    ],
+    "code": "RF-27",
+    "name": "Comentarios",
+    "uc": 1377,
+    "notes": "RF-27 | Comunidad\nEl sistema deberá registrar el comentario de un usuario sobre una publicación en un máximo de 3 segundos.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nUR: UR-35 | RF: RF-26",
+    "module": "Comunidad",
+    "requirements": [
+      {
+        "code": "RF-27",
+        "id": 1377,
+        "name": "RF-27 Comentarios",
+        "notes": "RF-27 | Comunidad\nEl sistema deberá registrar el comentario de un usuario sobre una publicación en un máximo de 3 segundos.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nUR: UR-35 | RF: RF-26"
+      },
+      {
+        "code": "RF-27-1",
+        "id": 1378,
+        "name": "RF-27-1 Validar (Texto)",
+        "notes": "RF-27-1 | Comunidad\nEl sistema deberá bloquear comentarios de más de 250 caracteres.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nDep.: RF-27"
+      },
+      {
+        "code": "RF-27-2",
+        "id": 1379,
+        "name": "RF-27-2 Leer (Listado)",
+        "notes": "RF-27-2 | Comunidad\nEl sistema deberá mostrar los comentarios en orden cronológico debajo de la publicación.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nDep.: RF-27"
+      },
+      {
+        "code": "RF-27-3",
+        "id": 1380,
+        "name": "RF-27-3 Eliminar (Borrado propio)",
+        "notes": "RF-27-3 | Comunidad\nEl sistema deberá permitir al autor aplicar 1 borrado lógico a su comentario.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debe tener\nDep.: RF-27"
+      }
+    ]
+  },
+  {
+    "class": "Reaccion",
+    "scenarios": [
+      {
+        "name": "Reaccionar o retirar reacción",
+        "actor": "Socio / Cliente",
+        "request": "Pulsar Me gusta o retirar",
+        "check": "Consultar reacción existente y acción solicitada",
+        "guard": "alta sin reacción previa o retirada con reacción existente",
+        "fail": "Conservar contador sin duplicar reacción",
+        "steps": [
+          {
+            "refs": [
+              "RF-28-1"
+            ],
+            "text": "Mantener unicidad por usuario y publicación"
+          },
+          {
+            "refs": [
+              "RF-28-2"
+            ],
+            "text": "Crear y sumar 1 o retirar y restar 1 en ≤2 s"
+          }
+        ]
+      }
+    ],
+    "code": "RF-28",
+    "name": "Reacciones",
+    "uc": 1381,
+    "notes": "RF-28 | Comunidad\nEl sistema deberá registrar la reacción «Me gusta» de un usuario a una publicación en un máximo de 2 segundos.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Podría tener\nUR: UR-35 | RF: RF-26",
+    "module": "Comunidad",
+    "requirements": [
+      {
+        "code": "RF-28",
+        "id": 1381,
+        "name": "RF-28 Reacciones",
+        "notes": "RF-28 | Comunidad\nEl sistema deberá registrar la reacción «Me gusta» de un usuario a una publicación en un máximo de 2 segundos.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Podría tener\nUR: UR-35 | RF: RF-26"
+      },
+      {
+        "code": "RF-28-1",
+        "id": 1382,
+        "name": "RF-28-1 Validar (Reacción única)",
+        "notes": "RF-28-1 | Comunidad\nEl sistema deberá permitir como máximo 1 reacción por usuario en cada publicación.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Podría tener\nDep.: RF-28"
+      },
+      {
+        "code": "RF-28-2",
+        "id": 1383,
+        "name": "RF-28-2 Actualizar (Contador)",
+        "notes": "RF-28-2 | Comunidad\nEl sistema deberá sumar 1 al contador al reaccionar y restar 1 al retirar la reacción.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Podría tener\nDep.: RF-28"
+      }
+    ]
+  },
+  {
+    "class": "Publicacion",
+    "scenarios": [
+      {
+        "name": "Fijar publicación oficial",
+        "actor": "Gestor de contenidos",
+        "request": "Elegir publicación y duración",
+        "check": "Comprobar carácter oficial, límite y duración",
+        "guard": "oficial; menos de 3 fijadas; duración 1–30 días",
+        "fail": "Rechazar fijación",
+        "steps": [
+          {
+            "refs": [
+              "RF-29-1",
+              "RF-29-2"
+            ],
+            "text": "Guardar fijación y colocar en primeras posiciones en ≤3 s"
+          }
+        ]
+      },
+      {
+        "name": "Retirar fijación vencida",
+        "actor": "Evento del sistema",
+        "request": "Detectar fecha de fin",
+        "check": "Comparar fecha actual con fin",
+        "guard": "fijación vencida",
+        "fail": "Mantener fijación hasta su vencimiento",
+        "steps": [
+          {
+            "refs": [
+              "RF-29-2"
+            ],
+            "text": "Retirar fijación sin borrar publicación"
+          }
+        ]
+      }
+    ],
+    "code": "RF-29",
+    "name": "Publicaciones fijadas",
+    "uc": 1384,
+    "notes": "RF-29 | Comunidad\nEl sistema deberá fijar una publicación oficial en las primeras posiciones del muro en un máximo de 3 segundos y retirarla al cumplirse su fecha de fin.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Podría tener\nUR: UR-36 | RF: RF-26",
+    "module": "Comunidad",
+    "requirements": [
+      {
+        "code": "RF-29",
+        "id": 1384,
+        "name": "RF-29 Publicaciones fijadas",
+        "notes": "RF-29 | Comunidad\nEl sistema deberá fijar una publicación oficial en las primeras posiciones del muro en un máximo de 3 segundos y retirarla al cumplirse su fecha de fin.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Podría tener\nUR: UR-36 | RF: RF-26"
+      },
+      {
+        "code": "RF-29-1",
+        "id": 1385,
+        "name": "RF-29-1 Validar (Límite)",
+        "notes": "RF-29-1 | Comunidad\nEl sistema deberá permitir un máximo de 3 publicaciones fijadas a la vez.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Podría tener\nDep.: RF-29"
+      },
+      {
+        "code": "RF-29-2",
+        "id": 1386,
+        "name": "RF-29-2 Validar (Duración)",
+        "notes": "RF-29-2 | Comunidad\nEl sistema deberá aceptar una duración de fijación de entre 1 y 30 días.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Podría tener\nDep.: RF-29"
+      }
+    ]
+  },
+  {
+    "class": "Reporte",
+    "scenarios": [
+      {
+        "name": "Reportar contenido",
+        "actor": "Socio / Cliente",
+        "request": "Elegir contenido y motivo",
+        "check": "Validar motivo y ausencia de reporte propio previo",
+        "guard": "Ofensivo, Spam, Falso u Otro; reporte único",
+        "fail": "Rechazar duplicado o motivo inválido",
+        "steps": [
+          {
+            "refs": [
+              "RF-30-1"
+            ],
+            "text": "Registrar reporte y contar usuarios distintos"
+          },
+          {
+            "refs": [
+              "RF-30"
+            ],
+            "text": "Ocultar contenido en ≤5 s",
+            "when": "reportes de usuarios distintos ≥3"
+          }
+        ]
+      },
+      {
+        "name": "Resolver moderación",
+        "actor": "Administrador",
+        "request": "Elegir eliminar, restaurar u ocultar",
+        "check": "Verificar permiso administrativo",
+        "guard": "administrador autorizado",
+        "fail": "Denegar moderación",
+        "steps": [
+          {
+            "refs": [
+              "RF-30-2",
+              "RF-30-3"
+            ],
+            "text": "Aplicar resolución en ≤2 s; permitir ocultar directamente sin reportes"
+          }
+        ]
+      }
+    ],
+    "code": "RF-30",
+    "name": "Moderación de contenidos",
+    "uc": 1387,
+    "notes": "RF-30 | Comunidad\nEl sistema deberá ocultar un contenido en un máximo de 5 segundos cuando reciba 3 reportes de usuarios distintos.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Debería tener\nUR: UR-37 | RF: RF-26, RF-27",
+    "module": "Comunidad",
+    "requirements": [
+      {
+        "code": "RF-30",
+        "id": 1387,
+        "name": "RF-30 Moderación de contenidos",
+        "notes": "RF-30 | Comunidad\nEl sistema deberá ocultar un contenido en un máximo de 5 segundos cuando reciba 3 reportes de usuarios distintos.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Debería tener\nUR: UR-37 | RF: RF-26, RF-27"
+      },
+      {
+        "code": "RF-30-1",
+        "id": 1388,
+        "name": "RF-30-1 Crear (Reporte)",
+        "notes": "RF-30-1 | Comunidad\nEl sistema deberá exigir 1 de 4 motivos (Ofensivo, Spam, Falso u Otro) y aceptar 1 solo reporte por usuario y contenido.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Debería tener\nDep.: RF-30"
+      },
+      {
+        "code": "RF-30-2",
+        "id": 1389,
+        "name": "RF-30-2 Actualizar (Resolución)",
+        "notes": "RF-30-2 | Comunidad\nEl sistema deberá permitir al administrador eliminar o restaurar el contenido en máximo 2 segundos.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Debería tener\nDep.: RF-30"
+      },
+      {
+        "code": "RF-30-3",
+        "id": 1390,
+        "name": "RF-30-3 Eliminar (Ocultamiento directo)",
+        "notes": "RF-30-3 | Comunidad\nEl sistema deberá permitir al administrador ocultar cualquier publicación o comentario sin necesidad de reportes.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Debería tener\nDep.: RF-30"
+      }
+    ]
+  },
+  {
+    "class": "ContenidoSalud",
+    "scenarios": [
+      {
+        "name": "Publicar contenido de salud",
+        "actor": "Gestor de contenidos",
+        "request": "Enviar artículo o información de servicio",
+        "check": "Validar categoría",
+        "guard": "Nutrición, Actividad física, Salud mental o Prevención",
+        "fail": "Rechazar categoría",
+        "steps": [
+          {
+            "refs": [
+              "RF-31-1"
+            ],
+            "text": "Publicar contenido de salud en ≤3 s"
+          }
+        ]
+      },
+      {
+        "name": "Consultar salud",
+        "actor": "Socio / Cliente",
+        "request": "Abrir salud desde inicio",
+        "check": "Consultar contenido publicado",
+        "guard": "consulta permitida",
+        "fail": "Denegar consulta",
+        "steps": [
+          {
+            "refs": [
+              "RF-31-2"
+            ],
+            "text": "Separar artículos y servicios; recientes primero; acceso en ≤2 pasos"
+          }
+        ]
+      },
+      {
+        "name": "Despublicar",
+        "actor": "Gestor de contenidos",
+        "request": "Seleccionar contenido",
+        "check": "Comprobar permiso y existencia",
+        "guard": "operación autorizada",
+        "fail": "Denegar operación",
+        "steps": [
+          {
+            "refs": [
+              "RF-31-3"
+            ],
+            "text": "Cambiar a Borrador y ocultar a usuarios"
+          }
+        ]
+      }
+    ],
+    "code": "RF-31",
+    "name": "Contenidos y servicios de salud",
+    "uc": 1391,
+    "notes": "RF-31 | Salud y bienestar\nEl sistema deberá permitir al gestor de contenidos publicar artículos de salud y la información de los servicios de salud de la Cooperativa, completando cada operación en un máximo de 3 segundos.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Podría tener\nUR: UR-38 | RF: RF-08",
+    "module": "Salud y bienestar",
+    "requirements": [
+      {
+        "code": "RF-31",
+        "id": 1391,
+        "name": "RF-31 Contenidos y servicios de salud",
+        "notes": "RF-31 | Salud y bienestar\nEl sistema deberá permitir al gestor de contenidos publicar artículos de salud y la información de los servicios de salud de la Cooperativa, completando cada operación en un máximo de 3 segundos.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Podría tener\nUR: UR-38 | RF: RF-08"
+      },
+      {
+        "code": "RF-31-1",
+        "id": 1392,
+        "name": "RF-31-1 Validar (Categoría)",
+        "notes": "RF-31-1 | Salud y bienestar\nEl sistema deberá exigir 1 de 4 categorías (Nutrición, Actividad física, Salud mental o Prevención).\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Podría tener\nDep.: RF-31"
+      },
+      {
+        "code": "RF-31-2",
+        "id": 1393,
+        "name": "RF-31-2 Leer (Catálogo)",
+        "notes": "RF-31-2 | Salud y bienestar\nEl sistema deberá mostrar los artículos y los servicios en secciones separadas, del más reciente al más antiguo, accesibles en máximo 2 pasos desde la pantalla de inicio.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Podría tener\nDep.: RF-31"
+      },
+      {
+        "code": "RF-31-3",
+        "id": 1394,
+        "name": "RF-31-3 Eliminar (Despublicar)",
+        "notes": "RF-31-3 | Salud y bienestar\nEl sistema deberá cambiar el contenido a «Borrador» para ocultarlo a los usuarios.\nResponsable en la matriz: Gestor de contenidos\nPrioridad: Podría tener\nDep.: RF-31"
+      }
+    ]
+  },
+  {
+    "class": "Premio",
+    "scenarios": [
+      {
+        "name": "Crear premio",
+        "actor": "Administrador",
+        "request": "Enviar nombre, costo, stock y foto",
+        "check": "Validar unicidad, enteros y foto",
+        "guard": "nombre único; costo >0; stock ≥1; JPG/PNG ≤2 MB",
+        "fail": "Rechazar premio",
+        "steps": [
+          {
+            "refs": [
+              "RF-32-1",
+              "RF-32-2"
+            ],
+            "text": "Guardar premio válido en ≤3 s"
+          }
+        ]
+      },
+      {
+        "name": "Consultar catálogo",
+        "actor": "Socio / Cliente",
+        "request": "Abrir recompensas",
+        "check": "Filtrar estado y stock",
+        "guard": "consulta permitida",
+        "fail": "Denegar consulta",
+        "steps": [
+          {
+            "refs": [
+              "RF-32-3"
+            ],
+            "text": "Mostrar solo premios activos con stock >0"
+          }
+        ]
+      },
+      {
+        "name": "Descontar inventario",
+        "actor": "Evento del sistema",
+        "request": "Recibir canje confirmado",
+        "check": "Bloquear inventario y verificar stock",
+        "guard": "stock disponible y evento no aplicado",
+        "fail": "No duplicar descuento ni permitir stock negativo",
+        "steps": [
+          {
+            "refs": [
+              "RF-32-4"
+            ],
+            "text": "Restar exactamente 1 unidad dentro de transacción de canje"
+          }
+        ]
+      },
+      {
+        "name": "Inactivar premio",
+        "actor": "Administrador",
+        "request": "Confirmar inactivación",
+        "check": "Comprobar permiso",
+        "guard": "administrador autorizado",
+        "fail": "Denegar operación",
+        "steps": [
+          {
+            "refs": [
+              "RF-32-5"
+            ],
+            "text": "Marcar Inactivo y bloquear nuevos canjes"
+          }
+        ]
+      }
+    ],
+    "code": "RF-32",
+    "name": "Catálogo de premios",
+    "uc": 1395,
+    "notes": "RF-32 | Puntos y recompensas\nEl sistema deberá permitir al administrador gestionar los premios del catálogo, completando cada operación en un máximo de 3 segundos.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nUR: UR-39 | RF: RF-42",
+    "module": "Puntos y recompensas",
+    "requirements": [
+      {
+        "code": "RF-32",
+        "id": 1395,
+        "name": "RF-32 Catálogo de premios",
+        "notes": "RF-32 | Puntos y recompensas\nEl sistema deberá permitir al administrador gestionar los premios del catálogo, completando cada operación en un máximo de 3 segundos.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nUR: UR-39 | RF: RF-42"
+      },
+      {
+        "code": "RF-32-1",
+        "id": 1396,
+        "name": "RF-32-1 Crear (Premio)",
+        "notes": "RF-32-1 | Puntos y recompensas\nEl sistema deberá registrar un premio solo si su costo es un entero mayor a 0, su stock un entero mayor o igual a 1 y su nombre no existe en el catálogo.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-32"
+      },
+      {
+        "code": "RF-32-2",
+        "id": 1397,
+        "name": "RF-32-2 Validar (Foto)",
+        "notes": "RF-32-2 | Puntos y recompensas\nEl sistema deberá aceptar la foto solo en JPG o PNG y de hasta 2 MB.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-32"
+      },
+      {
+        "code": "RF-32-3",
+        "id": 1398,
+        "name": "RF-32-3 Leer (Catálogo)",
+        "notes": "RF-32-3 | Puntos y recompensas\nEl sistema deberá excluir del catálogo los premios «Inactivos» o con stock 0.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-32"
+      },
+      {
+        "code": "RF-32-4",
+        "id": 1399,
+        "name": "RF-32-4 Actualizar (Inventario)",
+        "notes": "RF-32-4 | Puntos y recompensas\nEl sistema deberá restar exactamente 1 unidad del stock por cada canje.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-32"
+      },
+      {
+        "code": "RF-32-5",
+        "id": 1400,
+        "name": "RF-32-5 Eliminar (Inactivar)",
+        "notes": "RF-32-5 | Puntos y recompensas\nEl sistema deberá cambiar el premio a «Inactivo», bloqueando nuevos canjes.\nResponsable en la matriz: Administrador\nPrioridad: Debe tener\nDep.: RF-32"
+      }
+    ]
+  },
+  {
+    "class": "Canje",
+    "scenarios": [
+      {
+        "name": "Canjear premio",
+        "actor": "Socio / Cliente",
+        "request": "Elegir premio y confirmar",
+        "check": "Verificar RF-06, saldo y stock con control concurrente",
+        "guard": "cuenta Aprobada, saldo ≥costo y stock >0",
+        "fail": "Bloquear canje sin descontar saldo ni stock",
+        "steps": [
+          {
+            "refs": [
+              "RF-33-1",
+              "RF-33-2"
+            ],
+            "text": "Registrar canje, descontar puntos y 1 unidad atómicamente"
+          },
+          {
+            "refs": [
+              "RF-33-2"
+            ],
+            "text": "Mostrar comprobante; elegir–confirmar–comprobante en ≤3 pasos y ≤3 s"
+          }
+        ]
+      },
+      {
+        "name": "Consultar mis canjes",
+        "actor": "Socio / Cliente",
+        "request": "Abrir Mis canjes",
+        "check": "Verificar identidad",
+        "guard": "usuario autenticado",
+        "fail": "Denegar consulta",
+        "steps": [
+          {
+            "refs": [
+              "RF-33-3"
+            ],
+            "text": "Listar propios con estado, recientes primero"
+          }
+        ]
+      },
+      {
+        "name": "Actualizar entrega",
+        "actor": "Administrador",
+        "request": "Seleccionar siguiente estado",
+        "check": "Validar transición",
+        "guard": "Pendiente a Listo para retiro o Listo para retiro a Entregado",
+        "fail": "Rechazar salto o retroceso de estado",
+        "steps": [
+          {
+            "refs": [
+              "RF-33-4"
+            ],
+            "text": "Guardar siguiente estado en ≤2 s"
+          }
+        ]
+      },
+      {
+        "name": "Consultar historial global",
+        "actor": "Administrador",
+        "request": "Enviar rango de fechas",
+        "check": "Verificar permiso y rango",
+        "guard": "consulta autorizada y rango válido",
+        "fail": "Denegar consulta",
+        "steps": [
+          {
+            "refs": [
+              "RF-33-5"
+            ],
+            "text": "Listar todos los canjes filtrados, 50/página"
+          }
+        ]
+      }
+    ],
+    "code": "RF-33",
+    "name": "Canje de premios",
+    "uc": 1401,
+    "notes": "RF-33 | Puntos y recompensas\nEl sistema deberá registrar el canje de 1 premio descontando los puntos en un máximo de 3 segundos, cuando el saldo cubra el costo y exista stock.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Debe tener\nUR: UR-40, UR-41 | RF: RF-06, RF-12, RF-32",
+    "module": "Puntos y recompensas",
+    "requirements": [
+      {
+        "code": "RF-33",
+        "id": 1401,
+        "name": "RF-33 Canje de premios",
+        "notes": "RF-33 | Puntos y recompensas\nEl sistema deberá registrar el canje de 1 premio descontando los puntos en un máximo de 3 segundos, cuando el saldo cubra el costo y exista stock.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Debe tener\nUR: UR-40, UR-41 | RF: RF-06, RF-12, RF-32"
+      },
+      {
+        "code": "RF-33-1",
+        "id": 1402,
+        "name": "RF-33-1 Validar (Saldo y stock)",
+        "notes": "RF-33-1 | Puntos y recompensas\nEl sistema deberá bloquear el canje si el saldo es menor al costo o si el stock es 0.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Debe tener\nDep.: RF-33"
+      },
+      {
+        "code": "RF-33-2",
+        "id": 1403,
+        "name": "RF-33-2 Crear (Pasos)",
+        "notes": "RF-33-2 | Puntos y recompensas\nEl sistema deberá completar el canje en máximo 3 pasos: elegir, confirmar y ver el comprobante.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Debe tener\nDep.: RF-33"
+      },
+      {
+        "code": "RF-33-3",
+        "id": 1404,
+        "name": "RF-33-3 Leer (Mis canjes)",
+        "notes": "RF-33-3 | Puntos y recompensas\nEl sistema deberá mostrar al usuario sus canjes con su estado, del más reciente al más antiguo.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Debe tener\nDep.: RF-33"
+      },
+      {
+        "code": "RF-33-4",
+        "id": 1405,
+        "name": "RF-33-4 Actualizar (Entrega)",
+        "notes": "RF-33-4 | Puntos y recompensas\nEl sistema deberá permitir al administrador avanzar el estado solo en la secuencia «Pendiente» → «Listo para retiro» → «Entregado», en máximo 2 segundos.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Debe tener\nDep.: RF-33"
+      },
+      {
+        "code": "RF-33-5",
+        "id": 1406,
+        "name": "RF-33-5 Leer (Historial global)",
+        "notes": "RF-33-5 | Puntos y recompensas\nEl sistema deberá mostrar al administrador todos los canjes, 50 por página, filtrando por rango de fechas.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Debe tener\nDep.: RF-33"
+      }
+    ]
+  },
+  {
+    "class": "Favorito",
+    "scenarios": [
+      {
+        "name": "Guardar favorito",
+        "actor": "Socio / Cliente",
+        "request": "Seleccionar premio favorito",
+        "check": "Comprobar duplicado y cantidad",
+        "guard": "premio no guardado y menos de 50 favoritos",
+        "fail": "Informar duplicado o límite",
+        "steps": [
+          {
+            "refs": [
+              "RF-34-1",
+              "RF-34-2"
+            ],
+            "text": "Guardar favorito en ≤2 s"
+          }
+        ]
+      },
+      {
+        "name": "Quitar favorito",
+        "actor": "Socio / Cliente",
+        "request": "Solicitar retirada de favorito",
+        "check": "Comprobar propiedad",
+        "guard": "favorito propio",
+        "fail": "Denegar retirada",
+        "steps": [
+          {
+            "refs": [
+              "RF-34"
+            ],
+            "text": "Quitar favorito en ≤2 s"
+          }
+        ]
+      },
+      {
+        "name": "Consultar favoritos",
+        "actor": "Socio / Cliente",
+        "request": "Abrir favoritos",
+        "check": "Verificar identidad",
+        "guard": "usuario autenticado",
+        "fail": "Denegar consulta",
+        "steps": [
+          {
+            "refs": [
+              "RF-34-3"
+            ],
+            "text": "Mostrar propios excluyendo premios inactivos"
+          }
+        ]
+      }
+    ],
+    "code": "RF-34",
+    "name": "Favoritos",
+    "uc": 1407,
+    "notes": "RF-34 | Puntos y recompensas\nEl sistema deberá guardar o quitar un premio de los favoritos del usuario en un máximo de 2 segundos.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Podría tener\nUR: UR-42 | RF: RF-32",
+    "module": "Puntos y recompensas",
+    "requirements": [
+      {
+        "code": "RF-34",
+        "id": 1407,
+        "name": "RF-34 Favoritos",
+        "notes": "RF-34 | Puntos y recompensas\nEl sistema deberá guardar o quitar un premio de los favoritos del usuario en un máximo de 2 segundos.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Podría tener\nUR: UR-42 | RF: RF-32"
+      },
+      {
+        "code": "RF-34-1",
+        "id": 1408,
+        "name": "RF-34-1 Validar (Duplicado)",
+        "notes": "RF-34-1 | Puntos y recompensas\nEl sistema deberá impedir guardar 2 veces el mismo premio.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Podría tener\nDep.: RF-34"
+      },
+      {
+        "code": "RF-34-2",
+        "id": 1409,
+        "name": "RF-34-2 Validar (Límite)",
+        "notes": "RF-34-2 | Puntos y recompensas\nEl sistema deberá permitir un máximo de 50 favoritos por usuario.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Podría tener\nDep.: RF-34"
+      },
+      {
+        "code": "RF-34-3",
+        "id": 1410,
+        "name": "RF-34-3 Leer (Consulta)",
+        "notes": "RF-34-3 | Puntos y recompensas\nEl sistema deberá excluir de la lista los premios inactivos.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Podría tener\nDep.: RF-34"
+      }
+    ]
+  },
+  {
+    "class": "MetaCanje",
+    "scenarios": [
+      {
+        "name": "Elegir meta",
+        "actor": "Socio / Cliente",
+        "request": "Seleccionar premio meta",
+        "check": "Comprobar premio e identidad",
+        "guard": "selección válida",
+        "fail": "Rechazar selección",
+        "steps": [
+          {
+            "refs": [
+              "RF-35-1"
+            ],
+            "text": "Guardar una sola meta activa reemplazando anterior"
+          }
+        ]
+      },
+      {
+        "name": "Actualizar progreso de meta",
+        "actor": "Evento del sistema",
+        "request": "Recibir cambio de saldo o consulta de meta",
+        "check": "Leer costo y saldo actual",
+        "guard": "meta activa existente",
+        "fail": "Mostrar que no hay meta activa",
+        "steps": [
+          {
+            "refs": [
+              "RF-35-2"
+            ],
+            "text": "Calcular max(costo − saldo, 0) en ≤2 s"
+          },
+          {
+            "refs": [
+              "RF-35-3"
+            ],
+            "text": "Emitir una notificación en ≤1 minuto",
+            "when": "saldo ≥costo y aviso no emitido"
+          }
+        ]
+      }
+    ],
+    "code": "RF-35",
+    "name": "Meta de canje",
+    "uc": 1411,
+    "notes": "RF-35 | Puntos y recompensas\nEl sistema deberá calcular los puntos que faltan para el premio meta del usuario en un máximo de 2 segundos.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Podría tener\nUR: UR-42 | RF: RF-12, RF-32, RF-38",
+    "module": "Puntos y recompensas",
+    "requirements": [
+      {
+        "code": "RF-35",
+        "id": 1411,
+        "name": "RF-35 Meta de canje",
+        "notes": "RF-35 | Puntos y recompensas\nEl sistema deberá calcular los puntos que faltan para el premio meta del usuario en un máximo de 2 segundos.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Podría tener\nUR: UR-42 | RF: RF-12, RF-32, RF-38"
+      },
+      {
+        "code": "RF-35-1",
+        "id": 1412,
+        "name": "RF-35-1 Crear (Meta)",
+        "notes": "RF-35-1 | Puntos y recompensas\nEl sistema deberá mantener exactamente 1 meta activa por usuario, reemplazándola si elige otra.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Podría tener\nDep.: RF-35"
+      },
+      {
+        "code": "RF-35-2",
+        "id": 1413,
+        "name": "RF-35-2 Leer (Faltantes)",
+        "notes": "RF-35-2 | Puntos y recompensas\nEl sistema deberá calcular los faltantes como costo − saldo, con un mínimo de 0.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Podría tener\nDep.: RF-35"
+      },
+      {
+        "code": "RF-35-3",
+        "id": 1414,
+        "name": "RF-35-3 Crear (Aviso)",
+        "notes": "RF-35-3 | Puntos y recompensas\nEl sistema deberá enviar 1 notificación en máximo 1 minuto cuando el saldo alcance el costo de la meta.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Podría tener\nDep.: RF-35"
+      }
+    ]
+  },
+  {
+    "class": "PerfilPublico",
+    "scenarios": [
+      {
+        "name": "Buscar",
+        "actor": "Socio / Cliente",
+        "request": "Introducir término de búsqueda",
+        "check": "Validar longitud y privacidad de resultados",
+        "guard": "al menos 3 caracteres",
+        "fail": "Solicitar término de al menos 3 caracteres",
+        "steps": [
+          {
+            "refs": [
+              "RF-36-1"
+            ],
+            "text": "Buscar respetando privacidad RF-46"
+          },
+          {
+            "refs": [
+              "RF-36-2"
+            ],
+            "text": "Mostrar hasta 20 resultados por página en ≤3 s"
+          }
+        ]
+      }
+    ],
+    "code": "RF-36",
+    "name": "Búsqueda global",
+    "uc": 1415,
+    "notes": "RF-36 | Búsquedas\nEl sistema deberá mostrar los resultados de búsqueda en un máximo de 3 segundos.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Podría tener\nUR: UR-43 | RF: RF-46",
+    "module": "Búsquedas",
+    "requirements": [
+      {
+        "code": "RF-36",
+        "id": 1415,
+        "name": "RF-36 Búsqueda global",
+        "notes": "RF-36 | Búsquedas\nEl sistema deberá mostrar los resultados de búsqueda en un máximo de 3 segundos.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Podría tener\nUR: UR-43 | RF: RF-46"
+      },
+      {
+        "code": "RF-36-1",
+        "id": 1416,
+        "name": "RF-36-1 Validar (Longitud)",
+        "notes": "RF-36-1 | Búsquedas\nEl sistema deberá exigir al menos 3 caracteres para buscar.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Podría tener\nDep.: RF-36"
+      },
+      {
+        "code": "RF-36-2",
+        "id": 1417,
+        "name": "RF-36-2 Leer (Paginación)",
+        "notes": "RF-36-2 | Búsquedas\nEl sistema deberá mostrar un máximo de 20 resultados por página.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Podría tener\nDep.: RF-36"
+      }
+    ]
+  },
+  {
+    "class": "Notificacion",
+    "scenarios": [
+      {
+        "name": "Notificar campaña",
+        "actor": "Evento del sistema",
+        "request": "Recibir activación de campaña",
+        "check": "Obtener destinatarios de provincias cubiertas",
+        "guard": "campaña activa y destinatarios elegibles",
+        "fail": "No enviar a provincias fuera de cobertura",
+        "steps": [
+          {
+            "refs": [
+              "RF-37-1"
+            ],
+            "text": "Almacenar notificación y sumar 1 a no leídas; entregar en ≤60 s"
+          }
+        ]
+      },
+      {
+        "name": "Leer bandeja",
+        "actor": "Socio / Cliente",
+        "request": "Abrir bandeja o una notificación",
+        "check": "Verificar destinatario",
+        "guard": "notificación propia",
+        "fail": "Denegar acceso",
+        "steps": [
+          {
+            "refs": [
+              "RF-37-2"
+            ],
+            "text": "Listar 20/página recientes primero; al abrir no leída restar 1 una sola vez"
+          }
+        ]
+      },
+      {
+        "name": "Purgar informativas",
+        "actor": "Evento del sistema",
+        "request": "Ejecutar mantenimiento de notificaciones",
+        "check": "Comprobar clase y antigüedad",
+        "guard": "informativa con 30 días; no alerta protegida por RF-38",
+        "fail": "Conservar notificación",
+        "steps": [
+          {
+            "refs": [
+              "RF-37-3"
+            ],
+            "text": "Borrar informativas vencidas"
+          }
+        ]
+      }
+    ],
+    "code": "RF-37",
+    "name": "Bandeja y alertas de campañas",
+    "uc": 1418,
+    "notes": "RF-37 | Notificaciones\nEl sistema deberá entregar la notificación de una campaña a los usuarios de sus provincias en un máximo de 60 segundos tras su activación.\nResponsable en la matriz: Sistema\nPrioridad: Debería tener\nUR: UR-44 | RF: RF-13",
+    "module": "Notificaciones",
+    "requirements": [
+      {
+        "code": "RF-37",
+        "id": 1418,
+        "name": "RF-37 Bandeja y alertas de campañas",
+        "notes": "RF-37 | Notificaciones\nEl sistema deberá entregar la notificación de una campaña a los usuarios de sus provincias en un máximo de 60 segundos tras su activación.\nResponsable en la matriz: Sistema\nPrioridad: Debería tener\nUR: UR-44 | RF: RF-13"
+      },
+      {
+        "code": "RF-37-1",
+        "id": 1419,
+        "name": "RF-37-1 Crear (Entrega)",
+        "notes": "RF-37-1 | Notificaciones\nEl sistema deberá sumar 1 al contador de no leídas por cada notificación almacenada.\nResponsable en la matriz: Sistema\nPrioridad: Debería tener\nDep.: RF-37"
+      },
+      {
+        "code": "RF-37-2",
+        "id": 1420,
+        "name": "RF-37-2 Leer (Bandeja)",
+        "notes": "RF-37-2 | Notificaciones\nEl sistema deberá mostrar 20 notificaciones por página, de la más reciente a la más antigua, y restar 1 al contador al abrir una no leída.\nResponsable en la matriz: Sistema\nPrioridad: Debería tener\nDep.: RF-37"
+      },
+      {
+        "code": "RF-37-3",
+        "id": 1421,
+        "name": "RF-37-3 Eliminar (Purga)",
+        "notes": "RF-37-3 | Notificaciones\nEl sistema deberá borrar las notificaciones informativas a los 30 días calendario.\nResponsable en la matriz: Sistema\nPrioridad: Debería tener\nDep.: RF-37"
+      }
+    ]
+  },
+  {
+    "class": "Notificacion",
+    "scenarios": [
+      {
+        "name": "Notificar recompensa",
+        "actor": "Evento del sistema",
+        "request": "Recibir puntos, nivel, insignia o cambio de canje",
+        "check": "Leer evento confirmado y destinatario",
+        "guard": "evento confirmado",
+        "fail": "Esperar confirmación sin notificar",
+        "steps": [
+          {
+            "refs": [
+              "RF-38-1"
+            ],
+            "text": "Incluir puntos exactos cuando aplique y entregar alerta en ≤5 s"
+          },
+          {
+            "refs": [
+              "RF-38-2"
+            ],
+            "text": "Asignar retención mínima de 90 días"
+          }
+        ]
+      }
+    ],
+    "code": "RF-38",
+    "name": "Alertas de puntos, nivel, insignias y canjes",
+    "uc": 1422,
+    "notes": "RF-38 | Notificaciones\nEl sistema deberá notificar al usuario en un máximo de 5 segundos tras acreditarle puntos, subirlo de nivel, otorgarle una insignia o cambiar el estado de su canje.\nResponsable en la matriz: Sistema\nPrioridad: Debería tener\nUR: UR-24, UR-44 | RF: RF-12, RF-16, RF-17, RF-33",
+    "module": "Notificaciones",
+    "requirements": [
+      {
+        "code": "RF-38",
+        "id": 1422,
+        "name": "RF-38 Alertas de puntos, nivel, insignias y canjes",
+        "notes": "RF-38 | Notificaciones\nEl sistema deberá notificar al usuario en un máximo de 5 segundos tras acreditarle puntos, subirlo de nivel, otorgarle una insignia o cambiar el estado de su canje.\nResponsable en la matriz: Sistema\nPrioridad: Debería tener\nUR: UR-24, UR-44 | RF: RF-12, RF-16, RF-17, RF-33"
+      },
+      {
+        "code": "RF-38-1",
+        "id": 1423,
+        "name": "RF-38-1 Crear (Mensaje)",
+        "notes": "RF-38-1 | Notificaciones\nEl sistema deberá incluir en la alerta el valor exacto de los puntos ganados.\nResponsable en la matriz: Sistema\nPrioridad: Debería tener\nDep.: RF-38"
+      },
+      {
+        "code": "RF-38-2",
+        "id": 1424,
+        "name": "RF-38-2 Eliminar (Retención)",
+        "notes": "RF-38-2 | Notificaciones\nEl sistema deberá conservar estas alertas un mínimo de 90 días calendario.\nResponsable en la matriz: Sistema\nPrioridad: Debería tener\nDep.: RF-38"
+      }
+    ]
+  },
+  {
+    "class": "EventoNotificacion",
+    "scenarios": [
+      {
+        "name": "Notificar resultado automático",
+        "actor": "Evento del sistema",
+        "request": "Recibir cambio de cuenta o referido confirmado",
+        "check": "Comprobar unicidad evento-destinatario",
+        "guard": "evento no notificado a este destinatario",
+        "fail": "Finalizar sin repetir notificación",
+        "steps": [
+          {
+            "refs": [
+              "RF-39-1"
+            ],
+            "text": "Preparar resultado para titular o socio; del referido solo nombre de pila"
+          },
+          {
+            "refs": [
+              "RF-39-2"
+            ],
+            "text": "Persistir unicidad y entregar aviso en ≤5 s; tolerar reintentos de 5 minutos"
+          }
+        ]
+      }
+    ],
+    "code": "RF-39",
+    "name": "Alertas de referidos y de cuenta vinculada",
+    "uc": 1425,
+    "notes": "RF-39 | Notificaciones\nEl sistema deberá notificar al titular el resultado automático de su cuenta y al socio el cambio de estado de su referido en máximo 5 segundos desde su confirmación en base de datos, sin exponer datos personales ajenos.\nResponsable en la matriz: Sistema\nPrioridad: Debería tener\nUR: UR-15, UR-44 | RF: RF-05-4, RF-11-4, RF-50",
+    "module": "Notificaciones",
+    "requirements": [
+      {
+        "code": "RF-39",
+        "id": 1425,
+        "name": "RF-39 Alertas de referidos y de cuenta vinculada",
+        "notes": "RF-39 | Notificaciones\nEl sistema deberá notificar al titular el resultado automático de su cuenta y al socio el cambio de estado de su referido en máximo 5 segundos desde su confirmación en base de datos, sin exponer datos personales ajenos.\nResponsable en la matriz: Sistema\nPrioridad: Debería tener\nUR: UR-15, UR-44 | RF: RF-05-4, RF-11-4, RF-50"
+      },
+      {
+        "code": "RF-39-1",
+        "id": 1426,
+        "name": "RF-39-1 Crear (Privacidad)",
+        "notes": "RF-39-1 | Notificaciones\nEl sistema deberá mostrar del referido solo su nombre de pila, sin apellidos ni datos de contacto.\nResponsable en la matriz: Sistema\nPrioridad: Debería tener\nDep.: RF-39"
+      },
+      {
+        "code": "RF-39-2",
+        "id": 1427,
+        "name": "RF-39-2 Validar (Duplicidad)",
+        "notes": "RF-39-2 | Notificaciones\nEl sistema deberá emitir una sola notificación por evento de cambio de estado y destinatario, con unicidad en base de datos, incluso si el evento se reintenta después de 5 minutos.\nResponsable en la matriz: Sistema\nPrioridad: Debería tener\nDep.: RF-39"
+      }
+    ]
+  },
+  {
+    "class": "Notificacion",
+    "scenarios": [
+      {
+        "name": "Recordar taller",
+        "actor": "Evento del sistema",
+        "request": "Ejecutar verificación horaria",
+        "check": "Consultar inscripción, ventana y aviso previo",
+        "guard": "inscrito; faltan 24–25 horas; aviso no emitido",
+        "fail": "No generar alerta de taller",
+        "steps": [
+          {
+            "refs": [
+              "RF-40-1"
+            ],
+            "text": "Enviar una alerta por taller e inscrito"
+          }
+        ]
+      },
+      {
+        "name": "Recordar reto",
+        "actor": "Evento del sistema",
+        "request": "Ejecutar verificación horaria",
+        "check": "Consultar avance, cierre y aviso previo",
+        "guard": "avance >0 %; faltan 72–73 horas; aviso no emitido",
+        "fail": "No generar alerta de reto",
+        "steps": [
+          {
+            "refs": [
+              "RF-40-2"
+            ],
+            "text": "Enviar una alerta por reto y participante"
+          }
+        ]
+      }
+    ],
+    "code": "RF-40",
+    "name": "Recordatorios automáticos",
+    "uc": 1428,
+    "notes": "RF-40 | Notificaciones\nEl sistema deberá ejecutar cada 1 hora la verificación de recordatorios de talleres y retos.\nResponsable en la matriz: Sistema\nPrioridad: Podría tener\nUR: UR-27, UR-33, UR-44 | RF: RF-18, RF-24",
+    "module": "Notificaciones",
+    "requirements": [
+      {
+        "code": "RF-40",
+        "id": 1428,
+        "name": "RF-40 Recordatorios automáticos",
+        "notes": "RF-40 | Notificaciones\nEl sistema deberá ejecutar cada 1 hora la verificación de recordatorios de talleres y retos.\nResponsable en la matriz: Sistema\nPrioridad: Podría tener\nUR: UR-27, UR-33, UR-44 | RF: RF-18, RF-24"
+      },
+      {
+        "code": "RF-40-1",
+        "id": 1429,
+        "name": "RF-40-1 Crear (Taller)",
+        "notes": "RF-40-1 | Notificaciones\nEl sistema deberá enviar 1 alerta entre 24 y 25 horas antes de cada taller en el que el usuario esté inscrito.\nResponsable en la matriz: Sistema\nPrioridad: Podría tener\nDep.: RF-40"
+      },
+      {
+        "code": "RF-40-2",
+        "id": 1430,
+        "name": "RF-40-2 Crear (Reto)",
+        "notes": "RF-40-2 | Notificaciones\nEl sistema deberá enviar 1 alerta entre 72 y 73 horas antes del cierre de un reto con avance mayor a 0 %.\nResponsable en la matriz: Sistema\nPrioridad: Podría tener\nDep.: RF-40"
+      }
+    ]
+  },
+  {
+    "class": "SolicitudSoporte",
+    "scenarios": [
+      {
+        "name": "Crear solicitud",
+        "actor": "Socio / Cliente",
+        "request": "Enviar descripción de soporte",
+        "check": "Validar longitud",
+        "guard": "descripción ≤1000 caracteres",
+        "fail": "Rechazar descripción",
+        "steps": [
+          {
+            "refs": [
+              "RF-41-1"
+            ],
+            "text": "Generar código único de 6 caracteres y registrar Abierta en ≤3 s"
+          }
+        ]
+      },
+      {
+        "name": "Atender y cerrar",
+        "actor": "Administrador",
+        "request": "Elegir siguiente estado y respuesta al cerrar",
+        "check": "Validar transición y respuesta única",
+        "guard": "Abierta a En atención o En atención a Cerrada con respuesta ≤1000 y sin respuesta previa",
+        "fail": "Rechazar transición o respuesta adicional",
+        "steps": [
+          {
+            "refs": [
+              "RF-41-2",
+              "RF-41-3"
+            ],
+            "text": "Guardar estado; al cerrar registrar una respuesta y entregarla en bandeja en ≤5 s"
+          }
+        ]
+      },
+      {
+        "name": "Consultar mis solicitudes",
+        "actor": "Socio / Cliente",
+        "request": "Abrir solicitudes",
+        "check": "Comprobar identidad",
+        "guard": "usuario autenticado",
+        "fail": "Denegar consulta",
+        "steps": [
+          {
+            "refs": [
+              "RF-41-4"
+            ],
+            "text": "Listar propias con estado y respuesta"
+          }
+        ]
+      }
+    ],
+    "code": "RF-41",
+    "name": "Solicitudes de soporte",
+    "uc": 1431,
+    "notes": "RF-41 | Administración\nEl sistema deberá registrar una solicitud de soporte en un máximo de 3 segundos y entregar la respuesta del administrador en la bandeja del usuario en un máximo de 5 segundos.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Podría tener\nUR: UR-45 | RF: RF-37",
+    "module": "Administración",
+    "requirements": [
+      {
+        "code": "RF-41",
+        "id": 1431,
+        "name": "RF-41 Solicitudes de soporte",
+        "notes": "RF-41 | Administración\nEl sistema deberá registrar una solicitud de soporte en un máximo de 3 segundos y entregar la respuesta del administrador en la bandeja del usuario en un máximo de 5 segundos.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Podría tener\nUR: UR-45 | RF: RF-37"
+      },
+      {
+        "code": "RF-41-1",
+        "id": 1432,
+        "name": "RF-41-1 Crear (Solicitud)",
+        "notes": "RF-41-1 | Administración\nEl sistema deberá generar un código único de exactamente 6 caracteres por solicitud y limitar la descripción a 1,000 caracteres.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Podría tener\nDep.: RF-41"
+      },
+      {
+        "code": "RF-41-2",
+        "id": 1433,
+        "name": "RF-41-2 Actualizar (Estado)",
+        "notes": "RF-41-2 | Administración\nEl sistema deberá avanzar el estado solo en la secuencia «Abierta» → «En atención» → «Cerrada».\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Podría tener\nDep.: RF-41"
+      },
+      {
+        "code": "RF-41-3",
+        "id": 1434,
+        "name": "RF-41-3 Crear (Respuesta única)",
+        "notes": "RF-41-3 | Administración\nEl sistema deberá permitir al administrador registrar 1 sola respuesta de hasta 1,000 caracteres al cerrar la solicitud, sin conversación entre usuarios.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Podría tener\nDep.: RF-41"
+      },
+      {
+        "code": "RF-41-4",
+        "id": 1435,
+        "name": "RF-41-4 Leer (Mis solicitudes)",
+        "notes": "RF-41-4 | Administración\nEl sistema deberá mostrar al usuario sus solicitudes con su estado y la respuesta recibida.\nResponsable en la matriz: Socio / Cliente / Administrador\nPrioridad: Podría tener\nDep.: RF-41"
+      }
+    ]
+  },
+  {
+    "class": "RegistroAuditoria",
+    "scenarios": [
+      {
+        "name": "Registrar auditoría",
+        "actor": "Evento del sistema",
+        "request": "Recibir acción crítica o intento/resultado de validación",
+        "check": "Recopilar actor, acción, fecha, origen y afectado",
+        "guard": "evento crítico con contexto disponible",
+        "fail": "Registrar incidencia de auditoría para recuperación; no simular registro exitoso",
+        "steps": [
+          {
+            "refs": [
+              "RF-42-1"
+            ],
+            "text": "Guardar registro inmutable; en validación incluir estados, causa, intento, fuente y regla; sin datos financieros"
+          }
+        ]
+      },
+      {
+        "name": "Consultar bitácora",
+        "actor": "Administrador",
+        "request": "Enviar fechas, usuario y tipo de acción",
+        "check": "Verificar permisos y filtros",
+        "guard": "consulta administrativa autorizada",
+        "fail": "Denegar acceso",
+        "steps": [
+          {
+            "refs": [
+              "RF-42-2"
+            ],
+            "text": "Filtrar y mostrar 50/página en ≤5 s"
+          }
+        ]
+      }
+    ],
+    "code": "RF-42",
+    "name": "Bitácora de auditoría",
+    "uc": 1436,
+    "notes": "RF-42 | Administración\nEl sistema deberá registrar en la bitácora el 100 % de las acciones críticas administrativas y de los intentos y resultados de validación automática de cuentas y referidos.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debe tener\nUR: UR-48 | RF: RF-05, RF-08, RF-11, RF-13, RF-14, RF-15, RF-30, RF-32, RF-47, RF-50",
+    "module": "Administración",
+    "requirements": [
+      {
+        "code": "RF-42",
+        "id": 1436,
+        "name": "RF-42 Bitácora de auditoría",
+        "notes": "RF-42 | Administración\nEl sistema deberá registrar en la bitácora el 100 % de las acciones críticas administrativas y de los intentos y resultados de validación automática de cuentas y referidos.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debe tener\nUR: UR-48 | RF: RF-05, RF-08, RF-11, RF-13, RF-14, RF-15, RF-30, RF-32, RF-47, RF-50"
+      },
+      {
+        "code": "RF-42-1",
+        "id": 1437,
+        "name": "RF-42-1 Crear (Registro)",
+        "notes": "RF-42-1 | Administración\nEl sistema deberá guardar registros inmutables con actor (usuario o Sistema), acción, fecha, origen o IP cuando aplique y registro afectado. Para validaciones automáticas incluirá estado anterior y nuevo, causa, intento, referencia y fecha de la fuente institucional y versión de regla, sin datos financieros.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debe tener\nDep.: RF-42"
+      },
+      {
+        "code": "RF-42-2",
+        "id": 1438,
+        "name": "RF-42-2 Leer (Filtros)",
+        "notes": "RF-42-2 | Administración\nEl sistema deberá filtrar por rango de fechas, usuario y tipo de acción en máximo 5 segundos, mostrando 50 registros por página.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debe tener\nDep.: RF-42"
+      }
+    ]
+  },
+  {
+    "class": "ReportePrograma",
+    "scenarios": [
+      {
+        "name": "Generar reporte de referidos",
+        "actor": "Administrador",
+        "request": "Enviar rango del reporte",
+        "check": "Validar rango y permiso",
+        "guard": "rango ≤12 meses y administrador autorizado",
+        "fail": "Rechazar consulta fuera de rango",
+        "steps": [
+          {
+            "refs": [
+              "RF-43-1",
+              "RF-43-3"
+            ],
+            "text": "Obtener socio referidor, campaña, provincia, estado y fecha"
+          },
+          {
+            "refs": [
+              "RF-43-2"
+            ],
+            "text": "Calcular porcentaje Aprobados/total; si total es 0 mostrar Sin datos; generar en ≤10 s"
+          }
+        ]
+      }
+    ],
+    "code": "RF-43",
+    "name": "Reporte de referidos",
+    "uc": 1439,
+    "notes": "RF-43 | Reportes\nEl sistema deberá generar el reporte de conversión de referidos en un máximo de 10 segundos.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nUR: UR-49 | RF: RF-11, RF-13",
+    "module": "Reportes",
+    "requirements": [
+      {
+        "code": "RF-43",
+        "id": 1439,
+        "name": "RF-43 Reporte de referidos",
+        "notes": "RF-43 | Reportes\nEl sistema deberá generar el reporte de conversión de referidos en un máximo de 10 segundos.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nUR: UR-49 | RF: RF-11, RF-13"
+      },
+      {
+        "code": "RF-43-1",
+        "id": 1440,
+        "name": "RF-43-1 Validar (Rango)",
+        "notes": "RF-43-1 | Reportes\nEl sistema deberá restringir la consulta a un máximo de 12 meses.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nDep.: RF-43"
+      },
+      {
+        "code": "RF-43-2",
+        "id": 1441,
+        "name": "RF-43-2 Crear (Conversión)",
+        "notes": "RF-43-2 | Reportes\nEl sistema deberá incluir 1 columna con el % de referidos Aprobados sobre el total.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nDep.: RF-43"
+      },
+      {
+        "code": "RF-43-3",
+        "id": 1442,
+        "name": "RF-43-3 Crear (Detalle)",
+        "notes": "RF-43-3 | Reportes\nEl sistema deberá incluir por referido el socio que lo refirió, la campaña, la provincia, el estado y la fecha.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nDep.: RF-43"
+      }
+    ]
+  },
+  {
+    "class": "RespuestaEncuesta",
+    "scenarios": [
+      {
+        "name": "Responder encuesta",
+        "actor": "Socio / Cliente",
+        "request": "Enviar respuestas del evento",
+        "check": "Validar unicidad, preguntas y escala",
+        "guard": "sin respuesta previa; ≤5 preguntas; enteros 1–5",
+        "fail": "Rechazar duplicado o escala inválida",
+        "steps": [
+          {
+            "refs": [
+              "RF-44-1",
+              "RF-44-2"
+            ],
+            "text": "Guardar una respuesta por usuario y evento en ≤3 s"
+          }
+        ]
+      }
+    ],
+    "code": "RF-44",
+    "name": "Encuestas de satisfacción",
+    "uc": 1443,
+    "notes": "RF-44 | Encuestas\nEl sistema deberá registrar la respuesta de un usuario a una encuesta en un máximo de 3 segundos.\nResponsable en la matriz: Socio / Cliente / Gestor de contenidos\nPrioridad: Podría tener\nUR: UR-50 | RF: RF-22, RF-25",
+    "module": "Encuestas",
+    "requirements": [
+      {
+        "code": "RF-44",
+        "id": 1443,
+        "name": "RF-44 Encuestas de satisfacción",
+        "notes": "RF-44 | Encuestas\nEl sistema deberá registrar la respuesta de un usuario a una encuesta en un máximo de 3 segundos.\nResponsable en la matriz: Socio / Cliente / Gestor de contenidos\nPrioridad: Podría tener\nUR: UR-50 | RF: RF-22, RF-25"
+      },
+      {
+        "code": "RF-44-1",
+        "id": 1444,
+        "name": "RF-44-1 Validar (Respuesta única)",
+        "notes": "RF-44-1 | Encuestas\nEl sistema deberá aceptar 1 sola respuesta por usuario y evento.\nResponsable en la matriz: Socio / Cliente / Gestor de contenidos\nPrioridad: Podría tener\nDep.: RF-44"
+      },
+      {
+        "code": "RF-44-2",
+        "id": 1445,
+        "name": "RF-44-2 Validar (Escala)",
+        "notes": "RF-44-2 | Encuestas\nEl sistema deberá aceptar solo enteros entre 1 y 5, en encuestas de máximo 5 preguntas.\nResponsable en la matriz: Socio / Cliente / Gestor de contenidos\nPrioridad: Podría tener\nDep.: RF-44"
+      }
+    ]
+  },
+  {
+    "class": "ReportePrograma",
+    "scenarios": [
+      {
+        "name": "Consultar indicadores",
+        "actor": "Administrador",
+        "request": "Abrir tablero",
+        "check": "Verificar permiso y frescura de datos",
+        "guard": "administrador autorizado y datos actualizados a ≤24 h",
+        "fail": "Actualizar datos vencidos antes de presentar tablero",
+        "steps": [
+          {
+            "refs": [
+              "RF-45-1"
+            ],
+            "text": "Calcular 6 indicadores: referidos, aprobación, activos, puntos otorgados/canjeados e inscripciones"
+          },
+          {
+            "refs": [
+              "RF-45-2"
+            ],
+            "text": "Calcular costo = puntos por referidos × valor del punto / aprobados; sin aprobados mostrar No aplica"
+          },
+          {
+            "refs": [
+              "RF-45-3"
+            ],
+            "text": "Mostrar participantes y porcentaje completado por reto/juego; tablero en ≤5 s"
+          }
+        ]
+      },
+      {
+        "name": "Exportar indicadores",
+        "actor": "Administrador",
+        "request": "Solicitar CSV del tablero",
+        "check": "Verificar permisos y datos disponibles",
+        "guard": "exportación autorizada",
+        "fail": "Denegar exportación",
+        "steps": [
+          {
+            "refs": [
+              "RF-45-4"
+            ],
+            "text": "Generar CSV en ≤10 s"
+          }
+        ]
+      }
+    ],
+    "code": "RF-45",
+    "name": "Tablero de indicadores",
+    "uc": 1446,
+    "notes": "RF-45 | Reportes\nEl sistema deberá mostrar al administrador el tablero de indicadores de captación y fidelización en un máximo de 5 segundos, con datos de máximo 24 horas de antigüedad.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nUR: UR-49 | RF: RF-11, RF-12, RF-14, RF-33",
+    "module": "Reportes",
+    "requirements": [
+      {
+        "code": "RF-45",
+        "id": 1446,
+        "name": "RF-45 Tablero de indicadores",
+        "notes": "RF-45 | Reportes\nEl sistema deberá mostrar al administrador el tablero de indicadores de captación y fidelización en un máximo de 5 segundos, con datos de máximo 24 horas de antigüedad.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nUR: UR-49 | RF: RF-11, RF-12, RF-14, RF-33"
+      },
+      {
+        "code": "RF-45-1",
+        "id": 1447,
+        "name": "RF-45-1 Leer (Indicadores)",
+        "notes": "RF-45-1 | Reportes\nEl sistema deberá mostrar 6 indicadores: referidos registrados, % de referidos Aprobados, usuarios activos en el mes (con al menos 1 actividad distinta de iniciar o cerrar sesión), puntos otorgados, puntos canjeados e inscripciones a talleres.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nDep.: RF-45"
+      },
+      {
+        "code": "RF-45-2",
+        "id": 1448,
+        "name": "RF-45-2 Leer (Costo por captación)",
+        "notes": "RF-45-2 | Reportes\nEl sistema deberá calcular el costo por captación como (puntos otorgados por referidos × valor del punto) / referidos Aprobados.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nDep.: RF-45"
+      },
+      {
+        "code": "RF-45-3",
+        "id": 1449,
+        "name": "RF-45-3 Leer (Participación)",
+        "notes": "RF-45-3 | Reportes\nEl sistema deberá mostrar por cada reto y juego el número de participantes y el % que lo completó.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nDep.: RF-45"
+      },
+      {
+        "code": "RF-45-4",
+        "id": 1450,
+        "name": "RF-45-4 Crear (Exportación)",
+        "notes": "RF-45-4 | Reportes\nEl sistema deberá exportar los indicadores en CSV en máximo 10 segundos.\nResponsable en la matriz: Administrador\nPrioridad: Debería tener\nDep.: RF-45"
+      }
+    ]
+  },
+  {
+    "class": "PerfilPublico",
+    "scenarios": [
+      {
+        "name": "Cambiar privacidad",
+        "actor": "Socio / Cliente",
+        "request": "Elegir Público o Privado",
+        "check": "Validar valor y titularidad",
+        "guard": "perfil propio y valor permitido",
+        "fail": "Rechazar cambio",
+        "steps": [
+          {
+            "refs": [
+              "RF-46-1"
+            ],
+            "text": "Guardar visibilidad en ≤3 s; usar Privado por defecto"
+          }
+        ]
+      },
+      {
+        "name": "Consultar perfil ajeno",
+        "actor": "Socio / Cliente",
+        "request": "Abrir perfil de otro usuario",
+        "check": "Comprobar visibilidad persistida",
+        "guard": "perfil Público",
+        "fail": "Ocultar perfil Privado y sus datos",
+        "steps": [
+          {
+            "refs": [
+              "RF-46-2"
+            ],
+            "text": "Excluir siempre correo, celular y cuenta para otros usuarios"
+          },
+          {
+            "refs": [
+              "RF-46-3"
+            ],
+            "text": "Mostrar solo nombre de pila, nivel e insignias"
+          }
+        ]
+      }
+    ],
+    "code": "RF-46",
+    "name": "Privacidad del perfil",
+    "uc": 1451,
+    "notes": "RF-46 | Usuarios y perfiles\nEl sistema deberá aplicar la visibilidad del perfil elegida por el usuario en un máximo de 3 segundos.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debería tener\nUR: UR-51 | RF: RF-03",
+    "module": "Usuarios y perfiles",
+    "requirements": [
+      {
+        "code": "RF-46",
+        "id": 1451,
+        "name": "RF-46 Privacidad del perfil",
+        "notes": "RF-46 | Usuarios y perfiles\nEl sistema deberá aplicar la visibilidad del perfil elegida por el usuario en un máximo de 3 segundos.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debería tener\nUR: UR-51 | RF: RF-03"
+      },
+      {
+        "code": "RF-46-1",
+        "id": 1452,
+        "name": "RF-46-1 Actualizar (Valor)",
+        "notes": "RF-46-1 | Usuarios y perfiles\nEl sistema deberá aceptar solo 2 valores (Público o Privado), con «Privado» por defecto.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debería tener\nDep.: RF-46"
+      },
+      {
+        "code": "RF-46-2",
+        "id": 1453,
+        "name": "RF-46-2 Leer (Datos protegidos)",
+        "notes": "RF-46-2 | Usuarios y perfiles\nEl sistema deberá ocultar al 100 % de los demás usuarios el correo, el celular y el número de cuenta de cualquier perfil.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debería tener\nDep.: RF-46"
+      },
+      {
+        "code": "RF-46-3",
+        "id": 1454,
+        "name": "RF-46-3 Leer (Perfil público)",
+        "notes": "RF-46-3 | Usuarios y perfiles\nEl sistema deberá mostrar en un perfil público solo 3 datos: nombre de pila, nivel e insignias.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debería tener\nDep.: RF-46"
+      }
+    ]
+  },
+  {
+    "class": "AceptacionTerminos",
+    "scenarios": [
+      {
+        "name": "Aceptar aviso",
+        "actor": "Prospecto",
+        "request": "Marcar aceptación al registrarse",
+        "check": "Verificar aceptación expresa de versión vigente",
+        "guard": "casilla marcada y versión vigente",
+        "fail": "Bloquear creación de cuenta",
+        "steps": [
+          {
+            "refs": [
+              "RF-47-1",
+              "RF-47-2"
+            ],
+            "text": "Registrar fecha, hora y versión aceptada en ≤2 s"
+          },
+          {
+            "refs": [
+              "RF-47-3"
+            ],
+            "text": "Conservar evidencia al menos 5 años"
+          }
+        ]
+      },
+      {
+        "name": "Publicar nueva versión",
+        "actor": "Administrador",
+        "request": "Enviar nueva versión numerada del aviso",
+        "check": "Verificar permiso y versión",
+        "guard": "administrador autorizado y versión nueva",
+        "fail": "Rechazar publicación",
+        "steps": [
+          {
+            "refs": [
+              "RF-47-4"
+            ],
+            "text": "Publicar manteniendo exactamente una versión vigente"
+          }
+        ]
+      }
+    ],
+    "code": "RF-47",
+    "name": "Autorización de tratamiento de datos",
+    "uc": 1455,
+    "notes": "RF-47 | Gestión de usuarios\nEl sistema deberá condicionar la creación de la cuenta a la aceptación expresa de los términos y del aviso de privacidad vigente, validándola en un máximo de 2 segundos.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debe tener\nUR: UR-52 | RF: RF-42",
+    "module": "Gestión de usuarios",
+    "requirements": [
+      {
+        "code": "RF-47",
+        "id": 1455,
+        "name": "RF-47 Autorización de tratamiento de datos",
+        "notes": "RF-47 | Gestión de usuarios\nEl sistema deberá condicionar la creación de la cuenta a la aceptación expresa de los términos y del aviso de privacidad vigente, validándola en un máximo de 2 segundos.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debe tener\nUR: UR-52 | RF: RF-42"
+      },
+      {
+        "code": "RF-47-1",
+        "id": 1456,
+        "name": "RF-47-1 Validar (Aceptación)",
+        "notes": "RF-47-1 | Gestión de usuarios\nEl sistema deberá bloquear la creación de la cuenta mientras la casilla de aceptación no esté marcada.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debe tener\nDep.: RF-47"
+      },
+      {
+        "code": "RF-47-2",
+        "id": 1457,
+        "name": "RF-47-2 Crear (Evidencia)",
+        "notes": "RF-47-2 | Gestión de usuarios\nEl sistema deberá registrar 3 datos de evidencia (fecha, hora y versión del aviso aceptado).\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debe tener\nDep.: RF-47"
+      },
+      {
+        "code": "RF-47-3",
+        "id": 1458,
+        "name": "RF-47-3 Leer (Conservación)",
+        "notes": "RF-47-3 | Gestión de usuarios\nEl sistema deberá conservar la evidencia durante un mínimo de 5 años.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debe tener\nDep.: RF-47"
+      },
+      {
+        "code": "RF-47-4",
+        "id": 1459,
+        "name": "RF-47-4 Crear (Versión del aviso)",
+        "notes": "RF-47-4 | Gestión de usuarios\nEl sistema deberá permitir al administrador publicar una nueva versión numerada del aviso, manteniendo exactamente 1 vigente; la persona que se registra debe aceptar la versión vigente.\nResponsable en la matriz: Sistema / Administrador\nPrioridad: Debe tener\nDep.: RF-47"
+      }
+    ]
+  },
+  {
+    "class": "Usuario",
+    "scenarios": [
+      {
+        "name": "Cargar inicio",
+        "actor": "Socio / Cliente",
+        "request": "Completar inicio de sesión",
+        "check": "Verificar sesión activa",
+        "guard": "sesión válida",
+        "fail": "Solicitar autenticación",
+        "steps": [
+          {
+            "refs": [
+              "RF-48-1"
+            ],
+            "text": "Consultar saldo, nivel, faltantes y no leídas en paralelo y reunir resultados",
+            "parallel": [
+              "Consultar saldo disponible (RF-12)",
+              "Consultar nivel y faltantes (RF-16)",
+              "Consultar notificaciones no leídas (RF-37)"
+            ]
+          },
+          {
+            "refs": [
+              "RF-48-2"
+            ],
+            "text": "Mostrar Compartir mi enlace a un toque si verificada; en otro caso Vincular mi cuenta"
+          },
+          {
+            "refs": [
+              "RF-48-3"
+            ],
+            "text": "Mostrar Referidos, Recompensas, Retos, Juegos, Talleres y Comunidad en ≤3 s"
+          }
+        ]
+      }
+    ],
+    "code": "RF-48",
+    "name": "Pantalla de inicio",
+    "uc": 1460,
+    "notes": "RF-48 | Usuarios y perfiles\nEl sistema deberá mostrar al usuario, en un máximo de 3 segundos tras iniciar sesión, su saldo, su nivel, los puntos faltantes y el botón para compartir su enlace.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debería tener\nUR: UR-12, UR-24, UR-25 | RF: RF-10, RF-12, RF-16, RF-37",
+    "module": "Usuarios y perfiles",
+    "requirements": [
+      {
+        "code": "RF-48",
+        "id": 1460,
+        "name": "RF-48 Pantalla de inicio",
+        "notes": "RF-48 | Usuarios y perfiles\nEl sistema deberá mostrar al usuario, en un máximo de 3 segundos tras iniciar sesión, su saldo, su nivel, los puntos faltantes y el botón para compartir su enlace.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debería tener\nUR: UR-12, UR-24, UR-25 | RF: RF-10, RF-12, RF-16, RF-37"
+      },
+      {
+        "code": "RF-48-1",
+        "id": 1461,
+        "name": "RF-48-1 Leer (Resumen)",
+        "notes": "RF-48-1 | Usuarios y perfiles\nEl sistema deberá mostrar 4 datos: saldo, nivel, puntos faltantes y notificaciones sin leer.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debería tener\nDep.: RF-48"
+      },
+      {
+        "code": "RF-48-2",
+        "id": 1462,
+        "name": "RF-48-2 Leer (Compartir)",
+        "notes": "RF-48-2 | Usuarios y perfiles\nEl sistema deberá ubicar el botón «Compartir mi enlace» a 1 toque, o el aviso «Vincular mi cuenta» si la cuenta no está verificada.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debería tener\nDep.: RF-48"
+      },
+      {
+        "code": "RF-48-3",
+        "id": 1463,
+        "name": "RF-48-3 Leer (Accesos directos)",
+        "notes": "RF-48-3 | Usuarios y perfiles\nEl sistema deberá mostrar 6 accesos directos: Referidos, Recompensas, Retos, Juegos, Talleres y Comunidad.\nResponsable en la matriz: Socio / Cliente\nPrioridad: Debería tener\nDep.: RF-48"
+      }
+    ]
+  },
+  {
+    "class": "Modulo",
+    "scenarios": [
+      {
+        "name": "Abrir formulario o menú",
+        "actor": "Usuario de la plataforma",
+        "request": "Navegar a pantalla",
+        "check": "Consultar rol y ancho de pantalla",
+        "guard": "sesión y función autorizadas",
+        "fail": "Mostrar acceso denegado",
+        "steps": [
+          {
+            "refs": [
+              "RF-49-1"
+            ],
+            "text": "Mostrar ayuda o ejemplo en cada campo"
+          },
+          {
+            "refs": [
+              "RF-49-4"
+            ],
+            "text": "Mostrar menú del rol completo si ancho ≥768 px; desplegable si menor"
+          }
+        ]
+      },
+      {
+        "name": "Presentar resultado de acción",
+        "actor": "Evento del sistema",
+        "request": "Recibir resultado de validación o ejecución",
+        "check": "Determinar si existen errores de campo",
+        "guard": "resultado recibido",
+        "fail": "Mantener estado pendiente hasta recibir resultado",
+        "steps": [
+          {
+            "refs": [
+              "RF-49-2"
+            ],
+            "text": "Marcar campos en rojo; mostrar causa y corrección",
+            "when": "existen campos con error"
+          },
+          {
+            "refs": [
+              "RF-49-3"
+            ],
+            "text": "Mostrar éxito/error en ≤1 s y mantener ≥4 s o hasta cierre"
+          }
+        ]
+      }
+    ],
+    "code": "RF-49",
+    "name": "Navegación, ayudas y mensajes de la interfaz",
+    "uc": 1464,
+    "notes": "RF-49 | Usuarios y perfiles\nEl sistema deberá mostrar un mensaje de éxito o de error en un máximo de 1 segundo después de cada acción del usuario.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nUR: UR-04, UR-53 | RF: RF-08",
+    "module": "Usuarios y perfiles",
+    "requirements": [
+      {
+        "code": "RF-49",
+        "id": 1464,
+        "name": "RF-49 Navegación, ayudas y mensajes de la interfaz",
+        "notes": "RF-49 | Usuarios y perfiles\nEl sistema deberá mostrar un mensaje de éxito o de error en un máximo de 1 segundo después de cada acción del usuario.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nUR: UR-04, UR-53 | RF: RF-08"
+      },
+      {
+        "code": "RF-49-1",
+        "id": 1465,
+        "name": "RF-49-1 Leer (Ayuda en campos)",
+        "notes": "RF-49-1 | Usuarios y perfiles\nEl sistema deberá mostrar en el 100 % de los campos de los formularios un texto de ayuda o un ejemplo.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-49"
+      },
+      {
+        "code": "RF-49-2",
+        "id": 1466,
+        "name": "RF-49-2 Leer (Campos con error)",
+        "notes": "RF-49-2 | Usuarios y perfiles\nEl sistema deberá marcar en rojo cada campo con error y mostrar debajo la causa y la corrección esperada.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-49"
+      },
+      {
+        "code": "RF-49-3",
+        "id": 1467,
+        "name": "RF-49-3 Leer (Mensajes)",
+        "notes": "RF-49-3 | Usuarios y perfiles\nEl sistema deberá mostrar un aviso de éxito o error durante al menos 4 segundos o hasta que el usuario lo cierre.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-49"
+      },
+      {
+        "code": "RF-49-4",
+        "id": 1468,
+        "name": "RF-49-4 Leer (Menú)",
+        "notes": "RF-49-4 | Usuarios y perfiles\nEl sistema deberá mostrar el menú del rol completo en pantallas de 768 píxeles o más y como menú desplegable en pantallas menores.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-49"
+      }
+    ]
+  },
+  {
+    "class": "ValidadorCuenta",
+    "scenarios": [
+      {
+        "name": "Validar contra fuente institucional",
+        "actor": "Evento del sistema",
+        "request": "Recibir solicitud o reintento programado",
+        "check": "Consultar fuente autorizada y verificar disponibilidad y vigencia",
+        "guard": "fuente disponible y vigente",
+        "fail": "Conservar Pendiente con causa; programar reintento en 5 minutos",
+        "steps": [
+          {
+            "refs": [
+              "RF-50-1"
+            ],
+            "text": "Comparar titular institucional, tipo, número y condición; sin saldos ni movimientos"
+          },
+          {
+            "refs": [
+              "RF-50-2"
+            ],
+            "text": "Persistir Aprobado con evidencia institucional",
+            "when": "existencia, titularidad y condición habilitada confirmadas",
+            "otherwise": "Persistir Rechazado con causa de incumplimiento y evidencia"
+          },
+          {
+            "refs": [
+              "RF-50-2"
+            ],
+            "text": "Reevaluar referido RF-11; notificar RF-39 y auditar RF-42; acreditar RF-12 solo ante nueva aprobación elegible"
+          }
+        ]
+      }
+    ],
+    "code": "RF-50",
+    "name": "Validación automática contra la base institucional",
+    "uc": 1469,
+    "notes": "RF-50 | Gestión de usuarios\nEl sistema deberá validar automáticamente existencia, titularidad y condición habilitada de las cuentas de asociados y referidos contra registros institucionales autorizados en máximo 5 segundos con la fuente disponible y vigente, sin intervención del administrador.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nUR: UR-07, UR-08, UR-09, UR-14, UR-16 | RF: RF-05, RF-11, RF-12, RF-39, RF-42",
+    "module": "Gestión de usuarios",
+    "requirements": [
+      {
+        "code": "RF-50",
+        "id": 1469,
+        "name": "RF-50 Validación automática contra la base institucional",
+        "notes": "RF-50 | Gestión de usuarios\nEl sistema deberá validar automáticamente existencia, titularidad y condición habilitada de las cuentas de asociados y referidos contra registros institucionales autorizados en máximo 5 segundos con la fuente disponible y vigente, sin intervención del administrador.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nUR: UR-07, UR-08, UR-09, UR-14, UR-16 | RF: RF-05, RF-11, RF-12, RF-39, RF-42"
+      },
+      {
+        "code": "RF-50-1",
+        "id": 1470,
+        "name": "RF-50-1 Leer (Consulta)",
+        "notes": "RF-50-1 | Gestión de usuarios\nEl sistema deberá consultar una fuente institucional de solo lectura o su réplica autorizada con trazabilidad de origen y vigencia, comparando identificador institucional del titular, tipo, número y condición habilitada. No obtendrá saldos ni movimientos ni aceptará como evidencia datos declarados por el usuario.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-50"
+      },
+      {
+        "code": "RF-50-2",
+        "id": 1471,
+        "name": "RF-50-2 Actualizar (Resultado y reintento automático)",
+        "notes": "RF-50-2 | Gestión de usuarios\nEl sistema deberá persistir el resultado y su evidencia, reevaluar automáticamente al referido asociado y disparar puntos y avisos. Ante falta de respuesta o fuente no vigente conservará Pendiente con causa y reintentará automáticamente cada 5 minutos, sin derivar a aprobación manual ni duplicar efectos.\nResponsable en la matriz: Sistema\nPrioridad: Debe tener\nDep.: RF-50, RF-05-4, RF-11-4, RF-12-2, RF-39, RF-42"
+      }
+    ]
+  }
+]

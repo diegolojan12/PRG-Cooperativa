@@ -1,0 +1,19 @@
+<section id="cls-acreditacion">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<img class="dots-tl" src="/_blob/1e2fea8d754caedaac7d450c0f54bca4" alt="">
+<img class="dots-br" src="/_blob/1e2fea8d754caedaac7d450c0f54bca4" alt="">
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">DIAGRAMA DE CLASES · PUNTOS · HU-012</p>
+<h2>AcreditacionPuntos</h2>
+</div>
+<div class="clases2">
+<div class="frame" style="width:1696px; height:230px;"><img src="/_blob/647a3740c6508cfd45a2e2bf4f5808fe" alt="Clase AcreditacionPuntos en Enterprise Architect" style="width:1666px; height:200px; object-fit:contain;"></div>
+<div class="panel" style="width:1696px; padding:20px 28px; gap:8px;"><p class="ptitle">AcreditacionPuntos&#160;&#160;<span class="rt">backend/src/dominio/administracion.mjs:101</span></p>
+<p class="src" style="line-height:1.3;">export class AcreditacionPuntos {<br>&#160;&#160;constructor(db, notificar) { this.db = db; this.notificar = notificar; }<br>&#160;&#160;async registrar(actividad, eventoId, usuarios, fecha, client) {<br>&#160;&#160;&#160;&#160;if (!Object.hasOwn(PARAMETRO_ACTIVIDAD, actividad) || !client)&#160;&#160;<span class="c">// exige una transacción</span><br>&#160;&#160;&#160;&#160;&#160;&#160;throw new Error(<span class="s">'La acreditación exige una actividad válida y una transacción.'</span>);<br>&#160;&#160;&#160;&#160;const [config] = await this.db.query(<span class="s">'SELECT valor FROM "Configuracion" WHERE clave=$1'</span>, …);<br>&#160;&#160;&#160;&#160;for (const usuarioId of new Set(usuarios)) {<br>&#160;&#160;&#160;&#160;&#160;&#160;const m = new MovimientoPuntos(usuarioId, actividad, eventoId, Number(config?.valor), fecha);<br>&#160;&#160;&#160;&#160;&#160;&#160;await this.db.query(<span class="s">'INSERT INTO "MovimientoPuntos" … ON CONFLICT (clave) DO NOTHING'</span>, …);<br>&#160;&#160;&#160;&#160;} … }&#160;<span class="c">// puntos según la configuración (HU-006), sin duplicados</span><br>}</p></div>
+</div>
+<p class="foot">Diagrama de clases (Enterprise Architect) · Documento de Visión, Figura 3</p>
+<div class="pnum"></div>
+<aside>(20 s) AcreditacionPuntos es el servicio que entrega los puntos al aprobar un referido. Lee el valor configurado por el administrador, crea un MovimientoPuntos por persona y, gracias a la clave única, nunca acredita dos veces el mismo evento. Siempre se ejecuta dentro de la transacción del dictamen.</aside>
+</section>

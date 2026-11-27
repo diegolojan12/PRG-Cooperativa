@@ -1,0 +1,934 @@
+{
+  "stats": {
+    "decisiones_rotuladas": 164,
+    "uniones_identificadas": 21,
+    "rombos_redundantes_retirados": 16
+  },
+  "nodes": [
+    {
+      "id": 10011,
+      "name": "¿Datos válidos y\naceptación expresa?",
+      "outputs": 2
+    },
+    {
+      "id": 10018,
+      "name": "¿Registro creado?",
+      "outputs": 2
+    },
+    {
+      "id": 10020,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 10034,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 2
+    },
+    {
+      "id": 10083,
+      "name": "¿Datos válidos y\núnicos?",
+      "outputs": 2
+    },
+    {
+      "id": 10092,
+      "name": "¿Baja autorizada y\nconfirmada?",
+      "outputs": 2
+    },
+    {
+      "id": 10115,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 3
+    },
+    {
+      "id": 10120,
+      "name": "¿Credenciales válidas\ny cuenta habilitada?",
+      "outputs": 2
+    },
+    {
+      "id": 10129,
+      "name": "¿Inactividad ≥15\nminutos?",
+      "outputs": 2
+    },
+    {
+      "id": 10138,
+      "name": "¿Sesión existente?",
+      "outputs": 2
+    },
+    {
+      "id": 10039,
+      "name": "¿Emisión inicial o\nmenos de 3\nreenvíos/hora?",
+      "outputs": 2
+    },
+    {
+      "id": 10048,
+      "name": "¿Código correcto y\nvigente?",
+      "outputs": 2
+    },
+    {
+      "id": 10069,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 3
+    },
+    {
+      "id": 10074,
+      "name": "¿Consulta autorizada?",
+      "outputs": 2
+    },
+    {
+      "id": 10161,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 4
+    },
+    {
+      "id": 10166,
+      "name": "¿Tipo y unicidad\nválidos?",
+      "outputs": 2
+    },
+    {
+      "id": 10176,
+      "name": "¿Administrador\nautorizado?",
+      "outputs": 2
+    },
+    {
+      "id": 10185,
+      "name": "¿Titular autenticado?",
+      "outputs": 2
+    },
+    {
+      "id": 10194,
+      "name": "¿Cuenta Rechazada y\ncorrección válida?",
+      "outputs": 2
+    },
+    {
+      "id": 10225,
+      "name": "¿Función abierta o\ncuenta Aprobada por\nRF-50?",
+      "outputs": 2
+    },
+    {
+      "id": 10242,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 2
+    },
+    {
+      "id": 10247,
+      "name": "¿Cuenta registrada?",
+      "outputs": 2
+    },
+    {
+      "id": 10256,
+      "name": "¿Enlace y contraseña\nválidos?",
+      "outputs": 2
+    },
+    {
+      "id": 10277,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 3
+    },
+    {
+      "id": 10282,
+      "name": "¿Cambio autorizado y\nroles protegidos?",
+      "outputs": 2
+    },
+    {
+      "id": 10292,
+      "name": "¿Creación de cuenta\nautorizada?",
+      "outputs": 2
+    },
+    {
+      "id": 10301,
+      "name": "¿Función autorizada\npor rol?",
+      "outputs": 2
+    },
+    {
+      "id": 10366,
+      "name": "¿Enlace oficial\ndisponible y cuenta\nAprobada?",
+      "outputs": 2
+    },
+    {
+      "id": 10369,
+      "name": "¿Canal = copiar?",
+      "outputs": 2
+    },
+    {
+      "id": 10371,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 10372,
+      "name": "¿Canal = WhatsApp,\nFacebook o menú de\ncompartir?",
+      "outputs": 2
+    },
+    {
+      "id": 10374,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 10326,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 2
+    },
+    {
+      "id": 10331,
+      "name": "¿Cuenta Aprobada y sin\ncódigo previo?",
+      "outputs": 2
+    },
+    {
+      "id": 10341,
+      "name": "¿QR propio disponible?",
+      "outputs": 2
+    },
+    {
+      "id": 10390,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 5
+    },
+    {
+      "id": 10395,
+      "name": "¿Relación válida y\núnica?",
+      "outputs": 2
+    },
+    {
+      "id": 10406,
+      "name": "¿Socio autenticado?",
+      "outputs": 2
+    },
+    {
+      "id": 10415,
+      "name": "¿Consulta autorizada?",
+      "outputs": 2
+    },
+    {
+      "id": 10419,
+      "name": "¿Operación = exportar\nPendientes?",
+      "outputs": 2
+    },
+    {
+      "id": 10421,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 10427,
+      "name": "¿Asociación permitida?",
+      "outputs": 2
+    },
+    {
+      "id": 10430,
+      "name": "¿Operación = asociar\nsin código?",
+      "outputs": 2
+    },
+    {
+      "id": 10432,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 10438,
+      "name": "¿Operación autorizada?",
+      "outputs": 2
+    },
+    {
+      "id": 10471,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 2
+    },
+    {
+      "id": 10476,
+      "name": "¿Evento nuevo y\nelegible?",
+      "outputs": 2
+    },
+    {
+      "id": 10480,
+      "name": "¿Evento = referido\naprobado?",
+      "outputs": 2
+    },
+    {
+      "id": 10482,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 10489,
+      "name": "¿Usuario autenticado?",
+      "outputs": 2
+    },
+    {
+      "id": 10511,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 3
+    },
+    {
+      "id": 10516,
+      "name": "¿Campaña válida sin\nsuperposición?",
+      "outputs": 2
+    },
+    {
+      "id": 10525,
+      "name": "¿Campaña modificable?",
+      "outputs": 2
+    },
+    {
+      "id": 10534,
+      "name": "¿Socio autenticado?",
+      "outputs": 2
+    },
+    {
+      "id": 10562,
+      "name": "¿Valor válido para el\nparámetro?",
+      "outputs": 2
+    },
+    {
+      "id": 10584,
+      "name": "¿Motivo 10–200\ncaracteres y saldo\nfinal ≥0?",
+      "outputs": 2
+    },
+    {
+      "id": 10602,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 3
+    },
+    {
+      "id": 10607,
+      "name": "¿Umbrales\nconfigurados?",
+      "outputs": 2
+    },
+    {
+      "id": 10616,
+      "name": "¿Consulta autorizada?",
+      "outputs": 2
+    },
+    {
+      "id": 10650,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 3
+    },
+    {
+      "id": 10655,
+      "name": "¿Operación de insignia\nválida?",
+      "outputs": 2
+    },
+    {
+      "id": 10658,
+      "name": "¿Operación = crear?",
+      "outputs": 2
+    },
+    {
+      "id": 10660,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 10661,
+      "name": "¿Operación =\ninactivar?",
+      "outputs": 2
+    },
+    {
+      "id": 10663,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 10669,
+      "name": "¿Meta cumplida y no\notorgada?",
+      "outputs": 2
+    },
+    {
+      "id": 10678,
+      "name": "¿Perfil visible para\nsolicitante?",
+      "outputs": 2
+    },
+    {
+      "id": 10626,
+      "name": "¿Niveles y umbrales\nválidos?",
+      "outputs": 2
+    },
+    {
+      "id": 10704,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 2
+    },
+    {
+      "id": 10709,
+      "name": "¿Operación de reto\nválida?",
+      "outputs": 2
+    },
+    {
+      "id": 10712,
+      "name": "¿Operación = crear?",
+      "outputs": 2
+    },
+    {
+      "id": 10714,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 10715,
+      "name": "¿Operación =\nfinalizar?",
+      "outputs": 2
+    },
+    {
+      "id": 10717,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 10723,
+      "name": "¿Actividad aplicable\nal reto?",
+      "outputs": 2
+    },
+    {
+      "id": 10727,
+      "name": "¿Avance =100 % y\nacreditación no\nemitida?",
+      "outputs": 2
+    },
+    {
+      "id": 10729,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 10800,
+      "name": "¿Menos de 3 partidas\ncompletadas?",
+      "outputs": 2
+    },
+    {
+      "id": 10804,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 10750,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 3
+    },
+    {
+      "id": 10755,
+      "name": "¿2–4 opciones, una\ncorrecta y tema\npermitido?",
+      "outputs": 2
+    },
+    {
+      "id": 10764,
+      "name": "¿Básico, Intermedio o\nAvanzado?",
+      "outputs": 2
+    },
+    {
+      "id": 10773,
+      "name": "¿Pregunta existente y\noperación autorizada?",
+      "outputs": 2
+    },
+    {
+      "id": 10806,
+      "name": "¿Quedan preguntas de\nlas 10?",
+      "outputs": 2
+    },
+    {
+      "id": 10874,
+      "name": "¿Menos de 3 intentos?",
+      "outputs": 2
+    },
+    {
+      "id": 10823,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 3
+    },
+    {
+      "id": 10828,
+      "name": "¿Material y\ncuestionario válidos?",
+      "outputs": 2
+    },
+    {
+      "id": 10837,
+      "name": "¿Consulta permitida?",
+      "outputs": 2
+    },
+    {
+      "id": 10846,
+      "name": "¿Operación autorizada?",
+      "outputs": 2
+    },
+    {
+      "id": 10878,
+      "name": "¿Calificación ≥70 %?",
+      "outputs": 2
+    },
+    {
+      "id": 10880,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 10882,
+      "name": "¿Calificación ≥70 %?",
+      "outputs": 2
+    },
+    {
+      "id": 10884,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 10885,
+      "name": "¿Calificación ≥70 % y\nprimera aprobación?",
+      "outputs": 2
+    },
+    {
+      "id": 10887,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 10905,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 4
+    },
+    {
+      "id": 10910,
+      "name": "¿Fecha futura, lugar\ninformado y cupos >0?",
+      "outputs": 2
+    },
+    {
+      "id": 10919,
+      "name": "¿Consulta permitida?",
+      "outputs": 2
+    },
+    {
+      "id": 10928,
+      "name": "¿Nuevo cupo\n≥inscritos?",
+      "outputs": 2
+    },
+    {
+      "id": 10937,
+      "name": "¿Cancelación\nautorizada?",
+      "outputs": 2
+    },
+    {
+      "id": 10963,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 2
+    },
+    {
+      "id": 10968,
+      "name": "¿Cupo disponible y\nusuario no inscrito?",
+      "outputs": 2
+    },
+    {
+      "id": 10977,
+      "name": "¿Inscripción propia y\nfaltan ≥24 horas?",
+      "outputs": 2
+    },
+    {
+      "id": 11022,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 3
+    },
+    {
+      "id": 11027,
+      "name": "¿Contenido y autoría\nválidos?",
+      "outputs": 2
+    },
+    {
+      "id": 11031,
+      "name": "¿Autor = Gestor de\ncontenidos?",
+      "outputs": 2
+    },
+    {
+      "id": 11033,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 11039,
+      "name": "¿Consulta permitida?",
+      "outputs": 2
+    },
+    {
+      "id": 11048,
+      "name": "¿Solicitante es autor?",
+      "outputs": 2
+    },
+    {
+      "id": 11001,
+      "name": "¿Entre inicio y +48 h;\nAsistió o No asistió?",
+      "outputs": 2
+    },
+    {
+      "id": 11005,
+      "name": "¿Asistencia = Asistió\ny puntos no\nacreditados?",
+      "outputs": 2
+    },
+    {
+      "id": 11007,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 11072,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 3
+    },
+    {
+      "id": 11077,
+      "name": "¿Texto ≤250 y\npublicación accesible?",
+      "outputs": 2
+    },
+    {
+      "id": 11086,
+      "name": "¿Publicación\naccesible?",
+      "outputs": 2
+    },
+    {
+      "id": 11095,
+      "name": "¿Solicitante es autor?",
+      "outputs": 2
+    },
+    {
+      "id": 11122,
+      "name": "¿Cambio de reacción\npermitido?",
+      "outputs": 2
+    },
+    {
+      "id": 11139,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 2
+    },
+    {
+      "id": 11144,
+      "name": "¿Oficial; menos de 3\nfijadas; duración 1–30\ndías?",
+      "outputs": 2
+    },
+    {
+      "id": 11153,
+      "name": "¿Fijación vencida?",
+      "outputs": 2
+    },
+    {
+      "id": 11212,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 3
+    },
+    {
+      "id": 11217,
+      "name": "¿Categoría de salud\npermitida?",
+      "outputs": 2
+    },
+    {
+      "id": 11226,
+      "name": "¿Consulta permitida?",
+      "outputs": 2
+    },
+    {
+      "id": 11235,
+      "name": "¿Operación autorizada?",
+      "outputs": 2
+    },
+    {
+      "id": 11173,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 2
+    },
+    {
+      "id": 11178,
+      "name": "¿Ofensivo, Spam, Falso\nu Otro; reporte único?",
+      "outputs": 2
+    },
+    {
+      "id": 11182,
+      "name": "¿Reportes de usuarios\ndistintos ≥3?",
+      "outputs": 2
+    },
+    {
+      "id": 11184,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 11190,
+      "name": "¿Administrador\nautorizado?",
+      "outputs": 2
+    },
+    {
+      "id": 11281,
+      "name": "¿Stock disponible y\nevento no aplicado?",
+      "outputs": 2
+    },
+    {
+      "id": 11290,
+      "name": "¿Administrador\nautorizado?",
+      "outputs": 2
+    },
+    {
+      "id": 11317,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 4
+    },
+    {
+      "id": 11322,
+      "name": "¿Cuenta Aprobada,\nsaldo ≥costo y stock\n>0?",
+      "outputs": 2
+    },
+    {
+      "id": 11341,
+      "name": "¿Siguiente estado\npermitido?",
+      "outputs": 2
+    },
+    {
+      "id": 11350,
+      "name": "¿Consulta autorizada y\nrango válido?",
+      "outputs": 2
+    },
+    {
+      "id": 11376,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 3
+    },
+    {
+      "id": 11258,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 4
+    },
+    {
+      "id": 11263,
+      "name": "¿Nombre único; costo\n>0; stock ≥1; JPG/PNG\n≤2 MB?",
+      "outputs": 2
+    },
+    {
+      "id": 11272,
+      "name": "¿Consulta permitida?",
+      "outputs": 2
+    },
+    {
+      "id": 11332,
+      "name": "¿Usuario autenticado?",
+      "outputs": 2
+    },
+    {
+      "id": 11381,
+      "name": "¿Premio no guardado y\nmenos de 50 favoritos?",
+      "outputs": 2
+    },
+    {
+      "id": 11390,
+      "name": "¿Favorito propio?",
+      "outputs": 2
+    },
+    {
+      "id": 11399,
+      "name": "¿Usuario autenticado?",
+      "outputs": 2
+    },
+    {
+      "id": 11421,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 2
+    },
+    {
+      "id": 11426,
+      "name": "¿Selección válida?",
+      "outputs": 2
+    },
+    {
+      "id": 11435,
+      "name": "¿Meta activa\nexistente?",
+      "outputs": 2
+    },
+    {
+      "id": 11439,
+      "name": "¿Saldo ≥costo y aviso\nno emitido?",
+      "outputs": 2
+    },
+    {
+      "id": 11441,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 11465,
+      "name": "¿Al menos 3\ncaracteres?",
+      "outputs": 2
+    },
+    {
+      "id": 11483,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 3
+    },
+    {
+      "id": 11488,
+      "name": "¿Campaña activa y\ndestinatarios\nelegibles?",
+      "outputs": 2
+    },
+    {
+      "id": 11497,
+      "name": "¿Notificación propia?",
+      "outputs": 2
+    },
+    {
+      "id": 11506,
+      "name": "¿Notificación\ninformativa vencida?",
+      "outputs": 2
+    },
+    {
+      "id": 11556,
+      "name": "¿Evento no notificado\na este destinatario?",
+      "outputs": 2
+    },
+    {
+      "id": 11573,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 2
+    },
+    {
+      "id": 11578,
+      "name": "¿Inscrito; faltan\n24–25 horas; aviso no\nemitido?",
+      "outputs": 2
+    },
+    {
+      "id": 11587,
+      "name": "¿Reto elegible para\nrecordatorio?",
+      "outputs": 2
+    },
+    {
+      "id": 11629,
+      "name": "¿Usuario autenticado?",
+      "outputs": 2
+    },
+    {
+      "id": 11652,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 2
+    },
+    {
+      "id": 11657,
+      "name": "¿Evento crítico con\ncontexto disponible?",
+      "outputs": 2
+    },
+    {
+      "id": 11666,
+      "name": "¿Consulta\nadministrativa\nautorizada?",
+      "outputs": 2
+    },
+    {
+      "id": 11692,
+      "name": "¿Rango ≤12 meses y\nadministrador\nautorizado?",
+      "outputs": 2
+    },
+    {
+      "id": 11767,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 2
+    },
+    {
+      "id": 11772,
+      "name": "¿Perfil propio y valor\npermitido?",
+      "outputs": 2
+    },
+    {
+      "id": 11781,
+      "name": "¿Perfil Público?",
+      "outputs": 2
+    },
+    {
+      "id": 11801,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 2
+    },
+    {
+      "id": 11806,
+      "name": "¿Casilla marcada y\nversión vigente?",
+      "outputs": 2
+    },
+    {
+      "id": 11816,
+      "name": "¿Administrador\nautorizado y versión\nnueva?",
+      "outputs": 2
+    },
+    {
+      "id": 11534,
+      "name": "¿Evento confirmado?",
+      "outputs": 2
+    },
+    {
+      "id": 11606,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 3
+    },
+    {
+      "id": 11611,
+      "name": "¿Descripción ≤1000\ncaracteres?",
+      "outputs": 2
+    },
+    {
+      "id": 11620,
+      "name": "¿Transición y\nrespuesta válidas?",
+      "outputs": 2
+    },
+    {
+      "id": 11715,
+      "name": "¿Sin respuesta previa;\n≤5 preguntas; enteros\n1–5?",
+      "outputs": 2
+    },
+    {
+      "id": 11731,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 2
+    },
+    {
+      "id": 11736,
+      "name": "¿Acceso válido y datos\nvigentes?",
+      "outputs": 2
+    },
+    {
+      "id": 11747,
+      "name": "¿Exportación\nautorizada?",
+      "outputs": 2
+    },
+    {
+      "id": 11841,
+      "name": "¿Sesión válida?",
+      "outputs": 2
+    },
+    {
+      "id": 11864,
+      "name": "¿Qué operación se\nsolicita?",
+      "outputs": 2
+    },
+    {
+      "id": 11869,
+      "name": "¿Sesión y función\nautorizadas?",
+      "outputs": 2
+    },
+    {
+      "id": 11879,
+      "name": "¿Resultado recibido?",
+      "outputs": 2
+    },
+    {
+      "id": 11882,
+      "name": "¿Existen campos con\nerror?",
+      "outputs": 2
+    },
+    {
+      "id": 11884,
+      "name": "Unir",
+      "outputs": 1
+    },
+    {
+      "id": 11908,
+      "name": "¿Fuente disponible y\nvigente?",
+      "outputs": 2
+    },
+    {
+      "id": 11912,
+      "name": "¿Cuenta institucional\nhabilitada?",
+      "outputs": 2
+    },
+    {
+      "id": 11914,
+      "name": "Unir",
+      "outputs": 1
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+<section id="hu007-bitacora">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">SPRINT 2 · EPI-03 · HU-007</p>
+<h2>Bitácora de auditoría inmutable</h2>
+</div>
+<div class="dual">
+<div class="fig"><div class="frame" style="width:620px; height:420px;"><img src="/_blob/8be833fcc875d6474d3f5290c1edb17d" alt="CU-20 Detalle: Consultar la bitácora de auditoría" style="width:590px; height:390px; object-fit:contain;"></div><p class="cap"><b>CU-20</b> · Fig. 34 (sin secuencia ni actividades propias)</p>
+<div class="status" style="width:620px;"><div class="verdict"><x-icon name="CheckCircle"></x-icon><p class="word">Cumple</p></div><p class="ev">«RF-14 / RF-14-2 / RF-42»: la IP y el objetivo se guardan (RF-42-1). Respaldo: npm run db:respaldo.</p></div></div>
+<div style="display:flex; flex-direction:column; gap:20px; width:1048px;">
+<table class="ttable" style="width:1048px;">
+<tr class="hrow"><th style="width:230px;">Eslabón</th><th>En SUMA</th></tr>
+<tr><td class="k">Requisitos</td><td>UR-48 · RF-42 · 42-1 autor, IP, objetivo y datos · 42-2 50 por página con filtros · RNF-08 · RNF-13</td></tr>
+<tr class="alt"><td class="k">Clase · código</td><td>RegistroAuditoria · GET /api/actividad · actividad.page.ts</td></tr>
+<tr><td class="k">Especificación</td><td>sprint-2/02-administracion · CA-10 a CA-12, CA-16</td></tr>
+</table>
+<div class="panel" style="width:1048px;"><p class="ptitle">Migración · backend/migraciones/sprint1-auditoria.sql</p>
+<p class="src"><span class="c">-- RF-42 · CA-12: nadie modifica ni borra la bitácora,</span><br><span class="c">-- ni siquiera desde la base de datos</span><br>CREATE OR REPLACE FUNCTION bitacora_inmutable()<br>RETURNS trigger AS $$<br>BEGIN RAISE EXCEPTION <span class="s">'La bitácora es inmutable'</span>;<br>END; $$ LANGUAGE plpgsql;<br>CREATE TRIGGER actividad_inmutable<br>&#160;&#160;BEFORE UPDATE OR DELETE ON "Actividad"<br>&#160;&#160;FOR EACH ROW EXECUTE FUNCTION bitacora_inmutable();</p></div>
+</div>
+</div>
+<p class="foot">specs/sprint-2/02-administracion · backend/migraciones/sprint1-auditoria.sql:26 · backend/src/api.mjs:1583</p>
+<div class="pnum"></div>
+<aside>HU-007 exige que toda acción administrativa quede registrada y que nadie pueda alterarla. La inmutabilidad no depende de la aplicación: un trigger de PostgreSQL rechaza cualquier UPDATE o DELETE sobre la tabla Actividad. La consulta muestra 50 registros por página con filtros por fecha, usuario y acción.</aside>
+</section>

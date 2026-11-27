@@ -1,0 +1,33 @@
+<section id="hu003-traza">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<img class="dots-tl" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<img class="dots-br" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">SPRINTS 1 Y 2 · EPI-02 · HU-003 · HU-004</p>
+<h2>Sesión segura y recuperación</h2>
+</div>
+<div class="trace">
+<table class="ttable">
+<tr class="hrow"><th style="width:250px;">Eslabón</th><th>En SUMA</th></tr>
+<tr><td class="k">Req. de usuario</td><td>UR-03 Ingresar de forma segura · UR-05 Recuperar el acceso</td></tr>
+<tr class="alt"><td class="k">Req. funcionales</td><td>RF-04-1 a 04-4: bloqueo de 15 min tras 5 intentos, vence a los 15 min · RF-07: enlace de un solo uso, 30 min</td></tr>
+<tr><td class="k">No funcionales</td><td>RNF-04 hash con sal · RNF-06 segundo factor · RNF-12 validación</td></tr>
+<tr class="alt"><td class="k">Casos de uso</td><td>CU-02 Iniciar sesión (Fig. 12, 67, 68) · CU-02.3 y 02.5 recuperación (Fig. 13, 69, 70)</td></tr>
+<tr><td class="k">Clases</td><td>Sesion · CodigoVerificacion · Usuario (dominio/acceso.mjs)</td></tr>
+<tr class="alt"><td class="k">API</td><td>POST /api/auth/login · /auth/2fa · /auth/logout · /auth/forgot · /auth/reset</td></tr>
+<tr><td class="k">Angular</td><td>login.page.ts · recuperar.page.ts · InactividadService · authGuard</td></tr>
+<tr class="alt"><td class="k">Especificación</td><td>sprint-1/02-sesion-y-acceso · sprint-2/01-recuperacion-de-acceso</td></tr>
+</table>
+<div class="status">
+<div class="verdict"><x-icon name="CheckCircle"></x-icon><p class="word">Cumple</p></div>
+<p class="evt">Pruebas que lo demuestran</p>
+<p class="ev">«RF-04-1 / RNF-06: segundo factor del administrador» · «RF-04-2: bloqueo de 15 minutos tras 5 intentos» · «RF-04-3: vence tras 15 min» · «RF-07: recuperación de un solo uso que revoca sesiones»</p>
+<p class="ev">Correo SMTP real · e2e/smoke.cjs</p>
+</div>
+</div>
+<p class="foot">specs/sprint-1/02-sesion-y-acceso · specs/sprint-2/01-recuperacion-de-acceso · backend/test/sprint.test.mjs</p>
+<div class="pnum"></div>
+<aside>(35 s) HU-003 y HU-004 cubren la entrada a la plataforma. Cada número del requisito está en el código: cinco intentos, quince minutos de bloqueo y quince de inactividad. El administrador entra con segundo factor. La recuperación envía un enlace de un solo uso que vence en 30 minutos y, al cambiar la contraseña, cierra todas las sesiones.</aside>
+</section>

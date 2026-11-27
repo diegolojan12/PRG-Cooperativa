@@ -1,0 +1,14 @@
+{
+  "UseCase": 397,
+  "Class": 61,
+  "Actor": 8,
+  "actividades": 50,
+  "secuencias": 50,
+  "trazas_comprobadas": 458,
+  "flujos_alcanzables": "50/50",
+  "orden_temporal": "50/50",
+  "subrequisitos": 179,
+  "rf": 50,
+  "operaciones": 109,
+  "estado": "VERIFICADO"
+}

@@ -1,0 +1,21 @@
+<section id="hu001-codigo">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<img class="dots-tl" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<img class="dots-br" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">HU-001 · HU-002 · CÓDIGO</p>
+<h2>La regla vive en la clase Rol</h2>
+</div>
+<div class="code">
+<div class="panel"><p class="ptitle">Dominio · dominio/acceso.mjs</p>
+<p class="src">validarPermisos(modulos, catalogo) {<br>&#160;&#160;const existentes = new Set(<br>&#160;&#160;&#160;&#160;catalogo.map((m) =&gt; m.id));<br>&#160;&#160;if (modulos.some((m) =&gt; !existentes.has(m)))<br>&#160;&#160;&#160;&#160;throw errorDeDominio(<span class="s">'Permisos no válidos.'</span>);<br>&#160;&#160;if (modulos.some(<br>&#160;&#160;&#160;&#160;&#160;&#160;(m) =&gt; !this.disponibles.includes(m)))<br>&#160;&#160;&#160;&#160;throw errorDeDominio(<span class="s">'Ese módulo no está…'</span>);<br>&#160;&#160;if (!this.obligatorios.every(<br>&#160;&#160;&#160;&#160;&#160;&#160;(m) =&gt; modulos.includes(m)))<br>&#160;&#160;&#160;&#160;throw errorDeDominio(<span class="s">'El rol debe…'</span>);<br>&#160;&#160;return [...new Set(modulos)];<br>}</p></div>
+<div class="panel"><p class="ptitle">Ruta · api.mjs · PUT /api/roles/:rol</p>
+<p class="src">route(<span class="s">'put'</span>, <span class="s">'/roles/:rol'</span>, async (req, res) =&gt; {<br>&#160;&#160;const user = await admin(req, <span class="s">'roles'</span>);<br>&#160;&#160;<span class="c">// RF-08-4: sin el módulo responde 403</span><br>&#160;&#160;await db.transaction(async (client) =&gt; {<br>&#160;&#160;&#160;&#160;const rol = await cargarRol(clave, …);<br>&#160;&#160;&#160;&#160;const modulos = rol.validarPermisos(<br>&#160;&#160;&#160;&#160;&#160;&#160;req.body.modulos, catalogo);<br>&#160;&#160;&#160;&#160;await db.query(<span class="s">'INSERT INTO "RolPermiso"…'</span>,<br>&#160;&#160;&#160;&#160;&#160;&#160;[clave, JSON.stringify(modulos)]);<br>&#160;&#160;&#160;&#160;await log(req, user,<br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="s">'Permisos actualizados'</span>, …);<br>&#160;&#160;&#160;&#160;<span class="c">// RF-08-5: anterior y nuevo en la bitácora</span><br>&#160;&#160;});<br>});</p></div>
+</div>
+<div class="note"><p class="lbl">ANGULAR</p><p class="txt">moduloGuard redirige a /panel/acceso-denegado si el rol no tiene el módulo (RF-08-4); el servidor lo rechaza igual.</p></div>
+<p class="foot">backend/src/dominio/acceso.mjs:69 · backend/src/api.mjs:1451 · frontend/src/app/core/auth/guards.ts:14</p>
+<div class="pnum"></div>
+<aside>La regla de permisos vive en la clase Rol del dominio: no acepta módulos inexistentes, ni módulos fuera de los disponibles del rol, y exige los obligatorios. La ruta solo orquesta: verifica que quien llama tenga el módulo Roles, valida con el dominio, guarda en RolPermiso y deja el cambio en la bitácora con el valor anterior y el nuevo.</aside>
+</section>

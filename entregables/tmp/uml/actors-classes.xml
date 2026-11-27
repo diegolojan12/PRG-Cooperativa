@@ -1,0 +1,224 @@
+<?xml version="1.0"?>
+<EADATA version="1.0" exporter="Enterprise Architect">
+	<Dataset_0><Data><Row><Object_ID>2</Object_ID><Object_Type>Actor</Object_Type><Name>Prospecto</Name><Package_ID>2</Package_ID><Note/></Row><Row><Object_ID>3</Object_ID><Object_Type>Actor</Object_Type><Name>Socio / Cliente</Name><Package_ID>2</Package_ID><Note/></Row><Row><Object_ID>4</Object_ID><Object_Type>Actor</Object_Type><Name>Gestor de contenidos</Name><Package_ID>2</Package_ID><Note/></Row><Row><Object_ID>5</Object_ID><Object_Type>Actor</Object_Type><Name>Administrador</Name><Package_ID>2</Package_ID><Note/></Row><Row><Object_ID>76</Object_ID><Object_Type>Class</Object_Type><Name>Prospecto</Name><Package_ID>3</Package_ID><Note/></Row><Row><Object_ID>77</Object_ID><Object_Type>Class</Object_Type><Name>Socio / Cliente</Name><Package_ID>3</Package_ID><Note/></Row><Row><Object_ID>78</Object_ID><Object_Type>Class</Object_Type><Name>Gestor de contenidos</Name><Package_ID>3</Package_ID><Note/></Row><Row><Object_ID>79</Object_ID><Object_Type>Class</Object_Type><Name>Administrador</Name><Package_ID>3</Package_ID><Note/></Row><Row><Object_ID>80</Object_ID><Object_Type>Class</Object_Type><Name>Servicio de correo</Name><Package_ID>3</Package_ID><Note/></Row><Row><Object_ID>81</Object_ID><Object_Type>Class</Object_Type><Name>Redes sociales</Name><Package_ID>3</Package_ID><Note/></Row><Row><Object_ID>101</Object_ID><Object_Type>Class</Object_Type><Name>Usuario</Name><Package_ID>7</Package_ID><Note>CRC-01 | Base original de 37 | Código confirmado
+Fuente: backend/src/dominio/acceso.mjs:112
+Representar los datos del usuario y normalizar la privacidad y el estado de su cuenta. Consultar si la cuenta está aprobada al construir la representación.
+RF-01, RF-03, RF-46, RF-48
+</Note></Row><Row><Object_ID>102</Object_ID><Object_Type>Class</Object_Type><Name>Rol</Name><Package_ID>8</Package_ID><Note>CRC-02 | Base original de 37 | Código confirmado
+Fuente: backend/src/dominio/acceso.mjs:26
+Crear roles configurables y validar los módulos que pueden recibir. Asignar la clave del rol a un usuario sin fijar una lista cerrada de roles.
+RF-08
+</Note></Row><Row><Object_ID>103</Object_ID><Object_Type>Class</Object_Type><Name>CodigoVerificacion</Name><Package_ID>8</Package_ID><Note>CRC-03 | Base original de 37 | Código confirmado
+Fuente: backend/src/dominio/acceso.mjs:147
+Generar tokens, códigos de segundo factor y huellas. Comprobar coincidencia, vigencia y uso del código.
+RF-02, RF-04, RF-07
+</Note></Row><Row><Object_ID>104</Object_ID><Object_Type>Class</Object_Type><Name>ConfirmacionCorreo</Name><Package_ID>8</Package_ID><Note>CRC-04 | Base original de 37 | Código confirmado
+Fuente: backend/src/dominio/confirmacion-correo.mjs:8
+Emitir y verificar códigos de correo, limitar intentos y reenvíos y activar la confirmación. Gestionar también el cambio de correo confirmado.
+RF-02, RF-03
+</Note></Row><Row><Object_ID>105</Object_ID><Object_Type>Class</Object_Type><Name>CuentaCooperativa</Name><Package_ID>8</Package_ID><Note>CRC-05 | Base original de 37 | Código confirmado
+Fuente: backend/src/dominio/acceso.mjs:172
+Validar formato y tipo de cuenta, normalizar estados y enmascarar el número. Aplicar transiciones de aprobación o rechazo; su invocación automática está pendiente.
+RF-05, RF-06, RF-50
+</Note></Row><Row><Object_ID>106</Object_ID><Object_Type>Class</Object_Type><Name>AceptacionTerminos</Name><Package_ID>8</Package_ID><Note>CRC-06 | Base original de 37 | Código confirmado
+Fuente: backend/src/dominio/acceso.mjs:242
+Exigir aceptación expresa de la versión vigente. Conservar versión y fecha como evidencia.
+RF-47
+</Note></Row><Row><Object_ID>107</Object_ID><Object_Type>Class</Object_Type><Name>AvisoPrivacidad</Name><Package_ID>8</Package_ID><Note>CRC-07 | Base original de 37 | Código confirmado
+Fuente: backend/src/dominio/acceso.mjs:207
+Representar la versión de términos y privacidad. Obtener los textos vigentes de la configuración y detener el registro si faltan en producción.
+RF-47
+</Note></Row><Row><Object_ID>108</Object_ID><Object_Type>Class</Object_Type><Name>CodigoReferido</Name><Package_ID>9</Package_ID><Note>CRC-08 | Base original de 37 | Código confirmado
+Fuente: backend/src/dominio/referidos.mjs:4
+Validar y generar códigos de ocho caracteres. Construir un enlace de invitación con un origen válido.
+RF-09, RF-10
+</Note></Row><Row><Object_ID>109</Object_ID><Object_Type>Class</Object_Type><Name>Referido</Name><Package_ID>9</Package_ID><Note>CRC-09 | Base original de 37 | Código confirmado
+Fuente: backend/src/dominio/referidos.mjs:41
+Representar la fila del referido y producir su consulta reducida para el socio. Controlar las transiciones de estado y exigir cuenta aprobada para aprobarlo.
+RF-11
+</Note></Row><Row><Object_ID>110</Object_ID><Object_Type>Class</Object_Type><Name>Campania</Name><Package_ID>9</Package_ID><Note>CRC-10 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Vigencia, cobertura y puntos para cada destinatario. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-13
+</Note></Row><Row><Object_ID>111</Object_ID><Object_Type>Class</Object_Type><Name>Campanias</Name><Package_ID>9</Package_ID><Note>CRC-11 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Servicio de campañas y control de superposición. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-13
+</Note></Row><Row><Object_ID>112</Object_ID><Object_Type>Class</Object_Type><Name>Nivel</Name><Package_ID>10</Package_ID><Note>CRC-12 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Umbrales configurables de progreso. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-16
+</Note></Row><Row><Object_ID>113</Object_ID><Object_Type>Class</Object_Type><Name>Gamificacion</Name><Package_ID>10</Package_ID><Note>CRC-13 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Aplicar reglas de logros y retos. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-16, RF-17, RF-18
+</Note></Row><Row><Object_ID>114</Object_ID><Object_Type>Class</Object_Type><Name>Insignia</Name><Package_ID>10</Package_ID><Note>CRC-14 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Definición de reconocimiento. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-17
+</Note></Row><Row><Object_ID>115</Object_ID><Object_Type>Class</Object_Type><Name>MovimientoPuntos</Name><Package_ID>10</Package_ID><Note>CRC-15 | Base original de 37 | Código confirmado
+Fuente: backend/src/dominio/administracion.mjs:84
+Validar el importe de un crédito y construir su clave única por actividad, evento y usuario. Identificar el referido de origen cuando corresponda.
+RF-12, RF-15
+</Note></Row><Row><Object_ID>116</Object_ID><Object_Type>Class</Object_Type><Name>AcreditacionPuntos</Name><Package_ID>10</Package_ID><Note>CRC-16 | Base original de 37 | Código confirmado
+Fuente: backend/src/dominio/administracion.mjs:101
+Registrar créditos dentro de una transacción proporcionada. Evitar duplicados y notificar solo los créditos insertados.
+RF-12
+</Note></Row><Row><Object_ID>117</Object_ID><Object_Type>Class</Object_Type><Name>Canje</Name><Package_ID>10</Package_ID><Note>CRC-17 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Validar cuenta, saldo y stock; conservar trazabilidad. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-33
+</Note></Row><Row><Object_ID>118</Object_ID><Object_Type>Class</Object_Type><Name>Premio</Name><Package_ID>10</Package_ID><Note>CRC-18 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Catálogo de recompensas. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-32, RF-33
+</Note></Row><Row><Object_ID>119</Object_ID><Object_Type>Class</Object_Type><Name>ProgresoReto</Name><Package_ID>11</Package_ID><Note>CRC-19 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Avance único del participante en un reto. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-18
+</Note></Row><Row><Object_ID>120</Object_ID><Object_Type>Class</Object_Type><Name>Reto</Name><Package_ID>11</Package_ID><Note>CRC-20 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Objetivos y reglas de participación. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-18
+</Note></Row><Row><Object_ID>121</Object_ID><Object_Type>Class</Object_Type><Name>Inscripcion</Name><Package_ID>11</Package_ID><Note>CRC-21 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Una inscripción por usuario y taller. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-24, RF-25
+</Note></Row><Row><Object_ID>122</Object_ID><Object_Type>Class</Object_Type><Name>Taller</Name><Package_ID>11</Package_ID><Note>CRC-22 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Oferta de talleres y disponibilidad. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-23, RF-24
+</Note></Row><Row><Object_ID>123</Object_ID><Object_Type>Class</Object_Type><Name>ResultadoCapacitacion</Name><Package_ID>11</Package_ID><Note>CRC-23 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Resultado de evaluación y acreditación. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-22
+</Note></Row><Row><Object_ID>124</Object_ID><Object_Type>Class</Object_Type><Name>Capacitacion</Name><Package_ID>11</Package_ID><Note>CRC-24 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Material de formación y cuestionario. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-21, RF-22
+</Note></Row><Row><Object_ID>125</Object_ID><Object_Type>Class</Object_Type><Name>PreguntaEvaluacion</Name><Package_ID>11</Package_ID><Note>CRC-25 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Pregunta de evaluación con respuesta protegida. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-22
+</Note></Row><Row><Object_ID>126</Object_ID><Object_Type>Class</Object_Type><Name>PartidaTrivia</Name><Package_ID>11</Package_ID><Note>CRC-26 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Partidas con límite diario y tiempo por pregunta. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-20
+</Note></Row><Row><Object_ID>127</Object_ID><Object_Type>Class</Object_Type><Name>PreguntaTrivia</Name><Package_ID>11</Package_ID><Note>CRC-27 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Especializa una pregunta con tema y dificultad. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-19, RF-20
+</Note></Row><Row><Object_ID>128</Object_ID><Object_Type>Class</Object_Type><Name>Reaccion</Name><Package_ID>12</Package_ID><Note>CRC-28 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Una reacción por usuario y publicación. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-28
+</Note></Row><Row><Object_ID>129</Object_ID><Object_Type>Class</Object_Type><Name>Publicacion</Name><Package_ID>12</Package_ID><Note>CRC-29 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Publicación de comunidad y contenido oficial. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-26, RF-29
+</Note></Row><Row><Object_ID>130</Object_ID><Object_Type>Class</Object_Type><Name>Comentario</Name><Package_ID>12</Package_ID><Note>CRC-30 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Comentario vinculado a una publicación. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-27
+</Note></Row><Row><Object_ID>131</Object_ID><Object_Type>Class</Object_Type><Name>Reporte</Name><Package_ID>12</Package_ID><Note>CRC-31 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Reporte de moderación; no es un informe de indicadores. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-30
+</Note></Row><Row><Object_ID>132</Object_ID><Object_Type>Class</Object_Type><Name>ContenidoComunidad</Name><Package_ID>12</Package_ID><Note>CRC-32 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Datos comunes a publicaciones y comentarios. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-26, RF-27, RF-30
+</Note></Row><Row><Object_ID>133</Object_ID><Object_Type>Class</Object_Type><Name>ContenidoSalud</Name><Package_ID>12</Package_ID><Note>CRC-33 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Artículos y servicios de salud y bienestar. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-31
+</Note></Row><Row><Object_ID>134</Object_ID><Object_Type>Class</Object_Type><Name>Notificacion</Name><Package_ID>13</Package_ID><Note>CRC-34 | Base original de 37 | Código confirmado
+Fuente: backend/src/dominio/administracion.mjs:61
+Representar el aviso dirigido a un usuario. Permitir marcarlo como leído.
+RF-37, RF-38, RF-39, RF-40
+</Note></Row><Row><Object_ID>135</Object_ID><Object_Type>Class</Object_Type><Name>SolicitudSoporte</Name><Package_ID>13</Package_ID><Note>CRC-35 | Base original de 37 | Modelada pendiente
+Fuente: Modelo original de 37 y CRC
+Atención de solicitudes con historial. Completar esta responsabilidad corresponde al diseño pendiente de implementación.
+RF-41
+</Note></Row><Row><Object_ID>136</Object_ID><Object_Type>Class</Object_Type><Name>RegistroAuditoria</Name><Package_ID>13</Package_ID><Note>CRC-36 | Base original de 37 | Código confirmado
+Fuente: backend/src/dominio/administracion.mjs:45
+Construir un registro inmutable de la acción, actor, objetivo, IP y fecha. Identificar como Sistema las acciones sin usuario.
+RF-42
+</Note></Row><Row><Object_ID>137</Object_ID><Object_Type>Class</Object_Type><Name>ParametroGlobal</Name><Package_ID>13</Package_ID><Note>CRC-37 | Base original de 37 | Código confirmado
+Fuente: backend/src/dominio/administracion.mjs:10
+Validar y normalizar el valor monetario del punto y los puntos por actividad. Rechazar valores fuera de sus límites.
+RF-14
+</Note></Row><Row><Object_ID>181</Object_ID><Object_Type>Actor</Object_Type><Name>Redes sociales</Name><Package_ID>2</Package_ID><Note>Actor secundario: WhatsApp, Facebook y el menú de compartir del dispositivo.</Note></Row><Row><Object_ID>190</Object_ID><Object_Type>Class</Object_Type><Name>Modulo</Name><Package_ID>8</Package_ID><Note>CRC-38 | Clase adicional del código | Código confirmado
+Fuente: backend/src/dominio/acceso.mjs:88
+Describir cada opción del catálogo de módulos. Indicar su disponibilidad y si pertenece al ámbito de administración.
+RF-08, RF-49
+</Note></Row><Row><Object_ID>191</Object_ID><Object_Type>Class</Object_Type><Name>Sesion</Name><Package_ID>8</Package_ID><Note>CRC-39 | Clase adicional del código | Código confirmado
+Fuente: backend/src/dominio/acceso.mjs:98
+Calcular el vencimiento por 15 minutos de inactividad. Conservar huella y usuario y comprobar si la sesión sigue vigente.
+RF-04
+</Note></Row><Row><Object_ID>192</Object_ID><Object_Type>Class</Object_Type><Name>ProteccionDatos</Name><Package_ID>13</Package_ID><Note>CRC-40 | Clase adicional del código | Código confirmado
+Fuente: backend/src/dominio/proteccion-datos.mjs:11
+Cifrar y descifrar datos de contacto y cuenta. Generar índices de búsqueda y abrir filas protegidas sin exponer sus índices.
+RNF-05
+</Note></Row><Row><Object_ID>1166</Object_ID><Object_Type>Actor</Object_Type><Name>Usuario de la plataforma</Name><Package_ID>2</Package_ID><Note>Actor general para funciones comunes a los usuarios autenticados. Los permisos de negocio se asignan por rol y capacidad.</Note></Row><Row><Object_ID>1167</Object_ID><Object_Type>Actor</Object_Type><Name>Fuente institucional de la Cooperativa</Name><Package_ID>2</Package_ID><Note>Servicio externo de datos autorizados de titularidad y condición habilitada. Solo lectura; no es la base interna de SUMA.</Note></Row><Row><Object_ID>1168</Object_ID><Object_Type>Actor</Object_Type><Name>Servicio de correo</Name><Package_ID>2</Package_ID><Note>Servicio externo de correo transaccional para confirmación, segundo factor y recuperación.</Note></Row><Row><Object_ID>1169</Object_ID><Object_Type>Class</Object_Type><Name>ValidadorCuenta</Name><Package_ID>8</Package_ID><Note>CRC-43 | Derivada del CRC | Propuesta del CRC
+Fuente: CRC y requisitos corregidos
+Consultar fuente autorizada; no aprobar ni rechazar ante falla técnica.
+RF-05-4, RF-50
+Falta una clase que coordine el cotejo institucional sin dictamen administrativo. Reúne consulta, aplicación del resultado y registro de evidencia.</Note></Row><Row><Object_ID>1170</Object_ID><Object_Type>Class</Object_Type><Name>ValidadorReferido</Name><Package_ID>9</Package_ID><Note>CRC-44 | Derivada del CRC | Propuesta del CRC
+Fuente: CRC y requisitos corregidos
+Registro activo, cuenta validada, referidor habilitado y relación única; confirmar estado y créditos juntos.
+RF-11-4, RF-12-2
+Las transiciones actuales no comprueban por sí solas registro activo, referidor habilitado y relación única ni coordinan todo el flujo automático.</Note></Row><Row><Object_ID>1171</Object_ID><Object_Type>Class</Object_Type><Name>SolicitudValidacion</Name><Package_ID>8</Package_ID><Note>CRC-45 | Derivada del CRC | Propuesta del CRC
+Fuente: CRC y requisitos corregidos
+Solicitud persistida y recuperable después de reinicios.
+RF-05, RF-50-2
+Se necesita conservar una validación Pendiente y su siguiente reintento aunque el proceso se reinicie.</Note></Row><Row><Object_ID>1172</Object_ID><Object_Type>Class</Object_Type><Name>IntentoValidacion</Name><Package_ID>8</Package_ID><Note>CRC-46 | Derivada del CRC | Propuesta del CRC
+Fuente: CRC y requisitos corregidos
+Evidencia inmutable de cada consulta institucional.
+RF-42, RF-50-2
+Cada consulta debe conservar su propio resultado, origen y vigencia; no basta sobrescribir el estado de la cuenta.</Note></Row><Row><Object_ID>1174</Object_ID><Object_Type>Class</Object_Type><Name>AdaptadorInstitucional</Name><Package_ID>8</Package_ID><Note>CRC-48 | Derivada del CRC | Propuesta del CRC
+Fuente: CRC y requisitos corregidos
+Implementa el contrato institucional sin exponer saldos ni movimientos financieros.
+RF-50-1
+Separa el acceso concreto a la fuente autorizada de las reglas de titularidad. Implementa FuenteInstitucional.</Note></Row><Row><Object_ID>1175</Object_ID><Object_Type>Class</Object_Type><Name>RegistroTitularidad</Name><Package_ID>8</Package_ID><Note>CRC-49 | Derivada del CRC | Propuesta del CRC
+Fuente: CRC y requisitos corregidos
+Datos mínimos recibidos de la fuente institucional; no son una cuenta autodeclarada.
+RF-50-1
+Agrupa los datos mínimos de existencia, titular y condición recibidos; evita utilizar la cuenta declarada como evidencia institucional.</Note></Row><Row><Object_ID>1176</Object_ID><Object_Type>Class</Object_Type><Name>EventoNotificacion</Name><Package_ID>13</Package_ID><Note>CRC-51 | Derivada del CRC | Propuesta del CRC
+Fuente: CRC y requisitos corregidos
+Evento persistido en la misma transacción del cambio; deduplicación por destinatario.
+RF-12-2, RF-39, RF-50-2
+Conserva el evento de aviso en la misma transacción del cambio y permite reintentar su entrega sin duplicarla.</Note></Row><Row><Object_ID>1177</Object_ID><Object_Type>Class</Object_Type><Name>Favorito</Name><Package_ID>13</Package_ID><Note>CRC-52 | Derivada del CRC | Propuesta del CRC
+Fuente: CRC y requisitos corregidos
+Preferencia única por usuario y premio.
+RF-34
+Registra la relación única entre usuario y premio y su fecha, necesaria para administrar la lista de favoritos.</Note></Row><Row><Object_ID>1178</Object_ID><Object_Type>Class</Object_Type><Name>MetaCanje</Name><Package_ID>13</Package_ID><Note>CRC-53 | Derivada del CRC | Propuesta del CRC
+Fuente: CRC y requisitos corregidos
+Premio meta y aviso al alcanzarlo.
+RF-35
+Representa el premio elegido como meta y el avance hacia su costo, separado del canje ya solicitado.</Note></Row><Row><Object_ID>1179</Object_ID><Object_Type>Class</Object_Type><Name>Encuesta</Name><Package_ID>13</Package_ID><Note>CRC-54 | Derivada del CRC | Propuesta del CRC
+Fuente: CRC y requisitos corregidos
+Encuesta de hasta 5 preguntas con escala de 1 a 5.
+RF-44
+Define el instrumento, sus preguntas y su disponibilidad; no equivale a una respuesta individual.</Note></Row><Row><Object_ID>1180</Object_ID><Object_Type>Class</Object_Type><Name>RespuestaEncuesta</Name><Package_ID>13</Package_ID><Note>CRC-55 | Derivada del CRC | Propuesta del CRC
+Fuente: CRC y requisitos corregidos
+Una respuesta por usuario y evento participado.
+RF-44-1
+Vincula respuestas con el usuario y la encuesta y permite garantizar una respuesta por participación.</Note></Row><Row><Object_ID>1181</Object_ID><Object_Type>Class</Object_Type><Name>ReportePrograma</Name><Package_ID>13</Package_ID><Note>CRC-56 | Derivada del CRC | Propuesta del CRC
+Fuente: CRC y requisitos corregidos
+Indicadores y reporte del programa de referidos.
+RF-43, RF-45
+Calcula indicadores de conversión y captación. Reporte ya es el reporte de moderación de contenidos y tiene otra responsabilidad.</Note></Row><Row><Object_ID>1182</Object_ID><Object_Type>Class</Object_Type><Name>ResultadoValidacion</Name><Package_ID>13</Package_ID><Note>CRC-50 | Derivada del CRC | Propuesta del CRC
+Fuente: CRC y requisitos corregidos
+Valor de resultado automático: Pendiente, Aprobado o Rechazado, con causa y referencia de evidencia.
+RF-05-4, RF-11-4, RF-50-2
+Comparte un resultado con estado, causa y evidencia entre validadores, sin confundir falta de respuesta con rechazo.</Note></Row><Row><Object_ID>1550</Object_ID><Object_Type>Class</Object_Type><Name>PerfilPublico</Name><Package_ID>7</Package_ID><Note>CRC-41 | Clase adicional del código | Código confirmado
+Fuente: backend/src/dominio/perfil.mjs:10
+Producir un perfil solo cuando el usuario esté activo y haya elegido hacerlo público. Exponer nombre de pila, nivel e insignias; estos dos últimos aún salen vacíos.
+RF-46
+</Note></Row><Row><Object_ID>1551</Object_ID><Object_Type>Class</Object_Type><Name>Database</Name><Package_ID>13</Package_ID><Note>CRC-42 | Clase adicional del código | Código confirmado
+Fuente: backend/src/database.mjs:29
+Gestionar consultas y transacciones de PostgreSQL y aplicar migraciones. Proteger filas personales y preparar catálogos y datos iniciales.
+RF-01, RF-11, RF-12, RF-42
+</Note></Row></Data></Dataset_0></EADATA>
+

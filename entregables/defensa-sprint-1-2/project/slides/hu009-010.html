@@ -1,0 +1,23 @@
+<section id="hu009-010">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">SPRINT 2 · EPI-04 · HU-009 · HU-010 · TRANSVERSALES</p>
+<h2>Avisos claros y ayuda en cada campo</h2>
+</div>
+<table class="ttable" style="width:1696px;">
+<tr class="hrow"><th style="width:14%;">Historia</th><th style="width:30%;">Requisitos</th><th style="width:22%;">Criterios</th><th>Prueba · estado</th></tr>
+<tr><td class="k">HU-009 Avisos</td><td>UR-53 · RF-49-3 · RNF-15 (WCAG 2.2 AA)</td><td>03 · CA-03, CA-04</td><td>auth.spec.ts «Avisos (RF-49, RF-49-3)» · Cumple</td></tr>
+<tr class="alt"><td class="k">HU-010 Ayuda</td><td>UR-53 · RF-49-1, RF-49-2 · RNF-16</td><td>03 · CA-05, CA-06</td><td>features.spec.ts «Campos con ayuda y error» · Cumple</td></tr>
+</table>
+<div class="code">
+<div class="panel"><p class="ptitle">HU-009 · core/ui/aviso.service.ts</p>
+<p class="src">export class AvisoService {<br>&#160;&#160;static readonly MINIMO_MS = 4000; <span class="c">// CA-03</span><br>&#160;&#160;exito(texto: string) {<br>&#160;&#160;&#160;&#160;this.mostrar(<span class="s">'exito'</span>, texto, 5000); }<br>&#160;&#160;error(texto: string) {<br>&#160;&#160;&#160;&#160;this.mostrar(<span class="s">'error'</span>, texto, 8000); }<br>&#160;&#160;<span class="c">// color + icono + texto; role="alert"</span><br>&#160;&#160;<span class="c">// en error y role="status" en éxito</span><br>}</p></div>
+<div class="panel"><p class="ptitle">HU-010 · shared/campo/CampoComponent</p>
+<p class="src"><span class="c">// RF-49-1: sin ayuda, no compila</span><br>readonly ayuda = input.required&lt;string&gt;();<br>readonly error = input&lt;string | null&gt;(null);<br><span class="c">// plantilla:</span><br>&lt;small class="s-help"&gt;{{ ayuda() }}&lt;/small&gt;<br>@if (error(); as mensaje) {<br>&#160;&#160;&lt;small class="s-error"&gt;{{ mensaje }}&lt;/small&gt;<br>}&#160;<span class="c">// RF-49-2: causa y corrección</span></p></div>
+</div>
+<p class="foot">specs/sprint-2/03-interfaz · frontend/src/app/core/ui/aviso.service.ts · shared/campo/</p>
+<div class="pnum"></div>
+<aside>HU-009 y HU-010 son transversales: no tienen un caso de uso propio porque aplican a todas las pantallas. Los avisos se distinguen por color, icono y texto, duran al menos 4 segundos y se anuncian a lectores de pantalla. Cada campo exige un texto de ayuda: si falta, el componente no compila.</aside>
+</section>

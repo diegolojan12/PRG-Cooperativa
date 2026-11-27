@@ -1,0 +1,24 @@
+<section id="admin-interfaz">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<img class="dots-tl" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<img class="dots-br" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">SPRINT 2 · EPI-03 · EPI-04 · HU-005 A HU-010</p>
+<h2>Administración e interfaz</h2>
+</div>
+<table class="mtable">
+<tr class="hrow"><th style="width:17%;">Historia</th><th style="width:22%;">Requisito</th><th style="width:13%;">Caso de uso</th><th style="width:26%;">Dónde se cumple</th><th>Prueba</th></tr>
+<tr><td>HU-005 Panel</td><td>RF-45-1 · 6 indicadores</td><td>CU-15 · Fig. 28</td><td>GET /api/indicadores</td><td>«RF-45-1: tablero con 6 indicadores»</td></tr>
+<tr class="alt"><td>HU-006 Configuración</td><td>RF-14, 14-1, 14-2</td><td>CU-19 · Fig. 109</td><td>ParametroGlobal · PUT /configuracion</td><td>«RF-14 / RF-14-2 / RF-42»</td></tr>
+<tr><td>HU-007 Bitácora</td><td>RF-42, 42-1, 42-2</td><td>CU-20 · Fig. 34</td><td>trigger actividad_inmutable</td><td>«RF-14 / RF-14-2 / RF-42»</td></tr>
+<tr class="alt"><td>HU-008 Interfaz por rol</td><td>RF-49-4 · RNF-18</td><td>CU-02.4</td><td>interfazMatch · ShellComponent</td><td>«Menú por rol» · smoke a 390 px</td></tr>
+<tr><td>HU-009 Avisos</td><td>RF-49-3 · RNF-15</td><td>Transversal</td><td>AvisoService (4 s mínimo)</td><td>«Avisos (RF-49, RF-49-3)»</td></tr>
+<tr class="alt"><td>HU-010 Ayuda en campos</td><td>RF-49-1, 49-2 · RNF-16</td><td>Transversal</td><td>CampoComponent</td><td>«Campos con ayuda y error»</td></tr>
+</table>
+<div class="note"><p class="lbl">CLAVE</p><p class="txt">La bitácora es inmutable en la propia base de datos: un trigger rechaza cualquier UPDATE o DELETE sobre la tabla Actividad.</p></div>
+<p class="foot">specs/sprint-2/02-administracion · specs/sprint-2/03-interfaz · migraciones/sprint1-auditoria.sql</p>
+<div class="pnum"></div>
+<aside>(40 s) Estas seis historias dan autonomía a la administración y claridad a la interfaz. El panel muestra seis indicadores; la configuración valida cada parámetro y deja una fila de bitácora con el valor anterior y el nuevo; y la bitácora no se puede alterar ni desde la base de datos. En interfaz, cada rol entra a su experiencia, los avisos se distinguen por color, icono y texto, y todo campo tiene ayuda y mensaje de error.</aside>
+</section>

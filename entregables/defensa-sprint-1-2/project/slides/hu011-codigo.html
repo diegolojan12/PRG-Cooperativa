@@ -1,0 +1,21 @@
+<section id="hu011-codigo">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<img class="dots-tl" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<img class="dots-br" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">HU-011 · HU-012 · CÓDIGO</p>
+<h2>El dominio impide el dictamen inválido</h2>
+</div>
+<div class="code">
+<div class="panel"><p class="ptitle">Dominio · dominio/referidos.mjs</p>
+<p class="src">#dictaminar(estado, fechaDecision, estadoCuenta) {<br>&#160;&#160;if (this.estado !== <span class="s">'PENDIENTE'</span>)<br>&#160;&#160;&#160;&#160;throw errorDeDominio(<span class="s">'Solo se dictaminan</span><br><span class="s">&#160;&#160;&#160;&#160;&#160;&#160;referidos en estado Pendiente.'</span>, 409);<br>&#160;&#160;if (estado === <span class="s">'APROBADO'</span> &amp;&amp;<br>&#160;&#160;&#160;&#160;&#160;&#160;!CuentaCooperativa.estaAprobada(estadoCuenta))<br>&#160;&#160;&#160;&#160;throw errorDeDominio(<span class="s">'La cuenta vinculada</span><br><span class="s">&#160;&#160;&#160;&#160;&#160;&#160;del referido debe estar Aprobada.'</span>, 409);<br>&#160;&#160;Object.assign(this, { estado, fechaDecision });<br>}&#160;<span class="c">// RF-11-4</span></p></div>
+<div class="panel"><p class="ptitle">Ruta · api.mjs · PATCH /referidos/:id/dictamen</p>
+<p class="src">const user = await admin(req, <span class="s">'referidos'</span>);<br>await db.transaction(async (client) =&gt; {<br>&#160;&#160;const decision = new Referido(ref);<br>&#160;&#160;decision.aprobar(cuenta?.cuentaEstado, fecha);<br>&#160;&#160;await db.query(<span class="s">'UPDATE "Referido" …'</span>);<br>&#160;&#160;await acreditacion.registrar(<span class="s">'REFERIDO'</span>,<br>&#160;&#160;&#160;&#160;ref.id, [ref.socioId, destinatario], …);<br>&#160;&#160;await log(req, user, <span class="s">'Dictamen de referido'</span>,<br>&#160;&#160;&#160;&#160;…, { datos: { anterior, nuevo } });<br>&#160;&#160;await notify(ref.socioId, …);<br>});&#160;<span class="c">// todo o nada: dos dictámenes → 200 y 409</span></p></div>
+</div>
+<div class="note"><p class="lbl">RESULTADO</p><p class="txt">Si dos administradores dictaminan el mismo referido a la vez, uno recibe 200 y el otro 409: los puntos se acreditan una sola vez por persona.</p></div>
+<p class="foot">backend/src/dominio/referidos.mjs:55 · backend/src/api.mjs:1097 · frontend/src/app/features/referidos/referidos.page.ts</p>
+<div class="pnum"></div>
+<aside>La regla de negocio vive en la clase Referido: no se puede dictaminar algo que no esté pendiente, ni aprobar sin la cuenta vinculada aprobada. La ruta lo ejecuta todo en una transacción: actualiza el estado, acredita los puntos a ambas personas, registra la bitácora y notifica. Si dos administradores dictaminan a la vez, uno recibe 200 y el otro 409. (40 s)</aside>
+</section>

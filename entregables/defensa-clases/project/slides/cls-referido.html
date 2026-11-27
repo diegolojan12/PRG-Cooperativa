@@ -1,0 +1,26 @@
+<section id="cls-referido">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<img class="dots-tl" src="/_blob/1e2fea8d754caedaac7d450c0f54bca4" alt="">
+<img class="dots-br" src="/_blob/1e2fea8d754caedaac7d450c0f54bca4" alt="">
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">DIAGRAMA DE CLASES · REFERIDOS · HU-011 · HU-012</p>
+<h2>Referido y CodigoReferido</h2>
+</div>
+<div class="clases2">
+<div class="crow">
+<div class="frame"><img class="cimg" src="/_blob/122a9db3fb02fbcfe03cba224932693b" alt="Clase Referido en Enterprise Architect"></div>
+<div class="panel"><p class="ptitle">Referido&#160;&#160;<span class="rt">backend/src/dominio/referidos.mjs:41</span></p>
+<p class="src">export class Referido {<br>&#160;&#160;aprobar(estadoCuenta, fechaDecision) {<br>&#160;&#160;&#160;&#160;this.#dictaminar(<span class="s">'APROBADO'</span>, fechaDecision, estadoCuenta); }<br>&#160;&#160;rechazar(fechaDecision) {<br>&#160;&#160;&#160;&#160;this.#dictaminar(<span class="s">'RECHAZADO'</span>, fechaDecision); }<br>&#160;&#160;#dictaminar(estado, fecha, estadoCuenta) { … }&#160;<span class="c">// RF-11-4</span><br>&#160;&#160;consultaSocio() { … } }&#160;<span class="c">// vista privada del socio</span></p></div>
+</div>
+<div class="crow">
+<div class="frame"><img class="cimg" src="/_blob/3db3f47748a6f110b57aa4d2114ede1f" alt="Clase CodigoReferido en Enterprise Architect"></div>
+<div class="panel"><p class="ptitle">CodigoReferido&#160;&#160;<span class="rt">backend/src/dominio/referidos.mjs:4</span></p>
+<p class="src">export class CodigoReferido {<br>&#160;&#160;constructor(codigo) {<br>&#160;&#160;&#160;&#160;if (!/^[A-Z0-9]{8}$/.test(codigo)) throw errorDeDominio(…);<br>&#160;&#160;&#160;&#160;this.codigo = codigo; }<br>&#160;&#160;static generar() { … }&#160;<span class="c">// 8 letras o números al azar</span><br>&#160;&#160;enlace(origen) {&#160;<span class="c">// /registro?ref=CODIGO</span><br>&#160;&#160;&#160;&#160;const url = new URL(<span class="s">'/registro'</span>, origen); … } }</p></div>
+</div>
+</div>
+<p class="foot">Diagrama de clases (Enterprise Architect) · Documento de Visión, Figura 3</p>
+<div class="pnum"></div>
+<aside>(20 s) Referido concentra la regla del dictamen: solo se dictaminan pendientes y solo se aprueba con la cuenta vinculada aprobada. CodigoReferido valida el código de ocho caracteres, lo genera y arma el enlace de invitación.</aside>
+</section>

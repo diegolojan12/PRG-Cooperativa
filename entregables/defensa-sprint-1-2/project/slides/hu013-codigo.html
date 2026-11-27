@@ -1,0 +1,19 @@
+<section id="hu013-codigo">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">HU-013 · HU-014 · CÓDIGO</p>
+<h2>La secuencia, línea por línea</h2>
+</div>
+<div class="code">
+<div class="panel"><p class="ptitle">Ruta · api.mjs · POST /api/auth/register</p>
+<p class="src">if (setting?.valor !== <span class="s">'true'</span>)&#160;&#160;<span class="c">// corte 1</span><br>&#160;&#160;fail(<span class="s">'El registro está cerrado…'</span>, 403);<br>const p = person(req.body);&#160;&#160;&#160;&#160;&#160;<span class="c">// RF-01-1</span><br>const clave = password(req.body.clave);<br>const aceptacion = new AceptacionTerminos(<br>&#160;&#160;aviso, req.body.aceptaTerminos, …);<br><span class="c">// RF-47: corte 2, sin aceptar no hay alta</span><br>const codigo = req.body.codigoReferido<br>&#160;&#160;? new CodigoReferido(…) : null;&#160;<span class="c">// opcional</span><br>const [duplicado] = await db.query(…);<br>if (duplicado) fail(<span class="s">'Ese celular ya está</span><br><span class="s">&#160;&#160;registrado.'</span>, 409);&#160;&#160;<span class="c">// corte 3 · UR-14</span></p></div>
+<div class="panel"><p class="ptitle">Dominio · dominio/confirmacion-correo.mjs</p>
+<p class="src">emitir(usuarioId, ahora) {<br>&#160;&#160;const codigo =<br>&#160;&#160;&#160;&#160;CodigoVerificacion.segundoFactor();<br>&#160;&#160;const vence = new Date(<br>&#160;&#160;&#160;&#160;ahora + 10 * MINUTO).toISOString();<br>&#160;&#160;<span class="c">// RF-02-1: 6 dígitos, vence en 10 min</span><br>&#160;&#160;return { codigo, vence,<br>&#160;&#160;&#160;&#160;huella: this.firmar(usuarioId, vence,<br>&#160;&#160;&#160;&#160;&#160;&#160;codigo) };<br>}<br><span class="c">// en la base solo queda la huella HMAC,</span><br><span class="c">// nunca el código (Constitución III.2)</span></p></div>
+</div>
+<div class="note"><p class="lbl">ANGULAR</p><p class="txt">registro.page.ts conserva los datos y el progreso de los 3 pasos; confirmar-correo.page.ts permite confirmar o reenviar (máximo 3 por hora, RF-02-3).</p></div>
+<p class="foot">backend/src/api.mjs:674 y 657 · backend/src/dominio/confirmacion-correo.mjs:21 · features/publico/</p>
+<div class="pnum"></div>
+<aside>La ruta de registro sigue la secuencia del diagrama con sus tres cortes: registro cerrado, términos no aceptados y celular o correo repetido. El código de confirmación lo emite el dominio: seis dígitos que vencen en diez minutos. En la base de datos solo queda la huella, nunca el código.</aside>
+</section>

@@ -1,0 +1,26 @@
+<section id="cls-puntos">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<img class="dots-tl" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<img class="dots-br" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">DIAGRAMA DE CLASES · AVISOS Y PUNTOS · HU-012 · HU-016</p>
+<h2>Notificacion y MovimientoPuntos</h2>
+</div>
+<div class="clases2">
+<div class="crow">
+<div class="frame"><img class="cimg" src="/_blob/9f5559543249547bd9a44ddc0fdbdfb9" alt="Clase Notificacion en Enterprise Architect"></div>
+<div class="panel"><p class="ptitle">Notificacion&#160;&#160;<span class="rt">backend/src/dominio/administracion.mjs:61</span></p>
+<p class="src">export class Notificacion {<br>&#160;&#160;constructor(usuarioId, titulo, mensaje, fecha, leida = false) {<br>&#160;&#160;&#160;&#160;Object.assign(this, { usuarioId, titulo, mensaje, fecha,<br>&#160;&#160;&#160;&#160;&#160;&#160;leida: Boolean(leida) });<br>&#160;&#160;}<br>&#160;&#160;marcarLeida() { this.leida = true; }&#160;<span class="c">// RF-39</span><br>}</p></div>
+</div>
+<div class="crow">
+<div class="frame"><img class="cimg" src="/_blob/be0fe322e9179533a5feff24b4eed557" alt="Clase MovimientoPuntos en Enterprise Architect"></div>
+<div class="panel"><p class="ptitle">MovimientoPuntos&#160;&#160;<span class="rt">backend/src/dominio/administracion.mjs:84</span></p>
+<p class="src">export class MovimientoPuntos {<br>&#160;&#160;constructor(usuarioId, actividad, eventoId, cantidad, fecha) {<br>&#160;&#160;&#160;&#160;if (!Number.isSafeInteger(cantidad) || cantidad &gt; 10000)<br>&#160;&#160;&#160;&#160;&#160;&#160;throw errorDeDominio(<span class="s">'El parámetro de puntos…'</span>, 409);<br>&#160;&#160;&#160;&#160;const clave = actividad.toLowerCase() + <span class="s">':'</span> + eventoId<br>&#160;&#160;&#160;&#160;&#160;&#160;+ <span class="s">':'</span> + usuarioId;&#160;<span class="c">// un crédito por evento y persona</span><br>&#160;&#160;&#160;&#160;Object.assign(this, { clave, usuarioId, cantidad, … }); } }</p></div>
+</div>
+</div>
+<p class="foot">Diagrama de clases (Enterprise Architect) · Documento de Visión, Figura 3</p>
+<div class="pnum"></div>
+<aside>(20 s) Notificacion es el aviso que recibe el usuario, por ejemplo cuando se revisa su cuenta o su referido. MovimientoPuntos es cada crédito de puntos; su clave combina actividad, evento y persona, así un mismo evento nunca acredita dos veces.</aside>
+</section>

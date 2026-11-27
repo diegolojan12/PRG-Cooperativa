@@ -1,0 +1,32 @@
+<section id="hu015-traza">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">SPRINT 2 · EPI-06 · HU-015</p>
+<h2>Vincular la cuenta de la Cooperativa</h2>
+</div>
+<div class="trace">
+<table class="ttable">
+<tr class="hrow"><th style="width:250px;">Eslabón</th><th>En SUMA</th></tr>
+<tr><td class="k">Req. de usuario</td><td>UR-07 vincular su cuenta · UR-09 referir con cuenta aprobada · UR-14</td></tr>
+<tr class="alt"><td class="k">Req. funcionales</td><td>RF-05-1 tipo y 10 dígitos · 05-2 queda Pendiente · 05-5 · 05-6 nuevo intento tras rechazo · RF-06</td></tr>
+<tr><td class="k">No funcionales</td><td>RNF-05 número cifrado · RNF-23 no guarda saldos ni movimientos</td></tr>
+<tr class="alt"><td class="k">Casos de uso</td><td>CU-04 Solicitar vinculación · CU-04.1 · CU-04.2 · CU-05.4</td></tr>
+<tr><td class="k">Clases</td><td>CuentaCooperativa · Usuario (dominio/acceso.mjs)</td></tr>
+<tr class="alt"><td class="k">API</td><td>GET · POST /api/auth/cuenta</td></tr>
+<tr><td class="k">Angular</td><td>mi-cuenta.page.ts (/panel/mi-cuenta, número enmascarado)</td></tr>
+<tr class="alt"><td class="k">Especificación</td><td>sprint-2/06-cuenta-cooperativa · CA-01 a CA-15</td></tr>
+<tr><td class="k">Prueba</td><td>«HU-015 / HU-016 / RF-06: vinculación, cola de revisión, rechazo y nuevo intento»</td></tr>
+</table>
+<div class="status">
+<div class="verdict"><x-icon name="CheckCircle"></x-icon><p class="word">Cumple</p></div>
+<p class="evt">Pruebas que lo demuestran</p>
+<p class="ev">«HU-015 / HU-016 / RF-06» · «RF-11: vinculación, código, registro asociado y exportación privada»</p>
+<p class="ev">Navegador: alta, número enmascarado y revelación solo por el titular.</p>
+</div>
+</div>
+<p class="foot">specs/sprint-2/06-cuenta-cooperativa · backend/test/sprint.test.mjs</p>
+<div class="pnum"></div>
+<aside>HU-015 permite al socio vincular su cuenta de la Cooperativa indicando el tipo y los diez dígitos. La cuenta queda pendiente hasta que un administrador la verifica, y sin cuenta aprobada no puede referir. SUMA no guarda saldos ni movimientos: solo el número, cifrado.</aside>
+</section>

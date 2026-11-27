@@ -1,0 +1,33 @@
+<section id="hu011-traza">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<img class="dots-tl" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<img class="dots-br" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">SPRINT 2 · EPI-05 · HU-011 · HU-012</p>
+<h2>Gestión y dictamen de referidos</h2>
+</div>
+<div class="trace">
+<table class="ttable">
+<tr class="hrow"><th style="width:250px;">Eslabón</th><th>En SUMA</th></tr>
+<tr><td class="k">Req. de usuario</td><td>UR-13 asociado a quien invitó · UR-16 aprobar o rechazar · UR-17 · UR-54</td></tr>
+<tr class="alt"><td class="k">Req. funcionales</td><td>RF-11 · 11-3 listado de 20 por página · 11-4 dictamen con cuenta Aprobada · 11-5 asociar en 30 días · 11-6 baja lógica</td></tr>
+<tr><td class="k">No funcionales</td><td>RNF-12 validación de entradas · RNF-05 datos cifrados</td></tr>
+<tr class="alt"><td class="k">Casos de uso</td><td>CU-06 Consultar referidos (Fig. 18, 81, 82) · CU-06.2 Dictamen (Fig. 19, 83, 84)</td></tr>
+<tr><td class="k">Clases</td><td>Referido · CodigoReferido · CuentaCooperativa · AcreditacionPuntos</td></tr>
+<tr class="alt"><td class="k">API</td><td>GET /api/referidos · PATCH /referidos/:id/dictamen · /baja · POST /asociar</td></tr>
+<tr><td class="k">Angular</td><td>referidos.page.ts · referidos.api.ts</td></tr>
+<tr class="alt"><td class="k">Especificación</td><td>sprint-2/04-referidos · CA-01 a CA-20</td></tr>
+</table>
+<div class="status">
+<div class="verdict"><x-icon name="CheckCircle"></x-icon><p class="word">Trazado</p></div>
+<p class="evt">Pruebas que lo demuestran</p>
+<p class="ev">«RF-11 / RNF-12: valida y pagina» · «RF-11-4: dictamen reservado a administración y con cuenta vinculada aprobada» · «RF-11-5: asociación manual dentro de 30 días» · «RF-11-6: baja lógica que conserva el historial»</p>
+<p class="ev">Angular: «Referidos (RF-11-3, RF-11-6)»</p>
+</div>
+</div>
+<p class="foot">specs/sprint-2/04-referidos · backend/test/sprint.test.mjs · features.spec.ts</p>
+<div class="pnum"></div>
+<aside>(35 s) HU-011 y HU-012 son el corazón del negocio. El socio registra y da de baja sus referidos; el administrador los revisa en listas de 20 y dictamina. Solo se puede aprobar un referido si su cuenta vinculada ya está aprobada, y la baja es lógica: se conserva el historial.</aside>
+</section>

@@ -1,0 +1,18 @@
+<section id="hu015-codigo">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">HU-015 · CÓDIGO</p>
+<h2>La cuenta se valida en el dominio</h2>
+</div>
+<div class="code">
+<div class="panel"><p class="ptitle">Dominio · dominio/acceso.mjs</p>
+<p class="src">export class CuentaCooperativa {<br>&#160;&#160;constructor(numeroCuenta, tipoCuenta,<br>&#160;&#160;&#160;&#160;&#160;&#160;estado = <span class="s">'PENDIENTE'</span>) {&#160;<span class="c">// RF-05-2</span><br>&#160;&#160;&#160;&#160;if (!/^\d{10}$/.test(numeroCuenta) ||<br>&#160;&#160;&#160;&#160;&#160;&#160;!<span class="s">['ahorros', 'corriente']</span><br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;.includes(tipoCuenta))&#160;<span class="c">// RF-05-1</span><br>&#160;&#160;&#160;&#160;&#160;&#160;throw errorDeDominio(…, 400, { cuenta:<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<span class="s">'Elige el tipo de cuenta e ingresa</span><br><span class="s">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;exactamente 10 dígitos.'</span> });<br>&#160;&#160;}<br>&#160;&#160;numeroEnmascarado() {<br>&#160;&#160;&#160;&#160;return <span class="s">'******'</span> + this.numeroCuenta.slice(-4);<br>&#160;&#160;}<br>}</p></div>
+<div class="panel"><p class="ptitle">Ruta · api.mjs · POST /api/auth/cuenta</p>
+<p class="src">const cuenta = new CuentaCooperativa(<br>&#160;&#160;req.body.cuenta, req.body.tipoCuenta);<br>await db.transaction(async (client) =&gt; {<br>&#160;&#160;if (actual.cuentaEstado &amp;&amp; !<span class="s">['RECHAZADO']</span><br>&#160;&#160;&#160;&#160;&#160;&#160;.includes(actual.cuentaEstado))<br>&#160;&#160;&#160;&#160;fail(<span class="s">'Ya tienes una cuenta vinculada…'</span>, 409);<br>&#160;&#160;<span class="c">// RF-05-6: tras un rechazo puede reintentar</span><br>&#160;&#160;await validarCuentaDisponible(…);<br>&#160;&#160;await db.query(<span class="s">'UPDATE "Usuario" SET cuenta=$2…'</span>,<br>&#160;&#160;&#160;&#160;[id, cifrar(<span class="s">'cuenta'</span>, numero), …]);<br>&#160;&#160;<span class="c">// RNF-05: el número se guarda cifrado</span><br>&#160;&#160;await log(req, usuario, <span class="s">'Vinculación solicitada'</span>);<br>});</p></div>
+</div>
+<p class="foot">backend/src/dominio/acceso.mjs:172 · backend/src/api.mjs:603 · features/resumen/mi-cuenta.page.ts</p>
+<div class="pnum"></div>
+<aside>La validación del número y del tipo de cuenta vive en la clase CuentaCooperativa, que además entrega el número enmascarado para mostrarlo. La ruta impide dos solicitudes activas, permite reintentar tras un rechazo, guarda el número cifrado con AES-256-GCM y deja la solicitud en la bitácora.</aside>
+</section>

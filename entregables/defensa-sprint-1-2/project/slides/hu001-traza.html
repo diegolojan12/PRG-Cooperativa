@@ -1,0 +1,34 @@
+<section id="hu001-traza">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<img class="dots-tl" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<img class="dots-br" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">SPRINT 1 · EPI-01 · HU-001 · HU-002</p>
+<h2>Roles, permisos y menú por rol</h2>
+</div>
+<div class="trace">
+<table class="ttable">
+<tr class="hrow"><th style="width:250px;">Eslabón</th><th>En SUMA</th></tr>
+<tr><td class="k">Req. de usuario</td><td>UR-04 Ver solo las opciones de su rol</td></tr>
+<tr class="alt"><td class="k">Req. funcionales</td><td>RF-08 · 08-1 tres roles base · 08-2 rol por defecto · 08-3 menú por rol · 08-4 rechazo en servidor · 08-5 auditoría</td></tr>
+<tr><td class="k">No funcionales</td><td>RNF-13 bitácora 5 años · RNF-25 módulos independientes</td></tr>
+<tr class="alt"><td class="k">Casos de uso</td><td>CU-16 Gestionar roles y permisos · CU-17 Gestionar usuarios · CU-02.4</td></tr>
+<tr><td class="k">Clases</td><td>Rol · Modulo · Usuario (dominio/acceso.mjs)</td></tr>
+<tr class="alt"><td class="k">API</td><td>GET · POST · PUT · DELETE /api/roles · GET /api/modulos · /auth/me</td></tr>
+<tr><td class="k">Angular</td><td>roles.page.ts · moduloGuard · ShellComponent (menú)</td></tr>
+<tr class="alt"><td class="k">Especificación</td><td>sprint-1/01-roles-y-permisos · CA-01 a CA-12</td></tr>
+<tr><td class="k">Prueba</td><td>«HU-001: roles y permisos se crean, editan y eliminan sin tocar el código»</td></tr>
+</table>
+<div class="status">
+<div class="verdict"><x-icon name="CheckCircle"></x-icon><p class="word">Cumple</p></div>
+<p class="evt">Pruebas que lo demuestran</p>
+<p class="ev">API: «RF-08-1 / RF-08-4: 3 roles y acceso denegado en servidor» · «RF-08-2: solo el administrador crea cuentas de Gestor o Administrador» · «RF-08: permisos por rol se aplican de inmediato»</p>
+<p class="ev">Angular: 4 pruebas «Menú por rol (HU-002, RF-08-3)»</p>
+</div>
+</div>
+<p class="foot">specs/sprint-1/01-roles-y-permisos · backend/test/sprint.test.mjs · features.spec.ts</p>
+<div class="pnum"></div>
+<aside>HU-001 y HU-002 nacen de UR-04: cada persona ve solo las opciones de su rol. Los roles y permisos no están quemados: viven en las tablas Rol, Modulo y RolPermiso y se administran desde la pantalla Roles y permisos. El servidor rechaza cualquier módulo que el rol no tenga.</aside>
+</section>

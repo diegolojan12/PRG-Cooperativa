@@ -1,0 +1,19 @@
+<section id="hu006-codigo">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">HU-006 · CÓDIGO</p>
+<h2>Parámetros validados y auditados</h2>
+</div>
+<div class="code">
+<div class="panel"><p class="ptitle">Dominio · dominio/administracion.mjs</p>
+<p class="src">export class ParametroGlobal {<br>&#160;&#160;actualizar(valor) {<br>&#160;&#160;&#160;&#160;const nuevo = String(valor).trim();<br>&#160;&#160;&#160;&#160;if (!/^\d{1,5}$/.test(nuevo) ||<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Number(nuevo) &gt; 10000)<br>&#160;&#160;&#160;&#160;&#160;&#160;throw errorDeDominio(<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<span class="s">'Los puntos deben ser un número</span><br><span class="s">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;entero entre 0 y 10000.'</span>);<br>&#160;&#160;&#160;&#160;<span class="c">// CA-06: decimales se rechazan en el campo</span><br>&#160;&#160;&#160;&#160;this.valor = String(Number(nuevo));<br>&#160;&#160;&#160;&#160;return this.valor;<br>&#160;&#160;}<br>}</p></div>
+<div class="panel"><p class="ptitle">Ruta · api.mjs · PUT /api/configuracion</p>
+<p class="src">const user = await admin(req, <span class="s">'configuracion'</span>);<br>const values = {<br>&#160;&#160;mensajeBienvenida: text(…, TEXTO_MAX),<br>&#160;&#160;puntosReferido: new ParametroGlobal(<br>&#160;&#160;&#160;&#160;<span class="s">'puntosReferido'</span>).actualizar(…), … };<br>for (const [parametro, nuevo] of …) {<br>&#160;&#160;if (anteriores[parametro] === nuevo) continue;<br>&#160;&#160;await db.query(<span class="s">'UPDATE "Configuracion" …'</span>);<br>&#160;&#160;<span class="c">// RF-14-2: parámetro, anterior y nuevo</span><br>&#160;&#160;await log(req, user, <span class="s">'Parámetro actualizado'</span>,<br>&#160;&#160;&#160;&#160;parametro, client, { datos: {<br>&#160;&#160;&#160;&#160;&#160;&#160;parametro, anterior, nuevo } });<br>}</p></div>
+</div>
+<div class="note warnnote"><p class="lbl">BRECHA F-02</p><p class="txt">feed.page.html (inicio del socio) muestra un saludo fijo en lugar de «bienvenida» de /api/overview. Corrección: leer el parámetro en FeedPage y GestorPage.</p></div>
+<p class="foot">backend/src/dominio/administracion.mjs:10 · backend/src/api.mjs:1503 · frontend/src/app/features/comunidad/feed.page.html</p>
+<div class="pnum"></div>
+<aside>El dominio rechaza decimales y valores fuera de rango con un mensaje que dice cómo corregirlo. La ruta guarda solo los parámetros que cambiaron y deja una fila de bitácora por cada uno. La brecha está en la interfaz del socio, que no lee el mensaje de bienvenida configurado.</aside>
+</section>

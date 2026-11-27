@@ -13,8 +13,14 @@ $raiz = Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $raiz
 
 function Instalar-Y-Compilar([string]$parte) {
-    if (-not (Test-Path -LiteralPath "$parte/node_modules")) {
-        Write-Host "Instalando dependencias de $parte..."
+    $instalar = -not (Test-Path -LiteralPath "$parte/node_modules")
+    if (-not $instalar) {
+        # Una carpeta existente puede tener dependencias de una version anterior.
+        & npm.cmd ls --prefix $parte --depth=0 --silent | Out-Null
+        $instalar = $LASTEXITCODE -ne 0
+    }
+    if ($instalar) {
+        Write-Host "Instalando dependencias faltantes o desactualizadas de $parte..."
         & npm.cmd ci --prefix $parte
         if ($LASTEXITCODE -ne 0) { throw "No se pudieron instalar las dependencias de $parte." }
     }
@@ -119,7 +125,10 @@ try {
     }
     if (-not $listo) { throw 'El inicio tarda mas de lo esperado. Revisa .local/api-error.log y .local/web-error.log.' }
 
-    if ($Modo -ne 'Backend') { Start-Process "http://localhost:$PuertoWeb" }
+    if ($Modo -ne 'Backend') {
+        try { Start-Process "http://localhost:$PuertoWeb" }
+        catch { Write-Host "No se pudo abrir el navegador. Abre http://localhost:$PuertoWeb manualmente." }
+    }
     Write-Host "SUMA esta lista ($Modo)."
     if ($Modo -ne 'Backend') { Write-Host "Web: http://localhost:$PuertoWeb" }
     Write-Host 'Cuentas de prueba (clave inicial Suma2026!): gestor@suma.ec | socio@suma.ec'

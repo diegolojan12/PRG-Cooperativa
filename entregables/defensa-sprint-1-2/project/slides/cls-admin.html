@@ -1,0 +1,26 @@
+<section id="cls-admin">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<img class="dots-tl" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<img class="dots-br" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">DIAGRAMA DE CLASES · ADMINISTRACIÓN · HU-006 · HU-007</p>
+<h2>ParametroGlobal y RegistroAuditoria</h2>
+</div>
+<div class="clases2">
+<div class="crow">
+<div class="frame"><img class="cimg" src="/_blob/0de6865e2a2518cde9de72eba1016fc4" alt="Clase ParametroGlobal en Enterprise Architect"></div>
+<div class="panel"><p class="ptitle">ParametroGlobal&#160;&#160;<span class="rt">backend/src/dominio/administracion.mjs:10</span></p>
+<p class="src">export class ParametroGlobal {<br>&#160;&#160;constructor(nombre, valor) { Object.assign(this, { … }); }<br>&#160;&#160;actualizar(valor) {<br>&#160;&#160;&#160;&#160;const nuevo = String(valor).trim();<br>&#160;&#160;&#160;&#160;if (!/^\d{1,5}$/.test(nuevo) || Number(nuevo) &gt; 10000)<br>&#160;&#160;&#160;&#160;&#160;&#160;throw errorDeDominio(<span class="s">'…entero entre 0 y 10000.'</span>);<br>&#160;&#160;&#160;&#160;return (this.valor = String(Number(nuevo))); } }</p></div>
+</div>
+<div class="crow">
+<div class="frame"><img class="cimg" src="/_blob/5979d4997a1d552e647d59752152e12d" alt="Clase RegistroAuditoria en Enterprise Architect"></div>
+<div class="panel"><p class="ptitle">RegistroAuditoria&#160;&#160;<span class="rt">backend/src/dominio/administracion.mjs:45</span></p>
+<p class="src">export class RegistroAuditoria {<br>&#160;&#160;constructor({ usuario, accion, detalle, ip, datos, … }) {<br>&#160;&#160;&#160;&#160;Object.assign(this, { usuarioId: usuario?.id ?? null,<br>&#160;&#160;&#160;&#160;&#160;&#160;actor: usuario?.nombre ?? <span class="s">'Sistema'</span>, accion, ip,<br>&#160;&#160;&#160;&#160;&#160;&#160;datos: JSON.stringify(datos ?? {}), fecha });<br>&#160;&#160;&#160;&#160;Object.freeze(this);&#160;<span class="c">// RF-42: inmutable</span><br>&#160;&#160;} }</p></div>
+</div>
+</div>
+<p class="foot">Diagrama de clases (Enterprise Architect) · Documento de Visión, Figura 3</p>
+<div class="pnum"></div>
+<aside>(20 s) ParametroGlobal valida cada parámetro configurable antes de guardarlo. RegistroAuditoria arma cada fila de la bitácora con autor, acción, IP y datos, y se congela: en el código tampoco se puede modificar.</aside>
+</section>

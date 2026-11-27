@@ -1,0 +1,32 @@
+<section id="hu006-traza">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">SPRINT 2 · EPI-03 · HU-006</p>
+<h2>Configuración de la plataforma</h2>
+</div>
+<div class="trace">
+<table class="ttable">
+<tr class="hrow"><th style="width:250px;">Eslabón</th><th>En SUMA</th></tr>
+<tr><td class="k">Req. de usuario</td><td>UR-46 Ajustar los parámetros sin tocar el código</td></tr>
+<tr class="alt"><td class="k">Req. funcionales</td><td>RF-14 parámetros · 14-1 validación (enteros, 500 caracteres) · 14-2 bitácora por parámetro · 14-3 · 14-4</td></tr>
+<tr><td class="k">Casos de uso</td><td>CU-19 Configurar los parámetros · CU-19.1</td></tr>
+<tr class="alt"><td class="k">Clases</td><td>ParametroGlobal · RegistroAuditoria (dominio/administracion.mjs)</td></tr>
+<tr><td class="k">API</td><td>GET · PUT /api/configuracion</td></tr>
+<tr class="alt"><td class="k">Angular</td><td>configuracion.page.ts (campos con ayuda y error)</td></tr>
+<tr><td class="k">Especificación</td><td>sprint-2/02-administracion · CA-06 a CA-09</td></tr>
+<tr class="alt"><td class="k">Prueba</td><td>«RF-14 / RF-14-2 / RF-42: configuración y bitácora completa»</td></tr>
+</table>
+<div class="status partial">
+<div class="verdict"><x-icon name="Warning"></x-icon><p class="word">Parcial</p></div>
+<p class="evt">Cumple</p>
+<p class="ev">Valida y guarda; rige de inmediato; una fila de bitácora por parámetro. Angular: «Configuración (RF-14-1) rechaza decimales».</p>
+<p class="evt">Falta</p>
+<p class="ev">El mensaje de bienvenida se guarda y /api/overview lo devuelve, pero el inicio del socio y el del gestor muestran un texto fijo (auditoría F-02).</p>
+</div>
+</div>
+<p class="foot">specs/sprint-2/02-administracion · docs/AUDITORIA-TRAZABILIDAD-SPRINT2-2026-11-19.md · F-02</p>
+<div class="pnum"></div>
+<aside>HU-006 permite cambiar parámetros como los puntos por referido, si el registro está abierto y el mensaje de bienvenida. Todo eso funciona y queda en la bitácora. Lo que declaramos parcial es que el mensaje de bienvenida aún no se muestra en el inicio actual del socio ni del gestor.</aside>
+</section>

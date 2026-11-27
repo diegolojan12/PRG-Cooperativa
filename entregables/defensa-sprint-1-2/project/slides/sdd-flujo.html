@@ -1,0 +1,29 @@
+<section id="sdd-flujo">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<img class="dots-tl" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<img class="dots-br" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">METODOLOGÍA · SDD DENTRO DE SCRUM</p>
+<h2>La especificación es la fuente de verdad</h2>
+</div>
+<p class="lead">Spec-Driven Development: el código y las pruebas salen de la especificación, nunca al revés.</p>
+<div class="chain">
+<div class="step"><p class="num">0</p><p class="sname">Constitución</p><p class="stxt">Reglas que ningún sprint puede romper.</p></div>
+<div class="arrow"><x-shape kind="arrow-right"></x-shape></div>
+<div class="step"><p class="num">1</p><p class="sname">Especificación</p><p class="stxt">Qué se construye y con qué criterios de aceptación.</p></div>
+<div class="arrow"><x-shape kind="arrow-right"></x-shape></div>
+<div class="step"><p class="num">2</p><p class="sname">Plan</p><p class="stxt">Cómo: datos, API y pantallas.</p></div>
+<div class="arrow"><x-shape kind="arrow-right"></x-shape></div>
+<div class="step"><p class="num">3</p><p class="sname">Tareas</p><p class="stxt">Pasos pequeños, cada uno ligado a un criterio.</p></div>
+<div class="arrow"><x-shape kind="arrow-right"></x-shape></div>
+<div class="step hot"><p class="num">4</p><p class="sname">Prueba</p><p class="stxt">Se escribe primero y cita el requisito.</p></div>
+<div class="arrow"><x-shape kind="arrow-right"></x-shape></div>
+<div class="step"><p class="num">5</p><p class="sname">Código</p><p class="stxt">Lo mínimo para que la prueba pase.</p></div>
+</div>
+<div class="note"><p class="lbl">EJEMPLO</p><p class="txt">specs/sprint-1/02-sesion-y-acceso → CA-07 «bloqueo tras 5 intentos» → prueba <b>«RF-04-2: bloqueo de 15 minutos tras 5 intentos fallidos consecutivos»</b> → const MAX_INTENTOS = 5 en api.mjs.</p></div>
+<p class="foot">specs/constitucion.md · specs/_plantillas/ (especificación, plan, tareas)</p>
+<div class="pnum"></div>
+<aside>Usamos Spec-Driven Development dentro de Scrum: la especificación es la fuente de verdad, y el código y las pruebas salen de ella. Partimos de una constitución, con reglas que ningún sprint puede romper. Luego, cada historia de usuario pasa por tres documentos: la especificación dice qué se construye y con qué criterios de aceptación; el plan dice cómo; y las tareas son pasos pequeños, cada uno ligado a un criterio. Primero escribimos la prueba, después el código, y cada prueba lleva en su nombre el requisito que verifica.</aside>
+</section>

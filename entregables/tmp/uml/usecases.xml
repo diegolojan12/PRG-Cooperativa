@@ -1,0 +1,1023 @@
+<?xml version="1.0"?>
+<EADATA version="1.0" exporter="Enterprise Architect">
+	<Dataset_0><Data><Row><Object_ID>6</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-01 Registrar y activar una cuenta
+RF-01, RF-02, RF-47</Name><Package_ID>2</Package_ID><Note/></Row><Row><Object_ID>7</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-02 Iniciar sesión
+RF-04, RF-07</Name><Package_ID>2</Package_ID><Note/></Row><Row><Object_ID>8</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-03 Consultar mi perfil
+RF-03, RF-46</Name><Package_ID>2</Package_ID><Note/></Row><Row><Object_ID>9</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-04 Vincular una cuenta de la Cooperativa
+RF-05, RF-06, RF-50</Name><Package_ID>2</Package_ID><Note>El participante declara su cuenta; SUMA valida formato y unicidad y consulta automáticamente la fuente institucional. La administración no decide resultados.</Note></Row><Row><Object_ID>10</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-05 Invitar nuevos socios
+RF-09, RF-10</Name><Package_ID>2</Package_ID><Note/></Row><Row><Object_ID>11</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-06 Consultar referidos
+RF-11</Name><Package_ID>2</Package_ID><Note/></Row><Row><Object_ID>12</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-07 Configurar una campaña de referidos
+RF-13</Name><Package_ID>2</Package_ID><Note/></Row><Row><Object_ID>13</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-08 Consultar puntos y logros
+RF-12, RF-16, RF-17, RF-48</Name><Package_ID>2</Package_ID><Note/></Row><Row><Object_ID>14</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-09 Jugar una partida de trivia
+RF-20</Name><Package_ID>2</Package_ID><Note/></Row><Row><Object_ID>15</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-10 Rendir una evaluación de capacitación
+RF-21, RF-22</Name><Package_ID>2</Package_ID><Note/></Row><Row><Object_ID>16</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-11 Inscribirse en un taller
+RF-23, RF-24</Name><Package_ID>2</Package_ID><Note/></Row><Row><Object_ID>17</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-12 Canjear puntos por un premio
+RF-06, RF-33</Name><Package_ID>2</Package_ID><Note/></Row><Row><Object_ID>18</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-13 Consultar el muro de la comunidad
+RF-26, RF-27, RF-28</Name><Package_ID>2</Package_ID><Note/></Row><Row><Object_ID>19</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-14 Consultar solicitudes de soporte
+RF-41</Name><Package_ID>2</Package_ID><Note/></Row><Row><Object_ID>20</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-15 Consultar indicadores de captación
+RF-43, RF-45</Name><Package_ID>2</Package_ID><Note/></Row><Row><Object_ID>25</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-01.1 Aceptar términos y aviso de privacidad</Name><Package_ID>2</Package_ID><Note>La aceptación es obligatoria para crear la cuenta.</Note></Row><Row><Object_ID>26</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-01.2 Confirmar el correo con un código</Name><Package_ID>2</Package_ID><Note>La confirmación es necesaria para activar la cuenta.</Note></Row><Row><Object_ID>27</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-01.3 Vincular el registro a un referido</Name><Package_ID>2</Package_ID><Note>La persona se registra con un código de referido válido.</Note></Row><Row><Object_ID>29</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-02.1 Validar las credenciales</Name><Package_ID>2</Package_ID><Note>Se comprueban el correo y la contraseña antes de abrir la sesión.</Note></Row><Row><Object_ID>30</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-02.2 Confirmar el segundo factor</Name><Package_ID>2</Package_ID><Note>El acceso corresponde a un administrador y requiere el código adicional.</Note></Row><Row><Object_ID>31</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-02.3 Solicitar recuperación de acceso</Name><Package_ID>2</Package_ID><Note>La persona selecciona la opción de recuperación desde el acceso.</Note></Row><Row><Object_ID>33</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-03.1 Actualizar datos del perfil</Name><Package_ID>2</Package_ID><Note>La persona actualiza su nombre, celular, provincia, correo o contraseña. El correo y el celular no pueden pertenecer a otra cuenta.</Note></Row><Row><Object_ID>34</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-03.2 Cambiar la privacidad del perfil</Name><Package_ID>2</Package_ID><Note>La persona elige si su perfil es Público o Privado (Privado por defecto). El perfil público muestra solo nombre de pila, nivel e insignias; nunca correo, celular ni cuenta.</Note></Row><Row><Object_ID>36</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-04.1 Validar los datos y la unicidad de la cuenta</Name><Package_ID>2</Package_ID><Note>Se comprueban el tipo y el número y que la cuenta no esté vinculada a otro usuario.</Note></Row><Row><Object_ID>37</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-04.2 Registrar la solicitud de validación automática</Name><Package_ID>2</Package_ID><Note>Persistir solicitud e intentos para procesamiento automático. Pendiente no espera aprobación administrativa.</Note></Row><Row><Object_ID>39</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-05.1 Obtener el enlace de referido</Name><Package_ID>2</Package_ID><Note>La invitación requiere el enlace oficial de la cuenta aprobada.</Note></Row><Row><Object_ID>40</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-05.2 Descargar el código QR de invitación</Name><Package_ID>2</Package_ID><Note>El socio elige usar el código QR para compartir su invitación.</Note></Row><Row><Object_ID>42</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-06.1 Filtrar el listado de referidos</Name><Package_ID>2</Package_ID><Note>El administrador aplica un filtro al listado.</Note></Row><Row><Object_ID>43</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-06.2 Validar automáticamente un referido</Name><Package_ID>2</Package_ID><Note>SUMA comprueba registro activo, cuenta validada, referidor habilitado y relación válida y única. Aprueba o rechaza por evidencia; falta de requisitos o fallo técnico conserva Pendiente. Sin dictamen administrativo.</Note></Row><Row><Object_ID>44</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-06.3 Exportar referidos pendientes</Name><Package_ID>2</Package_ID><Note>El administrador solicita la descarga de referidos pendientes.</Note></Row><Row><Object_ID>46</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-07.1 Definir la cobertura y la vigencia</Name><Package_ID>2</Package_ID><Note>La campaña requiere fechas válidas y provincias de cobertura.</Note></Row><Row><Object_ID>47</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-07.2 Definir los puntos para ambas partes</Name><Package_ID>2</Package_ID><Note>Se configuran los puntos del socio referidor y de la persona referida.</Note></Row><Row><Object_ID>49</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-08.1 Consultar el historial de puntos</Name><Package_ID>2</Package_ID><Note>El socio decide consultar el detalle de sus movimientos.</Note></Row><Row><Object_ID>50</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-08.2 Consultar el ranking de socios</Name><Package_ID>2</Package_ID><Note>El socio elige abrir el ranking de perfiles públicos.</Note></Row><Row><Object_ID>52</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-09.1 Comprobar el límite de partidas</Name><Package_ID>2</Package_ID><Note>El sistema comprueba si el socio puede iniciar otra partida.</Note></Row><Row><Object_ID>53</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-09.2 Calcular el puntaje de la partida</Name><Package_ID>2</Package_ID><Note>Al completar la partida se calcula el puntaje de las respuestas.</Note></Row><Row><Object_ID>55</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-10.1 Calificar la evaluación</Name><Package_ID>2</Package_ID><Note>La evaluación presentada se califica para determinar el resultado.</Note></Row><Row><Object_ID>56</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-10.2 Descargar el certificado</Name><Package_ID>2</Package_ID><Note>La evaluación está aprobada y el socio solicita el certificado.</Note></Row><Row><Object_ID>58</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-11.1 Comprobar la disponibilidad de cupo</Name><Package_ID>2</Package_ID><Note>El sistema verifica si todavía hay cupos antes de confirmar la inscripción.</Note></Row><Row><Object_ID>59</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-11.2 Validar que no exista una inscripción previa</Name><Package_ID>2</Package_ID><Note>El sistema impide que el socio se inscriba dos veces en el mismo taller.</Note></Row><Row><Object_ID>61</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-12.1 Validar el saldo y el stock</Name><Package_ID>2</Package_ID><Note>El saldo debe cubrir el costo y tiene que haber una unidad disponible.</Note></Row><Row><Object_ID>62</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-12.2 Descontar puntos y actualizar el stock</Name><Package_ID>2</Package_ID><Note>Al confirmar el canje se descuentan los puntos y una unidad del inventario.</Note></Row><Row><Object_ID>63</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-12.3 Emitir el comprobante de canje</Name><Package_ID>2</Package_ID><Note>La confirmación entrega al socio un comprobante del canje.</Note></Row><Row><Object_ID>65</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-13.1 Comentar una publicación</Name><Package_ID>2</Package_ID><Note>El socio elige comentar una publicación del muro.</Note></Row><Row><Object_ID>66</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-13.2 Reaccionar a una publicación</Name><Package_ID>2</Package_ID><Note>El socio elige dar o retirar un Me gusta.</Note></Row><Row><Object_ID>67</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-13.3 Reportar contenido</Name><Package_ID>2</Package_ID><Note>El socio detecta contenido inapropiado y decide reportarlo.</Note></Row><Row><Object_ID>69</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-14.1 Enviar una solicitud de soporte</Name><Package_ID>2</Package_ID><Note>El socio decide abrir una solicitud desde el área de soporte.</Note></Row><Row><Object_ID>70</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-14.2 Responder una solicitud de soporte</Name><Package_ID>2</Package_ID><Note>El administrador revisa una solicitud y envía su respuesta de cierre.</Note></Row><Row><Object_ID>72</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-15.1 Calcular el costo por captación</Name><Package_ID>2</Package_ID><Note>El tablero incluye el indicador de costo por captación.</Note></Row><Row><Object_ID>73</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-15.2 Exportar los indicadores</Name><Package_ID>2</Package_ID><Note>El administrador solicita la descarga del tablero.</Note></Row><Row><Object_ID>143</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-16 Gestionar roles y permisos
+RF-08</Name><Package_ID>2</Package_ID><Note>El administrador crea, edita y elimina roles y asigna módulos a cada uno. Los cambios se aplican en la siguiente petición y quedan en la bitácora.</Note></Row><Row><Object_ID>144</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-17 Gestionar usuarios de la plataforma
+RF-01, RF-08</Name><Package_ID>2</Package_ID><Note>El administrador cambia el rol o el estado de un usuario y crea cuentas de Gestor o Administrador con enlace de activación de 24 horas.</Note></Row><Row><Object_ID>145</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-18 Validar automáticamente una cuenta vinculada
+RF-05, RF-50</Name><Package_ID>2</Package_ID><Note>RF-50 obligatorio. Consultar fuente institucional autorizada y vigente, cotejar identidad, existencia, tipo, número y condición habilitada. Máximo 5 segundos con fuente disponible. Incidencia técnica: Pendiente y reintento cada 5 minutos. Sin saldos ni movimientos financieros.</Note></Row><Row><Object_ID>1256</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-03-2 Actualizar (Modificación)</Name><Package_ID>83</Package_ID><Note>RF-03-2 | Gestión de usuarios
+El sistema deberá actualizar el nombre, el correo, el celular y la contraseña en máximo 2 segundos, validando que el correo y el celular no pertenezcan a otra cuenta.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+Dep.: RF-03</Note></Row><Row><Object_ID>1257</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-03-3 Eliminar (Baja lógica)</Name><Package_ID>83</Package_ID><Note>RF-03-3 | Gestión de usuarios
+El sistema deberá inactivar la cuenta mediante 1 borrado lógico que conserve el 100 % de su historial de referidos y puntos.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+Dep.: RF-03</Note></Row><Row><Object_ID>1258</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-04 Autenticación y cierre de sesión</Name><Package_ID>83</Package_ID><Note>RF-04 | Validación de usuarios
+El sistema deberá autenticar al usuario con su correo y contraseña en un máximo de 3 segundos, y cerrar la sesión tras 15 minutos de inactividad.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos / Administrador
+Prioridad: Debe tener
+UR: UR-03, UR-04 | RF: RF-02, RF-08</Note></Row><Row><Object_ID>1259</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-04-1 Crear (Sesión)</Name><Package_ID>83</Package_ID><Note>RF-04-1 | Validación de usuarios
+El sistema deberá verificar las credenciales y generar el token de sesión en un máximo de 3 segundos.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos / Administrador
+Prioridad: Debe tener
+Dep.: RF-04</Note></Row><Row><Object_ID>1260</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-04-2 Validar (Bloqueo de intentos)</Name><Package_ID>83</Package_ID><Note>RF-04-2 | Validación de usuarios
+El sistema deberá bloquear el inicio de sesión durante 15 minutos tras 5 intentos fallidos consecutivos.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos / Administrador
+Prioridad: Debe tener
+Dep.: RF-04</Note></Row><Row><Object_ID>1261</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-04-3 Eliminar (Expiración)</Name><Package_ID>83</Package_ID><Note>RF-04-3 | Validación de usuarios
+El sistema deberá invalidar toda sesión que no registre acciones durante 15 minutos consecutivos.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos / Administrador
+Prioridad: Debe tener
+Dep.: RF-04</Note></Row><Row><Object_ID>1262</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-04-4 Eliminar (Cierre manual)</Name><Package_ID>83</Package_ID><Note>RF-04-4 | Validación de usuarios
+El sistema deberá cerrar la sesión en máximo 2 segundos cuando el usuario seleccione «Cerrar sesión».
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos / Administrador
+Prioridad: Debe tener
+Dep.: RF-04</Note></Row><Row><Object_ID>1263</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-05 Vinculación y validación automática de cuenta</Name><Package_ID>83</Package_ID><Note>RF-05 | Gestión de usuarios
+El sistema deberá registrar la solicitud de vinculación en máximo 3 segundos e iniciar automáticamente la validación de existencia, titularidad y condición habilitada contra la base institucional autorizada (RF-50), sin intervención del administrador.
+Responsable en la matriz: Socio / Cliente / Sistema
+Prioridad: Debe tener
+UR: UR-07, UR-08, UR-14 | RF: RF-01, RF-39, RF-42, RF-50</Note></Row><Row><Object_ID>1264</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-05-1 Crear (Datos de la cuenta)</Name><Package_ID>83</Package_ID><Note>RF-05-1 | Gestión de usuarios
+El sistema deberá aceptar 1 de 2 tipos de cuenta (Ahorros o Corriente) y un número de cuenta de exactamente 10 dígitos.
+Responsable en la matriz: Socio / Cliente / Sistema
+Prioridad: Debe tener
+Dep.: RF-05</Note></Row><Row><Object_ID>1265</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-05-2 Validar (Unicidad)</Name><Package_ID>83</Package_ID><Note>RF-05-2 | Gestión de usuarios
+El sistema deberá impedir que una cuenta quede vinculada a más de un usuario en estado Pendiente o Aprobado, mediante unicidad en base de datos y control de concurrencia.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-05</Note></Row><Row><Object_ID>1266</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-05-3 Leer (Seguimiento de validaciones)</Name><Package_ID>83</Package_ID><Note>RF-05-3 | Gestión de usuarios
+El sistema deberá mostrar al administrador las validaciones Pendientes de la más antigua a la más reciente, 20 por página, con causa, último intento y siguiente reintento, sin acciones de aprobación o rechazo manual.
+Responsable en la matriz: Administrador (consulta)
+Prioridad: Debe tener
+Dep.: RF-05</Note></Row><Row><Object_ID>1267</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-05-4 Actualizar (Resultado automático)</Name><Package_ID>83</Package_ID><Note>RF-05-4 | Gestión de usuarios
+El sistema deberá guardar automáticamente Aprobado si la fuente institucional confirma existencia, titularidad y condición habilitada, o Rechazado con causa ante un incumplimiento confirmado, en máximo 2 segundos desde la respuesta. Una falla técnica o fuente desactualizada conservará Pendiente.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-05, RF-50</Note></Row><Row><Object_ID>1268</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-05-5 Leer (Enmascarado)</Name><Package_ID>83</Package_ID><Note>RF-05-5 | Gestión de usuarios
+El sistema deberá mostrar el número de cuenta oculto, con solo sus 4 últimos dígitos visibles, salvo cuando el propio usuario pida verlo.
+Responsable en la matriz: Socio / Cliente / Sistema
+Prioridad: Debe tener
+Dep.: RF-05</Note></Row><Row><Object_ID>159</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-32 Gestionar el catálogo de premios
+RF-32</Name><Package_ID>2</Package_ID><Note>El administrador crea, modifica o inactiva premios con foto, costo en puntos y stock.</Note></Row><Row><Object_ID>160</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-33 Registrar la entrega de premios
+RF-33</Name><Package_ID>2</Package_ID><Note>El administrador avanza cada canje de Pendiente a Listo para retiro y a Entregado.</Note></Row><Row><Object_ID>161</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-34 Planificar canjes con favoritos y meta
+RF-34, RF-35</Name><Package_ID>2</Package_ID><Note>El socio guarda premios favoritos, elige uno como meta y ve cuántos puntos le faltan.</Note></Row><Row><Object_ID>162</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-35 Buscar información
+RF-36</Name><Package_ID>2</Package_ID><Note>El socio busca talleres, capacitaciones, publicaciones y premios con al menos 3 caracteres.</Note></Row><Row><Object_ID>163</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-36 Consultar notificaciones
+RF-37, RF-38, RF-39, RF-40</Name><Package_ID>2</Package_ID><Note>El usuario consulta su bandeja de avisos de puntos, nivel, referidos, cuenta vinculada, campañas y recordatorios.</Note></Row><Row><Object_ID>164</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-37 Ajustar puntos manualmente
+RF-15</Name><Package_ID>2</Package_ID><Note>El administrador suma o resta puntos con un motivo de 10 a 200 caracteres, sin dejar saldo negativo.</Note></Row><Row><Object_ID>165</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-38 Calificar una actividad
+RF-44</Name><Package_ID>2</Package_ID><Note>El socio responde la encuesta de satisfacción de un taller o capacitación en que participó.</Note></Row><Row><Object_ID>166</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-01.4 Validar que el correo y el celular no estén registrados</Name><Package_ID>2</Package_ID><Note>Se rechaza el registro si el correo o el celular ya pertenecen a otra cuenta.</Note></Row><Row><Object_ID>167</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-02.4 Cargar el menú y los permisos del rol</Name><Package_ID>2</Package_ID><Note>Al abrir la sesión se cargan los módulos del rol; el servidor rechaza cualquier módulo no permitido.</Note></Row><Row><Object_ID>168</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-02.5 Restablecer la contraseña</Name><Package_ID>2</Package_ID><Note>Con el enlace vigente (30 minutos, un solo uso) la persona define una nueva contraseña; se cierran todas sus sesiones.</Note></Row><Row><Object_ID>169</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-02.6 Cerrar sesión</Name><Package_ID>2</Package_ID><Note>La persona cierra su sesión; también se cierra sola tras 15 minutos sin acciones.</Note></Row><Row><Object_ID>170</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-03.3 Dar de baja la cuenta</Name><Package_ID>2</Package_ID><Note>Baja lógica que conserva el historial de referidos y puntos.</Note></Row><Row><Object_ID>171</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-05.3 Compartir el enlace por WhatsApp o redes sociales</Name><Package_ID>2</Package_ID><Note>El socio elige un canal; se arma un mensaje de máximo 300 caracteres con el enlace oficial.</Note></Row><Row><Object_ID>172</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-05.4 Comprobar que la cuenta vinculada esté aprobada</Name><Package_ID>2</Package_ID><Note>Sin cuenta Aprobada se bloquea referir y canjear y se muestra el aviso Vincular mi cuenta.</Note></Row><Row><Object_ID>173</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-06.4 Acreditar puntos a ambas partes una sola vez</Name><Package_ID>2</Package_ID><Note>Condición: referido aprobado automáticamente. Estado, créditos y eventos de aviso se confirman en una transacción, con claves únicas por evento y destinatario.</Note></Row><Row><Object_ID>174</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-06.5 Gestionar los datos de un referido</Name><Package_ID>2</Package_ID><Note>Registrar con autorización, editar Pendientes o dar de baja con motivo (baja lógica).</Note></Row><Row><Object_ID>175</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-06.6 Asociar un referido sin código</Name><Package_ID>2</Package_ID><Note>El administrador puede corregir la asociación en los primeros 30 días. La asociación comprueba unicidad y dispara validación automática; no equivale a aprobación.</Note></Row><Row><Object_ID>176</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-13.4 Publicar en el muro</Name><Package_ID>2</Package_ID><Note>El socio publica textos de hasta 500 caracteres con imagen opcional de hasta 2 MB.</Note></Row><Row><Object_ID>177</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-18.1 Generar código y enlace tras validar la cuenta</Name><Package_ID>2</Package_ID><Note>Condición: resultado Aprobado. Generar código único de 8 caracteres y enlace de forma idempotente, en máximo 3 segundos.</Note></Row><Row><Object_ID>178</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-19.1 Definir los puntos por acción y el valor del punto</Name><Package_ID>2</Package_ID><Note>Cada acción vale un entero de 0 a 10 000; el punto tiene valor en dólares con 2 decimales.</Note></Row><Row><Object_ID>179</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-19.2 Publicar una nueva versión de los términos</Name><Package_ID>2</Package_ID><Note>Versión numerada mayor que la vigente; queda exactamente 1 vigente y el registro exige aceptarla.</Note></Row><Row><Object_ID>180</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-20.1 Filtrar la bitácora</Name><Package_ID>2</Package_ID><Note>Filtra por rango de fechas, usuario y tipo de acción.</Note></Row><Row><Object_ID>146</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-19 Configurar los parámetros de la plataforma
+RF-14, RF-47</Name><Package_ID>2</Package_ID><Note>El administrador cambia textos, registro abierto, puntos y la versión de los términos; cada cambio queda en la bitácora con valor anterior y nuevo.</Note></Row><Row><Object_ID>147</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-20 Consultar la bitácora de auditoría
+RF-42</Name><Package_ID>2</Package_ID><Note>El administrador consulta quién hizo cada acción crítica, cuándo y desde qué IP, 50 registros por página.</Note></Row><Row><Object_ID>148</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-21 Controlar la vigencia de una campaña
+RF-13, RF-37</Name><Package_ID>2</Package_ID><Note>El administrador activa, pausa o finaliza una campaña; al activarse se avisa a los usuarios de sus provincias.</Note></Row><Row><Object_ID>149</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-22 Gestionar retos
+RF-18</Name><Package_ID>2</Package_ID><Note>El administrador crea retos con meta, puntos y vigencia, y los finaliza.</Note></Row><Row><Object_ID>150</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-23 Seguir el avance de los retos
+RF-18, RF-12</Name><Package_ID>2</Package_ID><Note>El socio ve su avance de 0 % a 100 % en cada reto activo y recibe los puntos al cumplirlo.</Note></Row><Row><Object_ID>151</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-24 Gestionar el banco de preguntas
+RF-19</Name><Package_ID>2</Package_ID><Note>El gestor crea, edita o desactiva preguntas de educación financiera con 2 a 4 opciones, 1 correcta, tema y dificultad.</Note></Row><Row><Object_ID>152</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-25 Publicar una capacitación
+RF-21</Name><Package_ID>2</Package_ID><Note>El gestor publica una capacitación con al menos 1 material de hasta 50 MB y un cuestionario de mínimo 5 preguntas.</Note></Row><Row><Object_ID>153</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-26 Gestionar talleres
+RF-23</Name><Package_ID>2</Package_ID><Note>El gestor publica, edita o cancela talleres con fecha futura, lugar y cupos.</Note></Row><Row><Object_ID>154</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-27 Registrar la asistencia a un taller
+RF-25</Name><Package_ID>2</Package_ID><Note>El gestor marca Asistió o No asistió a cada inscrito, desde la hora de inicio hasta 48 horas después.</Note></Row><Row><Object_ID>155</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-28 Publicar contenido oficial
+RF-26, RF-29</Name><Package_ID>2</Package_ID><Note>El gestor publica noticias con la etiqueta Oficial y fija hasta 3 publicaciones de 1 a 30 días.</Note></Row><Row><Object_ID>156</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-29 Moderar contenido reportado
+RF-30</Name><Package_ID>2</Package_ID><Note>El administrador elimina o restaura el contenido oculto por 3 reportes, o lo oculta sin reportes.</Note></Row><Row><Object_ID>157</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-30 Publicar contenidos de salud y bienestar
+RF-31</Name><Package_ID>2</Package_ID><Note>El gestor publica artículos (1 de 4 categorías) y servicios de salud de la Cooperativa.</Note></Row><Row><Object_ID>158</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-31 Consultar salud y bienestar
+RF-31</Name><Package_ID>2</Package_ID><Note>El socio consulta artículos y servicios de salud a máximo 2 pasos desde el inicio.</Note></Row><Row><Object_ID>193</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-03.4 Confirmar el correo nuevo</Name><Package_ID>2</Package_ID><Note>Se envía un código de 6 dígitos al correo nuevo (10 minutos, 5 intentos); el correo cambia solo al confirmarlo y se avisa al correo anterior.</Note></Row><Row><Object_ID>1269</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-05-6 Actualizar (Nuevo intento)</Name><Package_ID>83</Package_ID><Note>RF-05-6 | Gestión de usuarios
+El sistema deberá permitir corregir una cuenta Rechazada e iniciar una nueva validación automática, conservando el historial. Los reintentos técnicos de una solicitud Pendiente no crearán vinculaciones duplicadas.
+Responsable en la matriz: Socio / Cliente / Sistema
+Prioridad: Debe tener
+Dep.: RF-05</Note></Row><Row><Object_ID>1270</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-06 Acceso según la verificación de la cuenta</Name><Package_ID>83</Package_ID><Note>RF-06 | Gestión de usuarios
+El sistema deberá habilitar referir y canjear en máximo 3 segundos después de persistir la aprobación automática de la cuenta vinculada.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+UR: UR-09 | RF: RF-05, RF-50</Note></Row><Row><Object_ID>1271</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-06-1 Validar (Bloqueo)</Name><Package_ID>83</Package_ID><Note>RF-06-1 | Gestión de usuarios
+El sistema deberá bloquear en el servidor el 100 % de los intentos de referir o canjear sin cuenta Aprobada por validación automática institucional; no aceptará estados enviados por el cliente.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-06</Note></Row><Row><Object_ID>1272</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-06-2 Leer (Aviso)</Name><Package_ID>83</Package_ID><Note>RF-06-2 | Gestión de usuarios
+El sistema deberá mostrar «Vincular mi cuenta» si falta una cuenta, «Validación automática pendiente» si espera datos o reintento y la corrección requerida cuando la vinculación resulte Rechazada.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-06</Note></Row><Row><Object_ID>1273</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-06-3 Leer (Funciones abiertas)</Name><Package_ID>83</Package_ID><Note>RF-06-3 | Gestión de usuarios
+El sistema deberá permitir a todos los usuarios activos participar en capacitaciones, talleres, juegos, retos y comunidad, sin importar el estado de su cuenta vinculada.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-06</Note></Row><Row><Object_ID>1274</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-07 Recuperación de acceso</Name><Package_ID>83</Package_ID><Note>RF-07 | Validación de usuarios
+El sistema deberá enviar al correo registrado un enlace temporal de recuperación en un máximo de 60 segundos tras la solicitud.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+UR: UR-05 | RF: RF-04</Note></Row><Row><Object_ID>1275</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-07-1 Crear (Enlace)</Name><Package_ID>83</Package_ID><Note>RF-07-1 | Validación de usuarios
+El sistema deberá generar 1 enlace de recuperación de un solo uso que expire a los 30 minutos.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+Dep.: RF-07</Note></Row><Row><Object_ID>1276</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-07-2 Actualizar (Contraseña)</Name><Package_ID>83</Package_ID><Note>RF-07-2 | Validación de usuarios
+El sistema deberá exigir que la nueva contraseña tenga al menos 8 caracteres con 1 mayúscula y 1 número.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+Dep.: RF-07</Note></Row><Row><Object_ID>1277</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-08 Roles y permisos</Name><Package_ID>83</Package_ID><Note>RF-08 | Administración
+El sistema deberá actualizar el rol de un usuario en un máximo de 3 segundos.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+UR: UR-04 | RF: RF-42</Note></Row><Row><Object_ID>1278</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-08-1 Actualizar (Rol)</Name><Package_ID>83</Package_ID><Note>RF-08-1 | Administración
+El sistema deberá incluir 3 roles base que no se pueden eliminar (Socio / Cliente, Gestor de contenidos y Administrador) y permitir al administrador crear roles adicionales; los permisos se asignan por rol, no por persona.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-08</Note></Row><Row><Object_ID>1279</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-08-2 Crear (Rol por defecto)</Name><Package_ID>83</Package_ID><Note>RF-08-2 | Administración
+El sistema deberá asignar el rol «Socio / Cliente» a toda cuenta creada en el registro y permitir solo al administrador crear cuentas de Gestor de contenidos o Administrador.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-08</Note></Row><Row><Object_ID>1280</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-08-3 Leer (Menú por rol)</Name><Package_ID>83</Package_ID><Note>RF-08-3 | Administración
+El sistema deberá mostrar exclusivamente las opciones del menú asociadas al rol del usuario, con 0 opciones de otros roles.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-08</Note></Row><Row><Object_ID>1281</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-08-4 Validar (Acceso)</Name><Package_ID>83</Package_ID><Note>RF-08-4 | Administración
+El sistema deberá rechazar el 100 % de los intentos de acceso a funciones no autorizadas para el rol, con un mensaje de acceso denegado.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-08</Note></Row><Row><Object_ID>995</Object_ID><Object_Type>UseCase</Object_Type><Name>SUMA - Visión general de casos de uso</Name><Package_ID>2</Package_ID><Note>Elemento de resumen y navegación del modelo. Descompone las seis áreas existentes; no representa un requisito funcional adicional.</Note></Row><Row><Object_ID>996</Object_ID><Object_Type>UseCase</Object_Type><Name>01 Acceder y gestionar cuenta y referidos</Name><Package_ID>2</Package_ID><Note>Resumen navegable de la vista existente: 01 Acceso, cuenta y referidos. Casos: CU-01, CU-02, CU-03, CU-04, CU-05, CU-06, CU-18</Note></Row><Row><Object_ID>997</Object_ID><Object_Type>UseCase</Object_Type><Name>02 Participar en campañas, puntos y formación</Name><Package_ID>2</Package_ID><Note>Resumen navegable de la vista existente: 02 Campañas, puntos y actividades. Casos: CU-07, CU-08, CU-09, CU-10, CU-11</Note></Row><Row><Object_ID>998</Object_ID><Object_Type>UseCase</Object_Type><Name>03 Canjear premios, usar comunidad y soporte</Name><Package_ID>2</Package_ID><Note>Resumen navegable de la vista existente: 03 Premios, comunidad y administración. Casos: CU-12, CU-13, CU-14, CU-15</Note></Row><Row><Object_ID>999</Object_ID><Object_Type>UseCase</Object_Type><Name>04 Administrar la plataforma</Name><Package_ID>2</Package_ID><Note>Resumen navegable de la vista existente: 04 Administración de la plataforma. Casos: CU-16, CU-17, CU-19, CU-20</Note></Row><Row><Object_ID>1000</Object_ID><Object_Type>UseCase</Object_Type><Name>05 Usar servicios y gestionar incentivos</Name><Package_ID>2</Package_ID><Note>Resumen navegable de la vista existente: 05 Socio y administración · Sprints 3 a 5. Casos: CU-21, CU-22, CU-23, CU-29, CU-31, CU-32, CU-33, CU-34, CU-35, CU-36, CU-37, CU-38</Note></Row><Row><Object_ID>1001</Object_ID><Object_Type>UseCase</Object_Type><Name>06 Publicar y gestionar contenidos</Name><Package_ID>2</Package_ID><Note>Resumen navegable de la vista existente: 06 Gestión de contenidos · Sprints 4 y 5. Casos: CU-24, CU-25, CU-26, CU-27, CU-28, CU-30</Note></Row><Row><Object_ID>1002</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-16.1 Crear, editar o eliminar un rol</Name><Package_ID>2</Package_ID><Note>El administrador gestiona la definición de un rol.
+Desglose de CU-16 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1003</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-16.2 Asignar módulos y permisos al rol</Name><Package_ID>2</Package_ID><Note>Los permisos actualizados se aplican en la siguiente petición.
+Desglose de CU-16 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1004</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-16.3 Registrar el cambio de rol en bitácora</Name><Package_ID>2</Package_ID><Note>Registrar el cambio de rol en bitácora
+Desglose de CU-16 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1005</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-17.1 Cambiar el rol o estado de un usuario</Name><Package_ID>2</Package_ID><Note>El administrador modifica un usuario existente.
+Desglose de CU-17 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1006</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-17.2 Crear una cuenta interna</Name><Package_ID>2</Package_ID><Note>El administrador da de alta un Gestor o Administrador.
+Desglose de CU-17 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1007</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-17.3 Activar la cuenta interna con el enlace</Name><Package_ID>2</Package_ID><Note>Enlace válido durante 24 horas; se registra la activación en auditoría.
+Desglose de CU-17 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1008</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-21.1 Validar la transición y vigencia</Name><Package_ID>2</Package_ID><Note>Validar la transición y vigencia
+Desglose de CU-21 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1009</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-21.2 Actualizar el estado de la campaña</Name><Package_ID>2</Package_ID><Note>Actualizar el estado de la campaña
+Desglose de CU-21 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1010</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-21.3 Notificar activación a las provincias de cobertura</Name><Package_ID>2</Package_ID><Note>La campaña pasa a estado Activa.
+Desglose de CU-21 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1011</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-22.1 Crear un reto con meta, puntos y vigencia</Name><Package_ID>2</Package_ID><Note>El administrador elige crear un reto.
+Desglose de CU-22 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1012</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-22.2 Finalizar un reto</Name><Package_ID>2</Package_ID><Note>El administrador elige finalizar un reto existente.
+Desglose de CU-22 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1013</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-22.3 Validar la configuración y operación del reto</Name><Package_ID>2</Package_ID><Note>Validar la configuración y operación del reto
+Desglose de CU-22 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1014</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-23.1 Consultar retos activos y progreso</Name><Package_ID>2</Package_ID><Note>Consultar retos activos y progreso
+Desglose de CU-23 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1015</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-23.2 Calcular el avance del reto</Name><Package_ID>2</Package_ID><Note>El avance se limita al intervalo de 0 % a 100 %.
+Desglose de CU-23 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1016</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-23.3 Acreditar puntos al cumplir la meta</Name><Package_ID>2</Package_ID><Note>Se registran el cumplimiento y los puntos una sola vez.
+Desglose de CU-23 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1017</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-23.4 Notificar el cumplimiento del reto</Name><Package_ID>2</Package_ID><Note>Notificar el cumplimiento del reto
+Desglose de CU-23 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1018</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-24.1 Crear o editar una pregunta</Name><Package_ID>2</Package_ID><Note>El gestor elige crear o editar una pregunta.
+Desglose de CU-24 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1019</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-24.2 Desactivar una pregunta</Name><Package_ID>2</Package_ID><Note>El gestor elige desactivar una pregunta.
+Desglose de CU-24 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1020</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-24.3 Validar opciones, respuesta, tema y dificultad</Name><Package_ID>2</Package_ID><Note>De 2 a 4 opciones, exactamente una correcta, tema y dificultad.
+Desglose de CU-24 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1021</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-25.1 Adjuntar materiales de capacitación</Name><Package_ID>2</Package_ID><Note>Al menos un material; cada archivo de hasta 50 MB.
+Desglose de CU-25 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1022</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-25.2 Definir el cuestionario de evaluación</Name><Package_ID>2</Package_ID><Note>Mínimo 5 preguntas.
+Desglose de CU-25 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1023</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-25.3 Validar materiales y cuestionario</Name><Package_ID>2</Package_ID><Note>Validar materiales y cuestionario
+Desglose de CU-25 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1024</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-25.4 Guardar y publicar la capacitación</Name><Package_ID>2</Package_ID><Note>Guardar y publicar la capacitación
+Desglose de CU-25 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1025</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-26.1 Publicar o editar un taller</Name><Package_ID>2</Package_ID><Note>El gestor elige publicar o editar un taller.
+Desglose de CU-26 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1026</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-26.2 Cancelar un taller</Name><Package_ID>2</Package_ID><Note>El gestor elige cancelar un taller.
+Desglose de CU-26 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1040</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-30.2 Publicar un servicio de salud</Name><Package_ID>2</Package_ID><Note>El gestor elige publicar un servicio de la Cooperativa.
+Desglose de CU-30 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1041</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-30.3 Seleccionar una de las cuatro categorías</Name><Package_ID>2</Package_ID><Note>Seleccionar una de las cuatro categorías
+Desglose de CU-30 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1042</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-31.1 Abrir el listado de salud y bienestar</Name><Package_ID>2</Package_ID><Note>Primer paso desde Inicio.
+Desglose de CU-31 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1043</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-31.2 Consultar el detalle del artículo o servicio</Name><Package_ID>2</Package_ID><Note>Segundo paso desde Inicio; acceso a máximo dos pasos.
+Desglose de CU-31 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1044</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-32.1 Crear o modificar un premio</Name><Package_ID>2</Package_ID><Note>El administrador elige crear o modificar un premio.
+Desglose de CU-32 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1045</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-32.2 Inactivar un premio</Name><Package_ID>2</Package_ID><Note>El administrador elige inactivar un premio.
+Desglose de CU-32 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1046</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-32.3 Validar foto, costo en puntos y stock</Name><Package_ID>2</Package_ID><Note>Validar foto, costo en puntos y stock
+Desglose de CU-32 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1047</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-32.4 Registrar el cambio de premio en auditoría</Name><Package_ID>2</Package_ID><Note>Registrar el cambio de premio en auditoría
+Desglose de CU-32 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1048</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-33.1 Consultar el estado actual del canje</Name><Package_ID>2</Package_ID><Note>Consultar el estado actual del canje
+Desglose de CU-33 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1049</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-33.2 Validar la transición solicitada</Name><Package_ID>2</Package_ID><Note>Pendiente a Listo para retiro, o Listo para retiro a Entregado.
+Desglose de CU-33 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1050</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-33.3 Actualizar el estado del canje y notificar</Name><Package_ID>2</Package_ID><Note>Se registra la transición en auditoría y se avisa al socio.
+Desglose de CU-33 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1051</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-34.1 Consultar favoritos, meta y saldo</Name><Package_ID>2</Package_ID><Note>Consultar favoritos, meta y saldo
+Desglose de CU-34 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1052</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-34.2 Guardar o quitar premios favoritos</Name><Package_ID>2</Package_ID><Note>El socio modifica su lista de favoritos.
+Desglose de CU-34 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1027</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-26.3 Validar fecha, lugar y cupos</Name><Package_ID>2</Package_ID><Note>Fecha futura, lugar definido y cupos válidos.
+Desglose de CU-26 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1028</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-26.4 Notificar la cancelación a los inscritos</Name><Package_ID>2</Package_ID><Note>El taller cancelado tiene inscritos.
+Desglose de CU-26 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1029</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-27.1 Validar el plazo para registrar asistencia</Name><Package_ID>2</Package_ID><Note>Desde la hora de inicio hasta 48 horas después.
+Desglose de CU-27 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1030</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-27.2 Marcar Asistió o No asistió</Name><Package_ID>2</Package_ID><Note>Marcar Asistió o No asistió
+Desglose de CU-27 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1031</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-27.3 Guardar la asistencia del inscrito</Name><Package_ID>2</Package_ID><Note>Guardar la asistencia del inscrito
+Desglose de CU-27 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1032</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-28.1 Publicar una noticia con etiqueta Oficial</Name><Package_ID>2</Package_ID><Note>Publicar una noticia con etiqueta Oficial
+Desglose de CU-28 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1033</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-28.2 Fijar una publicación oficial</Name><Package_ID>2</Package_ID><Note>El gestor solicita fijar la publicación.
+Desglose de CU-28 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1034</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-28.3 Validar el límite y duración de la fijación</Name><Package_ID>2</Package_ID><Note>Hasta 3 fijadas vigentes en total y plazo de 1 a 30 días.
+Desglose de CU-28 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1035</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-29.1 Consultar el contenido y sus reportes</Name><Package_ID>2</Package_ID><Note>Consultar el contenido y sus reportes
+Desglose de CU-29 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1036</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-29.2 Eliminar o restaurar contenido</Name><Package_ID>2</Package_ID><Note>El administrador decide eliminar o restaurar contenido.
+Desglose de CU-29 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1037</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-29.3 Ocultar contenido administrativamente</Name><Package_ID>2</Package_ID><Note>El administrador decide ocultar contenido, incluso sin reportes.
+Desglose de CU-29 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1038</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-29.4 Registrar la decisión en auditoría</Name><Package_ID>2</Package_ID><Note>Registrar la decisión en auditoría
+Desglose de CU-29 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1039</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-30.1 Publicar un artículo de salud</Name><Package_ID>2</Package_ID><Note>El gestor elige publicar un artículo.
+Desglose de CU-30 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1053</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-34.3 Elegir un premio como meta</Name><Package_ID>2</Package_ID><Note>El socio selecciona un premio como meta.
+Desglose de CU-34 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1054</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-34.4 Calcular los puntos faltantes para la meta</Name><Package_ID>2</Package_ID><Note>Los puntos faltantes tienen un mínimo de cero.
+Desglose de CU-34 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1055</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-35.1 Validar el mínimo de tres caracteres</Name><Package_ID>2</Package_ID><Note>Validar el mínimo de tres caracteres
+Desglose de CU-35 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1056</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-35.2 Buscar talleres, capacitaciones, publicaciones y premios</Name><Package_ID>2</Package_ID><Note>Buscar talleres, capacitaciones, publicaciones y premios
+Desglose de CU-35 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1057</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-35.3 Abrir un resultado autorizado</Name><Package_ID>2</Package_ID><Note>El socio selecciona uno de los resultados.
+Desglose de CU-35 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1058</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-36.1 Consultar los avisos propios</Name><Package_ID>2</Package_ID><Note>Consultar los avisos propios
+Desglose de CU-36 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1059</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-36.2 Abrir una notificación</Name><Package_ID>2</Package_ID><Note>El usuario selecciona un aviso propio.
+Desglose de CU-36 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1060</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-36.3 Marcar la notificación como leída</Name><Package_ID>2</Package_ID><Note>Marcar la notificación como leída
+Desglose de CU-36 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1061</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-37.1 Indicar suma o resta de puntos y motivo</Name><Package_ID>2</Package_ID><Note>Indicar suma o resta de puntos y motivo
+Desglose de CU-37 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1062</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-37.2 Validar el motivo y saldo resultante</Name><Package_ID>2</Package_ID><Note>Motivo de 10 a 200 caracteres; no se permite saldo negativo.
+Desglose de CU-37 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1063</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-37.3 Aplicar el ajuste y registrar auditoría</Name><Package_ID>2</Package_ID><Note>Aplicar el ajuste y registrar auditoría
+Desglose de CU-37 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1064</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-38.1 Verificar participación en la actividad</Name><Package_ID>2</Package_ID><Note>Verificar participación en la actividad
+Desglose de CU-38 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1065</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-38.2 Responder la encuesta de satisfacción</Name><Package_ID>2</Package_ID><Note>Responder la encuesta de satisfacción
+Desglose de CU-38 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1066</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-38.3 Validar y guardar las respuestas</Name><Package_ID>2</Package_ID><Note>Validar y guardar las respuestas
+Desglose de CU-38 basado en sus notas y diagramas de proceso existentes.</Note></Row><Row><Object_ID>1282</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-08-5 Leer (Auditoría de roles)</Name><Package_ID>83</Package_ID><Note>RF-08-5 | Administración
+El sistema deberá registrar en la bitácora 3 datos (ID del autor, ID del usuario y nuevo rol) en cada cambio.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-08</Note></Row><Row><Object_ID>1283</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-09 Enlace de referido y código QR</Name><Package_ID>83</Package_ID><Note>RF-09 | Referidos
+El sistema deberá generar 1 código, 1 enlace y 1 código QR de referido únicos en máximo 3 segundos después de persistir la aprobación automática de la cuenta del socio.
+Responsable en la matriz: Sistema / Socio / Cliente
+Prioridad: Debe tener
+UR: UR-10, UR-11 | RF: RF-05, RF-06, RF-50</Note></Row><Row><Object_ID>1284</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-09-1 Crear (Código y enlace)</Name><Package_ID>83</Package_ID><Note>RF-09-1 | Referidos
+El sistema deberá generar un código alfanumérico único de exactamente 8 caracteres en mayúsculas e incluirlo en el enlace oficial, sin códigos repetidos entre socios.
+Responsable en la matriz: Sistema / Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-09</Note></Row><Row><Object_ID>1285</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-09-2 Crear (QR)</Name><Package_ID>83</Package_ID><Note>RF-09-2 | Referidos
+El sistema deberá generar el QR del enlace en formato PNG con una resolución mínima de 256 x 256 píxeles.
+Responsable en la matriz: Sistema / Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-09</Note></Row><Row><Object_ID>1286</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-09-3 Leer (Descargar QR)</Name><Package_ID>83</Package_ID><Note>RF-09-3 | Referidos
+El sistema deberá permitir al socio descargar su QR con 1 acción.
+Responsable en la matriz: Sistema / Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-09</Note></Row><Row><Object_ID>1287</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-10 Compartir el enlace de referido</Name><Package_ID>83</Package_ID><Note>RF-10 | Referidos
+El sistema deberá permitir al socio copiar su enlace o compartirlo por WhatsApp o redes sociales con 1 toque, abriendo el canal elegido en un máximo de 2 segundos.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+UR: UR-12 | RF: RF-09</Note></Row><Row><Object_ID>1288</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-10-1 Leer (Copiar)</Name><Package_ID>83</Package_ID><Note>RF-10-1 | Referidos
+El sistema deberá copiar al portapapeles exactamente 1 URL validada como enlace oficial.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-10</Note></Row><Row><Object_ID>1289</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-10-2 Crear (WhatsApp)</Name><Package_ID>83</Package_ID><Note>RF-10-2 | Referidos
+El sistema deberá abrir WhatsApp con un mensaje predefinido de máximo 300 caracteres que incluya el enlace.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-10</Note></Row><Row><Object_ID>1290</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-10-3 Crear (Redes sociales)</Name><Package_ID>83</Package_ID><Note>RF-10-3 | Referidos
+El sistema deberá ofrecer al menos 3 canales: WhatsApp, Facebook y el menú de compartir del dispositivo.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-10</Note></Row><Row><Object_ID>1291</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-11 Registro y gestión de referidos</Name><Package_ID>83</Package_ID><Note>RF-11 | Referidos
+El sistema deberá registrar al referido y su relación única con el socio en máximo 3 segundos, e iniciar su validación automática al registrarse, vincular su cuenta o corregir su asociación, sin aprobación del administrador.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+UR: UR-13, UR-15, UR-16, UR-17, UR-18, UR-54 | RF: RF-01, RF-02, RF-05, RF-09, RF-12, RF-39, RF-42, RF-50</Note></Row><Row><Object_ID>1292</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-11-1 Validar (Código)</Name><Package_ID>83</Package_ID><Note>RF-11-1 | Referidos
+El sistema deberá aceptar solo códigos existentes de socios con cuenta validada automáticamente, rechazar la autorreferencia y comprobar la relación única en base de datos.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-11</Note></Row><Row><Object_ID>1293</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-11-2 Leer (Consulta propia)</Name><Package_ID>83</Package_ID><Note>RF-11-2 | Referidos
+El sistema deberá mostrar al socio sus referidos con nombre de pila, fecha de registro y estado, 10 por página.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-11</Note></Row><Row><Object_ID>1294</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-11-3 Leer (Listado global)</Name><Package_ID>83</Package_ID><Note>RF-11-3 | Referidos
+El sistema deberá mostrar al administrador todos los referidos, 20 por página, con filtros por estado, campaña, provincia y fecha. Los Pendientes indicarán requisito faltante o incidencia técnica y último intento, sin acciones para dictaminar manualmente.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-11</Note></Row><Row><Object_ID>1295</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-11-4 Actualizar (Validación automática)</Name><Package_ID>83</Package_ID><Note>RF-11-4 | Referidos
+El sistema deberá aprobar automáticamente en máximo 2 segundos al referido activo cuya cuenta esté Aprobada por RF-50 y cuya relación sea válida y única. Un incumplimiento confirmado generará Rechazado con causa; requisitos aún no completados o fallas técnicas conservarán Pendiente. El administrador no podrá decidir el estado.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-11, RF-02, RF-05-4, RF-50</Note></Row><Row><Object_ID>1296</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-11-5 Crear (Asociación manual)</Name><Package_ID>83</Package_ID><Note>RF-11-5 | Referidos
+El sistema deberá permitir al administrador asociar al referidor un usuario registrado sin código durante los primeros 30 días, comprobando unicidad y ausencia de autorreferencia y disparando la validación automática; esta asociación no equivale a aprobar al referido.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-11</Note></Row><Row><Object_ID>1297</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-11-6 Eliminar (Baja lógica)</Name><Package_ID>83</Package_ID><Note>RF-11-6 | Referidos
+El sistema deberá ocultar un referido del listado mediante 1 borrado lógico, conservando su historial.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-11</Note></Row><Row><Object_ID>1298</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-11-7 Crear (Exportación)</Name><Package_ID>83</Package_ID><Note>RF-11-7 | Referidos
+El sistema deberá exportar en CSV, en máximo 10 segundos, los referidos Pendientes con nombre, correo, celular, referidor y fecha para seguimiento comercial, sin convertirlos en una cola de aprobación manual.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-11</Note></Row><Row><Object_ID>1299</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-12 Asignación automática de puntos</Name><Package_ID>83</Package_ID><Note>RF-12 | Puntos y recompensas
+El sistema deberá sumar puntos al saldo de un usuario en un máximo de 2 segundos al confirmarse una actividad bonificable.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+UR: UR-19, UR-24 | RF: RF-11-4, RF-13, RF-14, RF-50</Note></Row><Row><Object_ID>1300</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-12-1 Crear (Movimiento)</Name><Package_ID>83</Package_ID><Note>RF-12-1 | Puntos y recompensas
+El sistema deberá incrementar el saldo exactamente con el valor entero definido en los parámetros (RF-14) o en la campaña vigente (RF-13).
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-12</Note></Row><Row><Object_ID>1301</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-12-2 Crear (Premio por referido)</Name><Package_ID>83</Package_ID><Note>RF-12-2 | Puntos y recompensas
+El sistema deberá acreditar a ambas partes los puntos de la campaña activa en máximo 2 segundos desde la aprobación automática del referido, en una transacción con clave única por evento y destinatario, sin duplicados ante reintentos. Sin campaña activa aplicará a ambas partes «Puntos por referido» (RF-14).
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-12, RF-11-4</Note></Row><Row><Object_ID>1302</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-12-3 Leer (Historial)</Name><Package_ID>83</Package_ID><Note>RF-12-3 | Puntos y recompensas
+El sistema deberá mostrar el historial de movimientos del más reciente al más antiguo, 20 por página.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-12</Note></Row><Row><Object_ID>1303</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-12-4 Leer (Saldo)</Name><Package_ID>83</Package_ID><Note>RF-12-4 | Puntos y recompensas
+El sistema deberá mostrar por separado el saldo disponible y los puntos acumulados históricos.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-12</Note></Row><Row><Object_ID>1304</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-13 Campañas de referidos</Name><Package_ID>83</Package_ID><Note>RF-13 | Administración
+El sistema deberá permitir al administrador gestionar campañas de referidos con vigencia, provincias y puntos para ambas partes, completando cada operación en un máximo de 3 segundos.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+UR: UR-20, UR-21, UR-22, UR-23 | RF: RF-42</Note></Row><Row><Object_ID>1305</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-13-1 Crear (Campaña)</Name><Package_ID>83</Package_ID><Note>RF-13-1 | Administración
+El sistema deberá bloquear la creación si la fecha de fin es igual o anterior a la de inicio.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-13</Note></Row><Row><Object_ID>1306</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-13-2 Validar (Título)</Name><Package_ID>83</Package_ID><Note>RF-13-2 | Administración
+El sistema deberá restringir el título a un máximo de 100 caracteres.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-13</Note></Row><Row><Object_ID>1307</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-13-3 Crear (Premios)</Name><Package_ID>83</Package_ID><Note>RF-13-3 | Administración
+El sistema deberá exigir los puntos para el socio referidor y para el referido como enteros entre 1 y 10,000.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-13</Note></Row><Row><Object_ID>1159</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-18.2 Consultar titularidad y vigencia institucional</Name><Package_ID>2</Package_ID><Note>Consulta de solo lectura a fuente institucional autorizada, sin saldos ni movimientos. El vínculo de identidad se define con la Cooperativa.</Note></Row><Row><Object_ID>1160</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-18.3 Persistir resultado y evidencia del cotejo</Name><Package_ID>2</Package_ID><Note>Registrar origen Sistema, fuente, vigencia, regla, intento, causa y transición, con datos mínimos protegidos.</Note></Row><Row><Object_ID>1308</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-13-4 Crear (Provincias)</Name><Package_ID>83</Package_ID><Note>RF-13-4 | Administración
+El sistema deberá exigir la selección de entre 1 y 8 provincias de cobertura.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-13</Note></Row><Row><Object_ID>1309</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-13-5 Actualizar (Estado)</Name><Package_ID>83</Package_ID><Note>RF-13-5 | Administración
+El sistema deberá manejar 4 estados (Borrador, Activa, Pausada y Finalizada), aplicar cada cambio en máximo 2 segundos y no acreditar puntos mientras la campaña esté Pausada.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-13</Note></Row><Row><Object_ID>1310</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-13-6 Eliminar (Cierre)</Name><Package_ID>83</Package_ID><Note>RF-13-6 | Administración
+El sistema deberá impedir cambios en una campaña «Finalizada» y detener su bonificación.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-13</Note></Row><Row><Object_ID>1311</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-13-7 Validar (Superposición)</Name><Package_ID>83</Package_ID><Note>RF-13-7 | Administración
+El sistema deberá impedir que 2 campañas activas incluyan la misma provincia en fechas superpuestas.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-13</Note></Row><Row><Object_ID>1312</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-13-8 Leer (Campañas vigentes)</Name><Package_ID>83</Package_ID><Note>RF-13-8 | Administración
+El sistema deberá mostrar al socio las campañas activas de su provincia con los puntos para ambas partes y la fecha de fin.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-13</Note></Row><Row><Object_ID>1313</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-14 Parámetros globales</Name><Package_ID>83</Package_ID><Note>RF-14 | Administración
+El sistema deberá aplicar el cambio de un parámetro en un máximo de 5 segundos tras guardarlo.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+UR: UR-46 | RF: RF-42</Note></Row><Row><Object_ID>1314</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-14-1 Validar (Tipo)</Name><Package_ID>83</Package_ID><Note>RF-14-1 | Administración
+El sistema deberá aceptar en los parámetros numéricos solo números enteros y en los de texto un máximo de 500 caracteres.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-14</Note></Row><Row><Object_ID>1315</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-14-2 Leer (Auditoría)</Name><Package_ID>83</Package_ID><Note>RF-14-2 | Administración
+El sistema deberá registrar en la bitácora 3 campos (parámetro, valor anterior y valor nuevo) en cada cambio.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-14</Note></Row><Row><Object_ID>1316</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-14-3 Actualizar (Puntos por acción)</Name><Package_ID>83</Package_ID><Note>RF-14-3 | Administración
+El sistema deberá mantener 1 valor entero entre 0 y 10,000 para cada acción bonificable (capacitación aprobada, partida de trivia, asistencia a taller y reto cumplido).
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-14</Note></Row><Row><Object_ID>1317</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-14-4 Actualizar (Valor del punto)</Name><Package_ID>83</Package_ID><Note>RF-14-4 | Administración
+El sistema deberá mantener el valor en dólares de 1 punto, con 2 decimales, para calcular el costo por captación (RF-45).
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-14</Note></Row><Row><Object_ID>1318</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-15 Ajuste manual de puntos</Name><Package_ID>83</Package_ID><Note>RF-15 | Puntos y recompensas
+El sistema deberá registrar un ajuste manual de puntos en un máximo de 3 segundos.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+UR: UR-47 | RF: RF-12, RF-42</Note></Row><Row><Object_ID>1319</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-15-1 Validar (Saldo)</Name><Package_ID>83</Package_ID><Note>RF-15-1 | Puntos y recompensas
+El sistema deberá bloquear una resta que deje el saldo en negativo.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-15</Note></Row><Row><Object_ID>1320</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-15-2 Crear (Traza)</Name><Package_ID>83</Package_ID><Note>RF-15-2 | Puntos y recompensas
+El sistema deberá registrar 1 movimiento etiquetado como «Ajuste administrativo» con fecha y hora.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-15</Note></Row><Row><Object_ID>1161</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-18.4 Reintentar automáticamente la validación</Name><Package_ID>2</Package_ID><Note>Condición de extensión: fuente inaccesible, incompleta o desactualizada. Conservar Pendiente, reintentar cada 5 minutos y no derivar a revisión manual.</Note></Row><Row><Object_ID>1162</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-18.5 Notificar un resultado de validación</Name><Package_ID>2</Package_ID><Note>Condición: resultado resuelto y cambio persistido. Un aviso por evento y destinatario en máximo 5 segundos.</Note></Row><Row><Object_ID>1163</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-06.2.1 Comprobar registro activo y cuenta validada</Name><Package_ID>2</Package_ID><Note>No convertir un prospecto incompleto en referido aprobado. Sin requisitos completos, conservar Pendiente.</Note></Row><Row><Object_ID>1164</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-06.2.2 Comprobar referidor y relación única</Name><Package_ID>2</Package_ID><Note>Referidor habilitado, sin autorreferencia ni relación duplicada; unicidad e integridad en base de datos.</Note></Row><Row><Object_ID>1165</Object_ID><Object_Type>UseCase</Object_Type><Name>CU-06.2.3 Persistir decisión automática y evidencia</Name><Package_ID>2</Package_ID><Note>Guardar resultado del servicio interno con origen Sistema. La aprobación y los créditos de ambas partes se confirman juntos.</Note></Row><Row><Object_ID>1243</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-01 Registro de cuenta en 3 pasos</Name><Package_ID>83</Package_ID><Note>RF-01 | Gestión de usuarios
+El sistema deberá registrar la cuenta de un usuario en 3 pasos (datos, cuenta en la Cooperativa y acceso), guardándola en un máximo de 3 segundos al finalizar.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+UR: UR-01, UR-13, UR-14, UR-22 | RF: RF-05, RF-11, RF-47, RF-50</Note></Row><Row><Object_ID>1244</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-01-1 Crear (Paso 1: datos)</Name><Package_ID>83</Package_ID><Note>RF-01-1 | Gestión de usuarios
+El sistema deberá exigir nombres y apellidos (al menos un nombre y un apellido) de entre 3 y 100 caracteres, un correo con formato válido, un celular de exactamente 10 dígitos que inicie con 09 y 1 de las 24 provincias del Ecuador.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-01</Note></Row><Row><Object_ID>1245</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-01-2 Validar (Unicidad)</Name><Package_ID>83</Package_ID><Note>RF-01-2 | Gestión de usuarios
+El sistema deberá rechazar el registro si el correo o el celular ya pertenecen a otra cuenta.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-01</Note></Row><Row><Object_ID>1246</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-01-3 Crear (Paso 2: cuenta)</Name><Package_ID>83</Package_ID><Note>RF-01-3 | Gestión de usuarios
+El sistema deberá permitir continuar sin vincular una cuenta de la Cooperativa al elegir «No, aún no».
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-01</Note></Row><Row><Object_ID>1247</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-01-4 Crear (Paso 3: contraseña)</Name><Package_ID>83</Package_ID><Note>RF-01-4 | Gestión de usuarios
+El sistema deberá exigir una contraseña de al menos 8 caracteres con 1 mayúscula y 1 número, y que su confirmación coincida exactamente.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-01</Note></Row><Row><Object_ID>1248</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-01-5 Crear (Código de referido)</Name><Package_ID>83</Package_ID><Note>RF-01-5 | Gestión de usuarios
+El sistema deberá llenar automáticamente el código de referido cuando la persona llegue por un enlace o QR válido, y permitir escribirlo a mano o dejarlo vacío.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-01</Note></Row><Row><Object_ID>1249</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-01-6 Leer (Progreso)</Name><Package_ID>83</Package_ID><Note>RF-01-6 | Gestión de usuarios
+El sistema deberá mostrar el paso actual (1 a 3) con su porcentaje y conservar los datos ingresados al volver a un paso anterior.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-01</Note></Row><Row><Object_ID>1250</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-02 Confirmación de correo</Name><Package_ID>83</Package_ID><Note>RF-02 | Gestión de usuarios
+El sistema deberá enviar un código de confirmación al correo del usuario en un máximo de 60 segundos tras crear la cuenta o cambiar el correo.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+UR: UR-02 | RF: RF-01</Note></Row><Row><Object_ID>1251</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-02-1 Crear (Código)</Name><Package_ID>83</Package_ID><Note>RF-02-1 | Gestión de usuarios
+El sistema deberá generar un código numérico de exactamente 6 dígitos que expire a los 10 minutos.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-02</Note></Row><Row><Object_ID>1252</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-02-2 Validar (Reenvío)</Name><Package_ID>83</Package_ID><Note>RF-02-2 | Gestión de usuarios
+El sistema deberá permitir un máximo de 3 reenvíos del código por hora.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-02</Note></Row><Row><Object_ID>1253</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-02-3 Validar (Activación)</Name><Package_ID>83</Package_ID><Note>RF-02-3 | Gestión de usuarios
+El sistema deberá impedir el inicio de sesión de una cuenta mientras su correo no esté confirmado.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-02</Note></Row><Row><Object_ID>1254</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-03 Consulta, actualización y baja del perfil</Name><Package_ID>83</Package_ID><Note>RF-03 | Gestión de usuarios
+El sistema deberá permitir al usuario consultar, actualizar o dar de baja su perfil, completando cada operación en un máximo de 3 segundos.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+UR: UR-06 | RF: RF-01, RF-02, RF-42</Note></Row><Row><Object_ID>1255</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-03-1 Leer (Consulta)</Name><Package_ID>83</Package_ID><Note>RF-03-1 | Gestión de usuarios
+El sistema deberá mostrar exactamente 4 datos del perfil: nombres y apellidos, correo, celular y estado de la cuenta vinculada.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+Dep.: RF-03</Note></Row><Row><Object_ID>1321</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-15-3 Validar (Motivo)</Name><Package_ID>83</Package_ID><Note>RF-15-3 | Puntos y recompensas
+El sistema deberá exigir un motivo de entre 10 y 200 caracteres.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-15</Note></Row><Row><Object_ID>1322</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-16 Niveles y ranking</Name><Package_ID>83</Package_ID><Note>RF-16 | Gamificación
+El sistema deberá recalcular el nivel de un usuario en un máximo de 1 segundo tras acreditarle puntos.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+UR: UR-25 | RF: RF-12, RF-46</Note></Row><Row><Object_ID>1323</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-16-1 Actualizar (Nivel)</Name><Package_ID>83</Package_ID><Note>RF-16-1 | Gamificación
+El sistema deberá calcular el nivel con los puntos acumulados históricos, de modo que un canje no reduzca el nivel.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+Dep.: RF-16</Note></Row><Row><Object_ID>1324</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-16-2 Leer (Avance)</Name><Package_ID>83</Package_ID><Note>RF-16-2 | Gamificación
+El sistema deberá mostrar el nivel actual y los puntos faltantes para el siguiente (umbral siguiente − puntos acumulados, mínimo 0) en máximo 2 pasos desde la pantalla de inicio.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+Dep.: RF-16</Note></Row><Row><Object_ID>1325</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-16-3 Leer (Ranking)</Name><Package_ID>83</Package_ID><Note>RF-16-3 | Gamificación
+El sistema deberá mostrar en el ranking solo a los 10 primeros usuarios, excluyendo a los de perfil «Privado».
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+Dep.: RF-16</Note></Row><Row><Object_ID>1326</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-16-4 Crear (Niveles)</Name><Package_ID>83</Package_ID><Note>RF-16-4 | Gamificación
+El sistema deberá permitir al administrador definir entre 2 y 10 niveles con umbrales enteros únicos y crecientes.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+Dep.: RF-16</Note></Row><Row><Object_ID>1327</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-17 Insignias</Name><Package_ID>83</Package_ID><Note>RF-17 | Gamificación
+El sistema deberá otorgar una insignia al usuario en un máximo de 5 segundos tras cumplir la condición del logro.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+UR: UR-26 | RF: RF-12</Note></Row><Row><Object_ID>1328</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-17-1 Crear (Insignia)</Name><Package_ID>83</Package_ID><Note>RF-17-1 | Gamificación
+El sistema deberá exigir 1 de 5 tipos de logro (referidos aprobados, capacitaciones aprobadas, retos cumplidos, partidas de trivia o talleres asistidos) y una meta entera mayor o igual a 1.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+Dep.: RF-17</Note></Row><Row><Object_ID>1329</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-17-2 Crear (Otorgamiento)</Name><Package_ID>83</Package_ID><Note>RF-17-2 | Gamificación
+El sistema deberá otorgar cada insignia una sola vez por usuario.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+Dep.: RF-17</Note></Row><Row><Object_ID>1330</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-17-3 Leer (Perfil)</Name><Package_ID>83</Package_ID><Note>RF-17-3 | Gamificación
+El sistema deberá mostrar las insignias en el perfil, de la más reciente a la más antigua.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+Dep.: RF-17</Note></Row><Row><Object_ID>1331</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-17-4 Eliminar (Inactivar)</Name><Package_ID>83</Package_ID><Note>RF-17-4 | Gamificación
+El sistema deberá permitir inactivar una insignia sin retirarla a quienes ya la obtuvieron.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debería tener
+Dep.: RF-17</Note></Row><Row><Object_ID>1332</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-18 Retos</Name><Package_ID>83</Package_ID><Note>RF-18 | Gamificación
+El sistema deberá permitir al administrador gestionar retos con meta numérica y puntos de recompensa, completando cada operación en un máximo de 3 segundos.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+UR: UR-27 | RF: RF-12</Note></Row><Row><Object_ID>1333</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-18-1 Crear (Reto)</Name><Package_ID>83</Package_ID><Note>RF-18-1 | Gamificación
+El sistema deberá bloquear el reto si la fecha de fin es igual o anterior a la de inicio.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-18</Note></Row><Row><Object_ID>1334</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-18-2 Validar (Meta)</Name><Package_ID>83</Package_ID><Note>RF-18-2 | Gamificación
+El sistema deberá aceptar como meta un número entero entre 1 y 1,000.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-18</Note></Row><Row><Object_ID>1335</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-18-3 Leer (Progreso)</Name><Package_ID>83</Package_ID><Note>RF-18-3 | Gamificación
+El sistema deberá mostrar el avance del usuario de 0 % a 100 % respecto de la meta.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-18</Note></Row><Row><Object_ID>1336</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-18-4 Actualizar (Cumplimiento)</Name><Package_ID>83</Package_ID><Note>RF-18-4 | Gamificación
+El sistema deberá emitir 1 sola orden de acreditación por usuario y reto al llegar al 100 %.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-18</Note></Row><Row><Object_ID>1337</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-18-5 Eliminar (Finalizar)</Name><Package_ID>83</Package_ID><Note>RF-18-5 | Gamificación
+El sistema deberá cambiar el reto a «Finalizado», retirándolo de los retos activos.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-18</Note></Row><Row><Object_ID>1338</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-19 Banco de preguntas de educación financiera</Name><Package_ID>83</Package_ID><Note>RF-19 | Juegos
+El sistema deberá permitir al gestor de contenidos gestionar las preguntas de la trivia de educación financiera, completando cada operación en un máximo de 3 segundos.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+UR: UR-28 | RF: RF-08</Note></Row><Row><Object_ID>1339</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-19-1 Crear (Pregunta)</Name><Package_ID>83</Package_ID><Note>RF-19-1 | Juegos
+El sistema deberá exigir exactamente 1 opción correcta entre 2 y 4 opciones.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+Dep.: RF-19</Note></Row><Row><Object_ID>1340</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-19-2 Validar (Tema)</Name><Package_ID>83</Package_ID><Note>RF-19-2 | Juegos
+El sistema deberá clasificar cada pregunta en 1 de 4 temas (Ahorro, Crédito, Presupuesto o Inversión).
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+Dep.: RF-19</Note></Row><Row><Object_ID>1341</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-19-3 Leer (Dificultad)</Name><Package_ID>83</Package_ID><Note>RF-19-3 | Juegos
+El sistema deberá filtrar las preguntas por 1 de 3 niveles (Básico, Intermedio o Avanzado).
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+Dep.: RF-19</Note></Row><Row><Object_ID>1342</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-19-4 Eliminar (Desactivar)</Name><Package_ID>83</Package_ID><Note>RF-19-4 | Juegos
+El sistema deberá cambiar la pregunta a «Inactiva» para excluirla de nuevas partidas.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+Dep.: RF-19</Note></Row><Row><Object_ID>1343</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-20 Partida de trivia</Name><Package_ID>83</Package_ID><Note>RF-20 | Juegos
+El sistema deberá calcular el puntaje de una partida de trivia en un máximo de 3 segundos tras responder la última pregunta.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+UR: UR-24, UR-29 | RF: RF-19, RF-12</Note></Row><Row><Object_ID>1344</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-20-1 Validar (Límite diario)</Name><Package_ID>83</Package_ID><Note>RF-20-1 | Juegos
+El sistema deberá bloquear una nueva partida si el usuario completó 3 en las últimas 24 horas.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-20</Note></Row><Row><Object_ID>1345</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-20-2 Leer (Preguntas)</Name><Package_ID>83</Package_ID><Note>RF-20-2 | Juegos
+El sistema deberá cargar exactamente 10 preguntas activas al azar.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-20</Note></Row><Row><Object_ID>1346</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-20-3 Validar (Tiempo)</Name><Package_ID>83</Package_ID><Note>RF-20-3 | Juegos
+El sistema deberá limitar cada pregunta a 30 segundos y darla por incorrecta al agotarse.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-20</Note></Row><Row><Object_ID>1347</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-20-4 Actualizar (Puntos)</Name><Package_ID>83</Package_ID><Note>RF-20-4 | Juegos
+El sistema deberá enviar al módulo de puntos el valor exacto ganado.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-20</Note></Row><Row><Object_ID>1348</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-21 Gestión de capacitaciones</Name><Package_ID>83</Package_ID><Note>RF-21 | Capacitaciones
+El sistema deberá permitir al gestor de contenidos gestionar capacitaciones, completando cada operación en un máximo de 3 segundos.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+UR: UR-30 | RF: RF-08</Note></Row><Row><Object_ID>1349</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-21-1 Crear (Material)</Name><Package_ID>83</Package_ID><Note>RF-21-1 | Capacitaciones
+El sistema deberá bloquear cualquier archivo de material que supere los 50 MB.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+Dep.: RF-21</Note></Row><Row><Object_ID>1350</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-21-2 Crear (Publicación)</Name><Package_ID>83</Package_ID><Note>RF-21-2 | Capacitaciones
+El sistema deberá permitir publicar una capacitación solo si tiene al menos 1 material y un cuestionario de mínimo 5 preguntas.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+Dep.: RF-21</Note></Row><Row><Object_ID>1351</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-21-3 Leer (Catálogo)</Name><Package_ID>83</Package_ID><Note>RF-21-3 | Capacitaciones
+El sistema deberá mostrar las capacitaciones activas, 10 por página.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+Dep.: RF-21</Note></Row><Row><Object_ID>1352</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-21-4 Eliminar (Desactivar)</Name><Package_ID>83</Package_ID><Note>RF-21-4 | Capacitaciones
+El sistema deberá cambiar la capacitación a «Inactiva» sin borrar su historial.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debería tener
+Dep.: RF-21</Note></Row><Row><Object_ID>1353</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-22 Evaluación y certificado</Name><Package_ID>83</Package_ID><Note>RF-22 | Capacitaciones
+El sistema deberá calificar la evaluación de una capacitación en un máximo de 3 segundos.
+Responsable en la matriz: Sistema / Socio / Cliente
+Prioridad: Debería tener
+UR: UR-24, UR-31 | RF: RF-21, RF-12</Note></Row><Row><Object_ID>1354</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-22-1 Leer (Calificación)</Name><Package_ID>83</Package_ID><Note>RF-22-1 | Capacitaciones
+El sistema deberá exigir al menos el 70 % de respuestas correctas para marcar la capacitación como «Completada».
+Responsable en la matriz: Sistema / Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-22</Note></Row><Row><Object_ID>1355</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-22-2 Crear (Certificado)</Name><Package_ID>83</Package_ID><Note>RF-22-2 | Capacitaciones
+El sistema deberá generar el certificado en PDF con 1 código único de validación en máximo 10 segundos tras aprobar.
+Responsable en la matriz: Sistema / Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-22</Note></Row><Row><Object_ID>1356</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-22-3 Actualizar (Puntos)</Name><Package_ID>83</Package_ID><Note>RF-22-3 | Capacitaciones
+El sistema deberá acreditar los puntos de la capacitación solo la primera vez que se aprueba.
+Responsable en la matriz: Sistema / Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-22</Note></Row><Row><Object_ID>1357</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-22-4 Validar (Intentos)</Name><Package_ID>83</Package_ID><Note>RF-22-4 | Capacitaciones
+El sistema deberá permitir un máximo de 3 intentos por capacitación cada 24 horas.
+Responsable en la matriz: Sistema / Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-22</Note></Row><Row><Object_ID>1358</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-23 Gestión de talleres</Name><Package_ID>83</Package_ID><Note>RF-23 | Talleres
+El sistema deberá registrar un taller con fecha futura, lugar y cupos mayores a 0 en un máximo de 3 segundos.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debe tener
+UR: UR-32 | RF: RF-08</Note></Row><Row><Object_ID>1359</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-23-1 Crear (Taller)</Name><Package_ID>83</Package_ID><Note>RF-23-1 | Talleres
+El sistema deberá exigir que la fecha del taller sea posterior a la fecha actual.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-23</Note></Row><Row><Object_ID>1360</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-23-2 Leer (Calendario)</Name><Package_ID>83</Package_ID><Note>RF-23-2 | Talleres
+El sistema deberá mostrar los talleres activos agrupados por mes en máximo 3 segundos.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-23</Note></Row><Row><Object_ID>1361</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-23-3 Actualizar (Cupos)</Name><Package_ID>83</Package_ID><Note>RF-23-3 | Talleres
+El sistema deberá permitir cambiar los cupos siempre que el nuevo valor sea mayor o igual al número de inscritos.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-23</Note></Row><Row><Object_ID>1362</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-23-4 Eliminar (Cancelación)</Name><Package_ID>83</Package_ID><Note>RF-23-4 | Talleres
+El sistema deberá cambiar el taller a «Cancelado» y liberar el 100 % de sus inscripciones.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-23</Note></Row><Row><Object_ID>1363</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-24 Inscripción a talleres</Name><Package_ID>83</Package_ID><Note>RF-24 | Talleres
+El sistema deberá confirmar la inscripción de un usuario a un taller en un máximo de 3 segundos cuando existan cupos.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+UR: UR-33 | RF: RF-23</Note></Row><Row><Object_ID>1364</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-24-1 Crear (Inscripción)</Name><Package_ID>83</Package_ID><Note>RF-24-1 | Talleres
+El sistema deberá completar la inscripción en máximo 3 pasos y restar exactamente 1 cupo.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-24</Note></Row><Row><Object_ID>1365</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-24-2 Validar (Duplicidad)</Name><Package_ID>83</Package_ID><Note>RF-24-2 | Talleres
+El sistema deberá impedir más de 1 inscripción del mismo usuario en un taller.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-24</Note></Row><Row><Object_ID>1366</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-24-3 Eliminar (Anulación)</Name><Package_ID>83</Package_ID><Note>RF-24-3 | Talleres
+El sistema deberá permitir anular la inscripción hasta 24 horas antes del taller, devolviendo 1 cupo.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-24</Note></Row><Row><Object_ID>1367</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-25 Registro de asistencia</Name><Package_ID>83</Package_ID><Note>RF-25 | Talleres
+El sistema deberá registrar la asistencia de un inscrito en un máximo de 2 segundos.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debe tener
+UR: UR-24, UR-34 | RF: RF-24, RF-12</Note></Row><Row><Object_ID>1368</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-25-1 Actualizar (Asistencia)</Name><Package_ID>83</Package_ID><Note>RF-25-1 | Talleres
+El sistema deberá admitir solo 2 valores (Asistió o No asistió).
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-25</Note></Row><Row><Object_ID>1369</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-25-2 Crear (Puntos)</Name><Package_ID>83</Package_ID><Note>RF-25-2 | Talleres
+El sistema deberá acreditar una sola vez los puntos de asistencia definidos en los parámetros.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-25</Note></Row><Row><Object_ID>1370</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-25-3 Validar (Fecha)</Name><Package_ID>83</Package_ID><Note>RF-25-3 | Talleres
+El sistema deberá permitir marcar la asistencia solo desde la hora de inicio del taller hasta 48 horas después.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-25</Note></Row><Row><Object_ID>1371</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-26 Publicaciones en el muro</Name><Package_ID>83</Package_ID><Note>RF-26 | Comunidad
+El sistema deberá permitir al usuario y al gestor de contenidos publicar en el muro, con la publicación visible en un máximo de 3 segundos.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos
+Prioridad: Debe tener
+UR: UR-35, UR-36 | RF: RF-08</Note></Row><Row><Object_ID>1372</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-26-1 Validar (Texto)</Name><Package_ID>83</Package_ID><Note>RF-26-1 | Comunidad
+El sistema deberá restringir el texto a un máximo de 500 caracteres.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-26</Note></Row><Row><Object_ID>1373</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-26-2 Validar (Imagen)</Name><Package_ID>83</Package_ID><Note>RF-26-2 | Comunidad
+El sistema deberá rechazar imágenes de más de 2 MB o en un formato distinto de JPG o PNG.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-26</Note></Row><Row><Object_ID>1374</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-26-3 Leer (Muro)</Name><Package_ID>83</Package_ID><Note>RF-26-3 | Comunidad
+El sistema deberá mostrar las publicaciones activas, 10 por página.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-26</Note></Row><Row><Object_ID>1375</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-26-4 Crear (Oficial)</Name><Package_ID>83</Package_ID><Note>RF-26-4 | Comunidad
+El sistema deberá etiquetar como «Oficial» el 100 % de las publicaciones del gestor de contenidos.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-26</Note></Row><Row><Object_ID>1376</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-26-5 Actualizar (Autoría)</Name><Package_ID>83</Package_ID><Note>RF-26-5 | Comunidad
+El sistema deberá permitir editar o eliminar una publicación solo a su autor.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos
+Prioridad: Debe tener
+Dep.: RF-26</Note></Row><Row><Object_ID>1377</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-27 Comentarios</Name><Package_ID>83</Package_ID><Note>RF-27 | Comunidad
+El sistema deberá registrar el comentario de un usuario sobre una publicación en un máximo de 3 segundos.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+UR: UR-35 | RF: RF-26</Note></Row><Row><Object_ID>1378</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-27-1 Validar (Texto)</Name><Package_ID>83</Package_ID><Note>RF-27-1 | Comunidad
+El sistema deberá bloquear comentarios de más de 250 caracteres.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-27</Note></Row><Row><Object_ID>1379</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-27-2 Leer (Listado)</Name><Package_ID>83</Package_ID><Note>RF-27-2 | Comunidad
+El sistema deberá mostrar los comentarios en orden cronológico debajo de la publicación.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-27</Note></Row><Row><Object_ID>1380</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-27-3 Eliminar (Borrado propio)</Name><Package_ID>83</Package_ID><Note>RF-27-3 | Comunidad
+El sistema deberá permitir al autor aplicar 1 borrado lógico a su comentario.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debe tener
+Dep.: RF-27</Note></Row><Row><Object_ID>1381</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-28 Reacciones</Name><Package_ID>83</Package_ID><Note>RF-28 | Comunidad
+El sistema deberá registrar la reacción «Me gusta» de un usuario a una publicación en un máximo de 2 segundos.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+UR: UR-35 | RF: RF-26</Note></Row><Row><Object_ID>1382</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-28-1 Validar (Reacción única)</Name><Package_ID>83</Package_ID><Note>RF-28-1 | Comunidad
+El sistema deberá permitir como máximo 1 reacción por usuario en cada publicación.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-28</Note></Row><Row><Object_ID>1383</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-28-2 Actualizar (Contador)</Name><Package_ID>83</Package_ID><Note>RF-28-2 | Comunidad
+El sistema deberá sumar 1 al contador al reaccionar y restar 1 al retirar la reacción.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-28</Note></Row><Row><Object_ID>1384</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-29 Publicaciones fijadas</Name><Package_ID>83</Package_ID><Note>RF-29 | Comunidad
+El sistema deberá fijar una publicación oficial en las primeras posiciones del muro en un máximo de 3 segundos y retirarla al cumplirse su fecha de fin.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Podría tener
+UR: UR-36 | RF: RF-26</Note></Row><Row><Object_ID>1385</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-29-1 Validar (Límite)</Name><Package_ID>83</Package_ID><Note>RF-29-1 | Comunidad
+El sistema deberá permitir un máximo de 3 publicaciones fijadas a la vez.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Podría tener
+Dep.: RF-29</Note></Row><Row><Object_ID>1386</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-29-2 Validar (Duración)</Name><Package_ID>83</Package_ID><Note>RF-29-2 | Comunidad
+El sistema deberá aceptar una duración de fijación de entre 1 y 30 días.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Podría tener
+Dep.: RF-29</Note></Row><Row><Object_ID>1387</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-30 Moderación de contenidos</Name><Package_ID>83</Package_ID><Note>RF-30 | Comunidad
+El sistema deberá ocultar un contenido en un máximo de 5 segundos cuando reciba 3 reportes de usuarios distintos.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debería tener
+UR: UR-37 | RF: RF-26, RF-27</Note></Row><Row><Object_ID>1388</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-30-1 Crear (Reporte)</Name><Package_ID>83</Package_ID><Note>RF-30-1 | Comunidad
+El sistema deberá exigir 1 de 4 motivos (Ofensivo, Spam, Falso u Otro) y aceptar 1 solo reporte por usuario y contenido.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debería tener
+Dep.: RF-30</Note></Row><Row><Object_ID>1389</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-30-2 Actualizar (Resolución)</Name><Package_ID>83</Package_ID><Note>RF-30-2 | Comunidad
+El sistema deberá permitir al administrador eliminar o restaurar el contenido en máximo 2 segundos.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debería tener
+Dep.: RF-30</Note></Row><Row><Object_ID>1390</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-30-3 Eliminar (Ocultamiento directo)</Name><Package_ID>83</Package_ID><Note>RF-30-3 | Comunidad
+El sistema deberá permitir al administrador ocultar cualquier publicación o comentario sin necesidad de reportes.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debería tener
+Dep.: RF-30</Note></Row><Row><Object_ID>1391</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-31 Contenidos y servicios de salud</Name><Package_ID>83</Package_ID><Note>RF-31 | Salud y bienestar
+El sistema deberá permitir al gestor de contenidos publicar artículos de salud y la información de los servicios de salud de la Cooperativa, completando cada operación en un máximo de 3 segundos.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Podría tener
+UR: UR-38 | RF: RF-08</Note></Row><Row><Object_ID>1392</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-31-1 Validar (Categoría)</Name><Package_ID>83</Package_ID><Note>RF-31-1 | Salud y bienestar
+El sistema deberá exigir 1 de 4 categorías (Nutrición, Actividad física, Salud mental o Prevención).
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Podría tener
+Dep.: RF-31</Note></Row><Row><Object_ID>1393</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-31-2 Leer (Catálogo)</Name><Package_ID>83</Package_ID><Note>RF-31-2 | Salud y bienestar
+El sistema deberá mostrar los artículos y los servicios en secciones separadas, del más reciente al más antiguo, accesibles en máximo 2 pasos desde la pantalla de inicio.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Podría tener
+Dep.: RF-31</Note></Row><Row><Object_ID>1394</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-31-3 Eliminar (Despublicar)</Name><Package_ID>83</Package_ID><Note>RF-31-3 | Salud y bienestar
+El sistema deberá cambiar el contenido a «Borrador» para ocultarlo a los usuarios.
+Responsable en la matriz: Gestor de contenidos
+Prioridad: Podría tener
+Dep.: RF-31</Note></Row><Row><Object_ID>1395</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-32 Catálogo de premios</Name><Package_ID>83</Package_ID><Note>RF-32 | Puntos y recompensas
+El sistema deberá permitir al administrador gestionar los premios del catálogo, completando cada operación en un máximo de 3 segundos.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+UR: UR-39 | RF: RF-42</Note></Row><Row><Object_ID>1396</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-32-1 Crear (Premio)</Name><Package_ID>83</Package_ID><Note>RF-32-1 | Puntos y recompensas
+El sistema deberá registrar un premio solo si su costo es un entero mayor a 0, su stock un entero mayor o igual a 1 y su nombre no existe en el catálogo.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-32</Note></Row><Row><Object_ID>1397</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-32-2 Validar (Foto)</Name><Package_ID>83</Package_ID><Note>RF-32-2 | Puntos y recompensas
+El sistema deberá aceptar la foto solo en JPG o PNG y de hasta 2 MB.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-32</Note></Row><Row><Object_ID>1398</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-32-3 Leer (Catálogo)</Name><Package_ID>83</Package_ID><Note>RF-32-3 | Puntos y recompensas
+El sistema deberá excluir del catálogo los premios «Inactivos» o con stock 0.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-32</Note></Row><Row><Object_ID>1399</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-32-4 Actualizar (Inventario)</Name><Package_ID>83</Package_ID><Note>RF-32-4 | Puntos y recompensas
+El sistema deberá restar exactamente 1 unidad del stock por cada canje.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-32</Note></Row><Row><Object_ID>1400</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-32-5 Eliminar (Inactivar)</Name><Package_ID>83</Package_ID><Note>RF-32-5 | Puntos y recompensas
+El sistema deberá cambiar el premio a «Inactivo», bloqueando nuevos canjes.
+Responsable en la matriz: Administrador
+Prioridad: Debe tener
+Dep.: RF-32</Note></Row><Row><Object_ID>1401</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-33 Canje de premios</Name><Package_ID>83</Package_ID><Note>RF-33 | Puntos y recompensas
+El sistema deberá registrar el canje de 1 premio descontando los puntos en un máximo de 3 segundos, cuando el saldo cubra el costo y exista stock.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+UR: UR-40, UR-41 | RF: RF-06, RF-12, RF-32</Note></Row><Row><Object_ID>1402</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-33-1 Validar (Saldo y stock)</Name><Package_ID>83</Package_ID><Note>RF-33-1 | Puntos y recompensas
+El sistema deberá bloquear el canje si el saldo es menor al costo o si el stock es 0.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+Dep.: RF-33</Note></Row><Row><Object_ID>1403</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-33-2 Crear (Pasos)</Name><Package_ID>83</Package_ID><Note>RF-33-2 | Puntos y recompensas
+El sistema deberá completar el canje en máximo 3 pasos: elegir, confirmar y ver el comprobante.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+Dep.: RF-33</Note></Row><Row><Object_ID>1404</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-33-3 Leer (Mis canjes)</Name><Package_ID>83</Package_ID><Note>RF-33-3 | Puntos y recompensas
+El sistema deberá mostrar al usuario sus canjes con su estado, del más reciente al más antiguo.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+Dep.: RF-33</Note></Row><Row><Object_ID>1405</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-33-4 Actualizar (Entrega)</Name><Package_ID>83</Package_ID><Note>RF-33-4 | Puntos y recompensas
+El sistema deberá permitir al administrador avanzar el estado solo en la secuencia «Pendiente» → «Listo para retiro» → «Entregado», en máximo 2 segundos.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+Dep.: RF-33</Note></Row><Row><Object_ID>1406</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-33-5 Leer (Historial global)</Name><Package_ID>83</Package_ID><Note>RF-33-5 | Puntos y recompensas
+El sistema deberá mostrar al administrador todos los canjes, 50 por página, filtrando por rango de fechas.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Debe tener
+Dep.: RF-33</Note></Row><Row><Object_ID>1407</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-34 Favoritos</Name><Package_ID>83</Package_ID><Note>RF-34 | Puntos y recompensas
+El sistema deberá guardar o quitar un premio de los favoritos del usuario en un máximo de 2 segundos.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+UR: UR-42 | RF: RF-32</Note></Row><Row><Object_ID>1408</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-34-1 Validar (Duplicado)</Name><Package_ID>83</Package_ID><Note>RF-34-1 | Puntos y recompensas
+El sistema deberá impedir guardar 2 veces el mismo premio.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-34</Note></Row><Row><Object_ID>1409</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-34-2 Validar (Límite)</Name><Package_ID>83</Package_ID><Note>RF-34-2 | Puntos y recompensas
+El sistema deberá permitir un máximo de 50 favoritos por usuario.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-34</Note></Row><Row><Object_ID>1410</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-34-3 Leer (Consulta)</Name><Package_ID>83</Package_ID><Note>RF-34-3 | Puntos y recompensas
+El sistema deberá excluir de la lista los premios inactivos.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-34</Note></Row><Row><Object_ID>1411</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-35 Meta de canje</Name><Package_ID>83</Package_ID><Note>RF-35 | Puntos y recompensas
+El sistema deberá calcular los puntos que faltan para el premio meta del usuario en un máximo de 2 segundos.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+UR: UR-42 | RF: RF-12, RF-32, RF-38</Note></Row><Row><Object_ID>1412</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-35-1 Crear (Meta)</Name><Package_ID>83</Package_ID><Note>RF-35-1 | Puntos y recompensas
+El sistema deberá mantener exactamente 1 meta activa por usuario, reemplazándola si elige otra.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-35</Note></Row><Row><Object_ID>1413</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-35-2 Leer (Faltantes)</Name><Package_ID>83</Package_ID><Note>RF-35-2 | Puntos y recompensas
+El sistema deberá calcular los faltantes como costo − saldo, con un mínimo de 0.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-35</Note></Row><Row><Object_ID>1414</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-35-3 Crear (Aviso)</Name><Package_ID>83</Package_ID><Note>RF-35-3 | Puntos y recompensas
+El sistema deberá enviar 1 notificación en máximo 1 minuto cuando el saldo alcance el costo de la meta.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-35</Note></Row><Row><Object_ID>1415</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-36 Búsqueda global</Name><Package_ID>83</Package_ID><Note>RF-36 | Búsquedas
+El sistema deberá mostrar los resultados de búsqueda en un máximo de 3 segundos.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+UR: UR-43 | RF: RF-46</Note></Row><Row><Object_ID>1416</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-36-1 Validar (Longitud)</Name><Package_ID>83</Package_ID><Note>RF-36-1 | Búsquedas
+El sistema deberá exigir al menos 3 caracteres para buscar.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-36</Note></Row><Row><Object_ID>1417</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-36-2 Leer (Paginación)</Name><Package_ID>83</Package_ID><Note>RF-36-2 | Búsquedas
+El sistema deberá mostrar un máximo de 20 resultados por página.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Podría tener
+Dep.: RF-36</Note></Row><Row><Object_ID>1418</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-37 Bandeja y alertas de campañas</Name><Package_ID>83</Package_ID><Note>RF-37 | Notificaciones
+El sistema deberá entregar la notificación de una campaña a los usuarios de sus provincias en un máximo de 60 segundos tras su activación.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+UR: UR-44 | RF: RF-13</Note></Row><Row><Object_ID>1419</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-37-1 Crear (Entrega)</Name><Package_ID>83</Package_ID><Note>RF-37-1 | Notificaciones
+El sistema deberá sumar 1 al contador de no leídas por cada notificación almacenada.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+Dep.: RF-37</Note></Row><Row><Object_ID>1420</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-37-2 Leer (Bandeja)</Name><Package_ID>83</Package_ID><Note>RF-37-2 | Notificaciones
+El sistema deberá mostrar 20 notificaciones por página, de la más reciente a la más antigua, y restar 1 al contador al abrir una no leída.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+Dep.: RF-37</Note></Row><Row><Object_ID>1421</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-37-3 Eliminar (Purga)</Name><Package_ID>83</Package_ID><Note>RF-37-3 | Notificaciones
+El sistema deberá borrar las notificaciones informativas a los 30 días calendario.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+Dep.: RF-37</Note></Row><Row><Object_ID>1422</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-38 Alertas de puntos, nivel, insignias y canjes</Name><Package_ID>83</Package_ID><Note>RF-38 | Notificaciones
+El sistema deberá notificar al usuario en un máximo de 5 segundos tras acreditarle puntos, subirlo de nivel, otorgarle una insignia o cambiar el estado de su canje.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+UR: UR-24, UR-44 | RF: RF-12, RF-16, RF-17, RF-33</Note></Row><Row><Object_ID>1423</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-38-1 Crear (Mensaje)</Name><Package_ID>83</Package_ID><Note>RF-38-1 | Notificaciones
+El sistema deberá incluir en la alerta el valor exacto de los puntos ganados.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+Dep.: RF-38</Note></Row><Row><Object_ID>1424</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-38-2 Eliminar (Retención)</Name><Package_ID>83</Package_ID><Note>RF-38-2 | Notificaciones
+El sistema deberá conservar estas alertas un mínimo de 90 días calendario.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+Dep.: RF-38</Note></Row><Row><Object_ID>1425</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-39 Alertas de referidos y de cuenta vinculada</Name><Package_ID>83</Package_ID><Note>RF-39 | Notificaciones
+El sistema deberá notificar al titular el resultado automático de su cuenta y al socio el cambio de estado de su referido en máximo 5 segundos desde su confirmación en base de datos, sin exponer datos personales ajenos.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+UR: UR-15, UR-44 | RF: RF-05-4, RF-11-4, RF-50</Note></Row><Row><Object_ID>1426</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-39-1 Crear (Privacidad)</Name><Package_ID>83</Package_ID><Note>RF-39-1 | Notificaciones
+El sistema deberá mostrar del referido solo su nombre de pila, sin apellidos ni datos de contacto.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+Dep.: RF-39</Note></Row><Row><Object_ID>1427</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-39-2 Validar (Duplicidad)</Name><Package_ID>83</Package_ID><Note>RF-39-2 | Notificaciones
+El sistema deberá emitir una sola notificación por evento de cambio de estado y destinatario, con unicidad en base de datos, incluso si el evento se reintenta después de 5 minutos.
+Responsable en la matriz: Sistema
+Prioridad: Debería tener
+Dep.: RF-39</Note></Row><Row><Object_ID>1428</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-40 Recordatorios automáticos</Name><Package_ID>83</Package_ID><Note>RF-40 | Notificaciones
+El sistema deberá ejecutar cada 1 hora la verificación de recordatorios de talleres y retos.
+Responsable en la matriz: Sistema
+Prioridad: Podría tener
+UR: UR-27, UR-33, UR-44 | RF: RF-18, RF-24</Note></Row><Row><Object_ID>1429</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-40-1 Crear (Taller)</Name><Package_ID>83</Package_ID><Note>RF-40-1 | Notificaciones
+El sistema deberá enviar 1 alerta entre 24 y 25 horas antes de cada taller en el que el usuario esté inscrito.
+Responsable en la matriz: Sistema
+Prioridad: Podría tener
+Dep.: RF-40</Note></Row><Row><Object_ID>1430</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-40-2 Crear (Reto)</Name><Package_ID>83</Package_ID><Note>RF-40-2 | Notificaciones
+El sistema deberá enviar 1 alerta entre 72 y 73 horas antes del cierre de un reto con avance mayor a 0 %.
+Responsable en la matriz: Sistema
+Prioridad: Podría tener
+Dep.: RF-40</Note></Row><Row><Object_ID>1431</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-41 Solicitudes de soporte</Name><Package_ID>83</Package_ID><Note>RF-41 | Administración
+El sistema deberá registrar una solicitud de soporte en un máximo de 3 segundos y entregar la respuesta del administrador en la bandeja del usuario en un máximo de 5 segundos.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Podría tener
+UR: UR-45 | RF: RF-37</Note></Row><Row><Object_ID>1432</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-41-1 Crear (Solicitud)</Name><Package_ID>83</Package_ID><Note>RF-41-1 | Administración
+El sistema deberá generar un código único de exactamente 6 caracteres por solicitud y limitar la descripción a 1,000 caracteres.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Podría tener
+Dep.: RF-41</Note></Row><Row><Object_ID>1433</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-41-2 Actualizar (Estado)</Name><Package_ID>83</Package_ID><Note>RF-41-2 | Administración
+El sistema deberá avanzar el estado solo en la secuencia «Abierta» → «En atención» → «Cerrada».
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Podría tener
+Dep.: RF-41</Note></Row><Row><Object_ID>1434</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-41-3 Crear (Respuesta única)</Name><Package_ID>83</Package_ID><Note>RF-41-3 | Administración
+El sistema deberá permitir al administrador registrar 1 sola respuesta de hasta 1,000 caracteres al cerrar la solicitud, sin conversación entre usuarios.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Podría tener
+Dep.: RF-41</Note></Row><Row><Object_ID>1435</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-41-4 Leer (Mis solicitudes)</Name><Package_ID>83</Package_ID><Note>RF-41-4 | Administración
+El sistema deberá mostrar al usuario sus solicitudes con su estado y la respuesta recibida.
+Responsable en la matriz: Socio / Cliente / Administrador
+Prioridad: Podría tener
+Dep.: RF-41</Note></Row><Row><Object_ID>1436</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-42 Bitácora de auditoría</Name><Package_ID>83</Package_ID><Note>RF-42 | Administración
+El sistema deberá registrar en la bitácora el 100 % de las acciones críticas administrativas y de los intentos y resultados de validación automática de cuentas y referidos.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+UR: UR-48 | RF: RF-05, RF-08, RF-11, RF-13, RF-14, RF-15, RF-30, RF-32, RF-47, RF-50</Note></Row><Row><Object_ID>1437</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-42-1 Crear (Registro)</Name><Package_ID>83</Package_ID><Note>RF-42-1 | Administración
+El sistema deberá guardar registros inmutables con actor (usuario o Sistema), acción, fecha, origen o IP cuando aplique y registro afectado. Para validaciones automáticas incluirá estado anterior y nuevo, causa, intento, referencia y fecha de la fuente institucional y versión de regla, sin datos financieros.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-42</Note></Row><Row><Object_ID>1438</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-42-2 Leer (Filtros)</Name><Package_ID>83</Package_ID><Note>RF-42-2 | Administración
+El sistema deberá filtrar por rango de fechas, usuario y tipo de acción en máximo 5 segundos, mostrando 50 registros por página.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-42</Note></Row><Row><Object_ID>1439</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-43 Reporte de referidos</Name><Package_ID>83</Package_ID><Note>RF-43 | Reportes
+El sistema deberá generar el reporte de conversión de referidos en un máximo de 10 segundos.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+UR: UR-49 | RF: RF-11, RF-13</Note></Row><Row><Object_ID>1440</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-43-1 Validar (Rango)</Name><Package_ID>83</Package_ID><Note>RF-43-1 | Reportes
+El sistema deberá restringir la consulta a un máximo de 12 meses.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-43</Note></Row><Row><Object_ID>1441</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-43-2 Crear (Conversión)</Name><Package_ID>83</Package_ID><Note>RF-43-2 | Reportes
+El sistema deberá incluir 1 columna con el % de referidos Aprobados sobre el total.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-43</Note></Row><Row><Object_ID>1442</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-43-3 Crear (Detalle)</Name><Package_ID>83</Package_ID><Note>RF-43-3 | Reportes
+El sistema deberá incluir por referido el socio que lo refirió, la campaña, la provincia, el estado y la fecha.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-43</Note></Row><Row><Object_ID>1443</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-44 Encuestas de satisfacción</Name><Package_ID>83</Package_ID><Note>RF-44 | Encuestas
+El sistema deberá registrar la respuesta de un usuario a una encuesta en un máximo de 3 segundos.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos
+Prioridad: Podría tener
+UR: UR-50 | RF: RF-22, RF-25</Note></Row><Row><Object_ID>1444</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-44-1 Validar (Respuesta única)</Name><Package_ID>83</Package_ID><Note>RF-44-1 | Encuestas
+El sistema deberá aceptar 1 sola respuesta por usuario y evento.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos
+Prioridad: Podría tener
+Dep.: RF-44</Note></Row><Row><Object_ID>1445</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-44-2 Validar (Escala)</Name><Package_ID>83</Package_ID><Note>RF-44-2 | Encuestas
+El sistema deberá aceptar solo enteros entre 1 y 5, en encuestas de máximo 5 preguntas.
+Responsable en la matriz: Socio / Cliente / Gestor de contenidos
+Prioridad: Podría tener
+Dep.: RF-44</Note></Row><Row><Object_ID>1446</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-45 Tablero de indicadores</Name><Package_ID>83</Package_ID><Note>RF-45 | Reportes
+El sistema deberá mostrar al administrador el tablero de indicadores de captación y fidelización en un máximo de 5 segundos, con datos de máximo 24 horas de antigüedad.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+UR: UR-49 | RF: RF-11, RF-12, RF-14, RF-33</Note></Row><Row><Object_ID>1447</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-45-1 Leer (Indicadores)</Name><Package_ID>83</Package_ID><Note>RF-45-1 | Reportes
+El sistema deberá mostrar 6 indicadores: referidos registrados, % de referidos Aprobados, usuarios activos en el mes (con al menos 1 actividad distinta de iniciar o cerrar sesión), puntos otorgados, puntos canjeados e inscripciones a talleres.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-45</Note></Row><Row><Object_ID>1448</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-45-2 Leer (Costo por captación)</Name><Package_ID>83</Package_ID><Note>RF-45-2 | Reportes
+El sistema deberá calcular el costo por captación como (puntos otorgados por referidos × valor del punto) / referidos Aprobados.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-45</Note></Row><Row><Object_ID>1449</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-45-3 Leer (Participación)</Name><Package_ID>83</Package_ID><Note>RF-45-3 | Reportes
+El sistema deberá mostrar por cada reto y juego el número de participantes y el % que lo completó.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-45</Note></Row><Row><Object_ID>1450</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-45-4 Crear (Exportación)</Name><Package_ID>83</Package_ID><Note>RF-45-4 | Reportes
+El sistema deberá exportar los indicadores en CSV en máximo 10 segundos.
+Responsable en la matriz: Administrador
+Prioridad: Debería tener
+Dep.: RF-45</Note></Row><Row><Object_ID>1451</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-46 Privacidad del perfil</Name><Package_ID>83</Package_ID><Note>RF-46 | Usuarios y perfiles
+El sistema deberá aplicar la visibilidad del perfil elegida por el usuario en un máximo de 3 segundos.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+UR: UR-51 | RF: RF-03</Note></Row><Row><Object_ID>1452</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-46-1 Actualizar (Valor)</Name><Package_ID>83</Package_ID><Note>RF-46-1 | Usuarios y perfiles
+El sistema deberá aceptar solo 2 valores (Público o Privado), con «Privado» por defecto.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-46</Note></Row><Row><Object_ID>1453</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-46-2 Leer (Datos protegidos)</Name><Package_ID>83</Package_ID><Note>RF-46-2 | Usuarios y perfiles
+El sistema deberá ocultar al 100 % de los demás usuarios el correo, el celular y el número de cuenta de cualquier perfil.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-46</Note></Row><Row><Object_ID>1454</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-46-3 Leer (Perfil público)</Name><Package_ID>83</Package_ID><Note>RF-46-3 | Usuarios y perfiles
+El sistema deberá mostrar en un perfil público solo 3 datos: nombre de pila, nivel e insignias.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-46</Note></Row><Row><Object_ID>1455</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-47 Autorización de tratamiento de datos</Name><Package_ID>83</Package_ID><Note>RF-47 | Gestión de usuarios
+El sistema deberá condicionar la creación de la cuenta a la aceptación expresa de los términos y del aviso de privacidad vigente, validándola en un máximo de 2 segundos.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+UR: UR-52 | RF: RF-42</Note></Row><Row><Object_ID>1456</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-47-1 Validar (Aceptación)</Name><Package_ID>83</Package_ID><Note>RF-47-1 | Gestión de usuarios
+El sistema deberá bloquear la creación de la cuenta mientras la casilla de aceptación no esté marcada.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-47</Note></Row><Row><Object_ID>1457</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-47-2 Crear (Evidencia)</Name><Package_ID>83</Package_ID><Note>RF-47-2 | Gestión de usuarios
+El sistema deberá registrar 3 datos de evidencia (fecha, hora y versión del aviso aceptado).
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-47</Note></Row><Row><Object_ID>1458</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-47-3 Leer (Conservación)</Name><Package_ID>83</Package_ID><Note>RF-47-3 | Gestión de usuarios
+El sistema deberá conservar la evidencia durante un mínimo de 5 años.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-47</Note></Row><Row><Object_ID>1459</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-47-4 Crear (Versión del aviso)</Name><Package_ID>83</Package_ID><Note>RF-47-4 | Gestión de usuarios
+El sistema deberá permitir al administrador publicar una nueva versión numerada del aviso, manteniendo exactamente 1 vigente; la persona que se registra debe aceptar la versión vigente.
+Responsable en la matriz: Sistema / Administrador
+Prioridad: Debe tener
+Dep.: RF-47</Note></Row><Row><Object_ID>1460</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-48 Pantalla de inicio</Name><Package_ID>83</Package_ID><Note>RF-48 | Usuarios y perfiles
+El sistema deberá mostrar al usuario, en un máximo de 3 segundos tras iniciar sesión, su saldo, su nivel, los puntos faltantes y el botón para compartir su enlace.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+UR: UR-12, UR-24, UR-25 | RF: RF-10, RF-12, RF-16, RF-37</Note></Row><Row><Object_ID>1461</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-48-1 Leer (Resumen)</Name><Package_ID>83</Package_ID><Note>RF-48-1 | Usuarios y perfiles
+El sistema deberá mostrar 4 datos: saldo, nivel, puntos faltantes y notificaciones sin leer.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-48</Note></Row><Row><Object_ID>1462</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-48-2 Leer (Compartir)</Name><Package_ID>83</Package_ID><Note>RF-48-2 | Usuarios y perfiles
+El sistema deberá ubicar el botón «Compartir mi enlace» a 1 toque, o el aviso «Vincular mi cuenta» si la cuenta no está verificada.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-48</Note></Row><Row><Object_ID>1463</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-48-3 Leer (Accesos directos)</Name><Package_ID>83</Package_ID><Note>RF-48-3 | Usuarios y perfiles
+El sistema deberá mostrar 6 accesos directos: Referidos, Recompensas, Retos, Juegos, Talleres y Comunidad.
+Responsable en la matriz: Socio / Cliente
+Prioridad: Debería tener
+Dep.: RF-48</Note></Row><Row><Object_ID>1464</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-49 Navegación, ayudas y mensajes de la interfaz</Name><Package_ID>83</Package_ID><Note>RF-49 | Usuarios y perfiles
+El sistema deberá mostrar un mensaje de éxito o de error en un máximo de 1 segundo después de cada acción del usuario.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+UR: UR-04, UR-53 | RF: RF-08</Note></Row><Row><Object_ID>1465</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-49-1 Leer (Ayuda en campos)</Name><Package_ID>83</Package_ID><Note>RF-49-1 | Usuarios y perfiles
+El sistema deberá mostrar en el 100 % de los campos de los formularios un texto de ayuda o un ejemplo.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-49</Note></Row><Row><Object_ID>1466</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-49-2 Leer (Campos con error)</Name><Package_ID>83</Package_ID><Note>RF-49-2 | Usuarios y perfiles
+El sistema deberá marcar en rojo cada campo con error y mostrar debajo la causa y la corrección esperada.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-49</Note></Row><Row><Object_ID>1467</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-49-3 Leer (Mensajes)</Name><Package_ID>83</Package_ID><Note>RF-49-3 | Usuarios y perfiles
+El sistema deberá mostrar un aviso de éxito o error durante al menos 4 segundos o hasta que el usuario lo cierre.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-49</Note></Row><Row><Object_ID>1468</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-49-4 Leer (Menú)</Name><Package_ID>83</Package_ID><Note>RF-49-4 | Usuarios y perfiles
+El sistema deberá mostrar el menú del rol completo en pantallas de 768 píxeles o más y como menú desplegable en pantallas menores.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-49</Note></Row><Row><Object_ID>1469</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-50 Validación automática contra la base institucional</Name><Package_ID>83</Package_ID><Note>RF-50 | Gestión de usuarios
+El sistema deberá validar automáticamente existencia, titularidad y condición habilitada de las cuentas de asociados y referidos contra registros institucionales autorizados en máximo 5 segundos con la fuente disponible y vigente, sin intervención del administrador.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+UR: UR-07, UR-08, UR-09, UR-14, UR-16 | RF: RF-05, RF-11, RF-12, RF-39, RF-42</Note></Row><Row><Object_ID>1470</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-50-1 Leer (Consulta)</Name><Package_ID>83</Package_ID><Note>RF-50-1 | Gestión de usuarios
+El sistema deberá consultar una fuente institucional de solo lectura o su réplica autorizada con trazabilidad de origen y vigencia, comparando identificador institucional del titular, tipo, número y condición habilitada. No obtendrá saldos ni movimientos ni aceptará como evidencia datos declarados por el usuario.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-50</Note></Row><Row><Object_ID>1471</Object_ID><Object_Type>UseCase</Object_Type><Name>RF-50-2 Actualizar (Resultado y reintento automático)</Name><Package_ID>83</Package_ID><Note>RF-50-2 | Gestión de usuarios
+El sistema deberá persistir el resultado y su evidencia, reevaluar automáticamente al referido asociado y disparar puntos y avisos. Ante falta de respuesta o fuente no vigente conservará Pendiente con causa y reintentará automáticamente cada 5 minutos, sin derivar a aprobación manual ni duplicar efectos.
+Responsable en la matriz: Sistema
+Prioridad: Debe tener
+Dep.: RF-50, RF-05-4, RF-11-4, RF-12-2, RF-39, RF-42</Note></Row></Data></Dataset_0></EADATA>
+

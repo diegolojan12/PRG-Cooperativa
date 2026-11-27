@@ -1,0 +1,26 @@
+<section id="cls-cuenta">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<img class="dots-tl" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<img class="dots-br" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">DIAGRAMA DE CLASES · CUENTA · HU-015 · HU-016 · RNF-05</p>
+<h2>Cuenta y protección de datos</h2>
+</div>
+<div class="clases2">
+<div class="crow">
+<div class="frame"><img class="cimg" src="/_blob/f2a8b959ae399692cddbc14c24d99873" alt="Clase CuentaCooperativa en Enterprise Architect"></div>
+<div class="panel"><p class="ptitle">CuentaCooperativa&#160;&#160;<span class="rt">backend/src/dominio/acceso.mjs:172</span></p>
+<p class="src">export class CuentaCooperativa {<br>&#160;&#160;constructor(numeroCuenta, tipoCuenta, estado = <span class="s">'PENDIENTE'</span>) {<br>&#160;&#160;&#160;&#160;if (!/^\d{10}$/.test(numeroCuenta) || …) throw …; }<br>&#160;&#160;aprobar(fecha) { … }&#160;&#160;&#160;rechazar(motivo, fecha) { … }<br>&#160;&#160;numeroEnmascarado() {<br>&#160;&#160;&#160;&#160;return <span class="s">'******'</span> + this.numeroCuenta.slice(-4); }<br>}</p></div>
+</div>
+<div class="crow">
+<div class="frame"><img class="cimg" src="/_blob/02cec4df862f16b9fd3f533fcaf4dd02" alt="Clase ProteccionDatos en Enterprise Architect"></div>
+<div class="panel"><p class="ptitle">ProteccionDatos&#160;&#160;<span class="rt">backend/src/dominio/proteccion-datos.mjs:11</span></p>
+<p class="src">export class ProteccionDatos {<br>&#160;&#160;cifrar(campo, valor) {<br>&#160;&#160;&#160;&#160;const iv = randomBytes(12);<br>&#160;&#160;&#160;&#160;const cifrador = createCipheriv(<span class="s">'aes-256-gcm'</span>, this.cifrado, iv);<br>&#160;&#160;&#160;&#160;cifrador.setAAD(Buffer.from(campo));&#160;<span class="c">// RNF-05</span><br>&#160;&#160;&#160;&#160;return PREFIJO + …toString(<span class="s">'base64'</span>); }<br>&#160;&#160;huella(valor) { … }&#160;&#160;&#160;descifrar(campo, valor) { … } }</p></div>
+</div>
+</div>
+<p class="foot">Diagrama de clases (Enterprise Architect) · Documento de Visión, Figura 3</p>
+<div class="pnum"></div>
+<aside>(20 s) CuentaCooperativa valida el número de diez dígitos y el tipo de cuenta, controla el dictamen y entrega el número enmascarado. ProteccionDatos cifra los datos personales con AES-256-GCM y calcula una huella para buscar sin descifrar.</aside>
+</section>

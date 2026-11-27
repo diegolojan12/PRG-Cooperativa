@@ -1,0 +1,22 @@
+<section id="arq-seguridad">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<img class="dots-tl" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<img class="dots-br" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">ARQUITECTURA · 3 DE 3</p>
+<h2>La seguridad se valida en el servidor</h2>
+</div>
+<div class="grid3">
+<div class="card"><div class="ch"><x-icon name="Users"></x-icon><h3>Roles en la base de datos</h3></div><p class="txt">Rol, Modulo y RolPermiso. La autorización pregunta por capacidad, nunca por el nombre del rol.</p><p class="tag">RF-08 · RF-08-4</p></div>
+<div class="card"><div class="ch"><x-icon name="Key"></x-icon><h3>Contraseñas con hash</h3></div><p class="txt">Hash con sal. De tokens y códigos solo se guarda la huella, nunca el valor.</p><p class="tag">RNF-04</p></div>
+<div class="card"><div class="ch"><x-icon name="Lock"></x-icon><h3>Datos personales cifrados</h3></div><p class="txt">AES-256-GCM en reposo, con un índice HMAC para buscar sin descifrar.</p><p class="tag">RNF-05</p></div>
+<div class="card"><div class="ch"><x-icon name="Verified"></x-icon><h3>Segundo factor</h3></div><p class="txt">El administrador entra con un código de seis dígitos enviado al correo.</p><p class="tag">RNF-06</p></div>
+<div class="card"><div class="ch"><x-icon name="Clock"></x-icon><h3>Sesión de 15 minutos</h3></div><p class="txt">Cookie httpOnly que vence tras 15 minutos sin acciones; 5 intentos fallidos bloquean la cuenta.</p><p class="tag">RF-04-2 · RF-04-3</p></div>
+<div class="card"><div class="ch"><x-icon name="Book"></x-icon><h3>Bitácora inmutable</h3></div><p class="txt">Toda acción queda registrada; un trigger impide UPDATE y DELETE.</p><p class="tag">RF-42 · RNF-13</p></div>
+</div>
+<p class="foot">Constitución de SUMA · III. Seguridad y privacidad por defecto</p>
+<div class="pnum"></div>
+<aside>La seguridad se valida siempre en el servidor. Los roles y permisos viven en la base de datos, las contraseñas se guardan con hash y los datos personales cifrados. El administrador entra con segundo factor, la sesión se cierra a los 15 minutos de inactividad y toda acción queda en una bitácora que no se puede borrar.</aside>
+</section>

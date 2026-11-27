@@ -1,0 +1,1101 @@
+{
+  "t_diagramlinks": [
+    {
+      "value": 107,
+      "type": 3,
+      "name": "DiagramID"
+    },
+    {
+      "value": 1,
+      "type": 3,
+      "name": "ConnectorID"
+    },
+    {
+      "value": "SX=0;SY=0;EX=0;EY=0;EDGE=2;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;",
+      "type": 203,
+      "name": "Geometry"
+    },
+    {
+      "value": "Mode=3;EOID=1C3D7DBE;SOID=697B88B9;Color=0;LWidth=1;",
+      "type": 202,
+      "name": "Style"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "Hidden"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Path"
+    },
+    {
+      "value": 898,
+      "type": 3,
+      "name": "Instance_ID"
+    }
+  ],
+  "t_connector": [
+    {
+      "value": 1,
+      "type": 3,
+      "name": "Connector_ID"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Name"
+    },
+    {
+      "value": "Unspecified",
+      "type": 202,
+      "name": "Direction"
+    },
+    {
+      "value": null,
+      "type": 203,
+      "name": "Notes"
+    },
+    {
+      "value": "Association",
+      "type": 202,
+      "name": "Connector_Type"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "SubType"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "SourceCard"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "SourceAccess"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "SourceElement"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "DestCard"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "DestAccess"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "DestElement"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "SourceRole"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "SourceRoleType"
+    },
+    {
+      "value": null,
+      "type": 203,
+      "name": "SourceRoleNote"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "SourceContainment"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "SourceIsAggregate"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "SourceIsOrdered"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "SourceQualifier"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "DestRole"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "DestRoleType"
+    },
+    {
+      "value": null,
+      "type": 203,
+      "name": "DestRoleNote"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "DestContainment"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "DestIsAggregate"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "DestIsOrdered"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "DestQualifier"
+    },
+    {
+      "value": 2,
+      "type": 3,
+      "name": "Start_Object_ID"
+    },
+    {
+      "value": 6,
+      "type": 3,
+      "name": "End_Object_ID"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Top_Start_Label"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Top_Mid_Label"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Top_End_Label"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Btm_Start_Label"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Btm_Mid_Label"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Btm_End_Label"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "Start_Edge"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "End_Edge"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "PtStartX"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "PtStartY"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "PtEndX"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "PtEndY"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "SeqNo"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "HeadStyle"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "LineStyle"
+    },
+    {
+      "value": 3,
+      "type": 3,
+      "name": "RouteStyle"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "IsBold"
+    },
+    {
+      "value": -1,
+      "type": 3,
+      "name": "LineColor"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Stereotype"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "VirtualInheritance"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "LinkAccess"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "PDATA1"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "PDATA2"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "PDATA3"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "PDATA4"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "PDATA5"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "DiagramID"
+    },
+    {
+      "value": "{F8EF01AB-2AE8-41A8-A9EB-C199652B8741}",
+      "type": 202,
+      "name": "ea_guid"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "SourceConstraint"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "DestConstraint"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "SourceIsNavigable"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "DestIsNavigable"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "IsRoot"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "IsLeaf"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "IsSpec"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "SourceChangeable"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "DestChangeable"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "SourceTS"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "DestTS"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "StateFlags"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "ActionFlags"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "IsSignal"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "IsStimulus"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "DispatchAction"
+    },
+    {
+      "value": null,
+      "type": 3,
+      "name": "Target2"
+    },
+    {
+      "value": null,
+      "type": 203,
+      "name": "StyleEx"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "SourceStereotype"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "DestStereotype"
+    },
+    {
+      "value": null,
+      "type": 203,
+      "name": "SourceStyle"
+    },
+    {
+      "value": null,
+      "type": 203,
+      "name": "DestStyle"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "EventFlags"
+    }
+  ],
+  "t_diagramobjects": [
+    {
+      "value": 1,
+      "type": 3,
+      "name": "Diagram_ID"
+    },
+    {
+      "value": 1184,
+      "type": 3,
+      "name": "Object_ID"
+    },
+    {
+      "value": -25,
+      "type": 3,
+      "name": "RectTop"
+    },
+    {
+      "value": 340,
+      "type": 3,
+      "name": "RectLeft"
+    },
+    {
+      "value": 990,
+      "type": 3,
+      "name": "RectRight"
+    },
+    {
+      "value": -675,
+      "type": 3,
+      "name": "RectBottom"
+    },
+    {
+      "value": 1000,
+      "type": 3,
+      "name": "Sequence"
+    },
+    {
+      "value": "DUID=AC9380A0;BCol=16777215;LCol=0;BFol=0;LWth=1;FType=Arial;FSize=10;",
+      "type": 202,
+      "name": "ObjectStyle"
+    },
+    {
+      "value": 1352,
+      "type": 3,
+      "name": "Instance_ID"
+    }
+  ],
+  "t_xref": [
+    {
+      "value": "{10BAA2E0-8ADA-45d1-9B09-09A9629ED035}",
+      "type": 202,
+      "name": "XrefID"
+    },
+    {
+      "value": "DefaultDiagram",
+      "type": 202,
+      "name": "Name"
+    },
+    {
+      "value": "element property",
+      "type": 202,
+      "name": "Type"
+    },
+    {
+      "value": "Public",
+      "type": 202,
+      "name": "Visibility"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Namespace"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Requirement"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Constraint"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Behavior"
+    },
+    {
+      "value": "0",
+      "type": 202,
+      "name": "Partition"
+    },
+    {
+      "value": null,
+      "type": 203,
+      "name": "Description"
+    },
+    {
+      "value": "{F5DE771E-C873-4C4F-BF0C-FE6B401E14F1}",
+      "type": 202,
+      "name": "Client"
+    },
+    {
+      "value": "{358FE730-3486-4441-84BC-6066BE01ACC3}",
+      "type": 202,
+      "name": "Supplier"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Link"
+    }
+  ],
+  "t_diagram": [
+    {
+      "value": 1,
+      "type": 3,
+      "name": "Diagram_ID"
+    },
+    {
+      "value": 2,
+      "type": 3,
+      "name": "Package_ID"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "ParentID"
+    },
+    {
+      "value": "Use Case",
+      "type": 202,
+      "name": "Diagram_Type"
+    },
+    {
+      "value": "General 02 Referidos y campañas",
+      "type": 202,
+      "name": "Name"
+    },
+    {
+      "value": "1.0",
+      "type": 202,
+      "name": "Version"
+    },
+    {
+      "value": "Equipo SUMA",
+      "type": 202,
+      "name": "Author"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "ShowDetails"
+    },
+    {
+      "value": "Revisión de auditoría 2026-11-26. Vistas generales 1 a 7: cubren CU-01 a CU-38 y RF-01 a RF-50. RF-49 es transversal a formularios, mensajes y navegación.",
+      "type": 203,
+      "name": "Notes"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Stereotype"
+    },
+    {
+      "value": true,
+      "type": 11,
+      "name": "AttPub"
+    },
+    {
+      "value": true,
+      "type": 11,
+      "name": "AttPri"
+    },
+    {
+      "value": true,
+      "type": 11,
+      "name": "AttPro"
+    },
+    {
+      "value": "L",
+      "type": 202,
+      "name": "Orientation"
+    },
+    {
+      "value": 1169,
+      "type": 3,
+      "name": "cx"
+    },
+    {
+      "value": 826,
+      "type": 3,
+      "name": "cy"
+    },
+    {
+      "value": 100,
+      "type": 3,
+      "name": "Scale"
+    },
+    {
+      "value": "2026-11-10T17:30:07.019",
+      "type": 7,
+      "name": "CreatedDate"
+    },
+    {
+      "value": "2026-11-22T18:33:11",
+      "type": 7,
+      "name": "ModifiedDate"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "HTMLPath"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "ShowForeign"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "ShowBorder"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "ShowPackageContents"
+    },
+    {
+      "value": "HideRel=0;ShowTags=0;ShowReqs=0;ShowCons=0;OpParams=1;ShowSN=0;ScalePI=0;PPgs.cx=0;PPgs.cy=0;PSize=9;ShowIcons=1;SuppCN=0;HideProps=0;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideEStereo=0;ShowRec=1;ShowRes=0;ShowShape=1;FormName=;",
+      "type": 202,
+      "name": "PDATA"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "Locked"
+    },
+    {
+      "value": "{4E76BE2F-21B7-45E2-93DE-CCE854CC7123}",
+      "type": 202,
+      "name": "ea_guid"
+    },
+    {
+      "value": 1,
+      "type": 3,
+      "name": "TPos"
+    },
+    {
+      "value": "locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=1;ufh=0;hh=0;cls=0;bw=0;hli=0;",
+      "type": 202,
+      "name": "Swimlanes"
+    },
+    {
+      "value": "ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;MDGView=UML::Simple Use Case;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:0;SaveTag=F7339EAF;",
+      "type": 203,
+      "name": "StyleEx"
+    }
+  ],
+  "t_package": [
+    {
+      "value": 1,
+      "type": 3,
+      "name": "Package_ID"
+    },
+    {
+      "value": "SUMA",
+      "type": 202,
+      "name": "Name"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "Parent_ID"
+    },
+    {
+      "value": "2012-04-17T00:00:00",
+      "type": 7,
+      "name": "CreatedDate"
+    },
+    {
+      "value": "2012-04-17T00:00:00",
+      "type": 7,
+      "name": "ModifiedDate"
+    },
+    {
+      "value": "Programa de referidos de la Cooperativa Padre Julián Lorente.",
+      "type": 203,
+      "name": "Notes"
+    },
+    {
+      "value": "{02BAEABD-6A12-4489-BCA3-8D33C05B81DB}",
+      "type": 202,
+      "name": "ea_guid"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "XMLPath"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "IsControlled"
+    },
+    {
+      "value": "2026-11-11T08:45:16",
+      "type": 7,
+      "name": "LastLoadDate"
+    },
+    {
+      "value": null,
+      "type": 7,
+      "name": "LastSaveDate"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Version"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "Protected"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "PkgOwner"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "UMLVersion"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "UseDTD"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "LogXML"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "CodePath"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Namespace"
+    },
+    {
+      "value": null,
+      "type": 3,
+      "name": "TPos"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "PackageFlags"
+    },
+    {
+      "value": null,
+      "type": 3,
+      "name": "BatchSave"
+    },
+    {
+      "value": null,
+      "type": 3,
+      "name": "BatchLoad"
+    }
+  ],
+  "t_object": [
+    {
+      "value": 1,
+      "type": 3,
+      "name": "Object_ID"
+    },
+    {
+      "value": "Package",
+      "type": 202,
+      "name": "Object_Type"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "Diagram_ID"
+    },
+    {
+      "value": "Casos de uso",
+      "type": 202,
+      "name": "Name"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Alias"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Author"
+    },
+    {
+      "value": "1.0",
+      "type": 202,
+      "name": "Version"
+    },
+    {
+      "value": null,
+      "type": 203,
+      "name": "Note"
+    },
+    {
+      "value": 18,
+      "type": 3,
+      "name": "Package_ID"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Stereotype"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "NType"
+    },
+    {
+      "value": "2",
+      "type": 202,
+      "name": "Complexity"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "Effort"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Style"
+    },
+    {
+      "value": -1,
+      "type": 3,
+      "name": "Backcolor"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "BorderStyle"
+    },
+    {
+      "value": -1,
+      "type": 3,
+      "name": "BorderWidth"
+    },
+    {
+      "value": -1,
+      "type": 3,
+      "name": "Fontcolor"
+    },
+    {
+      "value": -1,
+      "type": 3,
+      "name": "Bordercolor"
+    },
+    {
+      "value": "2026-11-10T17:30:07.019",
+      "type": 7,
+      "name": "CreatedDate"
+    },
+    {
+      "value": "2026-11-10T17:30:07.019",
+      "type": 7,
+      "name": "ModifiedDate"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Status"
+    },
+    {
+      "value": "0",
+      "type": 202,
+      "name": "Abstract"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "Tagged"
+    },
+    {
+      "value": "2",
+      "type": 202,
+      "name": "PDATA1"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "PDATA2"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "PDATA3"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "PDATA4"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "PDATA5"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Concurrency"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Visibility"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Persistence"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Cardinality"
+    },
+    {
+      "value": "<none>",
+      "type": 202,
+      "name": "GenType"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "GenFile"
+    },
+    {
+      "value": null,
+      "type": 203,
+      "name": "Header1"
+    },
+    {
+      "value": null,
+      "type": 203,
+      "name": "Header2"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Phase"
+    },
+    {
+      "value": "Public",
+      "type": 202,
+      "name": "Scope"
+    },
+    {
+      "value": null,
+      "type": 203,
+      "name": "GenOption"
+    },
+    {
+      "value": null,
+      "type": 203,
+      "name": "GenLinks"
+    },
+    {
+      "value": null,
+      "type": 3,
+      "name": "Classifier"
+    },
+    {
+      "value": "{15936E51-6D3F-4562-A568-3FA1DCB2E0C9}",
+      "type": 202,
+      "name": "ea_guid"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "ParentID"
+    },
+    {
+      "value": null,
+      "type": 203,
+      "name": "RunState"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Classifier_guid"
+    },
+    {
+      "value": 0,
+      "type": 3,
+      "name": "TPos"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "IsRoot"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "IsLeaf"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "IsSpec"
+    },
+    {
+      "value": false,
+      "type": 11,
+      "name": "IsActive"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "StateFlags"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "PackageFlags"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "Multiplicity"
+    },
+    {
+      "value": null,
+      "type": 203,
+      "name": "StyleEx"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "ActionFlags"
+    },
+    {
+      "value": null,
+      "type": 202,
+      "name": "EventFlags"
+    }
+  ]
+}

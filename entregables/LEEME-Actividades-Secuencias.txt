@@ -1,0 +1,16 @@
+SUMA - Actividades y secuencias
+Entrega: SUMA-Diagramas_Vistas_Actividad_Secuencia.eapx
+
+Abrir en Enterprise Architect:
+SUMA > Vista de Procesos > Diagramas de actividades / Diagramas de secuencia
+Elegir la carpeta del tipo de diagrama, luego módulo y RF. Actividades: ACT-RF-nn. Secuencias: SEQ-RF-nn.
+
+Cobertura: 50 RF, 179 subrequisitos, 50 actividades, 50 secuencias y 109 operaciones alternativas.
+Trazabilidad: 458 dependencias UML «trace» desde Activity/Interaction a los casos de uso; las acciones tienen trazas adicionales a sus subrequisitos. Las notas de los elementos conservan los requisitos. Los nombres y descripciones se contrastaron con el Excel.
+Referencia de formato: Evaluacion_AUTOSYS_Bim1_completada.pdf, actividad de la página 9. Las instrucciones del ejercicio se trataron como referencia, no como una ampliación del encargo.
+
+Consulta visual y correspondencia con filas Excel:
+diagramas/Procesos-RF-2026-11-27/index.html
+
+Se conservaron los casos de uso, clases y actores originales. El archivo original SUMA-Diagramas_Vistas.eapx no fue reemplazado. En la copia actualizada se eliminaron las carpetas históricas de actividades y secuencias. Se rotularon 164 decisiones, se identificaron 21 uniones y se retiraron 16 rombos redundantes.
+Las secuencias son modelos de análisis: sus mensajes expresan responsabilidades, no certifican que esas operaciones estén implementadas en el código.

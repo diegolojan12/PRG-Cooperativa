@@ -1,0 +1,26 @@
+<section id="cls-aviso">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<img class="dots-tl" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<img class="dots-br" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">DIAGRAMA DE CLASES · REGISTRO · HU-013</p>
+<h2>Aviso de privacidad y términos</h2>
+</div>
+<div class="clases2">
+<div class="crow">
+<div class="frame"><img class="cimg" src="/_blob/cd35eaec0ec3ffb96269c1c68d8d8bed" alt="Clase AvisoPrivacidad en Enterprise Architect"></div>
+<div class="panel"><p class="ptitle">AvisoPrivacidad&#160;&#160;<span class="rt">backend/src/dominio/acceso.mjs:207</span></p>
+<p class="src">export class AvisoPrivacidad {<br>&#160;&#160;static vigente() {<br>&#160;&#160;&#160;&#160;const { SUMA_AVISO_VERSION: version, … } = process.env;<br>&#160;&#160;&#160;&#160;if (version &amp;&amp; terminos?.trim() &amp;&amp; privacidad?.trim())<br>&#160;&#160;&#160;&#160;&#160;&#160;return new AvisoPrivacidad(version, terminos, …); … }<br>&#160;&#160;constructor(version, terminos, privacidad) { … }<br>}</p></div>
+</div>
+<div class="crow">
+<div class="frame"><img class="cimg" src="/_blob/ba2133e680a2caed742885f7448ebf8c" alt="Clase AceptacionTerminos en Enterprise Architect"></div>
+<div class="panel"><p class="ptitle">AceptacionTerminos&#160;&#160;<span class="rt">backend/src/dominio/acceso.mjs:242</span></p>
+<p class="src">export class AceptacionTerminos {<br>&#160;&#160;constructor(aviso, aceptado, version, fecha) {<br>&#160;&#160;&#160;&#160;if (aceptado !== true || version !== aviso.version)<br>&#160;&#160;&#160;&#160;&#160;&#160;throw errorDeDominio(<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<span class="s">'Revisa y acepta los términos y el aviso vigente.'</span>);<br>&#160;&#160;&#160;&#160;this.version = version; this.fecha = fecha;&#160;<span class="c">// RF-47</span><br>&#160;&#160;} }</p></div>
+</div>
+</div>
+<p class="foot">Diagrama de clases (Enterprise Architect) · Documento de Visión, Figura 3</p>
+<div class="pnum"></div>
+<aside>(20 s) AvisoPrivacidad entrega la versión vigente de los términos. AceptacionTerminos impide registrarse sin aceptar exactamente esa versión, y guarda la versión y la fecha aceptadas.</aside>
+</section>

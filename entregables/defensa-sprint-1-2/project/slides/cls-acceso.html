@@ -1,0 +1,26 @@
+<section id="cls-acceso">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<img class="dots-tl" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<img class="dots-br" src="/_blob/d6d85790ebb790fc5061500562b31fce" alt="">
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">DIAGRAMA DE CLASES · ACCESO · HU-001 · HU-002</p>
+<h2>Rol y Modulo</h2>
+</div>
+<div class="clases2">
+<div class="crow">
+<div class="frame"><img class="cimg" src="/_blob/d5cd06da26a8eb6f33c76554fba71d3d" alt="Clase Rol en Enterprise Architect"></div>
+<div class="panel"><p class="ptitle">Rol&#160;&#160;<span class="rt">backend/src/dominio/acceso.mjs:26</span></p>
+<p class="src">export class Rol {<br>&#160;&#160;constructor(fila) {<br>&#160;&#160;&#160;&#160;Object.assign(this, { clave: fila.clave, … }); }<br>&#160;&#160;static crear(datos, catalogo) { … }&#160;<span class="c">// nunca alcance global</span><br>&#160;&#160;validarPermisos(modulos, catalogo) { … }&#160;<span class="c">// HU-001</span><br>&#160;&#160;asignarA(usuario) { usuario.rol = this.clave; }<br>}</p></div>
+</div>
+<div class="crow">
+<div class="frame"><img class="cimg" src="/_blob/299021377af55e699b26733f4140297b" alt="Clase Modulo en Enterprise Architect"></div>
+<div class="panel"><p class="ptitle">Modulo&#160;&#160;<span class="rt">backend/src/dominio/acceso.mjs:88</span></p>
+<p class="src">export class Modulo {<br>&#160;&#160;constructor({ id, etiqueta, grupo, icono, ambito, disponible }) {<br>&#160;&#160;&#160;&#160;Object.assign(this, { id, etiqueta, grupo, icono, ambito,<br>&#160;&#160;&#160;&#160;&#160;&#160;disponible: Boolean(disponible) });<br>&#160;&#160;}<br>&#160;&#160;get esDeAdministracion() { return this.ambito === <span class="s">'ADMIN'</span>; }<br>}</p></div>
+</div>
+</div>
+<p class="foot">Diagrama de clases (Enterprise Architect) · Documento de Visión, Figura 3</p>
+<div class="pnum"></div>
+<aside>(20 s) Rol y Modulo son las clases del control de acceso. Rol valida los permisos que se le asignan y nunca se crea con alcance global; Modulo sabe si es de administración. Las dos viven en acceso.mjs.</aside>
+</section>

@@ -1,0 +1,26 @@
+<section id="hu005-panel">
+<div class="band-top"></div>
+<div class="band-bot"></div>
+<p class="uni">Universidad Técnica Particular de Loja</p>
+<div class="head">
+<p class="eyebrow">SPRINT 2 · EPI-03 · HU-005</p>
+<h2>Panel del administrador</h2>
+</div>
+<div class="dual">
+<div class="fig"><div class="frame" style="width:620px; height:330px;"><img src="/_blob/cc65ca1f37b40ba5ac3198a63ea84fcd" alt="CU-15 Detalle: Consultar indicadores de captación" style="width:590px; height:300px; object-fit:contain;"></div><p class="cap"><b>CU-15</b> · Fig. 28 (sin secuencia ni actividades propias)</p>
+<div class="status" style="width:620px;"><div class="verdict"><x-icon name="CheckCircle"></x-icon><p class="word">Cumple</p></div><p class="ev">Prueba «RF-45-1: tablero con 6 indicadores». El socio que pide indicadores recibe 403 y ve su propio resumen (CA-15).</p></div></div>
+<div style="display:flex; flex-direction:column; gap:20px; width:1048px;">
+<table class="ttable" style="width:1048px;">
+<tr class="hrow"><th style="width:230px;">Eslabón</th><th>En SUMA</th></tr>
+<tr><td class="k">Requisitos</td><td>UR-49 · RF-45-1 tablero con 6 indicadores · RF-08-3</td></tr>
+<tr class="alt"><td class="k">Código</td><td>GET /api/indicadores · admin-resumen.page.ts</td></tr>
+<tr><td class="k">Especificación</td><td>sprint-2/02-administracion · CA-13 a CA-15, CA-17</td></tr>
+</table>
+<div class="panel" style="width:1048px;"><p class="ptitle">Ruta · api.mjs · indicadores()</p>
+<p class="src"><span class="c">// RF-45-1: activo = al menos 1 actividad en el mes;</span><br><span class="c">// entrar o salir no cuenta como actividad</span><br>return { usuariosRegistrados, sociosActivos,<br>&#160;&#160;pendientesAtrasados: pendientes.filter(<br>&#160;&#160;&#160;&#160;(x) =&gt; diasHabiles(x.creadoEn) &gt; 2).length,<br>&#160;&#160;indicadores: [<br>&#160;&#160;&#160;&#160;{ id: <span class="s">'aprobados'</span>, etiqueta: <span class="s">'% de referidos aprobados'</span> },<br>&#160;&#160;&#160;&#160;{ id: <span class="s">'activos'</span>, etiqueta: <span class="s">'Usuarios activos en el mes'</span> },<br>&#160;&#160;&#160;&#160;{ id: <span class="s">'otorgados'</span>, etiqueta: <span class="s">'Puntos otorgados'</span> }, … ] };</p></div>
+</div>
+</div>
+<p class="foot">specs/sprint-2/02-administracion · backend/src/api.mjs:860 y 914 · features/resumen/admin-resumen.page.ts</p>
+<div class="pnum"></div>
+<aside>HU-005 da al administrador un tablero con seis indicadores. Un usuario activo es quien hizo al menos una actividad en el mes; entrar o salir no cuenta. CU-15 no tiene secuencia ni actividades propias en el modelo, así que se traza con su diagrama de detalle.</aside>
+</section>
